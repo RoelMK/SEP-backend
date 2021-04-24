@@ -1,0 +1,24 @@
+{
+  "name": "sep-backend",
+  "version": "1.0.0",
+  "description": "Backend for a diabetes platform.",
+  "main": "src\\app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoelMK/SEP-backend.git"
+  },
+  "author": "Group 3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoelMK/SEP-backend/issues"
+  },
+  "homepage": "https://github.com/RoelMK/SEP-backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1"
+  }
+}

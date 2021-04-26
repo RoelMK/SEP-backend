@@ -2,6 +2,16 @@ const https = require('https')
 
 import * as i from './interfaces'
 
+
+function x_func(xObj : x) {console.log(xObj)}
+interface x {
+	a : string
+	b : number
+}
+let response = '{"b":"foo","c":"bar"}'
+let obj : x = JSON.parse(response)
+x_func(obj)
+
 interface activityInput {
   gameDescriptorTK : String,
   dataProviderName : String,
@@ -92,12 +102,12 @@ let newActivity : i.activityPOSTData = {
     } ],
     "players" : [ userKevin.userID ]
 }
-
+/*
 testGamebarGetSingleActivity(activityID,userKevin,((x:activityOutput) => {
   console.log(x)
   console.log(x.group)
 }))
-
+*/
 function testGamebarGetSingleActivity(activityID, user, onComplete : ((activityOutput:activityOutput) => void)) {
   const options = {
       hostname : 'api3.gamebus.eu',

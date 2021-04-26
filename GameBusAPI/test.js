@@ -1,4 +1,10 @@
+"use strict";
+exports.__esModule = true;
 var https = require('https');
+function x_func(xObj) { console.log(xObj); }
+var response = '{"b":"foo","c":"bar"}';
+var obj = JSON.parse(response);
+x_func(obj);
 var temp = {
     id: 26940,
     date: 1618848682000,
@@ -35,19 +41,9 @@ var temp = {
     supports: [{ id: 82, date: 1618906191000, supporter: [Object] }]
 };
 //kevins credential (DON'T MISUSE!)
-var userKevin2 = {
-    authToken: "50a47c89-5cbd-4dca-aea9-e5d7ed93e837",
-    playerID: 525,
-    userID: 517
-};
 var activityID = 26940;
 var onComplete = function (data) {
     console.log(data);
-};
-var userKevin = {
-    authToken: "436a116e-6814-409a-8afc-0be7a2e34711",
-    playerID: 524,
-    userID: 516
 };
 var newActivity = {
     "gameDescriptorTK": "WALK",
@@ -60,10 +56,12 @@ var newActivity = {
         }],
     "players": [userKevin.userID]
 };
-testGamebarGetSingleActivity(activityID, userKevin, (function (x) {
-    console.log(x);
-    console.log(x.group);
-}));
+/*
+testGamebarGetSingleActivity(activityID,userKevin,((x:activityOutput) => {
+  console.log(x)
+  console.log(x.group)
+}))
+*/
 function testGamebarGetSingleActivity(activityID, user, onComplete) {
     var options = {
         hostname: 'api3.gamebus.eu',

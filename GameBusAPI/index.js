@@ -2,11 +2,6 @@ const https = require('https')
 const util = require('util')
 
 //kevins credential (DON'T MISUSE!)
-let userKevin2 = {
-    authToken : "50a47c89-5cbd-4dca-aea9-e5d7ed93e837",
-    playerID : 525,
-    userID : 517
-}
 
 let activityID = 26940
 
@@ -14,11 +9,7 @@ let onComplete = function (data) {
     //console.log(data)
     console.log(util.inspect(data, false, null, true /* enable colors */))
 }
-let userKevin = {
-    authToken : "436a116e-6814-409a-8afc-0be7a2e34711",
-    playerID : 524,
-    userID : 516
-}
+
 let newGFitActivity = {
     "gameDescriptorTK" : "WALK",
     "dataProviderName" : "Google Fit",
@@ -44,13 +35,18 @@ let newActivity = {
 }
 let jsonAct = JSON.stringify(newGFitActivity)
 //let jsonAct = JSON.stringify(newActivity)
-testGamebarPostActivity(jsonAct,userKevin,onComplete)
+//testGamebarPostActivity(jsonAct,userKevin,onComplete)
 //testHttps()
 //testGamebarGetActivities(userKevin1, onComplete)
 //testGamebarGetSingleActivity(activityID,userKevin,onComplete)
 //testGamebarGetSingleUser(userKevin,onComplete) //DEFUNCT
 //testGamebarGetSinglePlayer(userKevin, onComplete)
 
+let temp = {
+    b : "foo",
+    c : "bar"
+}
+console.log(JSON.stringify(temp))
 
 
 

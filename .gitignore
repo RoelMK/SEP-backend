@@ -44,3 +44,4 @@ nodeLanguageServer/**
 nodeLanguageServer.*/**
 plots/
 .ipynb_checkpoints/**
+.env.local

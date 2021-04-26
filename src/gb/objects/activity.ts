@@ -1,5 +1,6 @@
-import { Headers, Query } from '../GamebusClient';
+import { Headers, Query } from '../GameBusClient';
 import { GameBusObject } from './base';
+import { ActivityModel } from '../models/activityModel';
 
 // TODO: add ActivityModel to models/activityModel
 /**

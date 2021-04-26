@@ -1,4 +1,4 @@
-import { GameBusClient } from '../GamebusClient';
+import { GameBusClient } from '../GameBusClient';
 
 /**
  * Base object used for constructor-inheritance

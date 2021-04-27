@@ -77,3 +77,5 @@ export interface supportReference {
     date : number,
     supporter : userReference
 }
+
+//TODO add output interfaces for getPlayer and getUser

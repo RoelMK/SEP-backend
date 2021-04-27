@@ -2,10 +2,12 @@
   "name": "sep-backend",
   "version": "1.0.0",
   "description": "Backend for a diabetes platform.",
-  "main": "src\\app.js",
+  "main": "src\\app.ts",
   "scripts": {
-    "dev-server": "ts-node src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-api": "ts-node src/gb/test.ts",
+    "test-server": "ts-node src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@types/node": "^15.0.0",

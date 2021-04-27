@@ -12,11 +12,11 @@
 			{
 				"type": "pwa-node",
 				"request": "launch",
-				"name": "Launch Test",
+				"name": "Launch Server",
 				"skipFiles": [
 					"<node_internals>/**"
 				],
-				"program": ".\\test.js"
+				"program": ".\\src\\server.js"
 			}
 		]
 	}

@@ -1,6 +1,6 @@
 import {glucoseModel, RecordType} from '../../gb/models/glucoseModel';
 import { AbottData } from '../csvParser';
-import { parse, getUnixTime } from 'date-fns';
+import { parse, getUnixTime} from 'date-fns';
 import { GlucoseSource } from './glucoseParser';
 
 /**
@@ -31,29 +31,25 @@ export default class GlucoseMapper {
         switch (parseInt(entry.record_type)){
             case RecordType.HISTORIC_GLUCOSE_LEVEL:
                 return {
-                    recordType: parseInt(entry.record_type),
                     timestamp: getUnixTime(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date())),
-                    historicGlucoseLevel: parseInt(entry.historic_glucose_mg_dl)
+                    glucoseLevel: parseInt(entry.historic_glucose_mg_dl)
                 } as glucoseModel;
             case RecordType.SCAN_GLUCOSE_LEVEL:
                 return {
-                    recordType: parseInt(entry.record_type),
                     timestamp: getUnixTime(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date())),
-                    scanGlucoseLevel: parseInt(entry.scan_glucose_mg_dl)
+                    glucoseLevel: parseInt(entry.scan_glucose_mg_dl)
                 } as glucoseModel;
            case RecordType.STRIP_GLUCOSE_LEVEL:
             return {
-                recordType: parseInt(entry.record_type),
                 timestamp: getUnixTime(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date())),
-                stripGlucoseLevel: parseInt(entry.strip_glucose_mg_dl)
+                glucoseLevel: parseInt(entry.strip_glucose_mg_dl)
             } as glucoseModel;
         }
 
-        // TODO what to do at end of function
+        // TODO what to do at end of function, this should not happen
         return {
-            recordType: 0,
             timestamp: getUnixTime(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date())),
-            scanGlucoseLevel: 0
+            glucoseLevel: 0
         } as glucoseModel;
     }
 }

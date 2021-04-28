@@ -2,6 +2,7 @@ import CSVParser from '../csvParser';
 import { AbottData } from '../csvParser';
 import { glucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
+import { parse, isValid} from 'date-fns';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -53,11 +54,14 @@ export default class GlucoseParser {
      * Processes Abott data by first filtering out irrelevant entries
      */
     private processAbott() {
-        // We only include entries for which the record type is a glucose scan, either historical or not
+        // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
+        // We also only include entries for which the date is specified
+
         this.rawData = this.rawData?.filter((entry: AbottData) => {
-            return parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL 
+            return (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL 
             || parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL
-            || parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL;
+            || parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL)
+            && isValid(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date()));
         });
     }
 

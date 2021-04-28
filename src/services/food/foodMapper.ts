@@ -1,7 +1,7 @@
 import foodModel from '../../gb/models/foodModel';
-import { AbottData } from '../csvParser';
+import { AbbottData } from '../csvParser';
 import { D1NAMOFoodData, FoodSource } from './foodParser';
-import { parse, getUnixTime } from 'date-fns';
+import { DateFormat, parseDate } from '../dateParser';
 
 /**
  * Helper class to map the different food sources to 1 foodModel
@@ -12,14 +12,25 @@ export default class FoodMapper {
     /**
      * Main function that returns the correct mapping function based on given source
      * @param foodSource Food source given as enum
+     * @param dateFormat DateFormat of data source
      * @returns Mapping function that maps an entry from the source to a foodModel
      */
-    public static mapFood(foodSource: FoodSource) {
+    public static mapFood(foodSource: FoodSource, dateFormat: DateFormat) {
         switch (foodSource) {
+            // D1NAMO source goes to D1NAMO mapping
             case FoodSource.D1NAMO:
                 return this.mapD1NAMO;
-            case FoodSource.ABOTT:
-                return this.mapAbott;
+            case FoodSource.ABBOTT:
+                // Abbott depends on date format (US/EU)
+                switch (dateFormat) {
+                    case DateFormat.ABBOTT_EU:
+                        return this.mapAbbottEU;
+                    case DateFormat.ABBOTT_US:
+                        return this.mapAbbottUS;
+                    // Default (unused) case otherwise Typescript will complain
+                    default:
+                        return this.mapAbbottEU;
+                }
         }
     }
 
@@ -38,15 +49,30 @@ export default class FoodMapper {
     }
 
     /**
-     * Abott mapping function
-     * @param entry Abott entry
+     * Abbott mapping function for EU timestamps
+     * @param entry Abbott entry
      * @returns foodModel with information
      */
-    private static mapAbott(entry: AbottData): foodModel {
+    private static mapAbbottEU(entry: AbbottData): foodModel {
         // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
         // 1g carbohydrate = 4 calories
         return {
-            timestamp: getUnixTime(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date())),
+            timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_EU, undefined, true),
+            calories: parseInt(entry.carbohydrates__grams_) * 4,
+            description: entry.notes
+        } as foodModel;
+    }
+
+    /**
+     * Abbott mapping function for US timestamps
+     * @param entry Abbott entry
+     * @returns foodModel with information
+     */
+    private static mapAbbottUS(entry: AbbottData): foodModel {
+        // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
+        // 1g carbohydrate = 4 calories
+        return {
+            timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_US, undefined, true),
             calories: parseInt(entry.carbohydrates__grams_) * 4,
             description: entry.notes
         } as foodModel;

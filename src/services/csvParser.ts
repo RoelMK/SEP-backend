@@ -56,10 +56,10 @@ const defaultConfig: ParseConfig = {
 };
 
 /**
- * Raw Abott .csv data format
+ * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export interface AbottData {
+export interface AbbottData {
     device: string;
     serial_number: string;
     device_timestamp: string;

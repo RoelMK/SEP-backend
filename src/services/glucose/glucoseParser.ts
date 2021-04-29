@@ -1,8 +1,8 @@
 import CSVParser from '../csvParser';
-import { AbottData } from '../csvParser';
+import { AbbottData } from '../csvParser';
 import { glucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
-import { parse, isValid} from 'date-fns';
+import { parse, isValid } from 'date-fns';
 import { DateFormat, getDateFormat } from '../dateParser';
 
 /**
@@ -22,7 +22,10 @@ export default class GlucoseParser {
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to food .csv file
      */
-    constructor(private readonly filePath: string, private readonly glucoseSource: GlucoseSource = GlucoseSource.ABOTT) {
+    constructor(
+        private readonly filePath: string,
+        private readonly glucoseSource: GlucoseSource = GlucoseSource.ABOTT
+    ) {
         this.Ready = new Promise((resolve, reject) => {
             this.parse()
                 .then(() => {
@@ -50,6 +53,7 @@ export default class GlucoseParser {
             case GlucoseSource.ABOTT:
                 this.processAbott();
         }
+        console.log(this.rawData);
         this.glucoseData = this.rawData?.map(GlucoseMapper.mapFood(this.glucoseSource, this.dateFormat));
     }
 
@@ -60,12 +64,13 @@ export default class GlucoseParser {
         // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
         // We also only include entries for which the date is specified
 
-        
-        this.rawData = this.rawData?.filter((entry: AbottData) => {
-            return (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL 
-            || parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL
-            || parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL)
-            && getDateFormat(entry.device_timestamp) !== DateFormat.NONE;
+        this.rawData = this.rawData?.filter((entry: AbbottData) => {
+            return (
+                (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
+                    parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
+                    parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL) &&
+                getDateFormat(entry.device_timestamp) !== DateFormat.NONE
+            );
         });
 
         // TODO check if not NONE
@@ -82,6 +87,6 @@ export default class GlucoseParser {
 /**
  * Current glucose sources available //TODO ? Add more
  */
- export enum GlucoseSource {
+export enum GlucoseSource {
     ABOTT = 1
 }

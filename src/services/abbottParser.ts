@@ -35,8 +35,10 @@ export default class AbbottParser extends DataParser {
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData = this.filterFood();
         this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
-        // TODO: change glucoseParser constructor to allow AbbottData[], GlucoseSource and DateFormat
-        //this.glucoseParser = new GlucoseParser(this.filterGlucose(), GlucoseSource.ABOTT, this.dateFormat);
+
+        const glucoseData = this.filterGlucose();
+        this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
+        
         // TODO: insulinParser creation
     }
 
@@ -61,17 +63,28 @@ export default class AbbottParser extends DataParser {
      * Filters the glucose entries from the raw data
      * @returns All glucose entries
      */
-    private filterGlucose(): AbbottData[] | undefined {
-        return this.rawData?.filter((entry: AbbottData) => {
-            // TODO: checking for dateFormat for every entry can be slow, maybe change it to something else
+    private filterGlucose(): AbbottData[] {
+        const glucose = this.rawData?.filter((entry: AbbottData) => {
+            
+
+
+            // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
+            // We also only include entries for which the date is specified
             return (
-                (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
-                    parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
-                    parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL) &&
-                getDateFormat(entry.device_timestamp) !== DateFormat.NONE
+                    parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
+                    parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL||
+                    parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL 
+                    // TODO: checking for dateFormat for every entry can be slow, and it looks like dates might be always present 
+                    // (excel just does not always show them without clicking on them)
+                    // but check if this can be assumed
+                    //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
             );
         });
-        // TODO: might be easier to always return AbbottData even if there is no glucose data, see below for a way to do it
+        // TODO: come up with a better way to return AbbottData if there is no glucose data
+        if (!glucose) {
+            return [emptyAbbottData()];
+        }
+        return glucose;
     }
 
     /**
@@ -103,6 +116,7 @@ export default class AbbottParser extends DataParser {
      * Determines the date format (locale) of the input file based on first entry
      */
     private getLocale(): void {
+        // TODO check if the first entry is NONE, but otherss are not
         this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
     }
 }

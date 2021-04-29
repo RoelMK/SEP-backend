@@ -22,17 +22,17 @@ export default class GlucoseMapper {
             case GlucoseSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
                 return function (entry: AbbottData): glucoseModel {
-                    return GlucoseMapper.mapAbott(entry, dateFormat, glucoseUnit);
+                    return GlucoseMapper.mapAbbott(entry, dateFormat, glucoseUnit);
                 };
         }
     }
 
     /**
-     * Abott mapping function
-     * @param entry Abott entry
+     * Abbott mapping function
+     * @param entry Abbott entry
      * @returns glucoseModel with information
      */
-    private static mapAbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): glucoseModel {
+    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): glucoseModel {
 
         // TODO now of type any because otherwise ts complains that entry.historic_glucose_mg_dl can be undefined
         let historic_glucose;

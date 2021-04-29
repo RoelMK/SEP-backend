@@ -1,80 +1,51 @@
 import CSVParser from '../csvParser';
 import { AbbottData } from '../abbottParser';
-import { glucoseModel, RecordType } from '../../gb/models/glucoseModel';
+import { glucoseModel, GlucoseUnit, RecordType } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
-import { parse, isValid } from 'date-fns';
 import { DateFormat, getDateFormat } from '../dateParser';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
- * Currently supported food sources:
- * - Abott
+ * Currently supported glucose sources:
+ * - Abbott
  */
 export default class GlucoseParser {
-    private csvParser: CSVParser = new CSVParser();
-    private rawData?: any[];
     glucoseData?: glucoseModel[];
-    // DateFormat of data .csv to be determined later
-    private dateFormat: DateFormat = DateFormat.NONE;
-    Ready: Promise<any>;
-
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
-     * @param filePath path to food .csv file
+     * @param filePath path to glucose .csv file
      */
     constructor(
-        private readonly filePath: string,
-        private readonly glucoseSource: GlucoseSource = GlucoseSource.ABOTT
+        private readonly glucoseInput: AbbottData[],
+        private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
+        private readonly dateFormat: DateFormat
     ) {
-        this.Ready = new Promise((resolve, reject) => {
-            this.parse()
-                .then(() => {
-                    resolve(undefined);
-                })
-                .catch(reject);
-        });
-    }
-
-    /**
-     * Parses CSV data to JSON format
-     */
-    async parse() {
-        // Skip line if source is Abott
-        const skipLine: boolean = this.glucoseSource == GlucoseSource.ABOTT;
-        this.rawData = await this.csvParser.parse(this.filePath, skipLine);
+        // Process incoming glucoseInput data
         this.process();
     }
 
     /**
-     * Processes the data (if necessary) and maps it to the FoodModel
+     * Processes the data (if necessary) and maps it to the GlucoseModel
      */
     private process() {
-        switch (this.glucoseSource) {
-            case GlucoseSource.ABOTT:
-                this.processAbott();
+        // indicates in which unit the glucose levels are measured
+        var glucoseUnit: GlucoseUnit;
+
+        // We assume that the dateFormat also defines which unit to use
+        switch(this.dateFormat){
+            case DateFormat.ABBOTT_EU:
+                glucoseUnit = GlucoseUnit.MMOL_L;
+                break;
+            case DateFormat.ABBOTT_US:
+                glucoseUnit = GlucoseUnit.MG_DL;
+                break;
+            default:
+                // TODO this should not happen, but caught earlier
+                glucoseUnit = GlucoseUnit.UNDEFINED;
+                break;
         }
-        console.log(this.rawData);
-        this.glucoseData = this.rawData?.map(GlucoseMapper.mapFood(this.glucoseSource, this.dateFormat));
-    }
 
-    /**
-     * Processes Abott data by first filtering out irrelevant entries
-     */
-    private processAbott() {
-        // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
-        // We also only include entries for which the date is specified
-
-        this.rawData = this.rawData?.filter((entry: AbbottData) => {
-            return (
-                (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
-                    parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
-                    parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL) &&
-                getDateFormat(entry.device_timestamp) !== DateFormat.NONE
-            );
-        });
-
-        // TODO check if not NONE
-        this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
+        this.glucoseData = this.glucoseInput.map(GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, glucoseUnit));
     }
 
     /**
@@ -88,5 +59,5 @@ export default class GlucoseParser {
  * Current glucose sources available //TODO ? Add more
  */
 export enum GlucoseSource {
-    ABOTT = 1
+    ABBOTT = 1
 }

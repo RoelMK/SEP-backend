@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
-const endpoint = 'https://www.endpoint.com/'; // TODO: add GameBus endpoint
+const endpoint = 'https://api3.gamebus.eu';//'https://www.endpoint.com/'; // TODO: add GameBus endpoint
 
 export class GameBusClient {
     // Axios client

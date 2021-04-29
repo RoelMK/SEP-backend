@@ -7,7 +7,7 @@ export interface connectionData {
 export interface  activityPOSTData {
     gameDescriptorTK : String,
     dataProviderName : String,
-    image : String
+    image : String | null
     date : number,
     propertyInstances : propertyInstancePOST[]
     players : number[]

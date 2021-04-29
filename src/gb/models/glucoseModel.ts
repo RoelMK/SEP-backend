@@ -1,7 +1,20 @@
-// Glucose interface with UNIX timestamp and glucose level (in mmol/L)
+import { parse } from "dotenv/types";
+
+// Glucose interface with UNIX timestamp, glucose level and unit
 export interface glucoseModel {
     timestamp: number;
     glucoseLevel: number;
+    glucoseUnit: GlucoseUnit;
+}
+
+/**
+ * Units for defining the glucose level differ per region
+ * In the USA mg/dL is more common, whereas mmol/L is more common in Europe
+ */
+export enum GlucoseUnit{
+    UNDEFINED = "undefined",
+    MMOL_L = "mmol/L",
+    MG_DL  = "mg/dL"
 }
 
 /**

@@ -8,6 +8,7 @@
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
         "test": "echo \"Error: no test specified\" && exit 1",
+        "testService": "ts-node src/services/testService.ts",
         "build": "tsc"
     },
     "repository": {
@@ -21,11 +22,19 @@
     },
     "homepage": "https://github.com/RoelMK/SEP-backend#readme",
     "dependencies": {
+        "axios": "^0.21.1",
         "date-fns": "^2.21.1",
         "dotenv": "^8.2.0",
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
-        "axios": "^0.21.1",
+        "fast-csv": "^4.3.6",
+        "fs": "*",
+        "http": "*",
+        "multer": "^1.4.2",
+        "papaparse": "^5.3.0"
+    },
+    "devDependencies": {
+        "@types/node": "^15.0.1",
         "papaparse": "^5.3.0"
     },
     "devDependencies": {

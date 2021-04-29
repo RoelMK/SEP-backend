@@ -1,10 +1,7 @@
 // Glucose interface with UNIX timestamp and glucose level (in mmol/L)
 export interface glucoseModel {
     timestamp: number;
-    recordType: number;
-    historicGlucoseLevel?: number;
-    scanGlucoseLevel?: number;
-    stripGlucoseLevel?: number;
+    glucoseLevel: number;
 }
 
 /**
@@ -16,6 +13,7 @@ export interface glucoseModel {
 export enum RecordType {
     HISTORIC_GLUCOSE_LEVEL = 0,
     SCAN_GLUCOSE_LEVEL = 1,
+    STRIP_GLUCOSE_LEVEL = 2,
     INSULIN = 4,
     CARBOHYDRATES = 5,
     NOTES = 6

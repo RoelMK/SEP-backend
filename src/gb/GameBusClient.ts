@@ -144,13 +144,8 @@ export class GameBusClient {
             data: body
         });
 
-        // If error, throw error
-        // TODO: better error handling
-        if (response.status != 200) {
-            const text = response.data;
-
-            throw new Error(`${response.statusText}: ${text}`);
-        }
+        // Error handling is already included in Axios, so unless you need to check for a correct status code outside of the
+        // 2xx range, no error handling is required
 
         // If full response is needed, return it
         if (fullResponse) {

@@ -1,5 +1,5 @@
 import CSVParser from '../csvParser';
-import { AbbottData } from '../csvParser';
+import { AbbottData } from '../abbottParser';
 import { glucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
 import { parse, isValid } from 'date-fns';

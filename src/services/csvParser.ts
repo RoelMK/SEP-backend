@@ -54,32 +54,3 @@ const defaultConfig: ParseConfig = {
         return header.toLowerCase().replace(/\W/g, '_');
     }
 };
-
-/**
- * Raw Abbott .csv data format
- * TODO: what is non_numeric_food?
- */
-export interface AbbottData {
-    device: string;
-    serial_number: string;
-    device_timestamp: string;
-    record_type: string;
-    historic_glucose_mg_dl?: string;
-    historic_glucose_mmol_l?: string;
-    scan_glucose_mg_dl?: string;
-    scan_glucose_mmol_l?: string;
-    non_numeric_rapid_acting_insulin: string;
-    rapid_acting_insulin__units_: string;
-    non_numeric_food: string;
-    carbohydrates__grams_: string;
-    carbohydrates__servings_: string;
-    non_numeric_long_acting_insulin: string;
-    long_acting_insulin__units_: string;
-    notes: string;
-    strip_glucose_mg_dl?: string;
-    strip_glucose_mmol_l?: string;
-    ketone_mmol_l: string;
-    meal_insulin__units_: string;
-    correction_insulin__units_: string;
-    user_change_insulin__units_: string;
-}

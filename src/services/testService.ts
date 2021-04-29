@@ -1,10 +1,11 @@
-import GlucoseParser from './glucose/glucoseParser';
-import FoodParser, { GlucoseSource } from './glucose/glucoseParser';
+import AbbottParser, { AbbottDataType } from './abbottParser';
 
-async function AbbottGlucoseTest() {
-    const AbottParser = new GlucoseParser('src/services/glucose/glucose_data_abbott_eu.csv', GlucoseSource.ABOTT);
-    await AbottParser.Ready;
-    console.log(AbottParser.glucoseData);
+async function testAbbottFood() {
+    const abbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
+    // Currently this step is required since reading the file is async
+    await abbottParser.process();
+    // Print data for debugging
+    console.log(abbottParser.getData(AbbottDataType.FOOD));
 }
 
-AbbottGlucoseTest();
+testAbbottFood();

@@ -1,6 +1,6 @@
 import foodModel from '../../gb/models/foodModel';
-import { AbbottData } from '../csvParser';
-import { D1NAMOFoodData, FoodSource } from './foodParser';
+import { AbbottData } from '../abbottParser';
+import { FoodSource } from './foodParser';
 import { DateFormat, parseDate } from '../dateParser';
 
 /**
@@ -17,9 +17,7 @@ export default class FoodMapper {
      */
     public static mapFood(foodSource: FoodSource, dateFormat: DateFormat) {
         switch (foodSource) {
-            // D1NAMO source goes to D1NAMO mapping
-            case FoodSource.D1NAMO:
-                return this.mapD1NAMO;
+            // TODO: improve this code duplication
             case FoodSource.ABBOTT:
                 // Abbott depends on date format (US/EU)
                 switch (dateFormat) {
@@ -35,18 +33,18 @@ export default class FoodMapper {
     }
 
     /**
-     * D1NAMO mapping function
+     * !UNUSED D1NAMO mapping function
      * @param entry D1NAMO entry
      * @returns foodModel with information
      */
-    private static mapD1NAMO(entry: D1NAMOFoodData): foodModel {
-        // D1NAMO data has no timestamp, calories are converted to numbers
-        return {
-            timestamp: -1,
-            calories: parseInt(entry.calories),
-            description: entry.description
-        } as foodModel;
-    }
+    // private static mapD1NAMO(entry: D1NAMOFoodData): foodModel {
+    //     // D1NAMO data has no timestamp, calories are converted to numbers
+    //     return {
+    //         timestamp: -1,
+    //         calories: parseInt(entry.calories),
+    //         description: entry.description
+    //     } as foodModel;
+    // }
 
     /**
      * Abbott mapping function for EU timestamps

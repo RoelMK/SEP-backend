@@ -1,7 +1,7 @@
 import AbbottParser, { AbbottDataType } from './abbottParser';
 
 async function testAbbott() {
-    const abbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
+    const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_us.csv');
     // Currently this step is required since reading the file is async
     await abbottParser.process();
     // Print data for debugging

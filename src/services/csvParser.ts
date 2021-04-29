@@ -13,7 +13,7 @@ export default class CSVParser {
      * @param skipLine Whether the first line should be skipped in case the headers are on the second line
      * @returns Array of csv entries as objects
      */
-    async parse(filePath: string, skipLine: boolean = false): Promise<any[]> {
+    async parse(filePath: string, skipLine: boolean = false): Promise<Record<string, string>[]> {
         // TODO: change path to uploaded .csv?
         // Open file from given filePath
         // TODO: Papa.parse should be able to open URLs as well

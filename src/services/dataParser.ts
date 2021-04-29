@@ -4,36 +4,25 @@ import { DateFormat } from './dateParser';
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
  */
-export abstract class DataParser {
+export abstract class DataParser<D extends {} = Record<string, string>> {
     protected csvParser: CSVParser = new CSVParser();
-    protected rawData?: any[];
+    protected rawData: D[] = [];
     protected dateFormat: DateFormat = DateFormat.NONE;
 
-    // Promise to handle async functions in constructor
-    Ready: Promise<any>;
-
     /**
-     * Constructor needs async parse function so we create a Promise that should be awaited by the end user before continuing
+     * Constructor with file path and data source (provided by children)
      * @param filePath Path to .csv file
      * @param dataSource Data source of .csv file (see below)
      * TODO: change to dynamic .csv location/URL
      */
-    constructor(private readonly filePath: string, protected readonly dataSource: DataSource) {
-        this.Ready = new Promise((resolve, reject) => {
-            this.parse()
-                .then(() => {
-                    resolve(undefined);
-                })
-                .catch(reject);
-        });
-    }
+    constructor(private readonly filePath: string, protected readonly dataSource: DataSource) {}
 
-    private async parse() {
+    protected async parse(): Promise<void> {
         const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
-        this.rawData = await this.csvParser.parse(this.filePath, skipLine);
+        this.rawData = (await this.csvParser.parse(this.filePath, skipLine)) as D[];
     }
 
-    protected abstract process(): void;
+    abstract process(): Promise<void>;
 }
 
 export enum DataSource {

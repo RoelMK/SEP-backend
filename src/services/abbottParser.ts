@@ -8,7 +8,7 @@ import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
-export default class AbbottParser extends DataParser {
+export default class AbbottParser extends DataParser<AbbottData> {
     // Parsers can't be initialized from the start since they have to be initialized with the filtered data
     // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
     // alternatively, you can create a public method in the AbbottParser for each data type POST individually
@@ -28,8 +28,7 @@ export default class AbbottParser extends DataParser {
      * Function that is called (async) that creates the parsers and filers the data to the correct parsers
      */
     async process() {
-        // TODO: move this somewhere else? You should still wait for Ready before you can continue though
-        await this.Ready;
+        await this.parse();
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
@@ -96,7 +95,7 @@ export default class AbbottParser extends DataParser {
             return parseInt(entry.record_type) === RecordType.CARBOHYDRATES && entry.carbohydrates__grams_;
         });
         // TODO: come up with a better way to return AbbottData if there is no food data
-        if (!food) {
+        if (food?.length === 0) {
             return [emptyAbbottData()];
         }
         return food;

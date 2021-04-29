@@ -32,16 +32,10 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
         let valid;
         try {
             // Try to make a valid date using the format
-            valid = isValid(
-                parse(
-                    dateString,
-                    DateFormat[format as keyof typeof DateFormat],
-                    referenceDate ? referenceDate : new Date()
-                )
-            );
+            valid = isValid(parse(dateString, DateFormat[format], referenceDate ? referenceDate : new Date()));
             // If the date is valid, return the used format
             if (valid) {
-                return DateFormat[format as keyof typeof DateFormat];
+                return DateFormat[format];
             }
         } catch {
             // If not, try the next format

@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { UserModel } from '../models/userModel';
-import { connectUser, disconnectUser, getUserStatus } from '../utils/authUtils';
+import { connectUser, disconnectUser, generateToken, getUserStatus } from '../utils/authUtils';
 
 const router = Router();
 
@@ -10,8 +10,8 @@ router.get('/connect', (req: Request, res: Response) => {
     if (userModel) {
         let connected: boolean = connectUser(userModel as UserModel);
         if (connected) {
-            // TODO: give jwt
-            return res.status(200).send();      // OK
+            let jwt: string = generateToken(userModel.userId);
+            return res.status(200).send(jwt);      // TODO: how to send the token to the client?
         } else {
             return res.status(403).send();      // Forbidden
         }

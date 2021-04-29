@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './env.local' });
+require('dotenv').config({ path: __dirname.split('\\').slice( 0, -1 ).join('\\') + '\\.env.local' });
 const express = require('express');
 const errorhandler = require('errorhandler');
 

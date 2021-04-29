@@ -1,4 +1,5 @@
 import { UserModel } from "../models/userModel";
+import jwt from "jsonwebtoken";
 
 /**
  * Registers a (new) user.
@@ -25,4 +26,13 @@ export function disconnectUser(userModel: UserModel): boolean {
  */
 export function getUserStatus(userModel: UserModel): boolean {
     return false; // TODO: find status in database
+}
+
+/**
+ * Generates a jwt for a specified user id.
+ * @param userId User id to generate token for
+ * @returns Token
+ */
+export function generateToken(userId: string): string {
+    return jwt.sign({userId: userId}, process.env.TOKEN_SECRET as string, { expiresIn: process.env.TOKEN_EXPIRES_IN, issuer: process.env.TOKEN_ISSUER, algorithm: 'HS256' });
 }

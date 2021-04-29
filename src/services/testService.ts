@@ -28,4 +28,4 @@ async function AbottGlucoseTest() {
     console.log(AbottParser.glucoseData);
 }
 
-AbottGlucoseTest();
+AbbottFoodTest();

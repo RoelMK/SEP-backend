@@ -3,6 +3,7 @@ import { AbottData } from '../csvParser';
 import { glucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
 import { parse, isValid} from 'date-fns';
+import { DateFormat, getDateFormat } from '../dateParser';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -13,6 +14,8 @@ export default class GlucoseParser {
     private csvParser: CSVParser = new CSVParser();
     private rawData?: any[];
     glucoseData?: glucoseModel[];
+    // DateFormat of data .csv to be determined later
+    private dateFormat: DateFormat = DateFormat.NONE;
     Ready: Promise<any>;
 
     /**
@@ -47,7 +50,7 @@ export default class GlucoseParser {
             case GlucoseSource.ABOTT:
                 this.processAbott();
         }
-        this.glucoseData = this.rawData?.map(GlucoseMapper.mapFood(this.glucoseSource));
+        this.glucoseData = this.rawData?.map(GlucoseMapper.mapFood(this.glucoseSource, this.dateFormat));
     }
 
     /**
@@ -57,12 +60,16 @@ export default class GlucoseParser {
         // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
         // We also only include entries for which the date is specified
 
+        
         this.rawData = this.rawData?.filter((entry: AbottData) => {
             return (parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL 
             || parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL
             || parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL)
-            && isValid(parse(entry.device_timestamp, 'MM-dd-yyyy p', new Date()));
+            && getDateFormat(entry.device_timestamp) !== DateFormat.NONE;
         });
+
+        // TODO check if not NONE
+        this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
     }
 
     /**

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
-const endpoint = 'https://api3.gamebus.eu';//'https://www.endpoint.com/'; // TODO: add GameBus endpoint
+const endpoint = 'https://api3.gamebus.eu'; // TODO: change to include /v2/?
 
 export class GameBusClient {
     // Axios client
@@ -145,7 +145,8 @@ export class GameBusClient {
         });
 
         // If error, throw error
-        if (!response.statusText) {
+        // TODO: better error handling
+        if (response.status != 200) {
             const text = response.data;
 
             throw new Error(`${response.statusText}: ${text}`);
@@ -171,6 +172,7 @@ export class GameBusClient {
         let headers: Headers = {
             'Content-Type': 'application/json',
             'User-Agent': 'Diabetter Client',
+            Accept: 'application/json',
             ...extraHeaders
         };
 

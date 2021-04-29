@@ -24,4 +24,14 @@ export class Activity extends GameBusObject {
         );
         return activity;
     }
+
+    async getAllActivities(playerId: number, headers?: Headers, query?: Query): Promise<any> {
+        const activity = await this.gamebus.get(
+            `/v2/players/${playerId}/activities`,
+            headers,
+            query,
+            this.authRequired
+        );
+        return activity;
+    }
 }

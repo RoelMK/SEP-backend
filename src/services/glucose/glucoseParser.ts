@@ -1,8 +1,7 @@
-import CSVParser from '../csvParser';
 import { AbbottData } from '../abbottParser';
-import { glucoseModel, GlucoseUnit, RecordType } from '../../gb/models/glucoseModel';
+import { glucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import GlucoseMapper from './glucoseMapper';
-import { DateFormat, getDateFormat } from '../dateParser';
+import { DateFormat } from '../dateParser';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -40,7 +39,7 @@ export default class GlucoseParser {
                 glucoseUnit = GlucoseUnit.MG_DL;
                 break;
             default:
-                // TODO this should not happen, but caught earlier
+                // TODO this should not happen, but should also be caught earlier (see Abbottparser)
                 glucoseUnit = GlucoseUnit.UNDEFINED;
                 break;
         }

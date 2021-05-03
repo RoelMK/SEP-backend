@@ -3,6 +3,7 @@ import { AbbottData } from '../abbottParser';
 import { parse, getUnixTime } from 'date-fns';
 import { GlucoseSource } from './glucoseParser';
 import { DateFormat } from '../dateParser';
+import UnitConverter from '../unitConverter';
 
 /**
  * Helper class to map the different glucose sources to 1 glucoseModel
@@ -30,53 +31,49 @@ export default class GlucoseMapper {
     /**
      * Abbott mapping function
      * @param entry Abbott entry
-     * @returns glucoseModel with information
+     * @returns glucoseModel with time and glucose level in mmol/L
      */
-    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): glucoseModel {
+    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): glucoseModel {    
 
-        // TODO now of type any because otherwise ts complains that entry.historic_glucose_mg_dl can be undefined
-        let historic_glucose;
-        let scan_glucose;
-        let strip_glucose;
-        switch(glucoseUnit){
-            case GlucoseUnit.MMOL_L:
-                historic_glucose = entry.historic_glucose_mmol_l;
-                scan_glucose     = entry.scan_glucose_mmol_l;
-                strip_glucose    = entry.strip_glucose_mmol_l;
-                break;
-
-            case GlucoseUnit.MG_DL:
-                historic_glucose = entry.historic_glucose_mg_dl;
-                scan_glucose     = entry.scan_glucose_mg_dl;
-                strip_glucose    = entry.strip_glucose_mg_dl;
-                break;
-        }
-
-        // based on its recordtype, a different glucose data is available
+        // based on its recordtype, different glucose data is available
+        let glucose_level_mmol: number;
         switch (parseInt(entry.record_type)) {
 
             // When the glucose data was buffered in the sensor
             case RecordType.HISTORIC_GLUCOSE_LEVEL:
+                // Convert to mmol/L
+                glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
+                                            parseInt(entry.historic_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.historic_glucose_mg_dl as string));
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
-                    glucoseLevel: parseInt(historic_glucose),
-                    glucoseUnit : glucoseUnit
+                    glucoseLevel: glucose_level_mmol
+
                 } as glucoseModel;
 
             // When the glucose data was drawn from a live scan
             case RecordType.SCAN_GLUCOSE_LEVEL:
+                // Convert to mmol/L
+                glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
+                                            parseInt(entry.scan_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.scan_glucose_mg_dl as string));
+
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
-                    glucoseLevel: parseInt(scan_glucose),
-                    glucoseUnit : glucoseUnit
+                    glucoseLevel: glucose_level_mmol,
                 } as glucoseModel;
 
-            // When the glucose date was from a blood drop on a strip
+
+            // When the glucose data was from a blood drop on a strip
             case RecordType.STRIP_GLUCOSE_LEVEL:
+                // Convert to mmol/L
+                glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
+                                            parseInt(entry.strip_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.strip_glucose_mg_dl as string));
+
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
-                    glucoseLevel: parseInt(strip_glucose),
-                    glucoseUnit : glucoseUnit
+                    glucoseLevel: glucose_level_mmol,
                 } as glucoseModel;
         }
 
@@ -92,6 +89,5 @@ export default class GlucoseMapper {
 */
 const emptyGlucoseModel = (): glucoseModel => ({
     timestamp: 0,
-    glucoseLevel: 0,
-    glucoseUnit: GlucoseUnit.UNDEFINED
+    glucoseLevel: 0
 })

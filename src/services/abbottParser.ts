@@ -73,9 +73,8 @@ export default class AbbottParser extends DataParser<AbbottData> {
                     parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
                     parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL||
                     parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL 
-                    // TODO: checking for dateFormat for every entry can be slow, and it looks like dates might be always present 
-                    // (excel just does not always show them without clicking on them)
-                    // but check if this can be assumed
+                    // TODO: checking for dateFormat for every entry can be slow, 
+                    // it also looks like dates might be always present, but can this be assumed?
                     //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
             );
         });
@@ -115,7 +114,8 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * Determines the date format (locale) of the input file based on first entry
      */
     private getLocale(): void {
-        // TODO check if the first entry is NONE, but otherss are not
+        // TODO check if the first entry is NONE, but others are not
+        // TODO involves checking if first can be NONE at all
         this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
     }
 }

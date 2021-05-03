@@ -1,10 +1,9 @@
 import { parse } from "dotenv/types";
 
-// Glucose interface with UNIX timestamp, glucose level and unit
+// Glucose interface with UNIX timestamp, glucose level (in mmol/L)
 export interface glucoseModel {
     timestamp: number;
     glucoseLevel: number;
-    glucoseUnit: GlucoseUnit;
 }
 
 /**

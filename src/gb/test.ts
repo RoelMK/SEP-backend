@@ -24,10 +24,9 @@ const axios = require('axios')
 import * as i from './interfaces'
 
 import { userKevin, userKevin2 } from './usersExport';
-import {Query,Headers,requestMethod} from './GamebusClient'
 
 import { transform, isEqual, isObject } from 'lodash';
-import { GameBusClient } from './GameBusClient';
+import { requestMethod, GameBusClient } from './GameBusClient';
 
 /**
  * Deep diff between two object, using lodash
@@ -430,4 +429,8 @@ function testClientGetAllActs(client : GameBusClient, playerID:number) {
     client.request(path,method,body,headers,query,true,false).then((value :any) => console.log(value)).catch((error :Error) => console.log(error))
 }
 
-testClientGetAllActs(client,kevin.playerID)
+//testClientGetAllActs(client,kevin.playerID)
+
+//client.activity().getAllActivities(kevin.playerID).then((value :any) => console.log(value)).catch((error :Error) => console.log(error))
+//client.activity().getActivityById(26941).then((value :any) => console.log(value)).catch((error :Error) => console.log(error))
+client.activity().getAllActivitiesDateFilter(userKevin.playerID,new Date(1619429369000), /*new Date(1619629369000),30*/).then((value :any) => console.log(value[0].propertyInstances)).catch((error :Error) => console.log(error))

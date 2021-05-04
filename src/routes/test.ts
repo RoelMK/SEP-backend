@@ -1,3 +1,4 @@
+import { runDBTests } from "../../test/db/testDBClient";
 import { checkJwt } from "../middlewares/checkJwt";
 
 const testRouter = require('express').Router();
@@ -11,7 +12,12 @@ testRouter.get('/test', (req: any, res: any) => {
 });
 
 testRouter.get('/jwt-test', checkJwt, (req: any, res: any) => {
-    res.send('Authenticated test, user id: ' + req.user.userId);
+    res.send('Authentication test, your user id: ' + req.user.userId);
+});
+
+testRouter.get('/db-test', (req: any, res: any) => {
+    runDBTests();
+    res.send('Finished database test.');
 });
 
 module.exports = testRouter;

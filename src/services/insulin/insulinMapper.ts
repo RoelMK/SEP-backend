@@ -1,9 +1,8 @@
-import { insulinModel, InsulinType} from '../../gb/models/insulinModel';
+import { insulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { AbbottData } from '../abbottParser';
 import { parse, getUnixTime } from 'date-fns';
 import { InsulinSource } from './insulinParser';
 import { DateFormat } from '../dateParser';
-
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
@@ -30,26 +29,28 @@ export default class InsulinMapper {
     /**
      * Abbott mapping function
      * @param entry Abbott entry
-     * @returns insulinModel with time and type(RAPID or LONG) 
+     * @returns insulinModel with time and type(RAPID or LONG)
      */
-    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat): insulinModel {    
-
-        
+    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat): insulinModel {
         let insulin_amount: number;
 
         // based on its recordtype, different insulin types are available
-        //Type Rapid by default 
+        //Type Rapid by default
         let insulin_type: InsulinType = InsulinType.RAPID;
 
         // Early return to return empty insulin model
-        if (!(entry.rapid_acting_insulin__units_ || entry.long_acting_insulin__units_ || entry.long_acting_insulin_value__units_)) {
+        if (
+            !(
+                entry.rapid_acting_insulin__units_ ||
+                entry.long_acting_insulin__units_ ||
+                entry.long_acting_insulin_value__units_
+            )
+        ) {
             return emptyInsulinModel();
         }
 
-  
         if (entry.rapid_acting_insulin__units_) {
             insulin_amount = parseInt(entry.rapid_acting_insulin__units_);
-            
         } else {
             switch (dateFormat) {
                 //different name of the column for EU and US
@@ -63,9 +64,9 @@ export default class InsulinMapper {
                     insulin_amount = parseInt(entry.long_acting_insulin_value__units_);
                     break;
             }
-            insulin_type=InsulinType.LONG;
+            insulin_type = InsulinType.LONG;
         }
-                  
+
         return {
             timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
             insulinAmount: insulin_amount,
@@ -75,11 +76,11 @@ export default class InsulinMapper {
 }
 
 /**
-* Function that can return an empty insulinModel entry that might be needed for easy returns
-* @returns Empty insulinModel
-*/
+ * Function that can return an empty insulinModel entry that might be needed for easy returns
+ * @returns Empty insulinModel
+ */
 const emptyInsulinModel = (): insulinModel => ({
     timestamp: 0,
     insulinAmount: 0,
     insulinType: 0
-})
+});

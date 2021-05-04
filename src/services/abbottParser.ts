@@ -17,7 +17,6 @@ export default class AbbottParser extends DataParser<AbbottData> {
     private foodParser?: FoodParser;
     private glucoseParser?: GlucoseParser;
     private insulinParser?: InsulinParser;
-    
 
     /**
      * DataParser construction with DataSource set
@@ -40,10 +39,9 @@ export default class AbbottParser extends DataParser<AbbottData> {
 
         const glucoseData = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
-        
-        // TODO: insulinParser creation
+
         const insulinData = this.filterInsulin();
-        this.insulinParser= new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
+        this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
     }
 
     /**
@@ -68,18 +66,15 @@ export default class AbbottParser extends DataParser<AbbottData> {
      */
     private filterGlucose(): AbbottData[] {
         const glucose = this.rawData?.filter((entry: AbbottData) => {
-            
-
-
             // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
             // We also only include entries for which the date is specified
             return (
-                    parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
-                    parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL||
-                    parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL 
-                    // TODO: checking for dateFormat for every entry can be slow, 
-                    // it also looks like dates might be always present, but can this be assumed?
-                    //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
+                parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
+                parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
+                parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL
+                // TODO: checking for dateFormat for every entry can be slow,
+                // it also looks like dates might be always present, but can this be assumed?
+                //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
             );
         });
         // TODO: come up with a better way to return AbbottData if there is no glucose data
@@ -108,16 +103,15 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * Filters the insulin entries from the raw data
      * @returns All insulin entries
      */
-    private filterInsulin(): AbbottData[]  {
+    private filterInsulin(): AbbottData[] {
         //console.log(this.rawData);
         const insulin = this.rawData?.filter((entry: AbbottData) => {
             return parseInt(entry.record_type) === RecordType.INSULIN;
         });
         if (insulin?.length === 0) {
-            return [emptyAbbottData()]
+            return [emptyAbbottData()];
         }
         return insulin;
-        // TODO: return empty AbbottData if no insulin data is in file
     }
 
     /**

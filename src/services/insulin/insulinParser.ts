@@ -27,8 +27,6 @@ export default class InsulinParser {
      * Processes the data (if necessary) and maps it to the insulinModel
      */
     private process() {
-
-
         this.insulinData = this.insulinInput.map(InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat));
     }
 

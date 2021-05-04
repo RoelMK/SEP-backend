@@ -46,3 +46,4 @@ plots/
 .ipynb_checkpoints/**
 .env.local
 .env
+localdb.db

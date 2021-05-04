@@ -6,3 +6,11 @@ export interface glucoseModel {
     scanGlucoseLevel?: number;
     stripGlucoseLevel?: number;
 }
+
+/**
+ * Glucose "activity" for GameBus includes the UNIX timestamp and glucose level (in mmol/L)
+ */
+export interface GameBusGlucoseActivity {
+    timestamp: number;
+    glucoseLevel: number;
+}

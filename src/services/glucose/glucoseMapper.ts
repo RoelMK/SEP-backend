@@ -43,8 +43,8 @@ export default class GlucoseMapper {
             case RecordType.HISTORIC_GLUCOSE_LEVEL:
                 // Convert to mmol/L
                 glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
-                                            parseInt(entry.historic_glucose_mmol_l as string)
-                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.historic_glucose_mg_dl as string));
+                                            parseFloat(entry.historic_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseFloat(entry.historic_glucose_mg_dl as string));
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
                     glucoseLevel: glucose_level_mmol
@@ -55,8 +55,8 @@ export default class GlucoseMapper {
             case RecordType.SCAN_GLUCOSE_LEVEL:
                 // Convert to mmol/L
                 glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
-                                            parseInt(entry.scan_glucose_mmol_l as string)
-                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.scan_glucose_mg_dl as string));
+                                            parseFloat(entry.scan_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseFloat(entry.scan_glucose_mg_dl as string));
 
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
@@ -68,8 +68,8 @@ export default class GlucoseMapper {
             case RecordType.STRIP_GLUCOSE_LEVEL:
                 // Convert to mmol/L
                 glucose_level_mmol =  (glucoseUnit == GlucoseUnit.MMOL_L) ? 
-                                            parseInt(entry.strip_glucose_mmol_l as string)
-                                            : UnitConverter.convertMG_DLtoMMOL_L(parseInt(entry.strip_glucose_mg_dl as string));
+                                            parseFloat(entry.strip_glucose_mmol_l as string)
+                                            : UnitConverter.convertMG_DLtoMMOL_L(parseFloat(entry.strip_glucose_mg_dl as string));
 
                 return {
                     timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),

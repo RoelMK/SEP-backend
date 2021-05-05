@@ -6,7 +6,7 @@ import { parse, getUnixTime, isValid } from 'date-fns';
  * @param dateFormat Format to be used for date (see below)
  * @param referenceDate (Optional) Reference date from when to parse, will use today if not provided
  * @param unix (Optional) Whether a unix timestamp should be returned, default is false
- * @returns Date or unix timestamp of given date string
+ * @returns Date or unix timestamp of given date string, NaN if dateString does not match DateFormat
  */
 const parseDate = (dateString: string, dateFormat: DateFormat, referenceDate?: Date, unix?: boolean): Date | number => {
     // Parse date using specified format

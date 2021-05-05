@@ -1,9 +1,7 @@
-import CSVParser from '../csvParser';
-import foodModel from '../../gb/models/foodModel';
-import FoodMapper from './foodMapper';
-import { AbbottData } from '../abbottParser';
-import { RecordType } from '../../gb/models/glucoseModel';
-import { DateFormat, getDateFormat } from '../dateParser';
+import FoodModel from '../../gb/models/FoodModel';
+import { AbbottData } from '../AbbottParser';
+import { DateFormat } from '../utils/dates';
+import FoodMapper from './FoodMapper';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -14,7 +12,7 @@ import { DateFormat, getDateFormat } from '../dateParser';
  */
 export default class FoodParser {
     // Food data to be exported
-    foodData?: foodModel[];
+    foodData?: FoodModel[];
 
     // TODO: change to other inputs if needed
     constructor(

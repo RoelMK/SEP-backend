@@ -1,5 +1,5 @@
-import CSVParser from './csvParser';
-import { DateFormat } from './dateParser';
+import CSVParser from './CSVParser';
+import { DateFormat } from './utils/dates';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers

@@ -1,7 +1,7 @@
-import { AbbottData } from '../abbottParser';
-import { glucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import GlucoseMapper from './glucoseMapper';
-import { DateFormat } from '../dateParser';
+import { GlucoseModel, GlucoseUnit } from '../../gb/models/GlucoseModel';
+import { AbbottData } from '../AbbottParser';
+import { DateFormat } from '../utils/dates';
+import GlucoseMapper from './GlucoseMapper';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -9,7 +9,7 @@ import { DateFormat } from '../dateParser';
  * - Abbott
  */
 export default class GlucoseParser {
-    glucoseData?: glucoseModel[];
+    glucoseData?: GlucoseModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to glucose .csv file
@@ -31,7 +31,7 @@ export default class GlucoseParser {
         var glucoseUnit: GlucoseUnit;
 
         // We assume that the dateFormat also defines which unit to use
-        switch(this.dateFormat){
+        switch (this.dateFormat) {
             case DateFormat.ABBOTT_EU:
                 glucoseUnit = GlucoseUnit.MMOL_L;
                 break;
@@ -44,7 +44,9 @@ export default class GlucoseParser {
                 break;
         }
 
-        this.glucoseData = this.glucoseInput.map(GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, glucoseUnit));
+        this.glucoseData = this.glucoseInput.map(
+            GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, glucoseUnit)
+        );
     }
 
     /**

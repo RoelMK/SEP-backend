@@ -1,7 +1,7 @@
-import { AbbottData } from '../abbottParser';
-import { insulinModel, InsulinType } from '../../gb/models/insulinModel';
-import InsulinMapper from './insulinMapper';
-import { DateFormat } from '../dateParser';
+import { InsulinModel } from '../../gb/models/InsulinModel';
+import { AbbottData } from '../AbbottParser';
+import { DateFormat } from '../utils/dates';
+import InsulinMapper from './InsulinMapper';
 
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
@@ -9,7 +9,7 @@ import { DateFormat } from '../dateParser';
  * - Abbott
  */
 export default class InsulinParser {
-    insulinData?: insulinModel[];
+    insulinData?: InsulinModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to insulin .csv file

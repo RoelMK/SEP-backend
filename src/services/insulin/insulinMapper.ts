@@ -1,8 +1,9 @@
-import { insulinModel, InsulinType } from '../../gb/models/insulinModel';
-import { AbbottData } from '../abbottParser';
-import { parse, getUnixTime } from 'date-fns';
-import { InsulinSource } from './insulinParser';
-import { DateFormat } from '../dateParser';
+import { getUnixTime } from 'date-fns';
+import { parse } from 'date-fns';
+import { InsulinModel, InsulinType } from '../../gb/models/InsulinModel';
+import { AbbottData } from '../AbbottParser';
+import { DateFormat } from '../utils/dates';
+import { InsulinSource } from './InsulinParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
@@ -20,7 +21,7 @@ export default class InsulinMapper {
         switch (insulinSource) {
             case InsulinSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
-                return function (entry: AbbottData): insulinModel {
+                return function (entry: AbbottData): InsulinModel {
                     return InsulinMapper.mapAbbott(entry, dateFormat);
                 };
         }
@@ -31,7 +32,7 @@ export default class InsulinMapper {
      * @param entry Abbott entry
      * @returns insulinModel with time and type(RAPID or LONG)
      */
-    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat): insulinModel {
+    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat): InsulinModel {
         let insulin_amount: number;
 
         // based on its recordtype, different insulin types are available
@@ -71,7 +72,7 @@ export default class InsulinMapper {
             timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
             insulinAmount: insulin_amount,
             insulinType: insulin_type
-        } as insulinModel;
+        } as InsulinModel;
     }
 }
 
@@ -79,7 +80,7 @@ export default class InsulinMapper {
  * Function that can return an empty insulinModel entry that might be needed for easy returns
  * @returns Empty insulinModel
  */
-const emptyInsulinModel = (): insulinModel => ({
+const emptyInsulinModel = (): InsulinModel => ({
     timestamp: 0,
     insulinAmount: 0,
     insulinType: 0

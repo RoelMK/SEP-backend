@@ -1,12 +1,12 @@
 import { getUnixTime, parse } from 'date-fns';
-import { insulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import AbbottParser, { AbbottDataType } from '../../src/services/abbottParser';
-import { DateFormat } from '../../src/services/dateParser';
+import { InsulinModel, InsulinType } from '../../src/gb/models/InsulinModel';
+import AbbottParser, { AbbottDataType } from '../../src/services/AbbottParser';
+import { DateFormat } from '../../src/services/utils/dates';
 
 test('import Abbott EU insulin', async () => {
     const abbottEUParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv');
     await abbottEUParser.process();
-    let expectedResult: insulinModel = {
+    let expectedResult: InsulinModel = {
         insulinAmount: 9,
         insulinType: InsulinType.RAPID,
         timestamp: getUnixTime(parse('01/03/2021 14:36', DateFormat.ABBOTT_EU, new Date()))
@@ -17,7 +17,7 @@ test('import Abbott EU insulin', async () => {
 test('import Abbott US insulin', async () => {
     const abbottUSParser: AbbottParser = new AbbottParser('test/services/data/abbott_us.csv');
     await abbottUSParser.process();
-    let expectedResult: insulinModel = {
+    let expectedResult: InsulinModel = {
         insulinAmount: 14,
         insulinType: InsulinType.RAPID,
         timestamp: getUnixTime(parse('11-29-2018 11:34 AM', DateFormat.ABBOTT_US, new Date()))

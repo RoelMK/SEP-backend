@@ -1,11 +1,11 @@
-import foodModel from '../gb/models/foodModel';
-import { glucoseModel, RecordType } from '../gb/models/glucoseModel';
-import { insulinModel } from '../gb/models/insulinModel';
-import { DataParser, DataSource } from './dataParser';
-import { DateFormat, getDateFormat } from './dateParser';
-import FoodParser, { FoodSource } from './food/foodParser';
-import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from './insulin/insulinParser';
+import FoodModel from '../gb/models/FoodModel';
+import { GlucoseModel } from '../gb/models/GlucoseModel';
+import { InsulinModel } from '../gb/models/InsulinModel';
+import { DataParser, DataSource } from './DataParser';
+import FoodParser, { FoodSource } from './food/FoodParser';
+import GlucoseParser, { GlucoseSource } from './glucose/GlucoseParser';
+import InsulinParser, { InsulinSource } from './insulin/InsulinParser';
+import { getDateFormat } from './utils/dates';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -49,7 +49,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @param abbottDataType Data type to get
      * @returns Data from data type's parser
      */
-    getData(abbottDataType: AbbottDataType): glucoseModel[] | insulinModel[] | foodModel[] | undefined {
+    getData(abbottDataType: AbbottDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined {
         switch (abbottDataType) {
             case AbbottDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -182,6 +182,21 @@ export interface AbbottData {
     meal_insulin__units_: string;
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
+}
+
+/**
+ * Different record type meanings
+ * Glucose levels (0 & 1) are in mmol/L
+ * Insulin (4) includes both rapid-acting insulin and long-acting insulin (in units)
+ * Carbohydrates are in grams
+ */
+export enum RecordType {
+    HISTORIC_GLUCOSE_LEVEL = 0,
+    SCAN_GLUCOSE_LEVEL = 1,
+    STRIP_GLUCOSE_LEVEL = 2,
+    INSULIN = 4,
+    CARBOHYDRATES = 5,
+    NOTES = 6
 }
 
 export enum AbbottDataType {

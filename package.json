@@ -8,7 +8,7 @@
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "testService": "ts-node src/services/testService.ts",
+        "unit-test-services": "ts-node test/services/testServices.ts",
         "build": "tsc"
     },
     "repository": {

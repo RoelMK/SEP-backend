@@ -29,11 +29,11 @@ function testDBInsertGetRemove() {
     const dbClient = new DBClient(true);
     const user: UserModel = {userId: "id1", gamebusToken: "secretToken"};
 
-    dbClient.setToken(user);
+    assert.strictEqual(dbClient.setToken(user), true);
     let token: string | undefined = dbClient.getToken(user.userId);
     assert.strictEqual(token, user.gamebusToken);
 
-    dbClient.removeToken(user.userId);
+    assert.strictEqual(dbClient.removeToken(user.userId), true);
     dbClient.close();
 }
 
@@ -45,15 +45,15 @@ function testDBSetDuplicate() {
     const user1: UserModel = {userId: "id1", gamebusToken: "secretToken1"};
     const user2: UserModel = {userId: "id1", gamebusToken: "secretToken2"};
 
-    dbClient.setToken(user1);
+    assert.strictEqual(dbClient.setToken(user1), true);
     let token: string | undefined = dbClient.getToken(user1.userId);
     assert.strictEqual(token, user1.gamebusToken);
 
-    dbClient.setToken(user2);
+    assert.strictEqual(dbClient.setToken(user2), true);
     token = dbClient.getToken(user2.userId);
     assert.strictEqual(token, user2.gamebusToken);
 
-    dbClient.removeToken(user2.userId);
+    assert.strictEqual(dbClient.removeToken(user2.userId), true);
     token = dbClient.getToken(user2.userId);
     assert.strictEqual(token, undefined);
 
@@ -67,7 +67,7 @@ function testDBRemoveNonExisting() {
     const dbClient = new DBClient(true);
     const user: UserModel = {userId: "id1", gamebusToken: "secretToken"};
 
-    dbClient.removeToken(user.userId);
+    assert.strictEqual(dbClient.removeToken(user.userId), true);
 
     dbClient.close();
 }

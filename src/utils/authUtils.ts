@@ -1,31 +1,67 @@
 import { UserModel } from "../models/userModel";
 import jwt from "jsonwebtoken";
+import { DBClient } from "../db/dbClient";
+import { decryptGamebusToken } from "./cryptoUtils";
 
 /**
- * Registers a (new) user.
+ * Registers a (new) user. Assumes given user is valid, token may be overwritten.
  * @param userModel User to register
  * @returns If the user has been registered successfully
  */
 export function connectUser(userModel: UserModel): boolean {
-    return true; // TODO: add to database
+    let db: DBClient = new DBClient();
+    let tokenSet: boolean = db.setToken(userModel);
+    db.close();
+    return tokenSet;
 }
 
 /**
- * Removes a user from the system.
+ * Removes a user from the system. Given token is validated.
+ * If token in db is undefined (normally meaning no token is in the db), true will be returned.
  * @param userModel User to remove
  * @returns If the user has been removed successfully
  */
 export function disconnectUser(userModel: UserModel): boolean {
-    return true; // TODO: remove from database
+    let db: DBClient = new DBClient();
+
+    let tokenRemoved: boolean = false;
+    let token: string | undefined = db.getToken(userModel.userId);
+    if (token === userModel.gamebusToken) {
+        tokenRemoved = db.removeToken(userModel.userId);
+    } else if (token === undefined) {
+        tokenRemoved = true;
+    }
+    db.close();
+
+    return tokenRemoved; 
 }
 
 /**
- * Retrieves the status of a user.
+ * Retrieves the status of a user. Token is validated. If token is invalid, false will be returned.
  * @param userModel User to get status for
  * @returns If user has a connection to the systen
  */
 export function getUserStatus(userModel: UserModel): boolean {
-    return false; // TODO: find status in database
+    let db: DBClient = new DBClient();
+    let foundToken: string | undefined = db.getToken(userModel.userId);
+    db.close();
+    return foundToken === userModel.gamebusToken;
+}
+
+/**
+ * Retrieves the decrypted token for a user.
+ * @param userId User to get token for
+ * @returns Decrypted token or undefined if no token was found or an error occurred
+ */
+export function getDecryptedGamebusToken(userId: string): string | undefined {
+    let db: DBClient = new DBClient();
+    let foundToken: string | undefined = db.getToken(userId);
+    db.close();
+    if (foundToken) {
+        return decryptGamebusToken(foundToken, process.env.GAMEBUS_TOKEN_SECRET as string);
+    } else {
+        return undefined;
+    }
 }
 
 /**

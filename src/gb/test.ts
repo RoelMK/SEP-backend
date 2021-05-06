@@ -11,6 +11,8 @@ async function main() {
     console.log(JSON.stringify(activity));
 }
 
+// TODO: remove this file
+
 main();
 */
 const https = require('https');
@@ -122,7 +124,6 @@ function testHttps() {
             process.stdout.write(d);
         });
     });
-
     req.on('error', (error: any) => {
         console.error(error);
     });
@@ -280,7 +281,7 @@ function testGamebarGetSinglePlayer(user: i.connectionData, onComplete: any) {
 }
 
 //TODO remove any from onComplete
-function testGamebarPostActivity(activity: any, user: i.connectionData, onComplete: any) {
+function testGamebarPostActivity(activity: i.activityPOSTData, user: i.connectionData, onComplete: any) {
     const options = {
         hostname: 'api3.gamebus.eu',
         path: '/v2/me/activities',
@@ -460,3 +461,6 @@ client
     .getAllActivitiesDateFilter(userKevin.playerID, new Date(1619429369000) /*new Date(1619629369000),30*/)
     .then((value: any) => console.log(value[0].propertyInstances))
     .catch((error: Error) => console.log(error));
+    req.write(activity);
+    req.end();
+}

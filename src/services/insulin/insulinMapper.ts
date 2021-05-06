@@ -1,9 +1,9 @@
 import { getUnixTime } from 'date-fns';
 import { parse } from 'date-fns';
-import { InsulinModel, InsulinType } from '../../gb/models/InsulinModel';
-import { AbbottData } from '../AbbottParser';
+import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
+import { AbbottData } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
-import { InsulinSource } from './InsulinParser';
+import { InsulinSource } from './insulinParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel

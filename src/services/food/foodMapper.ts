@@ -1,7 +1,7 @@
-import FoodModel from '../../gb/models/FoodModel';
-import { AbbottData } from '../AbbottParser';
+import FoodModel from '../../gb/models/foodModel';
+import { AbbottData } from '../abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';
-import { FoodSource } from './FoodParser';
+import { FoodSource } from './foodParser';
 
 /**
  * Helper class to map the different food sources to 1 foodModel

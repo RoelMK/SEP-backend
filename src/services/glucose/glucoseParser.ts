@@ -1,7 +1,7 @@
-import { GlucoseModel, GlucoseUnit } from '../../gb/models/GlucoseModel';
-import { AbbottData } from '../AbbottParser';
+import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
+import { AbbottData } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
-import GlucoseMapper from './GlucoseMapper';
+import GlucoseMapper from './glucoseMapper';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel

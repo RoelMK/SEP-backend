@@ -1,6 +1,6 @@
 import { getUnixTime, parse } from 'date-fns';
-import { GlucoseModel } from '../../src/gb/models/GlucoseModel';
-import { AbbottDataType } from '../../src/services/AbbottParser';
+import { GlucoseModel } from '../../src/gb/models/glucoseModel';
+import { AbbottDataType } from '../../src/services/abbottParser';
 import { DateFormat } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { parseAbbott } from './parseUtils';

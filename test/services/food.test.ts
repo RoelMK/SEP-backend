@@ -1,8 +1,8 @@
-import FoodModel from '../../src/gb/models/FoodModel';
+import FoodModel from '../../src/gb/models/foodModel';
 import { parse, getUnixTime } from 'date-fns';
 import { DateFormat } from '../../src/services/utils/dates';
 import { parseAbbott } from './parseUtils';
-import { AbbottDataType } from '../../src/services/AbbottParser';
+import { AbbottDataType } from '../../src/services/abbottParser';
 
 test('import Abbott EU food', async () => {
     let expectedResult: FoodModel = {

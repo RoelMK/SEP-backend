@@ -1,6 +1,6 @@
 import { Headers, Query } from '../GameBusClient';
-import { ActivityModel } from '../models/ActivityModel';
-import { GameBusObject } from './Base';
+import { ActivityModel } from '../models/activityModel';
+import { GameBusObject } from './base';
 
 // TODO: add ActivityModel to models/activityModel
 /**

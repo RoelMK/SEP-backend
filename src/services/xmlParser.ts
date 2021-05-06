@@ -30,5 +30,5 @@ const defaultConfig = {
     explicitArray: false, 
     attrkey: 'Attributes', 
     charkey: 'Value',
-    valueProcessors: [xml2js.processors.parseNumbers],
+    valueProcessors: [xml2js.processors.parseNumbers]
 };

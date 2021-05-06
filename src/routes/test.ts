@@ -9,16 +9,7 @@ testRouter.get('/', (req: any, res: any) => {
 });
 
 testRouter.get('/test', (req: any, res: any) => {
-
-    var parser = new XMLParser()
-    var k = parser.parse("./src/services/food/eetmeter.xml")
-    // console.log(k)
-    k.then((result) => {
-        // console.log("in closure")
-        var parsed = result as EetmeterModels.EetmeterData
-        var o = new EeetMeterParser(parsed)
-        res.send(o.foodData);
-    })
+    res.send("Hi, this was a success!");
 });
 
 module.exports = testRouter;

@@ -54,27 +54,8 @@ export class Activity extends GameBusObject {
     ): Promise<any> {
         const startDateAsDate = fromUnixTime(startDate);
         const endDateAsDate = fromUnixTime(endDate);
-        const dateQuery: Query = {
-            // Given date formatted in ISO format
-            start: formatISO(startDateAsDate, { representation: 'date' }),
-            // Date of next day (end is exclusive) formatted in ISO
-            end: formatISO(endDateAsDate, { representation: 'date' }),
-            // Either use the given limit or use 30 as default
-            limit: (limit ? limit : 30).toString(),
-            // Use given order as order or use descending as default
-            sort: `${order ? order : QueryOrder.DESC}date`,
-            // Add rest of query
-            ...query
-        };
-        const activities = await this.gamebus.get(
-            `players/${playerId}/activities`,
-            headers,
-            dateQuery,
-            this.authRequired
-        );
-        return activities;
+        return await this.getAllAcitivitiesBetweenDate(playerId,startDateAsDate,endDateAsDate,order,limit,headers,query)
     }
-
     /**
      * Get all activities on a specified date range
      * @param playerId Player ID
@@ -83,7 +64,7 @@ export class Activity extends GameBusObject {
      * @param limit Amount of activities (default 30)
      * @returns List of activities
      */
-    async getAllAcitivitiesBetween(
+    async getAllAcitivitiesBetweenDate(
         playerId: number,
         startDate: Date,
         endDate: Date,
@@ -159,7 +140,7 @@ export class Activity extends GameBusObject {
         query?: Query
     ): Promise<ActivityModel[]> {
         const tomorrowAsDate = addDays(date, 1);
-        const activities = await this.getAllAcitivitiesBetween(
+        const activities = await this.getAllAcitivitiesBetweenDate(
             playerId,
             date,
             tomorrowAsDate,

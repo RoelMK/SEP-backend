@@ -5,7 +5,6 @@
     "main": "src\\app.ts",
     "scripts": {
         "test-api": "ts-node src/gb/test.ts",
-        "test-api2": "ts-node src/gb/test2.ts",
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
         "test": "jest",

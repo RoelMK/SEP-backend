@@ -1,4 +1,4 @@
-import { connectionData } from "./interfaces"
+import { connectionData } from "./models/gamebusModel"
 
 const dotenv = require('dotenv')
 dotenv.config()

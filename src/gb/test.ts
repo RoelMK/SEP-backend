@@ -1,4 +1,4 @@
-import { GameBusClient } from './GameBusClient';
+import { GameBusClient } from './gameBusClient';
 require('dotenv').config();
 
 let userKevin = {

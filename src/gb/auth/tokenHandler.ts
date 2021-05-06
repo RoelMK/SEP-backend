@@ -1,4 +1,4 @@
-import { GameBusClient } from '../GameBusClient';
+import { GameBusClient } from '../gameBusClient';
 
 /**
  * Token handler that can retrieve and refresh tokens if needed

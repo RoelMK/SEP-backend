@@ -1,5 +1,4 @@
 import { GameBusClient } from './GameBusClient';
-import { QueryOrder } from './objects/activity';
 require('dotenv').config();
 
 let userKevin = {

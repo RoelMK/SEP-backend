@@ -1,7 +1,7 @@
 import { Headers, Query } from '../GameBusClient';
-import { GameBusObject } from './base';
-import { ActivityModel } from '../models/activityModel';
 import { fromUnixTime, formatISO, addDays } from 'date-fns';
+import { ActivityModel } from '../models/ActivityModel';
+import { GameBusObject } from './Base';
 
 // TODO: add ActivityModel to models/activityModel
 /**
@@ -18,7 +18,7 @@ export class Activity extends GameBusObject {
     async getActivityById(activityId: number, headers?: Headers, query?: Query): Promise<ActivityModel> {
         // TODO: change url if needed (see endpoint constant in GameBusClient.ts)
         const activity: ActivityModel = await this.gamebus.get(
-            `/v2/activities/${activityId}`,
+            `activities/${activityId}`,
             headers,
             query,
             this.authRequired
@@ -27,12 +27,7 @@ export class Activity extends GameBusObject {
     }
 
     async getAllActivities(playerId: number, headers?: Headers, query?: Query): Promise<any> {
-        const activity = await this.gamebus.get(
-            `/v2/players/${playerId}/activities`,
-            headers,
-            query,
-            this.authRequired
-        );
+        const activity = await this.gamebus.get(`players/${playerId}/activities`, headers, query, this.authRequired);
         return activity;
     }
 
@@ -57,12 +52,7 @@ export class Activity extends GameBusObject {
             query.limit = String(limit);
         }
 
-        const activity = await this.gamebus.get(
-            `/v2/players/${playerId}/activities`,
-            headers,
-            query,
-            this.authRequired
-        );
+        const activity = await this.gamebus.get(`players/${playerId}/activities`, headers, query, this.authRequired);
         return activity;
     }
 
@@ -95,7 +85,7 @@ export class Activity extends GameBusObject {
             ...query
         };
         const activities = await this.gamebus.get(
-            `/v2/players/${playerId}/activities`,
+            `players/${playerId}/activities`,
             headers,
             dateQuery,
             this.authRequired

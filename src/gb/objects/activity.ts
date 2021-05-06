@@ -1,7 +1,8 @@
 import { Headers, Query, queryDateFormat } from '../gbClient';
 import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
-import { ActivityModel } from '../models/activityModel';
+import { ActivityModel, ActivityProperty } from '../models/activityModel';
 import { GameBusObject } from './base';
+import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 
 // TODO: add ActivityModel to models/activityModel
 /**
@@ -15,8 +16,8 @@ export class Activity extends GameBusObject {
      * @param query Any queries
      * @returns Activity associated to given ID
      */
-    async getActivityById(activityId: number, headers?: Headers, query?: Query): Promise<ActivityModel> {
-        const activity: ActivityModel = await this.gamebus.get(
+    async getActivityById(activityId: number, headers?: Headers, query?: Query): Promise<ActivityGETData> {
+        const activity: ActivityGETData = await this.gamebus.get(
             `activities/${activityId}`,
             headers,
             query,
@@ -30,8 +31,13 @@ export class Activity extends GameBusObject {
      * @param playerId Player ID
      * @returns All activities of player
      */
-    async getAllActivities(playerId: number, headers?: Headers, query?: Query): Promise<any> {
-        const activity = await this.gamebus.get(`players/${playerId}/activities`, headers, query, this.authRequired);
+    async getAllActivities(playerId: number, headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
+        const activity: ActivityGETData[] = await this.gamebus.get(
+            `players/${playerId}/activities`,
+            headers,
+            query,
+            this.authRequired
+        );
         return activity;
     }
 
@@ -51,7 +57,7 @@ export class Activity extends GameBusObject {
         limit?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<any> {
+    ): Promise<ActivityGETData[]> {
         const startDateAsDate = fromUnixTime(startDate);
         const endDateAsDate = fromUnixTime(endDate);
         return await this.getAllAcitivitiesBetweenDate(
@@ -80,7 +86,7 @@ export class Activity extends GameBusObject {
         limit?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<any> {
+    ): Promise<ActivityGETData[]> {
         const dateQuery: Query = {
             // Given date formatted in ISO format
             start: format(startDate, queryDateFormat),
@@ -93,7 +99,7 @@ export class Activity extends GameBusObject {
             // Add rest of query
             ...query
         };
-        const activities = await this.gamebus.get(
+        const activities: ActivityGETData[] = await this.gamebus.get(
             `players/${playerId}/activities`,
             headers,
             dateQuery,
@@ -116,11 +122,11 @@ export class Activity extends GameBusObject {
         limit?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityModel[]> {
+    ): Promise<ActivityGETData[]> {
         const dateAsDate = fromUnixTime(date);
         const tomorrowAsDate = addDays(dateAsDate, 1);
         const tomorrowUnix = getUnixTime(tomorrowAsDate);
-        const activities = await this.getAllActivitiesBetweenUnix(
+        const activities: ActivityGETData[] = await this.getAllActivitiesBetweenUnix(
             playerId,
             date,
             tomorrowUnix,
@@ -146,9 +152,9 @@ export class Activity extends GameBusObject {
         limit?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityModel[]> {
+    ): Promise<ActivityGETData[]> {
         const tomorrowAsDate = addDays(date, 1);
-        const activities = await this.getAllAcitivitiesBetweenDate(
+        const activities: ActivityGETData[] = await this.getAllAcitivitiesBetweenDate(
             playerId,
             date,
             tomorrowAsDate,
@@ -161,6 +167,37 @@ export class Activity extends GameBusObject {
     }
 
     // TODO: query for specific timestamp on a given date to start filtering time periods
+    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[]
+
+    /**
+     * Example method that converts the ActivityGETData to (multiple) ActivityModels
+     * @param activity Response from GET activity request
+     * @returns List of ActivityModels corresponding to the response from the GET
+     */
+    static getActivityInfoFromActivity(activity: ActivityGETData): ActivityModel[] {
+        // Get property instances
+        const properties: PropertyInstanceReference[] = activity.propertyInstances;
+        // Prepare output array
+        const activityModels: ActivityModel[] = [];
+        // For each property instance, correctly transform the property and all relevant information to ActivityModel
+        properties.forEach((value: PropertyInstanceReference) => {
+            const valueProperty: ActivityProperty = {
+                id: value.property.id,
+                translationKey: value.property.translationKey,
+                baseUnit: value.property.baseUnit,
+                inputType: value.property.inputType
+            };
+            const activityModel: ActivityModel = {
+                timestamp: activity.date,
+                id: value.id,
+                value: value.value,
+                property: valueProperty
+            };
+            // Add model to array
+            activityModels.push(activityModel);
+        });
+        return activityModels;
+    }
 }
 
 export enum QueryOrder {

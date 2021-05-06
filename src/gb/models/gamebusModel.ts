@@ -1,42 +1,42 @@
 // TODO: move to gb/models
 
-export interface connectionData {
+export interface ConnectionData {
     authToken: string;
     playerID: number;
     userID: number;
 }
 
-export interface activityPOSTData {
+export interface ActivityPOSTData {
     gameDescriptorTK: String;
     dataProviderName: String;
     image: String;
     date: number;
-    propertyInstances: propertyInstancePOST[];
+    propertyInstances: PropertyInstancePOST[];
     players: number[];
 }
 
-export interface propertyInstancePOST {
+export interface PropertyInstancePOST {
     propertyTK: string;
     value: any;
 }
 
-export interface activityGETData {
+export interface ActivityGETData {
     id: number;
     date: number;
     isManual: boolean;
     group?: any; //unkown yet
     image?: any; //unkown yet
-    creator: userReference;
-    player: userReference;
-    gameDescriptor: gameDescriptorReference;
-    dataProvider: dataProviderReference;
-    propertyInstances: propertyInstanceReference[];
+    creator: UserReference;
+    player: UserReference;
+    gameDescriptor: GameDescriptorReference;
+    dataProvider: DataProviderReference;
+    propertyInstances: PropertyInstanceReference[];
     personalPoints: any[]; //TODO, no idea
-    supports: supportReference[];
+    supports: SupportReference[];
     chats: any[]; //TODO, prob not going to use anyways
 }
 
-export interface userReference {
+export interface UserReference {
     id: number;
     user: {
         id: number;
@@ -46,7 +46,7 @@ export interface userReference {
     };
 }
 
-export interface gameDescriptorReference {
+export interface GameDescriptorReference {
     id: number;
     translationKey: string;
     image: string | null;
@@ -54,30 +54,32 @@ export interface gameDescriptorReference {
     isAggregate: boolean; //not sure if this is alway there
 }
 
-export interface dataProviderReference {
+export interface DataProviderReference {
     id: number;
     name: string;
     image: string | null;
     isConnected: boolean; //not sure if this is always there
 }
 
-export interface propertyInstanceReference {
+export interface PropertyInstanceReference {
     id: number;
     value: number; //TODO, check this!!
-    property: {
-        id: number;
-        translationKey: string;
-        baseUnit: string;
-        inputType: string;
-        aggregationStrategy: string;
-        properyPermissions: any[]; //
-    };
+    property: PropertyInstanceProperty;
 }
 
-export interface supportReference {
+export interface PropertyInstanceProperty {
+    id: number;
+    translationKey: string;
+    baseUnit: string;
+    inputType: string;
+    aggregationStrategy: string;
+    properyPermissions: any[]; // Probably not needed
+}
+
+export interface SupportReference {
     id: number;
     date: number;
-    supporter: userReference;
+    supporter: UserReference;
 }
 
 //TODO add output interfaces for getPlayer and getUser

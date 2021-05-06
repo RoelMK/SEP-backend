@@ -1,6 +1,6 @@
 import { getUnixTime, parse } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../src/gb/models/InsulinModel';
-import AbbottParser, { AbbottDataType } from '../../src/services/AbbottParser';
+import { AbbottDataType } from '../../src/services/AbbottParser';
 import { DateFormat } from '../../src/services/utils/dates';
 import { parseAbbott } from './parseUtils';
 

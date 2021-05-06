@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-var parseString = require('xml2js').parseString;
+import { parseString } from 'xml2js';
 /**
  * Generic XML reader and parser to be used for all XML files
  */
@@ -17,6 +17,7 @@ export default class XMLParser {
 
         return new Promise((resolve) => {
             // Parse xml file return result as a promise
+            // TODO: error handling (try catch)
             parseString(xmlFile, function (err: any, result: any) {
                 resolve(result);
             });

@@ -13,11 +13,3 @@ export enum GlucoseUnit {
     MMOL_L = 'mmol/L',
     MG_DL = 'mg/dL'
 }
-
-/**
- * Glucose "activity" for GameBus includes the UNIX timestamp and glucose level (in mmol/L)
- */
-export interface GameBusGlucoseActivity {
-    timestamp: number;
-    glucoseLevel: number;
-}

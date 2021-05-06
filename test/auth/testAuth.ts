@@ -1,64 +1,66 @@
-import { UserModel } from "../../src/models/userModel";
-import { connectUser, disconnectUser, getDecryptedGamebusToken, getUserStatus } from "../../src/utils/authUtils";
+import { connectUser, disconnectUser, getAccessToken, getRefreshToken, getUserStatus } from "../../src/utils/authUtils";
 import * as assert from 'assert';
 
-// NOTE: these tokens are currently encrypted using AES with constant IV (128-bit)
-// This may not be the GameBus way of doing things, and should be changed if necessary.
-const decrToken = "123456789abc1";
-const encrToken = "d2QmVGx5GcJ/1BRTwg==";
-
 export function runAuthTests(): void {
+    testInvalidConnect();
     testConnectStatusDisconnect();
     testStatusNotConnected();
     testDisconnectNotConnected();
     testDuplicateConnect();
+    testEmptyRefreshToken();
 }
 
 /**
  * Tests connect, status and disconnect sequentially for one single user.
  */
 function testConnectStatusDisconnect() {
-    let user: UserModel = {
-        userId: "user1",
-        gamebusToken: encrToken
-    };
-    assert.strictEqual(connectUser(user), true);
-    assert.strictEqual(getUserStatus(user), true);
-    assert.strictEqual(getDecryptedGamebusToken(user.userId), decrToken);
-    assert.strictEqual(disconnectUser(user), true);
+    assert.strictEqual(connectUser("id1", "s1", "a1"), true);
+    assert.strictEqual(getUserStatus("id1"), true);
+    assert.strictEqual(getAccessToken("id1"), "s1");
+    assert.strictEqual(getRefreshToken("id1"), "a1");
+    assert.strictEqual(disconnectUser("id1"), true);
+}
+
+/**
+ * Tests if an empty access token can be added.
+ */
+function testEmptyRefreshToken() {
+    assert.strictEqual(connectUser("id1", "s1", ""), true);
+    assert.strictEqual(getRefreshToken("id1"), "");
+    assert.strictEqual(disconnectUser("id1"), true);
+}
+
+/**
+ * Tests if invalid rejects are not accepted.
+ */
+function testInvalidConnect() {
+    assert.strictEqual(connectUser("", "s1", ""), false);
+    assert.strictEqual(connectUser("id1", "", ""), false);
+    assert.strictEqual(connectUser("", "", ""), false);
+    assert.strictEqual(connectUser("", "", "a1"), false);
 }
 
 /**
  * Tests if status is correct if user is not connected.
  */
 function testStatusNotConnected() {
-    let user: UserModel = {
-        userId: "user2",
-        gamebusToken: encrToken
-    };
-    assert.strictEqual(getUserStatus(user), false); // TODO: add test for invalid token
+    assert.strictEqual(getUserStatus("id1"), false);
 }
 
 /**
  * Tests if disconnect works properly if user does not exist.
  */
 function testDisconnectNotConnected() {
-    let user: UserModel = {
-        userId: "user3",
-        gamebusToken: encrToken
-    };
-    assert.strictEqual(disconnectUser(user), true);
+    assert.strictEqual(disconnectUser("id1"), true);
 }
 
 /**
  * Tests if adding the same user twice works properly.
  */
 function testDuplicateConnect() {
-    let user: UserModel = {
-        userId: "user4",
-        gamebusToken: encrToken
-    };
-    assert.strictEqual(connectUser(user), true);
-    assert.strictEqual(connectUser(user), true); // TODO: change key and check if key change happens
-    assert.strictEqual(disconnectUser(user), true);
+    assert.strictEqual(connectUser("id1", "s1", "a1"), true);
+    assert.strictEqual(connectUser("id1", "s1", "a1"), true);
+    assert.strictEqual(connectUser("id1", "s2", "a1"), true);
+    assert.strictEqual(getAccessToken("id1"), "s2");
+    assert.strictEqual(disconnectUser("id1"), true);
 }

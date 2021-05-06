@@ -15,6 +15,7 @@ dbClient.close();
 const app = express();
 const port = 8080;
 app.use(require('./routes'));
+app.use(express.json());
 if (!isProduction) {
     app.use(errorhandler());
 }

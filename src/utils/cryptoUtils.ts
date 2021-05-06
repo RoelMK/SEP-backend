@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const algorithm = 'aes-128-cfb8';
 const constantIV = "1234567890123456";
 
+// NOTE: these methods are based on outdated documentation and may need to be altered.
+
 /**
  * Decrypts a Gamebus token.
  * @param token Token to decrypt
@@ -27,6 +29,7 @@ export function encryptGamebusToken(token: string, key: string): string {
     return encryptAES(token, key);
 }
 
+
 /**
  * Encrypts plain text using AES with constant IV.
  * @param text Text to encrypt
@@ -34,10 +37,8 @@ export function encryptGamebusToken(token: string, key: string): string {
  * @returns Ciphertext, base-64 encoded
  */
 function encryptAES(text: string, key: string) {
-    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), constantIV);
+    let cipher = crypto.createCipheriv(algorithm, key, constantIV);
     let encrypted = cipher.update(text);
-
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
 
     return encrypted.toString('base64'); 
 }
@@ -50,10 +51,8 @@ function encryptAES(text: string, key: string) {
  */
 function decryptAES(text: string, key: string) {
     let encryptedText = Buffer.from(text, 'base64'); 
-    let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), constantIV); 
+    let decipher = crypto.createDecipheriv(algorithm, key, constantIV); // https://nodejs.org/api/crypto.html#crypto_crypto_createdecipheriv_algorithm_key_iv_options 
     let decrypted = decipher.update(encryptedText);
-
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
 
     return decrypted.toString();
 }

@@ -1,5 +1,4 @@
 import Database from "better-sqlite3";
-import { UserModel } from "../models/userModel";
 
 
 export class DBClient {
@@ -23,19 +22,19 @@ export class DBClient {
      * @throws Will throw an error if unable to initialize the database
      */
     initialize(): void {
-        this.db.exec("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, token TEXT NOT NULL);")
+        this.db.exec("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT);")
     }
 
     /**
-     * Gets a token from the database.
-     * @param userId User to get token for
-     * @returns Token or undefined if not found / error occurred
+     * Gets an access token from the database.
+     * @param userId User to get access token for
+     * @returns Access token or undefined if not found / error occurred
      */
-    getToken(userId: string): string | undefined {
+    getAccessToken(userId: string): string | undefined {
         try {
-            const userRow = this.db.prepare('SELECT token FROM users WHERE user_id=?').get(userId);
+            const userRow = this.db.prepare('SELECT access_token FROM users WHERE user_id=?').get(userId);
             if (userRow) {
-                return userRow.token;
+                return userRow.access_token;
             } else {
                 return undefined;
             }
@@ -45,14 +44,34 @@ export class DBClient {
     }
 
     /**
-     * Adds a new token to the database.
-     * @param user User data to add
-     * @returns If token was set successfully
+     * Gets a refresh token from the database.
+     * @param userId User to get refresh token for
+     * @returns Refresh token or undefined if not found / error occurred
      */
-    setToken(user: UserModel): boolean {
+     getRefreshToken(userId: string): string | undefined {
         try {
-            const stmt = this.db.prepare('INSERT OR REPLACE INTO users(user_id, token) VALUES(?, ?)');
-            stmt.run(user.userId, user.gamebusToken);
+            const userRow = this.db.prepare('SELECT refresh_token FROM users WHERE user_id=?').get(userId);
+            if (userRow) {
+                return userRow.refresh_token;
+            } else {
+                return undefined;
+            }
+        } catch(e) {
+            return undefined;
+        }
+    }
+
+    /**
+     * Adds a new user to the database or update the tokens for a user.
+     * @param userId Id of user to set tokens for
+     * @param accessToken Access token for user to set
+     * @param refreshToken Refresh token for user to set
+     * @returns If tokens were set successfully
+     */
+    setUser(userId: string, accessToken: string, refreshToken: string): boolean {
+        try {
+            const stmt = this.db.prepare('INSERT OR REPLACE INTO users(user_id, access_token, refresh_token) VALUES(?, ?, ?)');
+            stmt.run(userId, accessToken, refreshToken);
             return true;
         } catch(e) {
             return false;
@@ -61,11 +80,11 @@ export class DBClient {
     }
 
     /**
-     * Removes a token from the database.
+     * Removes a user from the database.
      * @param userId User to remove
-     * @returns If token was removed successfully
+     * @returns If user was removed successfully
      */
-    removeToken(userId: string): boolean {
+    removeUser(userId: string): boolean {
         try {
             const stmt = this.db.prepare('DELETE FROM users WHERE user_id=?');
             stmt.run(userId);

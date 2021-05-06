@@ -26,7 +26,7 @@ function testDecryptOnly() {
  */
 function testEncryptDecrypt() {
     let encrypted: string = encryptGamebusToken(plainText, encryptionKey);
+    console.log("Chipertext: " + encrypted)
     let decrypted: string | undefined = decryptGamebusToken(encrypted, encryptionKey);
     assert.strictEqual(decrypted, plainText);
-    console.log("Chipertext: " + encrypted)
 }

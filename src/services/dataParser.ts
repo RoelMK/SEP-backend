@@ -27,4 +27,4 @@ export abstract class DataParser<D extends {} = Record<string, string>> {
 
 export enum DataSource {
     ABBOTT = 0
-}
+}   

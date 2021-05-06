@@ -4,7 +4,7 @@ import { parseString } from 'xml2js';
  * Generic XML reader and parser to be used for all XML files
  */
 export default class XMLParser {
-    constructor() {}
+    constructor(private readonly config = defaultConfig) {}
 
     /**
      * Async function that parses the given .xml file's path
@@ -18,9 +18,16 @@ export default class XMLParser {
         return new Promise((resolve) => {
             // Parse xml file return result as a promise
             // TODO: error handling (try catch)
-            parseString(xmlFile, function (err: any, result: any) {
+            parseString(xmlFile, this.config, function (err: any, result: any) {
                 resolve(result);
             });
         });
     }
 }
+const defaultConfig = {
+    trim: true, 
+    explicitArray: false, 
+    parseNumbers: true,
+    attrkey: 'Attributes', 
+    charkey: 'Value' 
+};

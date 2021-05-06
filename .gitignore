@@ -47,3 +47,4 @@ plots/
 .env.local
 .env
 test.bat
+dist/

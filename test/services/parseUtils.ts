@@ -1,4 +1,4 @@
-import AbbottParser, { AbbottDataType } from '../../src/services/AbbottParser';
+import AbbottParser, { AbbottDataType } from '../../src/services/abbottParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data

@@ -1,10 +1,10 @@
 import { getUnixTime } from 'date-fns';
 import { parse } from 'date-fns';
-import { GlucoseUnit, GlucoseModel } from '../../gb/models/GlucoseModel';
-import { AbbottData, RecordType } from '../AbbottParser';
+import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
+import { AbbottData, RecordType } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
-import { GlucoseSource } from './GlucoseParser';
+import { GlucoseSource } from './glucoseParser';
 
 /**
  * Helper class to map the different glucose sources to 1 glucoseModel

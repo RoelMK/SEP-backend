@@ -1,4 +1,4 @@
-import CSVParser from './CSVParser';
+import CSVParser from './csvParser';
 import { DateFormat } from './utils/dates';
 
 /**

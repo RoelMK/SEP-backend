@@ -1,10 +1,10 @@
-import FoodModel from '../gb/models/FoodModel';
-import { GlucoseModel } from '../gb/models/GlucoseModel';
-import { InsulinModel } from '../gb/models/InsulinModel';
-import { DataParser, DataSource } from './DataParser';
-import FoodParser, { FoodSource } from './food/FoodParser';
-import GlucoseParser, { GlucoseSource } from './glucose/GlucoseParser';
-import InsulinParser, { InsulinSource } from './insulin/InsulinParser';
+import FoodModel from '../gb/models/foodModel';
+import { GlucoseModel } from '../gb/models/glucoseModel';
+import { InsulinModel } from '../gb/models/insulinModel';
+import { DataParser, DataSource } from './dataParser';
+import FoodParser, { FoodSource } from './food/foodParser';
+import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
+import InsulinParser, { InsulinSource } from './insulin/insulinParser';
 import { getDateFormat } from './utils/dates';
 
 /**

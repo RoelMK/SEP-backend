@@ -1,7 +1,7 @@
-import { InsulinModel } from '../../gb/models/InsulinModel';
-import { AbbottData } from '../AbbottParser';
+import { InsulinModel } from '../../gb/models/insulinModel';
+import { AbbottData } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
-import InsulinMapper from './InsulinMapper';
+import InsulinMapper from './insulinMapper';
 
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel

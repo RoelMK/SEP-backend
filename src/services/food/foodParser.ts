@@ -1,7 +1,7 @@
-import FoodModel from '../../gb/models/FoodModel';
-import { AbbottData } from '../AbbottParser';
+import FoodModel from '../../gb/models/foodModel';
+import { AbbottData } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
-import FoodMapper from './FoodMapper';
+import FoodMapper from './foodMapper';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels

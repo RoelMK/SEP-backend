@@ -16,7 +16,9 @@ const parseDate = (dateString: string, dateFormat: DateFormat, referenceDate?: D
         return date;
     }
     // Otherwise, return the unix timestamp
-    return getUnixTime(date);
+    // To be consistent with GameBus' timestamps, we make sure we are using the extended 13-digit format
+    // And since getUnixTime() always returns the time in seconds, we just multiply by 1000 to get 13 digits
+    return getUnixTime(date) * 1000;
 };
 
 /**
@@ -29,7 +31,7 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
     // Try all the defined formats
     for (let format in DateFormat) {
         //console.log(`Parsing {${dateString}} as {${DateFormat[format as keyof typeof DateFormat]}}`);
-        let valid;
+        let valid: boolean;
         try {
             // Try to make a valid date using the format
             valid = isValid(parse(dateString, DateFormat[format], referenceDate ? referenceDate : new Date()));

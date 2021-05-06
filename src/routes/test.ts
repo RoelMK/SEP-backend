@@ -1,3 +1,6 @@
+import AbbottParser from "../services/abbottParser";
+import XMLParser from "../services/xmlParser";
+
 const testRouter = require('express').Router();
 
 testRouter.get('/', (req: any, res: any) => {

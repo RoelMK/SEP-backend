@@ -24,22 +24,26 @@ export default class EeetMeterParser {
      */
     private process() {
         for (var i = 0; i < this.foodInput.Consumpties.Consumptie.length; i++) {
+            var consumption = this.foodInput.Consumpties.Consumptie[i]
+            var date = this.dateParser(
+                consumption.Datum.Jaar,
+                consumption.Datum.Maand,
+                consumption.Datum.Dag,
+                consumption.Attributes.Periode
+            )
             let meal = {
-                timestamp: this.foodInput.Consumpties.Consumptie[i].Datum.Jaar,
-                calories: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Koolhydraten.Value * 4,
-                carbohydrates: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Koolhydraten.Value,
-                fat: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Vet.Value,
-                saturatedFat: this.foodInput.Consumpties.Consumptie[i].Nutrienten.VerzadigdVet.Value,
-                salt: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Zout.Value,
-                sugars: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Suikers.Value,
-                water: this.foodInput.Consumpties.Consumptie[i].Nutrienten.Water.Value,
-                description: this.foodInput.Consumpties.Consumptie[i].Product.Naam,
+                timestamp: date,
+                calories: consumption.Nutrienten.Koolhydraten.Value * 4,
+                carbohydrates: consumption.Nutrienten.Koolhydraten.Value,
+                fat: consumption.Nutrienten.Vet.Value,
+                saturatedFat: consumption.Nutrienten.VerzadigdVet.Value,
+                salt: consumption.Nutrienten.Zout.Value,
+                sugars: consumption.Nutrienten.Suikers.Value,
+                water: consumption.Nutrienten.Water.Value,
+                description: consumption.Product.Naam,
             } as FoodModel;
-
-            console.log(meal)
             this.foodData?.push(meal)
         }
-        console.log(this.foodData)
     }
 
     /**
@@ -47,5 +51,19 @@ export default class EeetMeterParser {
      */
     async post() {
         // TODO: post the foodData (correctly formatted) to GameBus
+    }
+
+    private dateParser(year: number, month: number, day: number, period: string) {
+        var hour = 0
+        if (period == "Ontbijt") {
+            hour = 9
+        } else if (period == "Lunch") {
+            hour = 13
+        } else if (period == "Avondeten") {
+            hour = 19
+        }
+
+        let date: Date = new Date(year, month, day, hour)       
+        return date.getTime();
     }
 }

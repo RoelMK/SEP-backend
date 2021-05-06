@@ -17,7 +17,7 @@ testRouter.get('/test', (req: any, res: any) => {
         // console.log("in closure")
         var parsed = result as EetmeterModels.EetmeterData
         var o = new EeetMeterParser(parsed)
-        res.send(parsed);
+        res.send(o.foodData);
     })
 });
 

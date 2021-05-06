@@ -1,5 +1,5 @@
-import { Headers, Query } from '../gbClient';
-import { fromUnixTime, formatISO, addDays, getUnixTime } from 'date-fns';
+import { Headers, Query, queryDateFormat } from '../gbClient';
+import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
 import { ActivityModel } from '../models/activityModel';
 import { GameBusObject } from './base';
 
@@ -83,9 +83,9 @@ export class Activity extends GameBusObject {
     ): Promise<any> {
         const dateQuery: Query = {
             // Given date formatted in ISO format
-            start: formatISO(startDate, { representation: 'date' }),
+            start: format(startDate, queryDateFormat),
             // Date of next day (end is exclusive) formatted in ISO
-            end: formatISO(endDate, { representation: 'date' }),
+            end: format(endDate, queryDateFormat),
             // Either use the given limit or use 30 as default
             limit: (limit ? limit : 30).toString(),
             // Use given order as order or use descending as default

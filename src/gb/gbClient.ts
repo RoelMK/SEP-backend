@@ -225,3 +225,6 @@ export interface Query {
 export interface Headers {
     [key: string]: string;
 }
+
+// Date format that is to be used in GameBus queries
+export const queryDateFormat = 'dd-MM-yyyy';

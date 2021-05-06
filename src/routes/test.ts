@@ -16,13 +16,6 @@ testRouter.get('/test', (req: any, res: any) => {
     k.then((result) => {
         // console.log("in closure")
         var parsed = result as EetmeterModels.EetmeterData
-        console.log(parsed)
-        // for (var i = 0; i < parsed.Consumpties.Consumptie.length; i++) {
-        //     console.log(parsed.Consumpties.Consumptie[i].Attributes.Periode)
-        //     console.log(parsed.Consumpties.Consumptie[i].Product.Naam)
-        //     console.log(parsed.Consumpties.Consumptie[i].Datum.Jaar)
-        //     console.log(parsed.Consumpties.Consumptie[i].Nutrienten.Koolhydraten.Value)
-        // }
         var o = new EeetMeterParser(parsed)
         res.send(parsed);
     })

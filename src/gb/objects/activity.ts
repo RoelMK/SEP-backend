@@ -1,4 +1,4 @@
-import { Headers, Query } from '../GameBusClient';
+import { Headers, Query } from '../gbClient';
 import { fromUnixTime, formatISO, addDays, getUnixTime } from 'date-fns';
 import { ActivityModel } from '../models/activityModel';
 import { GameBusObject } from './base';
@@ -54,7 +54,15 @@ export class Activity extends GameBusObject {
     ): Promise<any> {
         const startDateAsDate = fromUnixTime(startDate);
         const endDateAsDate = fromUnixTime(endDate);
-        return await this.getAllAcitivitiesBetweenDate(playerId,startDateAsDate,endDateAsDate,order,limit,headers,query)
+        return await this.getAllAcitivitiesBetweenDate(
+            playerId,
+            startDateAsDate,
+            endDateAsDate,
+            order,
+            limit,
+            headers,
+            query
+        );
     }
     /**
      * Get all activities on a specified date range

@@ -1,4 +1,4 @@
-import { Headers, Query } from '../gameBusClient';
+import { Headers, Query } from '../gbClient';
 import { fromUnixTime, formatISO, addDays, getUnixTime } from 'date-fns';
 import { ActivityModel } from '../models/activityModel';
 import { GameBusObject } from './base';

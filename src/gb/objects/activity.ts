@@ -16,7 +16,6 @@ export class Activity extends GameBusObject {
      * @returns Activity associated to given ID
      */
     async getActivityById(activityId: number, headers?: Headers, query?: Query): Promise<ActivityModel> {
-        // TODO: change url if needed (see endpoint constant in GameBusClient.ts)
         const activity: ActivityModel = await this.gamebus.get(
             `activities/${activityId}`,
             headers,
@@ -32,6 +31,7 @@ export class Activity extends GameBusObject {
     }
 
     //TODO: dateformatting (so rounding to the next day instead for end-date and rouding to the previous day for startDate)?
+    // ^Fixed below
     //NOTE: date is converted to dd-mm-yyyy format, not UNIX timestamp and any hours, minutes etc. are lost!
     async getAllActivitiesDateFilter(
         playerId: number,
@@ -92,6 +92,8 @@ export class Activity extends GameBusObject {
         );
         return activities;
     }
+
+    // TODO: query for specific timestamp on a given date to start filtering time periods
 }
 
 export enum QueryOrder {

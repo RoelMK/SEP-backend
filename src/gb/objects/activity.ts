@@ -1,14 +1,16 @@
-import { Headers, Query, queryDateFormat } from '../gbClient';
+import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
 import { ActivityModel, ActivityProperty } from '../models/activityModel';
-import { GameBusObject } from './base';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 
-// TODO: add ActivityModel to models/activityModel
 /**
  * Class that is used to GET/POST to GameBus activities
+ * This is a general class that can be used for all activity types
+ * This class should contain the basic GET/POST methods that are valid for all activities
  */
-export class Activity extends GameBusObject {
+export class Activity {
+    constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
+
     /**
      * Gets activity from activity ID
      * @param activityId Activity ID
@@ -42,6 +44,51 @@ export class Activity extends GameBusObject {
     }
 
     /**
+     * Should get all activities (with possible queries) of the given activity ID/type
+     * @param activityId ID (Type) of activity (i.e. ID of "step" activity)
+     * @returns All activities of given type
+     */
+    async getAllActivitiesWithId(activityId: number, headers?: Headers, query?: Query) {
+        // TODO: get all activities that belong to the same "activity" (i.e.) all "step" activities
+        // TODO: expand with date queries
+        return;
+    }
+
+    /**
+     * Get all activities on a specified date range
+     * @param playerId Player ID
+     * @param startDate Start date (inclusive)
+     * @param endDate End date (exclusive)
+     * @param limit Amount of activities (default 30)
+     * @returns List of activities
+     */
+    async getAllAcitivitiesBetweenDate(
+        playerId: number,
+        startDate: Date,
+        endDate: Date,
+        order?: QueryOrder,
+        limit?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        // Make a query for the given start and end date
+        const dateQuery: Query = {
+            // Given date formatted in ISO format
+            start: format(startDate, queryDateFormat),
+            // Date of next day (end is exclusive) formatted in ISO
+            end: format(endDate, queryDateFormat),
+            // Either use the given limit or use 30 as default
+            limit: (limit ? limit : 30).toString(),
+            // Use given order as order or use descending as default
+            sort: `${order ? order : QueryOrder.DESC}date`,
+            // Add rest of query
+            ...query
+        };
+        const activities: ActivityGETData[] = await this.getAllActivities(playerId, headers, dateQuery);
+        return activities;
+    }
+
+    /**
      * Get all activities on a specified date range (UNIX timestamps)
      * @param playerId Player ID
      * @param startDate Start date (inclusive) as UNIX
@@ -70,40 +117,32 @@ export class Activity extends GameBusObject {
             query
         );
     }
+
     /**
-     * Get all activities on a specified date range
+     * Shortcut function to get all activities of given user on a specific date
      * @param playerId Player ID
-     * @param startDate Start date (inclusive)
-     * @param endDate End date (exclusive)
-     * @param limit Amount of activities (default 30)
-     * @returns List of activities
+     * @param date Date on which you want to get all activities
+     * @param order Order of activity by date (descending is default)
+     * @param limit Amount of activities to retrieve (default 30)
      */
-    async getAllAcitivitiesBetweenDate(
+    async getActivitiesOnDate(
         playerId: number,
-        startDate: Date,
-        endDate: Date,
+        date: Date,
         order?: QueryOrder,
         limit?: number,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        const dateQuery: Query = {
-            // Given date formatted in ISO format
-            start: format(startDate, queryDateFormat),
-            // Date of next day (end is exclusive) formatted in ISO
-            end: format(endDate, queryDateFormat),
-            // Either use the given limit or use 30 as default
-            limit: (limit ? limit : 30).toString(),
-            // Use given order as order or use descending as default
-            sort: `${order ? order : QueryOrder.DESC}date`,
-            // Add rest of query
-            ...query
-        };
-        const activities: ActivityGETData[] = await this.gamebus.get(
-            `players/${playerId}/activities`,
+        // Simply set the endDate to tomorrow (from date)
+        const tomorrowAsDate = addDays(date, 1);
+        const activities: ActivityGETData[] = await this.getAllAcitivitiesBetweenDate(
+            playerId,
+            date,
+            tomorrowAsDate,
+            order,
+            limit,
             headers,
-            dateQuery,
-            this.authRequired
+            query
         );
         return activities;
     }
@@ -138,36 +177,8 @@ export class Activity extends GameBusObject {
         return activities;
     }
 
-    /**
-     * Shortcut function to get all activities of given user on a specific date
-     * @param playerId Player ID
-     * @param date Date on which you want to get all activities
-     * @param order Order of activity by date (descending is default)
-     * @param limit Amount of activities to retrieve (default 30)
-     */
-    async getActivitiesOnDate(
-        playerId: number,
-        date: Date,
-        order?: QueryOrder,
-        limit?: number,
-        headers?: Headers,
-        query?: Query
-    ): Promise<ActivityGETData[]> {
-        const tomorrowAsDate = addDays(date, 1);
-        const activities: ActivityGETData[] = await this.getAllAcitivitiesBetweenDate(
-            playerId,
-            date,
-            tomorrowAsDate,
-            order,
-            limit,
-            headers,
-            query
-        );
-        return activities;
-    }
-
     // TODO: query for specific timestamp on a given date to start filtering time periods
-    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[]
+    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[] (see below)
 
     /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels

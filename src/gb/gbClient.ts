@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
+import { Exercise } from './objects/exercise';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
@@ -8,6 +9,7 @@ export class GameBusClient {
     private readonly client: AxiosInstance;
 
     gamebusActivity: Activity;
+    gamebusExercise: Exercise;
     tokenHandler?: TokenHandler;
 
     // Create Axios instance, can add options if needed
@@ -16,6 +18,7 @@ export class GameBusClient {
 
         // Create necessary classes
         this.gamebusActivity = new Activity(this, true);
+        this.gamebusExercise = new Exercise(this.gamebusActivity, true);
 
         // If a token is provided, authenticate using the token
         if (token) {
@@ -23,8 +26,13 @@ export class GameBusClient {
         }
     }
 
+    // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
     activity() {
         return this.gamebusActivity;
+    }
+
+    exercise() {
+        return this.gamebusExercise;
     }
 
     /**

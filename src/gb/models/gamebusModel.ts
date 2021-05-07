@@ -1,5 +1,3 @@
-// TODO: move to gb/models
-
 export interface ConnectionData {
     authToken: string;
     playerID: number;

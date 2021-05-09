@@ -7,6 +7,7 @@
         "test-api": "ts-node src/gb/test.ts",
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
+        "test-excel-import": "ts-node src/services/excelParser.ts",
         "test": "jest",
         "build": "tsc"
     },

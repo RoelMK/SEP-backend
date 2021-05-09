@@ -12,7 +12,7 @@ async function testAbbott() {
 }
 
 async function testExcel() {
-    var testPath = 'src/services/food/Food_Diary2020.xlsx'
+    var testPath = 'src/services/food/foodDiary_standard.xlsx'
     console.log(new ExcelParser().parse(testPath))
 }
 

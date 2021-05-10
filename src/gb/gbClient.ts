@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
-const endpoint = 'https://www.endpoint.com/'; // TODO: add GameBus endpoint
+const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
@@ -54,7 +54,7 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ) {
-        return this.request(path, requestMethod.PUT, body, headers, query, authRequired, fullResponse);
+        return this.request(path, RequestMethod.PUT, body, headers, query, authRequired, fullResponse);
     }
 
     /**
@@ -75,7 +75,7 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ) {
-        return this.request(path, requestMethod.POST, body, headers, query, authRequired, fullResponse);
+        return this.request(path, RequestMethod.POST, body, headers, query, authRequired, fullResponse);
     }
 
     /**
@@ -88,7 +88,7 @@ export class GameBusClient {
      * @returns Response
      */
     async get(path: string, headers?: Headers, query?: Query, authRequired?: boolean, fullResponse?: boolean) {
-        return this.request(path, requestMethod.GET, undefined, headers, query, authRequired, fullResponse);
+        return this.request(path, RequestMethod.GET, undefined, headers, query, authRequired, fullResponse);
     }
 
     /**
@@ -104,7 +104,7 @@ export class GameBusClient {
      */
     async request(
         path: string,
-        method: requestMethod,
+        method: RequestMethod,
         body?: any,
         headers?: Headers,
         query?: Query,
@@ -144,12 +144,8 @@ export class GameBusClient {
             data: body
         });
 
-        // If error, throw error
-        if (!response.statusText) {
-            const text = response.data;
-
-            throw new Error(`${response.statusText}: ${text}`);
-        }
+        // Error handling is already included in Axios, so unless you need to check for a correct status code outside of the
+        // 2xx range, no error handling is required
 
         // If full response is needed, return it
         if (fullResponse) {
@@ -171,6 +167,7 @@ export class GameBusClient {
         let headers: Headers = {
             'Content-Type': 'application/json',
             'User-Agent': 'Diabetter Client',
+            Accept: 'application/json',
             ...extraHeaders
         };
 
@@ -209,7 +206,7 @@ export class GameBusClient {
 /**
  * Simple enum for different request methods
  */
-export enum requestMethod {
+export enum RequestMethod {
     GET = 'GET',
     POST = 'POST',
     PUT = 'PUT'

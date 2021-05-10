@@ -7,19 +7,22 @@ export class GameBusClient {
     // Axios client
     private readonly client: AxiosInstance;
 
+    // Player ID from token
+    private _playerId?: number;
+
     gamebusActivity: Activity;
     tokenHandler?: TokenHandler;
 
     // Create Axios instance, can add options if needed
-    constructor(private readonly verbose?: boolean, private readonly token?: string) {
+    constructor(private readonly jwt: string, private readonly verbose?: boolean) {
         this.client = axios.create();
 
         // Create necessary classes
         this.gamebusActivity = new Activity(this, true);
 
         // If a token is provided, authenticate using the token
-        if (token) {
-            this.login(token);
+        if (jwt) {
+            this.login(jwt);
         }
     }
 
@@ -27,13 +30,17 @@ export class GameBusClient {
         return this.gamebusActivity;
     }
 
+    public get playerId() {
+        return this._playerId;
+    }
+
     /**
      * Creates a token handler for the given token
-     * @param token (Valid) API token
+     * @param jwt (Valid) API token
      */
-    login(token: string) {
+    login(jwt: string) {
         // Authenticate via token handler
-        this.tokenHandler = new TokenHandler(this, token);
+        this.tokenHandler = new TokenHandler(this, jwt);
     }
 
     /**
@@ -173,7 +180,11 @@ export class GameBusClient {
 
         // Add authentication token to Authorization header if provided (and needed)
         if (authRequired && this.tokenHandler) {
-            headers['Authorization'] = `Bearer ${this.tokenHandler.getToken()}`;
+            const token = this.tokenHandler.getToken();
+            // TODO: should we handle this differently?
+            this._playerId = token.userId;
+            // Only add the access token part of the token
+            headers['Authorization'] = `Bearer ${token.accessToken}`;
         } else if (authRequired && !this.tokenHandler) {
             throw new Error('You must be authenticated to use this function');
         }

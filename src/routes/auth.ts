@@ -11,12 +11,12 @@ router.post('/connect', (req: Request, res: Response) => {
     if (userId && accessToken && refreshToken) {
         if (validateConnectRequest(userId, accessToken)) {
             let jwt: string = createJWT(userId, accessToken, refreshToken);
-            return res.status(200).json({ "token": jwt });  // TODO: this token must be saved locally on the computer of the end-user.
+            return res.status(200).json({ token: jwt }); // TODO: this token must be saved locally on the computer of the end-user.
         } else {
-            return res.status(403).send();      // Invalid user id and/or token provided
+            return res.status(403).send(); // Invalid user id and/or token provided
         }
     } else {
-        return res.status(400).send();      // Bad request
+        return res.status(400).send(); // Bad request
     }
 });
 

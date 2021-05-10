@@ -1,5 +1,6 @@
 import FoodModel from '../../gb/models/foodModel';
 import { AbbottData } from '../abbottParser';
+import { FoodDiaryData } from '../foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
 
@@ -10,13 +11,13 @@ import FoodMapper from './foodMapper';
  * TODO: automatically detect food source based on column names
  * TODO: use dynamic format where user is able to pick what column represents what
  */
-export default class FoodParser {
+export default class FoodParser<D extends {} = AbbottData | FoodDiaryData > {
     // Food data to be exported
     foodData?: FoodModel[];
 
     // TODO: change to other inputs if needed
     constructor(
-        private readonly foodInput: AbbottData[],
+        private readonly foodInput: D[],
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
@@ -43,5 +44,6 @@ export default class FoodParser {
  * Current food sources available
  */
 export enum FoodSource {
-    ABBOTT = 0
+    ABBOTT = 0,
+    FOOD_DIARY_EXCEL = 1
 }

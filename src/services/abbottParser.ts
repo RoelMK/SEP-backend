@@ -35,7 +35,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
         this.getLocale();
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData = this.filterFood();
-        this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
+        this.foodParser = new FoodParser<AbbottData>(foodData, FoodSource.ABBOTT, this.dateFormat);
 
         const glucoseData = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);

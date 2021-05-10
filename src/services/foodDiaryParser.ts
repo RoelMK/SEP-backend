@@ -1,9 +1,9 @@
+import { time } from "node:console";
 import ExcelParser from "./excelParser";
 import FoodParser, { FoodSource } from "./food/foodParser";
 import GlucoseParser from "./glucose/glucoseParser";
-import InsulinParser from "./insulin/insulinParser";
+import InsulinParser, {InsulinSource} from "./insulin/insulinParser";
 import { DateFormat } from "./utils/dates";
-
 
 
 /**
@@ -27,6 +27,9 @@ export default class FoodDiaryParser extends ExcelParser<FoodDiaryData> {
 
         this.foodParser = new FoodParser<FoodDiaryData>(this.rawData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
         console.log(this.foodParser.foodData);
+
+        this.insulinParser = new InsulinParser<FoodDiaryData>(this.rawData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+        console.log(this.insulinParser.insulinData);
     }
    
 }   

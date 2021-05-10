@@ -2,21 +2,21 @@ import { InsulinModel } from '../../gb/models/insulinModel';
 import { AbbottData } from '../abbottParser';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
-
+import { FoodDiaryData } from '../foodDiaryParser';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
  * - Abbott
  */
-export default class InsulinParser {
+export default class InsulinParser<D extends {} = AbbottData | FoodDiaryData > {
     insulinData?: InsulinModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to insulin .csv file
      */
     constructor(
-        private readonly insulinInput: AbbottData[],
-        private readonly insulinSource: InsulinSource = InsulinSource.ABBOTT,
+        private readonly insulinInput: D[],
+        private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat
     ) {
         // Process incoming insulinInput data
@@ -28,6 +28,7 @@ export default class InsulinParser {
      */
     private process() {
         this.insulinData = this.insulinInput.map(InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat));
+
     }
 
     /**
@@ -41,5 +42,6 @@ export default class InsulinParser {
  * Current insulin sources available //TODO ? Add more
  */
 export enum InsulinSource {
-    ABBOTT = 0
+    ABBOTT = 0,
+    FOOD_DIARY_EXCEL = 1
 }

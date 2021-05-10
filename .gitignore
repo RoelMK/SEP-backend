@@ -47,3 +47,5 @@ plots/
 .env.local
 .env
 localdb.db
+test.bat
+dist/

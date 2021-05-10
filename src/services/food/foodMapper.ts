@@ -1,5 +1,6 @@
 import FoodModel from '../../gb/models/foodModel';
 import { AbbottData } from '../abbottParser';
+import { FoodDiaryData } from '../foodDiaryParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
 
@@ -29,6 +30,11 @@ export default class FoodMapper {
                     default:
                         return this.mapAbbottEU;
                 }
+
+            case FoodSource.FOOD_DIARY_EXCEL:
+                return this.mapFoodDiary; //TODO
+            default:
+                return this.mapAbbottEU;
         }
     }
 
@@ -37,12 +43,12 @@ export default class FoodMapper {
      * @param entry Abbott entry
      * @returns foodModel with information
      */
-    private static mapAbbottEU(entry: AbbottData): FoodModel {
+    private static mapAbbottEU(entry: any): FoodModel {
         // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
         // 1g carbohydrate = 4 calories
         return {
             timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_EU, undefined, true),
-            calories: parseInt(entry.carbohydrates__grams_) * 4,
+            calories: parseFloat(entry.carbohydrates__grams_) * 4,
             description: entry.notes
         } as FoodModel;
     }
@@ -52,13 +58,23 @@ export default class FoodMapper {
      * @param entry Abbott entry
      * @returns foodModel with information
      */
-    private static mapAbbottUS(entry: AbbottData): FoodModel {
+    private static mapAbbottUS(entry: any): FoodModel {
         // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
         // 1g carbohydrate = 4 calories
         return {
             timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_US, undefined, true),
-            calories: parseInt(entry.carbohydrates__grams_) * 4,
+            calories: parseFloat(entry.carbohydrates__grams_) * 4,
             description: entry.notes
+        } as FoodModel;
+    }
+
+
+    private static mapFoodDiary(entry: any): FoodModel{
+        return {
+            timestamp: parseDate(entry.date, DateFormat.FOOD_DIARY, undefined, true),
+            calories: parseFloat(entry.carbohydrates) * 4,
+            carbohydrates: parseFloat(entry.carbohydrates),
+            description: entry.description
         } as FoodModel;
     }
 }

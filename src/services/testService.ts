@@ -1,5 +1,5 @@
 import AbbottParser, { AbbottDataType } from './abbottParser';
-import ExcelParser from './excelParser';
+import FoodDiaryParser from './foodDiaryParser';
 
 async function testAbbott() {
     const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -13,8 +13,8 @@ async function testAbbott() {
 
 async function testExcel() {
     var testPath = 'src/services/food/foodDiary_standard.xlsx'
-    console.log(new ExcelParser().parse(testPath))
+    console.log(await new FoodDiaryParser(testPath).process())
 }
 
-testAbbott();
+//testAbbott();
 testExcel();

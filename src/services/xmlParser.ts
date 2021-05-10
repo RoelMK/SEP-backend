@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
-import { parseString } from 'xml2js';
-var xml2js = require('xml2js')
+import { parseString, processors } from 'xml2js';
+
 /**
  * Generic XML reader and parser to be used for all XML files
  */
@@ -26,9 +26,9 @@ export default class XMLParser {
 }
 
 const defaultConfig = {
-    trim: true, 
-    explicitArray: false, 
-    attrkey: 'Attributes', 
+    trim: true,
+    explicitArray: false,
+    attrkey: 'Attributes',
     charkey: 'Value',
-    valueProcessors: [xml2js.processors.parseNumbers]
+    valueProcessors: [processors.parseNumbers]
 };

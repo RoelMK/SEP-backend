@@ -1,64 +1,66 @@
+// TODO: move somewhere else / to EetMeterParser directly
+
 export interface EetmeterData {
-    Consumpties: Consumpties
+    Consumpties: Consumpties;
 }
 export interface Consumpties {
-    Attributes: [any],
-    Consumptie: [Consumptie]
+    Attributes: [any];
+    Consumptie: [Consumptie];
 }
 export interface Consumptie {
-    Attributes: Periode,
-    Datum: Datum,
-    Product: Product,
-    Nutrienten: Nutrienten
+    Attributes: Periode;
+    Datum: Datum;
+    Product: Product;
+    Nutrienten: Nutrienten;
 }
 export interface Nutrienten {
-    Koolhydraten: Koolhydraten,
-    Energie: Energie,
-    Vet: Vet,
-    VerzadigdVet: VerzadigdVet,
-    Zout: Zout,
-    Water: Water,
-    Suikers: Suikers
+    Koolhydraten: Koolhydraten;
+    Energie: Energie;
+    Vet: Vet;
+    VerzadigdVet: VerzadigdVet;
+    Zout: Zout;
+    Water: Water;
+    Suikers: Suikers;
 }
 
 export interface Periode {
-    Periode: string
+    Periode: string;
 }
 
 export interface Product {
-    Naam: String
+    Naam: String;
 }
 
 export interface Datum {
-    Dag: number
-    Maand: number
-    Jaar: number
+    Dag: number;
+    Maand: number;
+    Jaar: number;
 }
 
 export interface Koolhydraten {
-    Value: number
+    Value: number;
 }
 
 export interface Energie {
-    Value: number
+    Value: number;
 }
 
 export interface Vet {
-    Value: number
+    Value: number;
 }
 
 export interface Zout {
-    Value: number
+    Value: number;
 }
 
 export interface Water {
-    Value: number
+    Value: number;
 }
 
 export interface Suikers {
-    Value: number
+    Value: number;
 }
 
 export interface VerzadigdVet {
-    Value: number
+    Value: number;
 }

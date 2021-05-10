@@ -12,12 +12,11 @@ export default class FoodDiaryParser {
     // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
     // alternatively, you can create a public method in the AbbottParser for each data type POST individually
     private foodParser?: FoodParser;
-    private glucoseParser?: GlucoseParser;
     private insulinParser?: InsulinParser;
     
     constructor(private readonly foodDiaryFile: string) {}
 
     process(rawData: unknown[])  {
-        (new ExcelParser()).parse(this.foodDiaryFile);
+        (new ExcelParser()).parse(this.foodDiaryFile);    
     }
 }   

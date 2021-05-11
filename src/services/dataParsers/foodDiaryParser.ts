@@ -33,7 +33,6 @@ export default class FoodDiaryParser extends DataParser {
     async process()  {
         // specify the type of parsed data
         this.foodDiaryData = (await this.parse()) as FoodDiaryData[];
-        console.log(this.foodDiaryData);
 
         //auto-fills empty cells in the Excel
         if(this.doAutoFill){

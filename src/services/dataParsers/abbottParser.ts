@@ -33,21 +33,17 @@ export default class AbbottParser extends DataParser {
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
-        console.log(this.rawData);
         // specify the type of parsed data
         this.abbottData = (await this.parse()) as AbbottData[];
 
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
-        console.log("DIT MOET KAPOT ZIJN")
-        console.log(this.abbottData);
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
 
         const foodData = this.filterFood();
         this.foodParser = new FoodParser<AbbottData>(foodData, FoodSource.ABBOTT, this.dateFormat);
 
         const glucoseData = this.filterGlucose();
-        console.log(glucoseData)
         this.glucoseParser = new GlucoseParser<AbbottData>(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
         const insulinData = this.filterInsulin();
@@ -75,7 +71,6 @@ export default class AbbottParser extends DataParser {
      * @returns All glucose entries
      */
     private filterGlucose(): AbbottData[] {
-        console.log(this.abbottData[0]);
         const glucose = this.abbottData?.filter((entry: AbbottData) => {
             // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
             // We also only include entries for which the date is specified

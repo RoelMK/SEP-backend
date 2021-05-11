@@ -34,11 +34,9 @@ export abstract class DataParser {
 
         // determine method of parsing by checking file extension
         let extension: string = this.filePath.substring(this.filePath.lastIndexOf('.')+1);
-        console.log(extension)
         switch(extension){
             case "csv":
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
-                console.log("PAKT CSV" + this.filePath)
                 return (await this.csvParser.parse(this.filePath, skipLine));
             case "xlsx":
                 return (await this.excelParser.parse(this.filePath, this.dataSource));

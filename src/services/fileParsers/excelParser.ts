@@ -4,7 +4,8 @@ import { DataSource } from "../dataParsers/dataParser";
 /**
  * Default class for parsing .xlsx files
  */
-export default class ExcelParser {   // <D extends {} = Record<string, string>>
+
+export default class ExcelParser {  
 
     constructor(){}
 

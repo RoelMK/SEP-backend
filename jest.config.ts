@@ -5,7 +5,7 @@
 
 export default {
     // All imported modules in your tests should be mocked automatically
-    // automock: false,
+    automock: false,
 
     // Stop running tests after `n` failures
     // bail: 0,
@@ -122,7 +122,7 @@ export default {
     // runner: "jest-runner",
 
     // The paths to modules that run some code to configure or set up the testing environment before each test
-    // setupFiles: [],
+    setupFiles: ['./setupJest.ts'],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
     // setupFilesAfterEnv: [],

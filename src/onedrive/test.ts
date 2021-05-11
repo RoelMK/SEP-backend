@@ -1,9 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance , AxiosRequestConfig} from 'axios';
+import {oneDriveToken} from '../gb/usersExport';
+
 let client : AxiosInstance = axios.create();
 
 //https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0
 
-//NOTE: token expires after ~ 7 minutes of inactivity (5 if we use persistent changes)
+//NOTE: token/sessionID (I forgot) expires after ~ 7 minutes of inactivity (5 if we use persistent changes)
 async function getExcelSession(workbookID : string, token : string) {
     let requestHeaders = {
         'content-type': 'Application/Json',
@@ -33,19 +35,22 @@ async function getExcelSession(workbookID : string, token : string) {
     */
 }
 
-async function getRange(workbookID : string, token : string, sessionID : string, worksheetID : string, topLeft : string, bottomRight: string) {
+async function getRange(workbookID : string, token : string, sessionID : string, workSheetName : string, topLeft : string, bottomRight: string) {
     let requestHeaders = {
         'content-type': 'Application/Json',
         'authorization': `Bearer ${token}`,
         'workbook-session-id': `Bearer ${sessionID}`
     }
-    
-    let response = await client.request({
-        method: 'POST',
-        url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/worksheets/${worksheetID}/range(adress='${topLeft}:${bottomRight}')`,
+
+    let config : AxiosRequestConfig = {
+        method: 'GET',
+        //url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/worksheets/${worksheetID}/range(adress='${topLeft}:${bottomRight}')`,
+        url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/worksheets('${workSheetName}')/range(address='${workSheetName}!${topLeft}:${bottomRight}')`,
         headers: requestHeaders,
         data: {}
-    });
+    }
+    console.log(config.url)
+    let response = await client.request(config);
     return response;
     /*
     Sample Response
@@ -141,6 +146,7 @@ async function getRange(workbookID : string, token : string, sessionID : string,
     }
     */
 }
+//Used when we didn't search on sheet name
 async function getListOfSheets(workbookID : string, token : string, sessionID : string) {
     let requestHeaders = {
         'content-type': 'Application/Json',
@@ -149,8 +155,8 @@ async function getListOfSheets(workbookID : string, token : string, sessionID : 
     }
     
     let response = await client.request({
-        method: 'POST',
-        url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/createSession`,
+        method: 'GET',
+        url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/worksheets`,
         headers: requestHeaders,
         data: {}
     });
@@ -182,27 +188,99 @@ async function getListOfSheets(workbookID : string, token : string, sessionID : 
     */
 }
 
+async function getFile(token : string, fileName : string, folderPath? : string) {
+    let requestHeaders = {
+        'content-type': 'Application/Json',
+        'authorization': `Bearer ${token}`
+    }
+    let body = {
+    }
+    let subUrl = "";
+    if(folderPath === undefined) {
+        subUrl = "";
+    } else {
+        subUrl = `:/${folderPath}:`
+    }
+    //console.log(`https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`)
+    let response = await client.request({
+        method: 'GET',
+        //url: `https://graph.microsoft.com/v1.0/me/drive/root/children`,
+        //url: `https://graph.microsoft.com/v1.0/me/drive/root:/Documents:/children`,
+        url : `https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`,
+        headers: requestHeaders,
+        data: body
+    });
+    /*
+    console.log(response.status);
+    console.log(response.statusText);
+    //console.log(response.headers);
+    console.log(response.data);
+
+    console.log(`ID = ${response.data.value[0].id}`) //TODO: gets first item instead of with correct name
+    */
+    //let x = $.grep(response.data.value, function(v:any) { return v.name === fileName; })[0]
+    let file = response.data.value.find(element => element.name === fileName)
+    return file;
+}
+
 //async function because top-level await gives problems
 async function execute() {
-    let sheetNumber = 0;
-    let workbookID = "TODO: id";
-    let excelToken = "TODO: token";
+    let sheetName = "Sheet2";
+    //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
+    //let fileName = "MyFirstSheet.xlsx";
+    //let folderPath = undefined;
+    let fileName = "DeepExcel.xlsx";
+    let folderPath = "Documents/DeepFolder";
+    let excelToken = oneDriveToken;
     let topLeft = "A1";
-    let bottomRight = "C3";
+    let bottomRight = "H4";
 
+    console.log("Get fileID");
+    let fileResult = await getFile(excelToken,fileName,folderPath);
+    let workbookID = fileResult.id;
+
+    console.log("Get session");
     let sessionResult = await getExcelSession(workbookID,excelToken);
     let sessionID = sessionResult.data.id;
 
+    /*
+    console.log("Get sheets");
     let sheetResult = await getListOfSheets(workbookID,excelToken,sessionID);
     let sheetID = sheetResult.data.value[sheetNumber].id;
+    */
 
-    let rangeResult = await getRange(workbookID,excelToken,sessionID,workbookID,topLeft,bottomRight);
+    console.log("Get range");
+    let rangeResult = await getRange(workbookID,excelToken,sessionID,sheetName,topLeft,bottomRight);
     let resultText = rangeResult.data.text;
     let resultValue = rangeResult.data.values;
 
+    console.log("Got the range")
+
+    console.log("ResultText:")
     console.log(resultText)
-    console.log()
+    console.log("ResultValue")
     console.log(resultValue)
 }
 
 execute()
+//getFileId(oneDrive,"MyFirstSheet.xlsx");
+//getFile(oneDrive,"Document1.docx","Documents").then((value) => console.log(value))
+async function execute2() {
+    let requestHeaders = {
+        'content-type': 'Application/Json',
+        'authorization': `Bearer ${oneDriveToken}`
+    }
+    let body = {
+    }
+    let response = await client.request({
+        method: 'GET',
+        //url: `https://graph.microsoft.com/v1.0/me/drive/root/children`,
+        url: `https://graph.microsoft.com/v1.0/me/drive/root:/Documents:/children`,
+        headers: requestHeaders,
+        data: body
+    });
+    console.log(response.status);
+    console.log(response.statusText);
+    //console.log(response.headers);
+    console.log(response.data);
+}

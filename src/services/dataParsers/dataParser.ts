@@ -31,6 +31,10 @@ export abstract class DataParser<D extends {} = Record<string, string>> {
      */
     constructor(private readonly filePath: string, protected readonly dataSource: DataSource) {}
 
+
+    /**
+     * Parse data file by looking at its extension and choosing the correct file parser
+     */
     protected async parse(): Promise<void> {
 
         // determine method of parsing by checking file extension
@@ -52,6 +56,11 @@ export abstract class DataParser<D extends {} = Record<string, string>> {
 
     abstract process(): Promise<void>;
 
+    /**
+     * To be called after processing, for retrieving processed data
+     * @param outputType Glucose, Insulin or Food
+     * @returns Glucose, Insulin or FoodModel object
+     */
     getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined{
         switch (outputType) {
             case OutputDataType.GLUCOSE:

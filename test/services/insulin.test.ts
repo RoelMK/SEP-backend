@@ -2,7 +2,7 @@ import { getUnixTime, parse } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { DateFormat } from '../../src/services/utils/dates';
-import { parseAbbott } from './parseUtils';
+import { parseAbbott, parseFoodDiary } from './parseUtils';
 
 test('import Abbott EU insulin', async () => {
     let expectedResult: InsulinModel = {
@@ -24,4 +24,24 @@ test('import Abbott US insulin', async () => {
     expect(await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.INSULIN)).toStrictEqual([
         expectedResult
     ]);
+});
+
+// check first row of standard (non missing) food diary test file
+test('import standardized food diary insulin values full', async () => {
+    let expectedResult: InsulinModel = {
+        insulinAmount: 7,
+        insulinType: InsulinType.RAPID,
+        timestamp: getUnixTime(parse('09-05-21', DateFormat.FOOD_DIARY_2, new Date()))
+    };
+    expect((await parseFoodDiary('test/services/data/foodDiary_standard.xlsx', OutputDataType.INSULIN, false) as InsulinModel[])[0]).toStrictEqual(expectedResult);
+});
+
+// check third row of standard, missing food diary test file
+test('import standardized food diary insulin values with missing values', async () => {
+    let expectedResult: InsulinModel = {
+        insulinAmount: 3,
+        insulinType: InsulinType.RAPID,
+        timestamp: getUnixTime(parse('08-05-21', DateFormat.FOOD_DIARY_2, new Date()))
+    };
+    expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.INSULIN, true) as InsulinModel[])[2]).toStrictEqual(expectedResult);
 });

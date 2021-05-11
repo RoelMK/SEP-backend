@@ -29,7 +29,7 @@ const redirectUri = "http://localhost:8080/onedrive/redirect";      // TODO: thi
 export async function getAuthorizationUrl(): Promise<string | undefined> {
     try {
         return await cca.getAuthCodeUrl({
-            scopes: ['user.read', "Files.ReadWrite.All"],
+            scopes: ['user.read', "Files.Read"],
             redirectUri: redirectUri,
         });
     } catch (e) {
@@ -46,7 +46,7 @@ export async function getAuthorizationUrl(): Promise<string | undefined> {
 export async function getAccessToken(authorizationCode: string): Promise<string | undefined> {
     const tokenRequest = {
         code: authorizationCode,
-        scopes: ["user.read", "Files.ReadWrite.All"],
+        scopes: ["user.read", "Files.Read"],
         redirectUri: redirectUri,
     };
 

@@ -3,6 +3,8 @@ import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
+import { getUnixTime } from 'date-fns';
+import { parse } from 'date-fns';
 
 /**
  * Helper class to map the different food sources to 1 foodModel
@@ -55,7 +57,7 @@ export default class FoodMapper {
      */
     private static mapFoodDiary(entry: any): FoodModel{
         return {
-            timestamp: parseDate(entry.date, DateFormat.FOOD_DIARY, undefined, true),
+            timestamp: getUnixTime(parse(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date())),
             carbohydrates: parseFloat(entry.carbohydrates),
             description: entry.description
         } as FoodModel;

@@ -2,6 +2,7 @@ import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
 import { ActivityModel, ActivityProperty } from '../models/activityModel';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
+import { fromUnixMsTime } from '../../services/utils/dates';
 
 /**
  * Class that is used to GET/POST to GameBus activities
@@ -91,8 +92,8 @@ export class Activity {
     /**
      * Get all activities on a specified date range (UNIX timestamps)
      * @param playerId Player ID
-     * @param startDate Start date (inclusive) as UNIX
-     * @param endDate End date (exclusive) as UNIX
+     * @param startDate Start date (inclusive) as millisecond UNIX (13-digit)
+     * @param endDate End date (exclusive) as millisecond UNIX (13-digit)
      * @param limit Amount of activities (default 30)
      * @returns List of activities
      */
@@ -105,8 +106,8 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        const startDateAsDate = fromUnixTime(startDate);
-        const endDateAsDate = fromUnixTime(endDate);
+        const startDateAsDate = fromUnixMsTime(startDate);
+        const endDateAsDate = fromUnixMsTime(endDate);
         return await this.getAllAcitivitiesBetweenDate(
             playerId,
             startDateAsDate,
@@ -150,7 +151,7 @@ export class Activity {
     /**
      * Shortcut function to get all activities of given user on a specific date
      * @param playerId Player ID
-     * @param date Date on which you want to get all activities (as UNIX)
+     * @param date Date on which you want to get all activities (as millisecond UNIX (13-digit))
      * @param order Order of activity by date (descending is default)
      * @param limit Amount of activities to retrieve (default 30)
      */
@@ -162,7 +163,7 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        const dateAsDate = fromUnixTime(date);
+        const dateAsDate = fromUnixMsTime(date);
         const tomorrowAsDate = addDays(dateAsDate, 1);
         const tomorrowUnix = getUnixTime(tomorrowAsDate);
         const activities: ActivityGETData[] = await this.getAllActivitiesBetweenUnix(

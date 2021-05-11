@@ -1,4 +1,4 @@
-import { parse, getUnixTime, isValid } from 'date-fns';
+import { parse, getUnixTime, isValid, fromUnixTime } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -49,6 +49,19 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
 };
 
 /**
+ * Function that will get the date from the given unix timestamp (in milliseconds)
+ * @param unixDate 13-digit (milliseconds) unix timestamp
+ * @returns Date of timestamp
+ */
+const fromUnixMsTime = (unixDate: number): Date => {
+    if (unixDate.toString().length != 13) {
+        throw new Error('unixDate is not correctly formatted (should be 13 digits)');
+    }
+    const date: Date = fromUnixTime(Math.floor(unixDate / 1000));
+    return date;
+};
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -57,4 +70,4 @@ enum DateFormat {
     NONE = ''
 }
 
-export { parseDate, getDateFormat, DateFormat };
+export { parseDate, getDateFormat, fromUnixMsTime, DateFormat };

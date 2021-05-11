@@ -1,5 +1,6 @@
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 
@@ -8,14 +9,14 @@ import GlucoseMapper from './glucoseMapper';
  * Currently supported glucose sources:
  * - Abbott
  */
-export default class GlucoseParser {
+export default class GlucoseParser<D extends {} = AbbottData | FoodDiaryData > {
     glucoseData?: GlucoseModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to glucose .csv file
      */
     constructor(
-        private readonly glucoseInput: AbbottData[],
+        private readonly glucoseInput: D[],
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat
     ) {

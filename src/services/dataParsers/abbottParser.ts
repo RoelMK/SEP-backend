@@ -1,22 +1,16 @@
-import FoodModel from '../gb/models/foodModel';
-import { GlucoseModel } from '../gb/models/glucoseModel';
-import { InsulinModel } from '../gb/models/insulinModel';
-import { DataParser, DataSource } from './dataParser';
-import FoodParser, { FoodSource } from './food/foodParser';
-import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from './insulin/insulinParser';
-import { getDateFormat } from './utils/dates';
+import FoodModel from '../../gb/models/foodModel';
+import { GlucoseModel } from '../../gb/models/glucoseModel';
+import { InsulinModel } from '../../gb/models/insulinModel';
+import { DataParser, DataSource, OutputDataType } from './dataParser';
+import FoodParser, { FoodSource } from '../food/foodParser';
+import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
+import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { getDateFormat } from '../utils/dates';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
 export default class AbbottParser extends DataParser<AbbottData> {
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    // alternatively, you can create a public method in the AbbottParser for each data type POST individually
-    private foodParser?: FoodParser;
-    private glucoseParser?: GlucoseParser;
-    private insulinParser?: InsulinParser;
 
     /**
      * DataParser construction with DataSource set
@@ -27,7 +21,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
     }
 
     /**
-     * Function that is called (async) that creates the parsers and filers the data to the correct parsers
+     * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
         await this.parse();
@@ -49,13 +43,13 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @param abbottDataType Data type to get
      * @returns Data from data type's parser
      */
-    getData(abbottDataType: AbbottDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined {
-        switch (abbottDataType) {
-            case AbbottDataType.GLUCOSE:
+    getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined {
+        switch (outputType) {
+            case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
-            case AbbottDataType.INSULIN:
+            case OutputDataType.INSULIN:
                 return this.insulinParser?.insulinData;
-            case AbbottDataType.FOOD:
+            case OutputDataType.FOOD:
                 return this.foodParser?.foodData;
         }
     }
@@ -199,8 +193,4 @@ export enum RecordType {
     NOTES = 6
 }
 
-export enum AbbottDataType {
-    GLUCOSE = 0,
-    INSULIN = 1,
-    FOOD = 2
-}
+

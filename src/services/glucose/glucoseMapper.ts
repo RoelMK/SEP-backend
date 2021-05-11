@@ -1,7 +1,7 @@
 import { getUnixTime } from 'date-fns';
 import { parse } from 'date-fns';
 import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
-import { AbbottData, RecordType } from '../abbottParser';
+import { AbbottData, RecordType } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
 import { GlucoseSource } from './glucoseParser';

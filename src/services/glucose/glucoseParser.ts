@@ -1,5 +1,5 @@
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import { AbbottData } from '../abbottParser';
+import { AbbottData } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 

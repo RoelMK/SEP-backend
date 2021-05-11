@@ -1,6 +1,6 @@
 import FoodModel from '../../gb/models/foodModel';
-import { AbbottData } from '../abbottParser';
-import { FoodDiaryData } from '../foodDiaryParser';
+import { AbbottData } from '../dataParsers/abbottParser';
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
 

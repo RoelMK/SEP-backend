@@ -163,9 +163,12 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
+        // Create Date from unix timestamp
         const dateAsDate = fromUnixMsTime(date);
+        // Get tomorrow from given date
         const tomorrowAsDate = addDays(dateAsDate, 1);
-        const tomorrowUnix = getUnixTime(tomorrowAsDate);
+        // Convert tomorrow back to unix timestamp (13-digit)
+        const tomorrowUnix = getUnixTime(tomorrowAsDate) * 1000;
         const activities: ActivityGETData[] = await this.getAllActivitiesBetweenUnix(
             playerId,
             date,

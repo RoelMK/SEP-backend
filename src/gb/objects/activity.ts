@@ -168,7 +168,7 @@ export class Activity {
         // Get tomorrow from given date
         const tomorrowAsDate = addDays(dateAsDate, 1);
         // Convert tomorrow back to unix timestamp (13-digit)
-        const tomorrowUnix = getUnixTime(tomorrowAsDate) * 1000;
+        const tomorrowUnix = tomorrowAsDate.getTime();
         const activities: ActivityGETData[] = await this.getAllActivitiesBetweenUnix(
             playerId,
             date,

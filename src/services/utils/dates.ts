@@ -1,4 +1,4 @@
-import { parse, getUnixTime, isValid, fromUnixTime } from 'date-fns';
+import { parse, isValid, fromUnixTime } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -17,8 +17,8 @@ const parseDate = (dateString: string, dateFormat: DateFormat, referenceDate?: D
     }
     // Otherwise, return the unix timestamp
     // To be consistent with GameBus' timestamps, we make sure we are using the extended 13-digit format
-    // And since getUnixTime() always returns the time in seconds, we just multiply by 1000 to get 13 digits
-    return getUnixTime(date) * 1000;
+    // Date.getTime() returns the unix timestamp in milliseconds
+    return date.getTime();
 };
 
 /**

@@ -6,7 +6,7 @@ import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 
 test('import Abbott EU food', async () => {
     let expectedResult: FoodModel = {
-        calories: 404,
+        carbohydrates: 101,
         description: '',
         timestamp: getUnixTime(parse('15/01/2021 13:13', DateFormat.ABBOTT_EU, new Date()))
     };
@@ -15,7 +15,7 @@ test('import Abbott EU food', async () => {
 
 test('import Abbott US food', async () => {
     let expectedResult: FoodModel = {
-        calories: 480,
+        carbohydrates: 120,
         description: '',
         timestamp: getUnixTime(parse('11-29-2018 11:29 AM', DateFormat.ABBOTT_US, new Date()))
     };

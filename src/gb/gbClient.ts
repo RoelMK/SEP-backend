@@ -1,14 +1,22 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
+import { Exercise } from './objects/exercise';
+import { Food } from './objects/food';
+import { Glucose } from './objects/glucose';
+import { Insulin } from './objects/insulin';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
     private readonly client: AxiosInstance;
 
-    gamebusActivity: Activity;
-    tokenHandler?: TokenHandler;
+    private gamebusActivity: Activity;
+    private gamebusExercise: Exercise;
+    private gamebusFood: Food;
+    private gamebusGlucose: Glucose;
+    private gamebusInsulin: Insulin;
+    private tokenHandler?: TokenHandler;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly verbose?: boolean, private readonly token?: string) {
@@ -16,6 +24,10 @@ export class GameBusClient {
 
         // Create necessary classes
         this.gamebusActivity = new Activity(this, true);
+        this.gamebusExercise = new Exercise(this.gamebusActivity, true);
+        this.gamebusFood = new Food(this.gamebusActivity, true);
+        this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
+        this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
 
         // If a token is provided, authenticate using the token
         if (token) {
@@ -23,8 +35,25 @@ export class GameBusClient {
         }
     }
 
+    // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
     activity() {
         return this.gamebusActivity;
+    }
+
+    exercise() {
+        return this.gamebusExercise;
+    }
+
+    food() {
+        return this.gamebusFood;
+    }
+
+    glucose() {
+        return this.gamebusGlucose;
+    }
+
+    insulin() {
+        return this.gamebusInsulin;
     }
 
     /**

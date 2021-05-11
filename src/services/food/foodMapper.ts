@@ -18,61 +18,44 @@ export default class FoodMapper {
      */
     public static mapFood(foodSource: FoodSource, dateFormat: DateFormat) {
         switch (foodSource) {
-            // TODO: improve this code duplication
             case FoodSource.ABBOTT:
                 // Abbott depends on date format (US/EU)
-                switch (dateFormat) {
-                    case DateFormat.ABBOTT_EU:
-                        return this.mapAbbottEU;
-                    case DateFormat.ABBOTT_US:
-                        return this.mapAbbottUS;
-                    // Default (unused) case otherwise Typescript will complain
-                    default:
-                        return this.mapAbbottEU;
-                }
+                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                return function (entry: any): FoodModel {
+                    return FoodMapper.mapAbbott(entry, dateFormat);
+                };
 
             case FoodSource.FOOD_DIARY_EXCEL:
-                return this.mapFoodDiary; //TODO
+                return this.mapFoodDiary;
+
             default:
-                return this.mapAbbottEU;
+                return this.mapFoodDiary;
         }
     }
 
     /**
-     * Abbott mapping function for EU timestamps
+     * Abbott mapping function for different timestamps
      * @param entry Abbott entry
-     * @returns foodModel with information
+     * @param dateFormat the dateFormat in which the date entries are encoded
+     * @returns FoodModel with information
      */
-    private static mapAbbottEU(entry: any): FoodModel {
+    private static mapAbbott(entry: any, dateFormat: DateFormat): FoodModel {
         // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
-        // 1g carbohydrate = 4 calories
         return {
-            timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_EU, undefined, true),
-            calories: parseFloat(entry.carbohydrates__grams_) * 4,
+            carbohydrates: parseFloat(entry.carbohydrates__grams_),
+            timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
             description: entry.notes
         } as FoodModel;
     }
 
     /**
-     * Abbott mapping function for US timestamps
-     * @param entry Abbott entry
-     * @returns foodModel with information
+     * Excel food diary mapping function
+     * @param entry FoodDiary row
+     * @returns FoodModel filled with information
      */
-    private static mapAbbottUS(entry: any): FoodModel {
-        // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
-        // 1g carbohydrate = 4 calories
-        return {
-            timestamp: parseDate(entry.device_timestamp, DateFormat.ABBOTT_US, undefined, true),
-            calories: parseFloat(entry.carbohydrates__grams_) * 4,
-            description: entry.notes
-        } as FoodModel;
-    }
-
-
     private static mapFoodDiary(entry: any): FoodModel{
         return {
             timestamp: parseDate(entry.date, DateFormat.FOOD_DIARY, undefined, true),
-            calories: parseFloat(entry.carbohydrates) * 4,
             carbohydrates: parseFloat(entry.carbohydrates),
             description: entry.description
         } as FoodModel;

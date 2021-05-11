@@ -23,7 +23,7 @@ export default class GlucoseMapper {
         switch (glucoseSource) {
             case GlucoseSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
-                return function (entry: AbbottData): GlucoseModel {
+                return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapAbbott(entry, dateFormat, glucoseUnit);
                 };
         }
@@ -34,7 +34,7 @@ export default class GlucoseMapper {
      * @param entry Abbott entry
      * @returns glucoseModel with time and glucose level in mmol/L
      */
-    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): GlucoseModel {
+    private static mapAbbott(entry: any, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): GlucoseModel {
         // based on its recordtype, different glucose data is available
         let glucose_level_mmol: number;
         switch (parseInt(entry.record_type)) {

@@ -7,22 +7,17 @@ import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
 import { DateFormat } from '../utils/dates';
+import { AbbottData } from './abbottParser';
+import { FoodDiaryData } from './foodDiaryParser';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
  */
-export abstract class DataParser<D extends {} = Record<string, string>> {
+export abstract class DataParser {
     protected csvParser: CSVParser = new CSVParser();
     protected excelParser: ExcelParser = new ExcelParser();
-    protected rawData: D[] = [];
+    protected rawData: Record<string, string>[] = [];
     protected dateFormat: DateFormat = DateFormat.NONE;
-
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    // alternatively, you can create a public method in the AbbottParser for each data type POST individually
-    protected foodParser?: FoodParser;
-    protected glucoseParser?: GlucoseParser;
-    protected insulinParser?: InsulinParser;
 
     /**
      * Constructor with file path and data source (provided by children)
@@ -35,23 +30,21 @@ export abstract class DataParser<D extends {} = Record<string, string>> {
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
-    protected async parse(): Promise<void> {
+    protected async parse(): Promise<Record<string, string>[] | undefined> {
 
         // determine method of parsing by checking file extension
         let extension: string = this.filePath.substring(this.filePath.lastIndexOf('.')+1);
-
+        console.log(extension)
         switch(extension){
             case "csv":
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
-                this.rawData = (await this.csvParser.parse(this.filePath, skipLine)) as D[];
+                console.log("PAKT CSV" + this.filePath)
+                return (await this.csvParser.parse(this.filePath, skipLine));
             case "xlsx":
-                this.rawData = (await this.excelParser.parse(this.filePath, this.dataSource)) as D[];
-
+                return (await this.excelParser.parse(this.filePath, this.dataSource));
             case "xml":
                 //TODO
-        }
-
-        
+        }      
     }
 
     abstract process(): Promise<void>;
@@ -61,16 +54,7 @@ export abstract class DataParser<D extends {} = Record<string, string>> {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined{
-        switch (outputType) {
-            case OutputDataType.GLUCOSE:
-                return this.glucoseParser?.glucoseData;
-            case OutputDataType.INSULIN:
-                return this.insulinParser?.insulinData;
-            case OutputDataType.FOOD:
-                return this.foodParser?.foodData;
-        }
-    }
+    abstract getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined;
 }
 
 export enum DataSource {

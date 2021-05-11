@@ -10,7 +10,16 @@ import { getDateFormat } from '../utils/dates';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
-export default class AbbottParser extends DataParser<AbbottData> {
+export default class AbbottParser extends DataParser {
+
+
+    private abbottData: AbbottData[] = [];
+
+    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
+    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
+    private foodParser?: FoodParser<AbbottData>;
+    private glucoseParser?: GlucoseParser<AbbottData>;
+    private insulinParser?: InsulinParser<AbbottData>;
 
     /**
      * DataParser construction with DataSource set
@@ -24,18 +33,25 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
-        await this.parse();
+        console.log(this.rawData);
+        // specify the type of parsed data
+        this.abbottData = (await this.parse()) as AbbottData[];
+
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
+        console.log("DIT MOET KAPOT ZIJN")
+        console.log(this.abbottData);
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
+
         const foodData = this.filterFood();
         this.foodParser = new FoodParser<AbbottData>(foodData, FoodSource.ABBOTT, this.dateFormat);
 
         const glucoseData = this.filterGlucose();
-        this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
+        console.log(glucoseData)
+        this.glucoseParser = new GlucoseParser<AbbottData>(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
         const insulinData = this.filterInsulin();
-        this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
+        this.insulinParser = new InsulinParser<AbbottData>(insulinData, InsulinSource.ABBOTT, this.dateFormat);
     }
 
     /**
@@ -59,7 +75,8 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All glucose entries
      */
     private filterGlucose(): AbbottData[] {
-        const glucose = this.rawData?.filter((entry: AbbottData) => {
+        console.log(this.abbottData[0]);
+        const glucose = this.abbottData?.filter((entry: AbbottData) => {
             // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
             // We also only include entries for which the date is specified
             return (
@@ -83,7 +100,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All food entries
      */
     private filterFood(): AbbottData[] {
-        const food = this.rawData?.filter((entry: AbbottData) => {
+        const food = this.abbottData?.filter((entry: AbbottData) => {
             return parseInt(entry.record_type) === RecordType.CARBOHYDRATES && entry.carbohydrates__grams_;
         });
         // TODO: come up with a better way to return AbbottData if there is no food data
@@ -98,8 +115,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All insulin entries
      */
     private filterInsulin(): AbbottData[] {
-        //console.log(this.rawData);
-        const insulin = this.rawData?.filter((entry: AbbottData) => {
+        const insulin = this.abbottData?.filter((entry: AbbottData) => {
             return parseInt(entry.record_type) === RecordType.INSULIN;
         });
         if (insulin?.length === 0) {
@@ -114,7 +130,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
     private getLocale(): void {
         // TODO check if the first entry is NONE, but others are not
         // TODO involves checking if first can be NONE at all
-        this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
+        this.dateFormat = getDateFormat(this.abbottData?.[0].device_timestamp);
     }
 }
 
@@ -152,7 +168,7 @@ const emptyAbbottData = (): AbbottData => ({
  * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export interface AbbottData {
+export interface AbbottData extends Record<string, string | undefined> {
     device: string;
     serial_number: string;
     device_timestamp: string;

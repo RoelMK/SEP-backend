@@ -27,7 +27,7 @@ test('import standardized food diary full', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 10,
         description: 'Meeting',
-        timestamp: getUnixTime(parse('09-05-21', DateFormat.FOOD_DIARY_2, new Date()))
+        timestamp: getUnixTime(parse('09/05/21 20:43', DateFormat.FOOD_DIARY_3, new Date()))
     };
     expect((await parseFoodDiary('test/services/data/foodDiary_standard.xlsx', OutputDataType.FOOD, false) as FoodModel[])[0]).toStrictEqual(expectedResult);
 });
@@ -36,7 +36,7 @@ test('import standardized food diary with missing values', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 5,
         description: '',
-        timestamp: getUnixTime(parse('08-05-21', DateFormat.FOOD_DIARY_2, new Date()))
+        timestamp: getUnixTime(parse('05/08/21 23:12', DateFormat.FOOD_DIARY_3, new Date()))
     };
     expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.FOOD, true) as FoodModel[])[2]).toStrictEqual(expectedResult);
 });

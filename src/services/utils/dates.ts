@@ -54,6 +54,7 @@ enum DateFormat {
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
     FOOD_DIARY = "d/M/yy",
     FOOD_DIARY_2 = "dd-MM-yy",
+    FOOD_DIARY_3= 'dd/MM/yy HH:mm',
     NONE = ''
 }
 

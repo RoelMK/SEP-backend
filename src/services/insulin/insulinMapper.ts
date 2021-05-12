@@ -41,11 +41,10 @@ export default class InsulinMapper {
      */
     private static mapAbbott(entry: any, dateFormat: DateFormat): InsulinModel {
         let insulin_amount: number;
-
+        
         // based on its recordtype, different insulin types are available
         //Type Rapid by default
         let insulin_type: InsulinType = InsulinType.RAPID;
-
         // Early return to return empty insulin model
         if (
             !(
@@ -61,8 +60,9 @@ export default class InsulinMapper {
         } else {
             insulin_amount = parseInt(entry.long_acting_insulin__units_);
             insulin_type = InsulinType.LONG;
+            
         }
-
+       
         return {
             timestamp:getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
             insulinAmount: insulin_amount,
@@ -74,7 +74,7 @@ export default class InsulinMapper {
 
     private static mapFoodDiaryInsulin(entry: any): InsulinModel{
         return {
-            timestamp: getUnixTime(parse(entry.date, DateFormat.FOOD_DIARY, new Date())),
+            timestamp: getUnixTime(parse(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date())),
             insulinAmount: parseFloat(entry.total_insulin),
             insulinType: InsulinType.RAPID
         } as InsulinModel;

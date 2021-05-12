@@ -7,9 +7,9 @@ import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
 import { DateFormat } from '../utils/dates';
+import { getFileExtension } from '../utils/files';
 import { AbbottData } from './abbottParser';
 import { FoodDiaryData } from './foodDiaryParser';
-
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
  */
@@ -24,7 +24,7 @@ export abstract class DataParser {
      * @param filePath Path to .csv file
      * @param dataSource Data source of .csv file (see below)
      */
-    constructor(private readonly filePath: string, protected readonly dataSource: DataSource) {}
+    constructor(protected readonly dataSource: DataSource, private filePath?: string) {}
 
 
     /**
@@ -32,8 +32,11 @@ export abstract class DataParser {
      */
     protected async parse(): Promise<Record<string, string>[] | undefined> {
 
+        if(!this.filePath){
+            throw Error("File path is not set!")
+        }
         // determine method of parsing by checking file extension
-        let extension: string = this.filePath.substring(this.filePath.lastIndexOf('.')+1);
+        let extension: string = getFileExtension(this.filePath);
         switch(extension){
             case "csv":
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
@@ -43,6 +46,14 @@ export abstract class DataParser {
             case "xml":
                 //TODO
         }      
+    }
+
+    /**
+     * Allows the program to define the path after the object has been created
+     * @param path string representation of the path to the file
+     */
+    setFilePath(path: string){
+        this.filePath = path;
     }
 
     abstract process(): Promise<void>;

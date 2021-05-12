@@ -179,7 +179,6 @@ export interface AbbottData extends Record<string, string | undefined> {
     carbohydrates__servings_: string;
     non_numeric_long_acting_insulin: string;
     long_acting_insulin__units_: string;
-    long_acting_insulin_value__units_: string;
     notes: string;
     strip_glucose_mg_dl?: string;
     strip_glucose_mmol_l?: string;

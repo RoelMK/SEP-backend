@@ -3,6 +3,8 @@ import { parse } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { InsulinSource } from './insulinParser';
 import { DateFormat, parseDate } from '../utils/dates';
+import { AbbottData } from '../dataParsers/abbottParser';
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
@@ -19,16 +21,15 @@ export default class InsulinMapper {
     public static mapInsulin(insulinSource: InsulinSource, dateFormat: DateFormat) {
         switch (insulinSource) {
             case InsulinSource.ABBOTT:
-                switch (dateFormat) {
-                case DateFormat.ABBOTT_EU:
-                    return this.mapAbbottEU;
-                case DateFormat.ABBOTT_US:
-                    return this.mapAbbottUS;
-                }
+                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                return function (entry: any): InsulinModel {
+                    return InsulinMapper.mapAbbott(entry, dateFormat);
+                };
             case InsulinSource.FOOD_DIARY_EXCEL:
                 return this.mapFoodDiaryInsulin;
             default:
-                return this.mapAbbottEU; 
+                // TODO this should not happen
+                return this.mapFoodDiaryInsulin; 
                 
     }
 }
@@ -38,7 +39,7 @@ export default class InsulinMapper {
      * @param entry Abbott entry
      * @returns insulinModel with time and type(RAPID or LONG)
      */
-    private static mapAbbottEU(entry: any): InsulinModel {
+    private static mapAbbott(entry: any, dateFormat: DateFormat): InsulinModel {
         let insulin_amount: number;
 
         // based on its recordtype, different insulin types are available
@@ -58,53 +59,17 @@ export default class InsulinMapper {
         if (entry.rapid_acting_insulin__units_) {
             insulin_amount = parseInt(entry.rapid_acting_insulin__units_);
         } else {
-            insulin_amount = parseInt(entry.long_acting_insulin_value__units_);
-            insulin_type = InsulinType.LONG;
-        }
-
-        return {
-            timestamp:getUnixTime(parse(entry.device_timestamp, DateFormat.ABBOTT_EU, new Date())),
-            insulinAmount: insulin_amount,
-            insulinType: insulin_type
-        } as InsulinModel;
-    }
-
-
-    /**
-     * Abbott mapping function
-     * @param entry Abbott entry
-     * @returns insulinModel with time and type(RAPID or LONG)
-     */
-     private static mapAbbottUS(entry: any): InsulinModel {
-        let insulin_amount: number;
-
-        // based on its recordtype, different insulin types are available
-        //Type Rapid by default
-        let insulin_type: InsulinType = InsulinType.RAPID;
-
-        // Early return to return empty insulin model
-        if (
-            !(
-                entry.rapid_acting_insulin__units_  ||
-                entry.long_acting_insulin__units_ 
-            )
-        ) {
-            return emptyInsulinModel();
-        }
-
-        if (entry.rapid_acting_insulin__units_) {
-            insulin_amount = parseInt(entry.rapid_acting_insulin__units_);
-        } else {
             insulin_amount = parseInt(entry.long_acting_insulin__units_);
             insulin_type = InsulinType.LONG;
         }
 
         return {
-            timestamp: getUnixTime(parse(entry.device_timestamp, DateFormat.ABBOTT_US, new Date())),
+            timestamp:getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
             insulinAmount: insulin_amount,
             insulinType: insulin_type
         } as InsulinModel;
     }
+
 
 
     private static mapFoodDiaryInsulin(entry: any): InsulinModel{

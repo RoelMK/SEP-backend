@@ -15,7 +15,7 @@ async function testAbbott() {
 
 async function testExcel() {
     var testPath = 'test/services/data/foodDiary_standard_missing.xlsx'
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath, true);
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(true, testPath);
     await foodDiaryParser.process();
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
     console.log(foodDiaryParser.getData(OutputDataType.FOOD));

@@ -25,8 +25,8 @@ export default class AbbottParser extends DataParser {
      * DataParser construction with DataSource set
      * @param abbotFile file path of Abbott file
      */
-    constructor(private readonly abbotFile: string) {
-        super(abbotFile, DataSource.ABBOTT);
+    constructor(private abbotFile?: string) {
+        super(DataSource.ABBOTT, abbotFile);
     }
 
     /**

@@ -23,8 +23,8 @@ export default class FoodDiaryParser extends DataParser {
     private foodParser?: FoodParser<FoodDiaryData>;
     private insulinParser?: InsulinParser<FoodDiaryData>;
 
-    constructor(private readonly foodDiaryFile: string, private readonly doAutoFill: boolean) {
-        super(foodDiaryFile, DataSource.FOOD_DIARY);
+    constructor(private readonly doAutoFill: boolean, private foodDiaryFile?: string,) {
+        super(DataSource.FOOD_DIARY, foodDiaryFile);
     }
 
     /**

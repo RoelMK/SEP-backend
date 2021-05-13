@@ -10,11 +10,15 @@ import GlucoseMapper from './glucoseMapper';
  * Currently supported glucose sources:
  * - Abbott
  */
-export default class GlucoseParser<D extends {} = XOR<AbbottData, FoodDiaryData> > {
+export default class GlucoseParser {
+    // Glucose data to be exported
     glucoseData?: GlucoseModel[];
+      
     /**
-     * File from filePath is read in constructor and parsed, waiting until Ready is advised.
-     * @param filePath path to glucose .csv file
+     * List of glucose datapoints that can stem from several sources
+     * @param glucoseInput array of glucose inputs
+     * @param glucoseSource specifies where the glucose input comes from
+     * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
         private readonly glucoseInput: GlucoseInput[],
@@ -65,4 +69,8 @@ export enum GlucoseSource {
     ABBOTT = 1
 }
 
-type GlucoseInput = XOR<AbbottData, FoodDiaryData>;
+
+/**
+ * All possible input types for glucose data
+ */
+type GlucoseInput = AbbottData;

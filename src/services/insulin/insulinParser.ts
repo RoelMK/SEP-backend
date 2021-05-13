@@ -11,9 +11,13 @@ import { XOR } from 'ts-xor';
  */
 export default class InsulinParser {
     insulinData?: InsulinModel[];
+   
+    
     /**
-     * File from filePath is read in constructor and parsed, waiting until Ready is advised.
-     * @param filePath path to insulin .csv file
+     * List of insulin datapoints that can stem from several sources
+     * @param insulinInput array of insulin inputs
+     * @param insulinSource specifies where the insulin input comes from
+     * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
         private readonly insulinInput: InsulinInput[],
@@ -47,4 +51,8 @@ export enum InsulinSource {
     FOOD_DIARY_EXCEL = 1
 }
 
+
+/**
+ * All possible input types for insulin data
+ */
 type InsulinInput = XOR<AbbottData, FoodDiaryData>;

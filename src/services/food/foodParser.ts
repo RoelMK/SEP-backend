@@ -16,14 +16,18 @@ export default class FoodParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
-    // TODO: change to other inputs if needed
+    /**
+     * Create foodparser with list of food datapoints that can stem from several sources
+     * @param glucoseInput array of food inputs
+     * @param glucoseSource specifies where the food input comes from
+     * @param dateFormat specifies the format in which dates are represented
+     */
     constructor(
         private readonly foodInput: FoodInput[],
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
-        console.log(typeof(this.foodInput))
-        console.log(typeof(this.foodInput))
+
         // Process incoming foodInput data
         this.process();
     }
@@ -51,4 +55,7 @@ export enum FoodSource {
     FOOD_DIARY_EXCEL = 1
 }
 
+/**
+ * All possible input types for food data
+ */
 type FoodInput = XOR<AbbottData, FoodDiaryData>;

@@ -8,7 +8,7 @@ import * as EetmeterModels from '../../models/eetmeterModel';
  * Helper class to map the different food sources to 1 foodModel
  */
 export default class FoodMapper {
-    private constructor() { }
+    private constructor() {}
 
     /**
      * Main function that returns the correct mapping function based on given source
@@ -32,10 +32,10 @@ export default class FoodMapper {
                 }
 
             case FoodSource.EETMETER:
-                return this.mapEetmeter
+                return this.mapEetmeter;
 
             default:
-                return this.mapEetmeter
+                return this.mapEetmeter;
         }
     }
 
@@ -96,7 +96,7 @@ export default class FoodMapper {
             description: consumption.Product.Naam
         } as FoodModel;
 
-        return meal
+        return meal;
     }
 
     private static dateParser(year: number, month: number, day: number, period: string) {
@@ -109,7 +109,6 @@ export default class FoodMapper {
             hour = 19;
         }
 
-        let date: Date = new Date(year, month, day, hour);
-        return date.getTime();
+        return parseDate(`${day}/${month}/${year} ${hour}:0`, DateFormat.EETMETER, undefined, true);
     }
 }

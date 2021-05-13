@@ -2,7 +2,6 @@ import multer from "multer";
 import Router from "express";
 import AbbottParser from "../services/dataParsers/abbottParser";
 import { DataParser, OutputDataType } from "../services/dataParsers/dataParser";
-import path from "node:path";
 import fs from "fs";
 import { getFileExtension } from "../services/utils/files";
 import FoodDiaryParser from "../services/dataParsers/foodDiaryParser";
@@ -13,12 +12,12 @@ const uploadRouter = new Router();
 
 uploadRouter.post('/upload-abbott', upload.single('file'), function(req, res){uploadFile(req, res, new AbbottParser())});
 uploadRouter.get('/upload-abbott', function (req, res) {
-    res.sendFile(path.join(__dirname, "/testHTMLabbott.html"));
+    res.sendFile(__dirname + "/testHTMLabbott.html");
 });
 
 uploadRouter.post('/upload-fooddiary', upload.single('file'), function(req, res){uploadFile(req, res, new FoodDiaryParser(true))});
 uploadRouter.get('/upload-fooddiary', function (req, res) {
-    res.sendFile(path.join(__dirname, "/testHTMLfooddiary.html"));
+    res.sendFile(__dirname +"/testHTMLfooddiary.html");
 });
 
 async function uploadFile(req, res, dataParser: DataParser) {

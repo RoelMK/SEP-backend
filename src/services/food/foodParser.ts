@@ -11,7 +11,7 @@ import * as EetmeterModels from '../../models/eetmeterModel';
  * TODO: automatically detect food source based on column names
  * TODO: use dynamic format where user is able to pick what column represents what
  */
-export default class FoodParse {
+export default class FoodParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
@@ -19,7 +19,7 @@ export default class FoodParse {
     constructor(
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        private readonly foodInput: FoodInput[]// AbbottData[] | EetmeterModels.Consumptie[] 
+        private readonly foodInput: FoodInput[]
     ) {
         // Process incoming foodInput data
         this.process();
@@ -29,9 +29,12 @@ export default class FoodParse {
      * Processes the data (if necessary) and maps it to the FoodModel
      */
     private process() {
+        console.log(this.foodInput)
+        console.log(this.foodInput.length)
+
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat))
     }
-    
+
     /**
      * Posts the imported food data to GameBus
      */

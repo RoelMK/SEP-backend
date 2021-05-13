@@ -8,7 +8,7 @@ import * as EetmeterModels from '../../models/eetmeterModel';
  * Helper class to map the different food sources to 1 foodModel
  */
 export default class FoodMapper {
-    private constructor() {}
+    private constructor() { }
 
     /**
      * Main function that returns the correct mapping function based on given source
@@ -33,7 +33,7 @@ export default class FoodMapper {
 
             case FoodSource.EETMETER:
                 return this.mapEetmeter
-            
+
             default:
                 return this.mapEetmeter
         }
@@ -75,33 +75,28 @@ export default class FoodMapper {
      * @returns foodModel with information
      */
     private static mapEetmeter(entry: EetmeterModels.Consumptie): FoodModel {
-        // var foodData: FoodModel[] = [];
-        // for (var i = 0; i < entry; i++) {
-            var consumption = entry;
+        var consumption = entry;
 
-            var date = FoodMapper.dateParser(
-                consumption.Datum.Jaar,
-                consumption.Datum.Maand,
-                consumption.Datum.Dag,
-                consumption.Attributes.Periode
-            );
+        var date = FoodMapper.dateParser(
+            consumption.Datum.Jaar,
+            consumption.Datum.Maand,
+            consumption.Datum.Dag,
+            consumption.Attributes.Periode
+        );
 
-            let meal = {
-                timestamp: date,
-                calories: consumption.Nutrienten.Koolhydraten.Value * 4,
-                carbohydrates: consumption.Nutrienten.Koolhydraten.Value,
-                fat: consumption.Nutrienten.Vet.Value,
-                saturatedFat: consumption.Nutrienten.VerzadigdVet.Value,
-                salt: consumption.Nutrienten.Zout.Value,
-                sugars: consumption.Nutrienten.Suikers.Value,
-                water: consumption.Nutrienten.Water.Value,
-                description: consumption.Product.Naam
-            } as FoodModel;
+        let meal = {
+            timestamp: date,
+            calories: consumption.Nutrienten.Koolhydraten.Value * 4,
+            carbohydrates: consumption.Nutrienten.Koolhydraten.Value,
+            fat: consumption.Nutrienten.Vet.Value,
+            saturatedFat: consumption.Nutrienten.VerzadigdVet.Value,
+            salt: consumption.Nutrienten.Zout.Value,
+            sugars: consumption.Nutrienten.Suikers.Value,
+            water: consumption.Nutrienten.Water.Value,
+            description: consumption.Product.Naam
+        } as FoodModel;
 
-            return meal
-            // foodData?.push(meal);
-        // }
-        // return foodData
+        return meal
     }
 
     private static dateParser(year: number, month: number, day: number, period: string) {

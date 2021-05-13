@@ -15,32 +15,19 @@ export default class EetMeterParser extends DataParser {
     // alternatively, you can create a public method in the AbbottParser for each data type POST individually
     private foodParser?: FoodParser;
 
-    // private : FoodDiaryData[] = [];
-
     /**
      * DataParser construction with DataSource set
-     * @param abbotFile file path of Abbott file
+     * @param xmlFile file path of Eetmeter file
      */
     constructor(private readonly xmlFile: string) {
         super(xmlFile, DataSource.EETMETER);
-        console.log("in eetmeter parser constructor ");
-        // this.process()
     }
 
     /**
      * Function that is called (async) that creates the parsers and filers the data to the correct parsers
      */
     async process() {
-        console.log("in process of ")
         await this.parse();
-        // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
-        // this.getLocale();
-
-        // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
-        
-        //get array of consumptions with their dates
-        // const foodData = this.filterFood();
-        // this.foodDiaryData = (await this.parse()) as EetmeterModels.EetmeterData[];
 
         this.foodParser = new FoodParser(FoodSource.EETMETER, this.dateFormat, this.rawData);   
     }

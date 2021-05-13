@@ -16,6 +16,5 @@ export async function parseAbbott(filePath: string, type: AbbottDataType) {
 export async function parseEetmeter(filePath: string) {
     const eetmeterParser: EetMeterParser = new EetMeterParser(filePath);
     await eetmeterParser.process();
-    console.log(eetmeterParser.getData())
     return eetmeterParser.getData()
 }

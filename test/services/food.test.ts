@@ -22,7 +22,24 @@ test('import Abbott US food', async () => {
     expect(await parseAbbott('test/services/data/abbott_us.csv', AbbottDataType.FOOD)).toStrictEqual([expectedResult]);
 });
 
-test('import Eetmeter data', async () => {
+test('import single Eetmeter entry', async () => {
+    let expectedResult = [{
+        timestamp: 1622876400000,
+        calories: 27.92,
+        carbohydrates: 6.98,
+        fat: 4.72,
+        saturatedFat: 0.52,
+        salt: 1.31,
+        sugars: 0.98,
+        water: 46.5,
+        description: 'Vegetarische balletjes'
+    }]
+    
+      var result = await parseEetmeter('test/services/data/eetmeter.xml')
+    expect(result).toStrictEqual(expectedResult);
+});
+
+test('import many Eetmeter entries', async () => {
     let expectedResult = [{
         timestamp: 1622876400000,
         calories: 27.92,
@@ -46,8 +63,6 @@ test('import Eetmeter data', async () => {
         description: 'Vegetable soup'
       }];
     
-      var result = await parseEetmeter('test/services/data/eetmeter.xml')
-      console.log(result)
-      console.log(result == expectedResult)
+      var result = await parseEetmeter('test/services/data/eetmeterMany.xml')
     expect(result).toStrictEqual(expectedResult);
 });

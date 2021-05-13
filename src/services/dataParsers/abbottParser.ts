@@ -33,7 +33,7 @@ export default class AbbottParser extends DataParser {
         // TODO is this at the correct place
         if (!AbbottDataGuard(this.abbottData[0])){
             console.log(this.abbottData[0]);
-            throw Error("Wrong input data for processing abbott data!");
+            throw Error("Wrong input data for processing Abbott data!");
         }
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();

@@ -1,4 +1,4 @@
-import { parse, getUnixTime, isValid } from 'date-fns';
+import { parse, isValid, fromUnixTime } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -16,7 +16,9 @@ const parseDate = (dateString: string, dateFormat: DateFormat, referenceDate?: D
         return date;
     }
     // Otherwise, return the unix timestamp
-    return getUnixTime(date);
+    // To be consistent with GameBus' timestamps, we make sure we are using the extended 13-digit format
+    // Date.getTime() returns the unix timestamp in milliseconds
+    return date.getTime();
 };
 
 /**
@@ -29,7 +31,7 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
     // Try all the defined formats
     for (let format in DateFormat) {
         //console.log(`Parsing {${dateString}} as {${DateFormat[format as keyof typeof DateFormat]}}`);
-        let valid;
+        let valid: boolean;
         try {
             // Try to make a valid date using the format
             valid = isValid(parse(dateString, DateFormat[format], referenceDate ? referenceDate : new Date()));
@@ -47,6 +49,19 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
 };
 
 /**
+ * Function that will get the date from the given unix timestamp (in milliseconds)
+ * @param unixDate 13-digit (milliseconds) unix timestamp
+ * @returns Date of timestamp
+ */
+const fromUnixMsTime = (unixDate: number): Date => {
+    if (unixDate.toString().length != 13) {
+        throw new Error('unixDate is not correctly formatted (should be 13 digits)');
+    }
+    const date: Date = fromUnixTime(Math.floor(unixDate / 1000));
+    return date;
+};
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -56,4 +71,4 @@ enum DateFormat {
     NONE = ''
 }
 
-export { parseDate, getDateFormat, DateFormat };
+export { parseDate, getDateFormat, fromUnixMsTime, DateFormat };

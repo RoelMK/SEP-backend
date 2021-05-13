@@ -2,6 +2,7 @@ import FoodModel from '../../gb/models/foodModel';
 import { AbbottData } from '../abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
+import * as EetmeterModels from '../../models/eetmeterModel';
 
 /**
  * Helper class to map the different food sources to 1 foodModel
@@ -29,6 +30,12 @@ export default class FoodMapper {
                     default:
                         return this.mapAbbottEU;
                 }
+
+            case FoodSource.EETMETER:
+                return this.mapEetmeter
+            
+            default:
+                return this.mapEetmeter
         }
     }
 
@@ -37,7 +44,7 @@ export default class FoodMapper {
      * @param entry Abbott entry
      * @returns foodModel with information
      */
-    private static mapAbbottEU(entry: AbbottData): FoodModel {
+    private static mapAbbottEU(entry: any): FoodModel {
         // We map the timestamp given in the .csv file to a unix timestamp, calories are converted to numbers
         // 1g carbohydrate = 4 calories
         return {
@@ -60,5 +67,54 @@ export default class FoodMapper {
             calories: parseInt(entry.carbohydrates__grams_) * 4,
             description: entry.notes
         } as FoodModel;
+    }
+
+    /**
+     * Maps eetmeter consumtions
+     * @param entry Consumptie entry
+     * @returns foodModel with information
+     */
+    private static mapEetmeter(entry: EetmeterModels.Consumptie): FoodModel {
+        // var foodData: FoodModel[] = [];
+        // for (var i = 0; i < entry; i++) {
+            var consumption = entry;
+
+            var date = FoodMapper.dateParser(
+                consumption.Datum.Jaar,
+                consumption.Datum.Maand,
+                consumption.Datum.Dag,
+                consumption.Attributes.Periode
+            );
+
+            let meal = {
+                timestamp: date,
+                calories: consumption.Nutrienten.Koolhydraten.Value * 4,
+                carbohydrates: consumption.Nutrienten.Koolhydraten.Value,
+                fat: consumption.Nutrienten.Vet.Value,
+                saturatedFat: consumption.Nutrienten.VerzadigdVet.Value,
+                salt: consumption.Nutrienten.Zout.Value,
+                sugars: consumption.Nutrienten.Suikers.Value,
+                water: consumption.Nutrienten.Water.Value,
+                description: consumption.Product.Naam
+            } as FoodModel;
+
+            return meal
+            // foodData?.push(meal);
+        // }
+        // return foodData
+    }
+
+    private static dateParser(year: number, month: number, day: number, period: string) {
+        var hour = 0;
+        if (period == 'Ontbijt') {
+            hour = 9;
+        } else if (period == 'Lunch') {
+            hour = 13;
+        } else if (period == 'Avondeten') {
+            hour = 19;
+        }
+
+        let date: Date = new Date(year, month, day, hour);
+        return date.getTime();
     }
 }

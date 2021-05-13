@@ -7,7 +7,7 @@ export interface Consumpties {
     Attributes: [any];
     Consumptie: [Consumptie];
 }
-export interface Consumptie {
+export type Consumptie = {
     Attributes: Periode;
     Datum: Datum;
     Product: Product;

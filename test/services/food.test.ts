@@ -1,7 +1,7 @@
 import FoodModel from '../../src/gb/models/foodModel';
 import { parse, getUnixTime } from 'date-fns';
 import { DateFormat } from '../../src/services/utils/dates';
-import { parseAbbott } from './parseUtils';
+import { parseAbbott, parseEetmeter } from './parseUtils';
 import { AbbottDataType } from '../../src/services/abbottParser';
 
 test('import Abbott EU food', async () => {
@@ -20,4 +20,34 @@ test('import Abbott US food', async () => {
         timestamp: getUnixTime(parse('11-29-2018 11:29 AM', DateFormat.ABBOTT_US, new Date()))
     };
     expect(await parseAbbott('test/services/data/abbott_us.csv', AbbottDataType.FOOD)).toStrictEqual([expectedResult]);
+});
+
+test('import Eetmeter data', async () => {
+    let expectedResult: FoodModel[] = [{
+        timestamp: 1622876400000,
+        calories: 27.92,
+        carbohydrates: 6.98,
+        fat: 4.72,
+        saturatedFat: 0.52,
+        salt: 1.31,
+        sugars: 0.98,
+        water: 46.5,
+        description: 'Vegetarische balletjes'
+      },
+      {
+        timestamp: 1622876400000,
+        calories: 46,
+        carbohydrates: 11.5,
+        fat: 1.75,
+        saturatedFat: 0.25,
+        salt: 1.42,
+        sugars: 2,
+        water: 228,
+        description: 'Vegetable soup'
+      }];
+    
+      var result = await parseEetmeter('test/services/data/eetmeter.xml')
+      console.log(result)
+      console.log(result == expectedResult)
+    expect(result).toStrictEqual([expectedResult]);
 });

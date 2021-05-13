@@ -29,10 +29,9 @@ export default class FoodParse {
      * Processes the data (if necessary) and maps it to the FoodModel
      */
     private process() {
-        console.log(this.foodInput)
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat))
-        console.log(this.foodData)
     }
+    
     /**
      * Posts the imported food data to GameBus
      */

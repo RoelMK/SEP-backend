@@ -23,7 +23,7 @@ test('import Abbott US food', async () => {
 });
 
 test('import Eetmeter data', async () => {
-    let expectedResult: FoodModel[] = [{
+    let expectedResult = [{
         timestamp: 1622876400000,
         calories: 27.92,
         carbohydrates: 6.98,
@@ -49,5 +49,5 @@ test('import Eetmeter data', async () => {
       var result = await parseEetmeter('test/services/data/eetmeter.xml')
       console.log(result)
       console.log(result == expectedResult)
-    expect(result).toStrictEqual([expectedResult]);
+    expect(result).toStrictEqual(expectedResult);
 });

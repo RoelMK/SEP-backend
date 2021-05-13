@@ -23,7 +23,7 @@ export default class FoodParser {
      * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
-        private readonly foodInput: FoodInput[],
+        private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
@@ -56,6 +56,6 @@ export enum FoodSource {
 }
 
 /**
- * All possible input types for food data
+ * All possible input types for food data, 
  */
-type FoodInput = XOR<AbbottData, FoodDiaryData>;
+type FoodInput = XOR<AbbottData[], FoodDiaryData[]>;

@@ -21,7 +21,7 @@ export default class GlucoseParser {
      * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
-        private readonly glucoseInput: GlucoseInput[],
+        private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat
     ) {
@@ -73,4 +73,4 @@ export enum GlucoseSource {
 /**
  * All possible input types for glucose data
  */
-type GlucoseInput = AbbottData;
+type GlucoseInput = AbbottData[];

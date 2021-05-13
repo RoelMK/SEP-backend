@@ -1,6 +1,3 @@
-import FoodModel from '../../gb/models/foodModel';
-import { GlucoseModel } from '../../gb/models/glucoseModel';
-import { InsulinModel } from '../../gb/models/insulinModel';
 import { DataParser, DataSource, OutputDataType } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
@@ -32,17 +29,23 @@ export default class AbbottParser extends DataParser {
         // specify the type of parsed data
         this.abbottData = (await this.parse()) as AbbottData[];
 
+        
+        // TODO is this at the correct place
+        if (!AbbottDataGuard(this.abbottData[0])){
+            console.log(this.abbottData[0]);
+            throw Error("Wrong input data for processing abbott data!");
+        }
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
+        
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
-
-        const foodData = this.filterFood();
+        const foodData: AbbottData[] = this.filterFood();
         this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
 
-        const glucoseData = this.filterGlucose();
+        const glucoseData: AbbottData[]  = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
-        const insulinData = this.filterInsulin();
+        const insulinData: AbbottData[]  = this.filterInsulin();
         this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
     }
 
@@ -130,7 +133,7 @@ const emptyAbbottData = (): AbbottData => ({
     carbohydrates__servings_: '',
     non_numeric_long_acting_insulin: '',
     long_acting_insulin__units_: '',
-    long_acting_insulin_value__units_: '',
+    long_acting_insulin_value__units_: '', // ?? it is not in the file it seems like, but still
     notes: '',
     strip_glucose_mg_dl: '',
     strip_glucose_mmol_l: '',
@@ -144,7 +147,7 @@ const emptyAbbottData = (): AbbottData => ({
  * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export interface AbbottData extends Record<string, string | undefined> {
+export type AbbottData =  { 
     device: string;
     serial_number: string;
     device_timestamp: string;
@@ -159,7 +162,8 @@ export interface AbbottData extends Record<string, string | undefined> {
     carbohydrates__grams_: string;
     carbohydrates__servings_: string;
     non_numeric_long_acting_insulin: string;
-    long_acting_insulin__units_: string;
+    long_acting_insulin__units_?: string;   // apparently there is a difference between US and EU names for these
+    long_acting_insulin_value__units_?: string;
     notes: string;
     strip_glucose_mg_dl?: string;
     strip_glucose_mmol_l?: string;
@@ -167,6 +171,29 @@ export interface AbbottData extends Record<string, string | undefined> {
     meal_insulin__units_: string;
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
+}
+
+/**
+ * Function to check if an object belongs to the AbbottData interface
+ * @param object any object
+ * @returns whether the object is part of the interface AbbottData
+ */
+function AbbottDataGuard(object: any): object is AbbottData{
+    return ( object.device !== undefined) &&
+           ( object.serial_number !== undefined) &&
+           ( object.device_timestamp !== undefined) &&   
+           ( object.record_type !== undefined) &&          
+           ( object.non_numeric_rapid_acting_insulin !== undefined) &&
+           ( object.rapid_acting_insulin__units_ !== undefined) &&
+           ( object.non_numeric_food !== undefined) &&
+           ( object.carbohydrates__grams_ !== undefined) &&
+           ( object.carbohydrates__servings_ !== undefined) &&
+           ( object.non_numeric_long_acting_insulin !== undefined) &&
+           ( object.notes !== undefined) &&
+           ( object.ketone_mmol_l !== undefined) &&
+           ( object.meal_insulin__units_ !== undefined) &&
+           ( object.correction_insulin__units_ !== undefined) &&
+           ( object.user_change_insulin__units_ !== undefined)
 }
 
 /**

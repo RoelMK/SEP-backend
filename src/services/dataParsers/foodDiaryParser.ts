@@ -24,6 +24,11 @@ export default class FoodDiaryParser extends DataParser {
         // specify the type of parsed data
         this.foodDiaryData = (await this.parse()) as FoodDiaryData[];
 
+        // TODO is this at the correct place
+        if (!FoodDiaryDataGuard(this.foodDiaryData[0])){
+            console.log(this.foodDiaryData[0]);
+            throw Error("Wrong input data for processing food diary data!");
+        }
         //auto-fills empty cells in the Excel
         if(this.doAutoFill){
             const filledFoodDiaryData: FoodDiaryData[] = this.autoFill(this.foodDiaryData);
@@ -72,7 +77,15 @@ export default class FoodDiaryParser extends DataParser {
     }
 }   
 
-export interface FoodDiaryData extends Record<string, string | undefined> {
+
+
+
+
+
+/**
+ * Type of a parsed food diary, extends string, string records
+ */
+export type FoodDiaryData = { 
     date: string;
     time: string;
     description: string;
@@ -81,6 +94,21 @@ export interface FoodDiaryData extends Record<string, string | undefined> {
     high_correction_insulin: string;
     sports_correction_insulin: string;
     total_insulin: string;
+}
+
+/**
+ * Function to check if an object belongs to the FoodDiaryData interface
+ * @param object any object
+ * @returns whether the object is part of the interface AbbottData
+ */
+ function FoodDiaryDataGuard(object: any): object is FoodDiaryData{
+    return ('date' in object) &&
+           ('time' in object) &&
+           ('description' in object) &&
+           ('carbohydrates' in object) &&
+           ('base_insulin' in object) &&
+           ('high_correction_insulin' in object) &&
+           ('total_insulin' in object)        
 }
 
 

@@ -20,7 +20,7 @@ export default class InsulinParser {
      * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
-        private readonly insulinInput: InsulinInput[],
+        private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat
     ) {
@@ -55,4 +55,4 @@ export enum InsulinSource {
 /**
  * All possible input types for insulin data
  */
-type InsulinInput = XOR<AbbottData, FoodDiaryData>;
+type InsulinInput = XOR<AbbottData[], FoodDiaryData[]>;

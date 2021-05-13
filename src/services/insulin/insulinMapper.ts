@@ -49,7 +49,8 @@ export default class InsulinMapper {
         if (
             !(
                 entry.rapid_acting_insulin__units_ ||
-                entry.long_acting_insulin_value__units_
+                entry.long_acting_insulin_value__units_ || 
+                entry.long_acting_insulin__units_ 
             )
         ) {
             return emptyInsulinModel();
@@ -58,7 +59,9 @@ export default class InsulinMapper {
         if (entry.rapid_acting_insulin__units_) {
             insulin_amount = parseInt(entry.rapid_acting_insulin__units_);
         } else {
-            insulin_amount = parseInt(entry.long_acting_insulin__units_);
+            insulin_amount = (dateFormat == DateFormat.ABBOTT_US) ?
+                             parseInt(entry.long_acting_insulin__units_)
+                             : parseInt(entry.long_acting_insulin_value__units_);
             insulin_type = InsulinType.LONG;
             
         }

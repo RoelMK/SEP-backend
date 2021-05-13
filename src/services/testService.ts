@@ -5,6 +5,7 @@ import FoodDiaryParser from './dataParsers/foodDiaryParser';
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
     const abbottParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv');
+   // const abbottParser: AbbottParser = new AbbottParser('test/services/data/foodDiary_standard_missing.xlsx');
     // Currently this step is required since reading the file is async
     await abbottParser.process();
     // Print data for debugging
@@ -15,7 +16,8 @@ async function testAbbott() {
 
 async function testExcel() {
     var testPath = 'test/services/data/foodDiary_standard_missing.xlsx'
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(true, testPath);
+    var wrongTestPath = 'test/services/data/abbott_eu.csv';
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(true, wrongTestPath);
     await foodDiaryParser.process();
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
     console.log(foodDiaryParser.getData(OutputDataType.FOOD));

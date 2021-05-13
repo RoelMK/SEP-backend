@@ -19,6 +19,11 @@ export abstract class DataParser {
     protected rawData: Record<string, string>[] = [];
     protected dateFormat: DateFormat = DateFormat.NONE;
 
+    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
+    protected foodParser?: FoodParser;
+    protected glucoseParser?: GlucoseParser;
+    protected insulinParser?: InsulinParser;
+
     /**
      * Constructor with file path and data source (provided by children)
      * @param filePath Path to .csv file
@@ -63,7 +68,20 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    abstract getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined;
+     getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined
+     {
+         switch (outputType) {
+            case OutputDataType.GLUCOSE:
+                return this.glucoseParser?.glucoseData;
+             case OutputDataType.INSULIN:
+                 return this.insulinParser?.insulinData;
+             case OutputDataType.FOOD:
+                 return this.foodParser?.foodData;
+            default:
+                // TODO this should not happen
+                return []
+         }
+     }
 }
 
 export enum DataSource {

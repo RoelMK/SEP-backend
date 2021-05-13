@@ -1,3 +1,4 @@
+import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
@@ -9,14 +10,14 @@ import GlucoseMapper from './glucoseMapper';
  * Currently supported glucose sources:
  * - Abbott
  */
-export default class GlucoseParser<D extends {} = AbbottData | FoodDiaryData > {
+export default class GlucoseParser<D extends {} = XOR<AbbottData, FoodDiaryData> > {
     glucoseData?: GlucoseModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to glucose .csv file
      */
     constructor(
-        private readonly glucoseInput: D[],
+        private readonly glucoseInput: GlucoseInput[],
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat
     ) {
@@ -63,3 +64,5 @@ export default class GlucoseParser<D extends {} = AbbottData | FoodDiaryData > {
 export enum GlucoseSource {
     ABBOTT = 1
 }
+
+type GlucoseInput = XOR<AbbottData, FoodDiaryData>;

@@ -3,6 +3,7 @@ import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
+import {XOR} from "ts-xor";
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -11,16 +12,18 @@ import FoodMapper from './foodMapper';
  * TODO: automatically detect food source based on column names
  * TODO: use dynamic format where user is able to pick what column represents what
  */
-export default class FoodParser<D extends {} = AbbottData | FoodDiaryData > {
+export default class FoodParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
     // TODO: change to other inputs if needed
     constructor(
-        private readonly foodInput: D[],
+        private readonly foodInput: FoodInput[],
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
+        console.log(typeof(this.foodInput))
+        console.log(typeof(this.foodInput))
         // Process incoming foodInput data
         this.process();
     }
@@ -47,3 +50,5 @@ export enum FoodSource {
     ABBOTT = 0,
     FOOD_DIARY_EXCEL = 1
 }
+
+type FoodInput = XOR<AbbottData, FoodDiaryData>;

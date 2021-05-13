@@ -15,11 +15,7 @@ export default class AbbottParser extends DataParser {
 
     private abbottData: AbbottData[] = [];
 
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    private foodParser?: FoodParser<AbbottData>;
-    private glucoseParser?: GlucoseParser<AbbottData>;
-    private insulinParser?: InsulinParser<AbbottData>;
+    
 
     /**
      * DataParser construction with DataSource set
@@ -41,30 +37,15 @@ export default class AbbottParser extends DataParser {
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
 
         const foodData = this.filterFood();
-        this.foodParser = new FoodParser<AbbottData>(foodData, FoodSource.ABBOTT, this.dateFormat);
+        this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
 
         const glucoseData = this.filterGlucose();
-        this.glucoseParser = new GlucoseParser<AbbottData>(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
+        this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
         const insulinData = this.filterInsulin();
-        this.insulinParser = new InsulinParser<AbbottData>(insulinData, InsulinSource.ABBOTT, this.dateFormat);
+        this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
     }
 
-    /**
-     * Debugging function to get data contained in the parsers
-     * @param abbottDataType Data type to get
-     * @returns Data from data type's parser
-     */
-    getData(outputType: OutputDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined {
-        switch (outputType) {
-            case OutputDataType.GLUCOSE:
-                return this.glucoseParser?.glucoseData;
-            case OutputDataType.INSULIN:
-                return this.insulinParser?.insulinData;
-            case OutputDataType.FOOD:
-                return this.foodParser?.foodData;
-        }
-    }
 
     /**
      * Filters the glucose entries from the raw data

@@ -3,19 +3,20 @@ import { AbbottData } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
+import { XOR } from 'ts-xor';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
  * - Abbott
  */
-export default class InsulinParser<D extends {} = AbbottData | FoodDiaryData > {
+export default class InsulinParser {
     insulinData?: InsulinModel[];
     /**
      * File from filePath is read in constructor and parsed, waiting until Ready is advised.
      * @param filePath path to insulin .csv file
      */
     constructor(
-        private readonly insulinInput: D[],
+        private readonly insulinInput: InsulinInput[],
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat
     ) {
@@ -45,3 +46,5 @@ export enum InsulinSource {
     ABBOTT = 0,
     FOOD_DIARY_EXCEL = 1
 }
+
+type InsulinInput = XOR<AbbottData, FoodDiaryData>;

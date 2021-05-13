@@ -1,13 +1,8 @@
 import { DataParser, DataSource, OutputDataType } from "./dataParser";
-import ExcelParser from "../fileParsers/excelParser";
 import FoodParser, { FoodSource } from "../food/foodParser";
-import GlucoseParser from "../glucose/glucoseParser";
 import InsulinParser, { InsulinSource } from "../insulin/insulinParser";
 import { DateFormat } from "../utils/dates";
-import { fil } from "date-fns/locale";
-import { GlucoseModel } from "../../gb/models/glucoseModel";
-import { InsulinModel } from "../../gb/models/insulinModel";
-import FoodModel from "../../gb/models/foodModel";
+
 
 
 
@@ -17,11 +12,6 @@ import FoodModel from "../../gb/models/foodModel";
 export default class FoodDiaryParser extends DataParser {
 
     private foodDiaryData: FoodDiaryData[] = [];
-
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    private foodParser?: FoodParser<FoodDiaryData>;
-    private insulinParser?: InsulinParser<FoodDiaryData>;
 
     constructor(private readonly doAutoFill: boolean, private foodDiaryFile?: string,) {
         super(DataSource.FOOD_DIARY, foodDiaryFile);
@@ -37,11 +27,11 @@ export default class FoodDiaryParser extends DataParser {
         //auto-fills empty cells in the Excel
         if(this.doAutoFill){
             const filledFoodDiaryData: FoodDiaryData[] = this.autoFill(this.foodDiaryData);
-            this.foodParser = new FoodParser<FoodDiaryData>(filledFoodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-            this.insulinParser = new InsulinParser<FoodDiaryData>(filledFoodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+            this.foodParser = new FoodParser(filledFoodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+            this.insulinParser = new InsulinParser(filledFoodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
         }else{
-            this.foodParser = new FoodParser<FoodDiaryData>(this.foodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-            this.insulinParser = new InsulinParser<FoodDiaryData>(this.foodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+            this.foodParser = new FoodParser(this.foodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+            this.insulinParser = new InsulinParser(this.foodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
         }
     }
 
@@ -80,15 +70,6 @@ export default class FoodDiaryParser extends DataParser {
         }
         return rawData;
     }
-    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | undefined
-        {
-            switch (outputType) {
-                case OutputDataType.INSULIN:
-                    return this.insulinParser?.insulinData;
-                case OutputDataType.FOOD:
-                    return this.foodParser?.foodData;
-            }
-        }
 }   
 
 export interface FoodDiaryData extends Record<string, string | undefined> {

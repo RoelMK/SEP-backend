@@ -67,6 +67,7 @@ const fromUnixMsTime = (unixDate: number): Date => {
 enum DateFormat {
     ABBOTT_US = 'MM-dd-yyyy p',
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
+    EETMETER = 'd/M/yyyy H:m',
     NONE = ''
 }
 

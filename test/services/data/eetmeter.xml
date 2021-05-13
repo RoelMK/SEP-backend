@@ -1,0 +1,50 @@
+<Consumpties Email="kvelkov14@gmail.com" Naam="Konstantin Velkov" Van="05-05-2021" Tot="05-05-2021">
+  <Consumptie Periode="Ontbijt">
+    <Datum>
+      <Dag>5</Dag>
+      <Maand>5</Maand>
+      <Jaar>2021</Jaar>
+    </Datum>
+    <Product NEVO="2046" VcCode="-1" IsMerkProduct="Nee" IsEigenProduct="Nee">
+      <Guid>AF6B269E-803D-400D-AA2D-0CC284009B64</Guid>
+      <Naam>Vegetarische balletjes</Naam>
+      <Bereiding>Onbereid</Bereiding>
+      <Eenheid GramPerEenheid="15.00">
+        <Naam>stuks</Naam>
+        <Aantal>5.00</Aantal>
+      </Eenheid>
+    </Product>
+    <Nutrienten>
+      <Energie Code="01001" Eenheid="kcal" WaardePer100Gram="169.00">126.75</Energie>
+      <Vet Code="03001" Eenheid="g" WaardePer100Gram="6.30">4.72</Vet>
+      <VerzadigdVet Code="03003" Eenheid="g" WaardePer100Gram="0.70">0.52</VerzadigdVet>
+      <Koolhydraten Code="05001" Eenheid="g" WaardePer100Gram="9.30">6.98</Koolhydraten>
+      <Eiwit Code="02002" Eenheid="g" WaardePer100Gram="17.10">12.83</Eiwit>
+      <Vezels Code="06001" Eenheid="g" WaardePer100Gram="3.20">2.40</Vezels>
+      <Zout Code="09012" Eenheid="g" WaardePer100Gram="1.75">1.31</Zout>
+      <Alcohol Code="08001" Eenheid="g" WaardePer100Gram="0.00">0.00</Alcohol>
+      <Water Code="07001" Eenheid="g" WaardePer100Gram="62.00">46.50</Water>
+      <Natrium Code="09006" Eenheid="mg" WaardePer100Gram="700.00">525.00</Natrium>
+      <Kalium Code="09007" Eenheid="mg" WaardePer100Gram="475.00">356.25</Kalium>
+      <Calcium Code="09001" Eenheid="mg" WaardePer100Gram="75.00">56.25</Calcium>
+      <Magnesium Code="09008" Eenheid="mg" WaardePer100Gram="67.00">50.25</Magnesium>
+      <IJzer Code="09003" Eenheid="mg" WaardePer100Gram="2.10">1.58</IJzer>
+      <Selenium Code="10001" Eenheid="µg" WaardePer100Gram="3.00">2.25</Selenium>
+      <Zink Code="09009" Eenheid="mg" WaardePer100Gram="0.14">0.11</Zink>
+      <VitamineA Code="11001" Eenheid="µg" WaardePer100Gram="0.00">0.00</VitamineA>
+      <VitamineD Code="11009" Eenheid="µg" WaardePer100Gram="0.00">0.00</VitamineD>
+      <VitamineE Code="11010" Eenheid="mg" WaardePer100Gram="5.00">3.75</VitamineE>
+      <VitamineB1 Code="11005" Eenheid="mg" WaardePer100Gram="0.10">0.08</VitamineB1>
+      <VitamineB2 Code="11006" Eenheid="mg" WaardePer100Gram="0.14">0.11</VitamineB2>
+      <VitamineB6 Code="11007" Eenheid="mg" WaardePer100Gram="0.13">0.10</VitamineB6>
+      <Foliumzuur Code="11028" Eenheid="µg" WaardePer100Gram="87.90">65.93</Foliumzuur>
+      <VitamineB12 Code="11008" Eenheid="µg" WaardePer100Gram="0.23">0.17</VitamineB12>
+      <Nicotinezuur Code="11014" Eenheid="mg" WaardePer100Gram="1.00">0.75</Nicotinezuur>
+      <VitamineC Code="11011" Eenheid="mg" WaardePer100Gram="0.00">0.00</VitamineC>
+      <Jodium Code="10003" Eenheid="µg" WaardePer100Gram="1.10">0.83</Jodium>
+      <Fosfor Code="09002" Eenheid="mg" WaardePer100Gram="147.00">110.25</Fosfor>
+      <Suikers Code="05002" Eenheid="g" WaardePer100Gram="1.30">0.98</Suikers>
+      <EiwitPlantaardig Code="02003" Eenheid="g" WaardePer100Gram="14.60">10.95</EiwitPlantaardig>
+    </Nutrienten>
+  </Consumptie>
+</Consumpties>

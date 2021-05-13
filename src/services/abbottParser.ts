@@ -6,6 +6,7 @@ import FoodParser, { FoodSource } from './food/foodParser';
 import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from './insulin/insulinParser';
 import { getDateFormat } from './utils/dates';
+import XMLParser from './xmlParser';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -20,10 +21,10 @@ export default class AbbottParser extends DataParser<AbbottData> {
 
     /**
      * DataParser construction with DataSource set
-     * @param abbotFile file path of Abbott file
+     * @param xmlFile file path of Abbott file
      */
-    constructor(private readonly abbotFile: string) {
-        super(abbotFile, DataSource.ABBOTT);
+    constructor(private readonly xmlFile: string) {
+        super(xmlFile, DataSource.ABBOTT);
     }
 
     /**
@@ -35,7 +36,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
         this.getLocale();
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData = this.filterFood();
-        this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
+        this.foodParser = new FoodParser(FoodSource.ABBOTT, this.dateFormat, foodData);
 
         const glucoseData = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
@@ -158,7 +159,7 @@ const emptyAbbottData = (): AbbottData => ({
  * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export interface AbbottData {
+export type AbbottData = {
     device: string;
     serial_number: string;
     device_timestamp: string;

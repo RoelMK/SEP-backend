@@ -12,15 +12,7 @@ testRouter.get('/', (req: any, res: any) => {
 
 
 testRouter.get('/test', (req: any, res: any) => {
-    // const parser = new EetMeterParser('src/services/food/eetmeter.xml');
-    const eetmeterParser: EetMeterParser = new EetMeterParser('src/services/food/eetmeter.xml');
-    eetmeterParser.process();
-    res.send(eetmeterParser.getData());
-    // return eetmeterParser.getData()
-    // var parser2 = new AbbottParser('src/services/food/food_data.csv')
-    // await parser.process();
-    // await parser.process()
-    // res.send('Hi, this was a success!');
+    res.send('Hi, this was a success!');
 });
 
 testRouter.get('/jwt-test', checkJwt, (req: any, res: any) => {

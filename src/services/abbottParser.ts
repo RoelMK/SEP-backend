@@ -20,10 +20,10 @@ export default class AbbottParser extends DataParser<AbbottData> {
 
     /**
      * DataParser construction with DataSource set
-     * @param abbotFile file path of Abbott file
+     * @param abbottFile file path of Abbott file
      */
-    constructor(private readonly abbotFile: string) {
-        super(abbotFile, DataSource.ABBOTT);
+    constructor(private readonly abbottFile: string) {
+        super(abbottFile, DataSource.ABBOTT);
     }
 
     /**
@@ -158,7 +158,7 @@ const emptyAbbottData = (): AbbottData => ({
  * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export interface AbbottData {
+export type AbbottData = {
     device: string;
     serial_number: string;
     device_timestamp: string;
@@ -182,7 +182,7 @@ export interface AbbottData {
     meal_insulin__units_: string;
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
-}
+};
 
 /**
  * Different record type meanings

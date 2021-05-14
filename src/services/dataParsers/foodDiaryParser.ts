@@ -13,8 +13,8 @@ export default class FoodDiaryParser extends DataParser {
 
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private readonly doAutoFill: boolean, private foodDiaryFile?: string,) {
-        super(DataSource.FOOD_DIARY, foodDiaryFile);
+    constructor(private readonly doAutoFill: boolean, private foodDiaryFile?: string, protected oneDriveToken?: string) {
+        super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken);
     }
 
     /**

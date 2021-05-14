@@ -3,6 +3,7 @@ import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
 import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
+import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
@@ -16,6 +17,7 @@ import { FoodDiaryData } from './foodDiaryParser';
 export abstract class DataParser {
     protected csvParser: CSVParser = new CSVParser();
     protected excelParser: ExcelParser = new ExcelParser();
+    protected oneDriveExcelParser: OneDriveExcelParser = new OneDriveExcelParser();
     protected rawData: Record<string, string>[] = [];
     protected dateFormat: DateFormat = DateFormat.NONE;
 
@@ -29,7 +31,7 @@ export abstract class DataParser {
      * @param filePath Path to .csv file
      * @param dataSource Data source of .csv file (see below)
      */
-    constructor(protected readonly dataSource: DataSource, private filePath?: string) {}
+    constructor(protected readonly dataSource: DataSource, protected filePath?: string, protected oneDriveToken?: string) {}
 
 
     /**
@@ -47,7 +49,8 @@ export abstract class DataParser {
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
                 return (await this.csvParser.parse(this.filePath, skipLine));
             case "xlsx":
-                return (await this.excelParser.parse(this.filePath, this.dataSource));
+                if(!this.oneDriveToken) return (await this.excelParser.parse(this.filePath, this.dataSource));
+                else                    return (await this.oneDriveExcelParser.parse(this.filePath, this.dataSource, this.oneDriveToken));
             case "xml":
                 //TODO
         }      

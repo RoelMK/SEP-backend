@@ -34,14 +34,21 @@ export default class OneDriveExcelParser {
      */
     assignKeys(array2D: string[][], keys: string[]): Record<string, string>[]{
 
+        // amount of values in an object-array must be equal to the amount of passed keys
         if(array2D[0].length != keys.length){
             throw Error(
                 "Length mismatch: 2D array cannot be converted to an object with given keys!")
         }
 
+        // resulting object array
         let result: Record<string, string>[] = [];
-        let object: Record<string, string>   = {};
+        // to be constructed object
+        let object: Record<string, string>;
+
+        // loop over all object-arrays, convert them to actual objects and
+        // store them in the result array
         array2D.forEach(function(array: string[]){
+            object = {};
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i];
                 const value = array[i];

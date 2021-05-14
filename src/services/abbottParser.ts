@@ -6,7 +6,6 @@ import FoodParser, { FoodSource } from './food/foodParser';
 import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from './insulin/insulinParser';
 import { getDateFormat } from './utils/dates';
-import XMLParser from './xmlParser';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -21,10 +20,10 @@ export default class AbbottParser extends DataParser<AbbottData> {
 
     /**
      * DataParser construction with DataSource set
-     * @param xmlFile file path of Abbott file
+     * @param abbottFile file path of Abbott file
      */
-    constructor(private readonly xmlFile: string) {
-        super(xmlFile, DataSource.ABBOTT);
+    constructor(private readonly abbottFile: string) {
+        super(abbottFile, DataSource.ABBOTT);
     }
 
     /**
@@ -36,7 +35,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
         this.getLocale();
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData = this.filterFood();
-        this.foodParser = new FoodParser(FoodSource.ABBOTT, this.dateFormat, foodData);
+        this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
 
         const glucoseData = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
@@ -183,7 +182,7 @@ export type AbbottData = {
     meal_insulin__units_: string;
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
-}
+};
 
 /**
  * Different record type meanings

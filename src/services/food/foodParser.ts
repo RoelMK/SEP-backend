@@ -17,9 +17,9 @@ export default class FoodParser {
 
     // TODO: change to other inputs if needed
     constructor(
+        private readonly foodInput: FoodInput[],
         private readonly foodSource: FoodSource,
-        private readonly dateFormat: DateFormat,
-        private readonly foodInput: FoodInput[]
+        private readonly dateFormat: DateFormat
     ) {
         // Process incoming foodInput data
         this.process();
@@ -29,10 +29,10 @@ export default class FoodParser {
      * Processes the data (if necessary) and maps it to the FoodModel
      */
     private process() {
-        console.log(this.foodInput)
-        console.log(this.foodInput.length)
+        console.log(this.foodInput);
+        console.log(this.foodInput.length);
 
-        this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat))
+        this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
     }
 
     /**
@@ -51,7 +51,7 @@ export enum FoodSource {
     EETMETER = 1
 }
 
-export type FoodInput = XOR<AbbottData,EetmeterModels.Consumptie> 
+export type FoodInput = XOR<AbbottData, EetmeterModels.Consumptie>;
 
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
-type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;

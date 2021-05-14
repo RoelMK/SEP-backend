@@ -1,5 +1,3 @@
-import { getUnixTime } from 'date-fns';
-import { parse } from 'date-fns';
 import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
 import { AbbottData, RecordType } from '../abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';

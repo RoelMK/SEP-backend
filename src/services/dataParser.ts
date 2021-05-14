@@ -2,12 +2,11 @@ import CSVParser from './csvParser';
 import { DateFormat } from './utils/dates';
 import XMLParser from './xmlParser';
 import * as EetmeterModels from '../models/eetmeterModel';
-import { AbbottData } from './abbottParser';
 
 /**
  * Abstract DataParser class that can take a .csv or xml file as input and pass it onto other parsers
  */
-export abstract class DataParser <D extends {} = Record<string, string>> {
+export abstract class DataParser<D extends {} = Record<string, string>> {
     protected csvParser: CSVParser = new CSVParser();
     protected xmlParser: XMLParser = new XMLParser();
     protected rawData: any[] = [];
@@ -22,15 +21,15 @@ export abstract class DataParser <D extends {} = Record<string, string>> {
     constructor(private readonly filePath: string, protected readonly dataSource: DataSource) {}
 
     protected async parse(): Promise<void> {
-        if(this.dataSource == DataSource.ABBOTT) {
+        if (this.dataSource == DataSource.ABBOTT) {
             const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
             this.rawData = (await this.csvParser.parse(this.filePath, skipLine)) as Record<string, string>[];
         } else if (this.dataSource == DataSource.EETMETER) {
             var eetmeterRawData = (await this.xmlParser.parse(this.filePath)) as EetmeterModels.EetmeterData;
-            this.rawData = eetmeterRawData.Consumpties.Consumptie as EetmeterModels.Consumptie[]
+            this.rawData = eetmeterRawData.Consumpties.Consumptie as EetmeterModels.Consumptie[];
             // Not sure why it does not always map it to an array (even with a single element)
             if (this.rawData.length == undefined) {
-                this.rawData = [this.rawData]
+                this.rawData = [this.rawData];
             }
         }
     }

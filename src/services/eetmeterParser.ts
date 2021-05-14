@@ -1,10 +1,6 @@
 import FoodModel from '../gb/models/foodModel';
-import { GlucoseModel } from '../gb/models/glucoseModel';
-import { InsulinModel } from '../gb/models/insulinModel';
 import { DataParser, DataSource } from './dataParser';
 import FoodParser, { FoodSource } from './food/foodParser';
-import * as EetmeterModels from '../models/eetmeterModel';
-import { getDateFormat } from './utils/dates';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -29,10 +25,10 @@ export default class EetMeterParser extends DataParser {
     async process() {
         await this.parse();
 
-        this.foodParser = new FoodParser(FoodSource.EETMETER, this.dateFormat, this.rawData);   
+        this.foodParser = new FoodParser(this.rawData, FoodSource.EETMETER, this.dateFormat);
     }
 
     getData(): FoodModel[] | undefined {
-        return this.foodParser?.foodData
+        return this.foodParser?.foodData;
     }
 }

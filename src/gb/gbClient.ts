@@ -14,7 +14,7 @@ export class GameBusClient {
     tokenHandler?: TokenHandler;
 
     // Create Axios instance, can add options if needed
-    constructor(private readonly jwt: string, private readonly verbose?: boolean) {
+    constructor(private readonly jwt?: string, private readonly verbose?: boolean) {
         this.client = axios.create();
 
         // Create necessary classes

@@ -4,8 +4,14 @@ const errorhandler = require('errorhandler');
 const cors = require('cors');
 import winston from 'winston';
 import expressWinston from 'express-winston';
+import { DBClient } from './db/dbClient';
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+// Initialize database
+const dbClient: DBClient = new DBClient();
+dbClient.initialize();
+dbClient.close();
 
 // Create app object
 const app = express();

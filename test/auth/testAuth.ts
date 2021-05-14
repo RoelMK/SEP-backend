@@ -14,7 +14,7 @@ function testCreateJWT() : void {
     let token = createJWT("id1", "a1", "r1");
     let decoded = jwt.verify(token, process.env.TOKEN_SECRET as string) as any;
     console.log(decoded);
-    assert.strictEqual(decoded.userId, "id1");
+    assert.strictEqual(decoded.playerId, "id1");
     assert.strictEqual(decoded.accessToken, "a1");
     assert.strictEqual(decoded.refreshToken, "r1");
 }

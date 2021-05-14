@@ -52,7 +52,7 @@ export class TokenHandler {
         //const privateSecret = process.env.TOKEN_SECRET as string;
         const decoded = verify(this.JWT, 'test') as DecodedJWT;
         return {
-            userId: parseInt(decoded.userId),
+            userId: parseInt(decoded.playerId),     // TODO: should it be playerId or userId here?
             accessToken: decoded.accessToken
         } as GameBusToken;
     }

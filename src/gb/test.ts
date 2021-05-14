@@ -7,7 +7,7 @@ let userKevin = {
     userID: process.env.kevin_userID!
 };
 
-let client: GameBusClient = new GameBusClient(true, userKevin.token);
+//let client: GameBusClient = new GameBusClient(true, userKevin.token);
 /*
 async function testClientGetAllActs2(client: GameBusClient, playerId: number) {
     const activity = await client.activity().getActivitiesOnDate(524, Math.floor(Date.now() / 1000));

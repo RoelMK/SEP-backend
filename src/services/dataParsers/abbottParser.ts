@@ -133,7 +133,7 @@ const emptyAbbottData = (): AbbottData => ({
     carbohydrates__servings_: '',
     non_numeric_long_acting_insulin: '',
     long_acting_insulin__units_: '',
-    long_acting_insulin_value__units_: '', // ?? it is not in the file it seems like, but still
+    long_acting_insulin_value__units_: '', 
     notes: '',
     strip_glucose_mg_dl: '',
     strip_glucose_mmol_l: '',

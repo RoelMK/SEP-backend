@@ -1,7 +1,9 @@
 import FoodModel from '../../gb/models/foodModel';
-import { AbbottData } from '../abbottParser';
+import { AbbottData } from '../dataParsers/abbottParser';
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
+import {XOR} from "ts-xor";
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -14,12 +16,18 @@ export default class FoodParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
-    // TODO: change to other inputs if needed
+    /**
+     * Create foodparser with list of food datapoints that can stem from several sources
+     * @param glucoseInput array of food inputs
+     * @param glucoseSource specifies where the food input comes from
+     * @param dateFormat specifies the format in which dates are represented
+     */
     constructor(
-        private readonly foodInput: AbbottData[],
+        private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
+
         // Process incoming foodInput data
         this.process();
     }
@@ -43,5 +51,11 @@ export default class FoodParser {
  * Current food sources available
  */
 export enum FoodSource {
-    ABBOTT = 0
+    ABBOTT = 0,
+    FOOD_DIARY_EXCEL = 1
 }
+
+/**
+ * All possible input types for food data, 
+ */
+type FoodInput = XOR<AbbottData[], FoodDiaryData[]>;

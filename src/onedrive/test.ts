@@ -1,5 +1,6 @@
 import axios, { AxiosInstance , AxiosRequestConfig} from 'axios';
 import {oneDriveToken} from '../gb/usersExport';
+import {OneDriveClient} from './odClient';
 
 let client : AxiosInstance = axios.create();
 
@@ -262,25 +263,24 @@ async function execute() {
     console.log(resultValue)
 }
 
-execute()
-//getFileId(oneDrive,"MyFirstSheet.xlsx");
-//getFile(oneDrive,"Document1.docx","Documents").then((value) => console.log(value))
+execute2()
+
 async function execute2() {
-    let requestHeaders = {
-        'content-type': 'Application/Json',
-        'authorization': `Bearer ${oneDriveToken}`
-    }
-    let body = {
-    }
-    let response = await client.request({
-        method: 'GET',
-        //url: `https://graph.microsoft.com/v1.0/me/drive/root/children`,
-        url: `https://graph.microsoft.com/v1.0/me/drive/root:/Documents:/children`,
-        headers: requestHeaders,
-        data: body
-    });
-    console.log(response.status);
-    console.log(response.statusText);
-    //console.log(response.headers);
-    console.log(response.data);
+    let sheetName = "Sheet2";
+    //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
+    //let fileName = "MyFirstSheet.xlsx";
+    //let folderPath = undefined;
+    let fileName = "DeepExcel.xlsx";
+    let folderPath = "Documents/DeepFolder";
+    let excelToken = oneDriveToken;
+    let topLeft = "A1";
+    let bottomRight = "H4";
+
+    
+    let odClient : OneDriveClient = new OneDriveClient(excelToken,fileName,folderPath,sheetName);
+    let result = await odClient.getRangeText(topLeft,bottomRight)
+    console.log("Done")
+    console.log(result)
 }
+
+//http://localhost:8080/onedrive/login

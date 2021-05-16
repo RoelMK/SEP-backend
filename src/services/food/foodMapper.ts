@@ -57,7 +57,7 @@ export default class FoodMapper {
      */
     private static mapFoodDiary(entry: any): FoodModel{
         return {
-            timestamp: getUnixTime(parse(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date())),
+            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date(),true),
             carbohydrates: parseFloat(entry.carbohydrates),
             description: entry.description
         } as FoodModel;

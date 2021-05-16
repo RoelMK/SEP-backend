@@ -67,7 +67,7 @@ export default class InsulinMapper {
         }
        
         return {
-            timestamp:getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
+            timestamp:parseDate(entry.device_timestamp, dateFormat, new Date(), true),
             insulinAmount: insulin_amount,
             insulinType: insulin_type
         } as InsulinModel;
@@ -77,7 +77,7 @@ export default class InsulinMapper {
 
     private static mapFoodDiaryInsulin(entry: any): InsulinModel{
         return {
-            timestamp: getUnixTime(parse(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date())),
+            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date(), true),
             insulinAmount: parseFloat(entry.total_insulin),
             insulinType: InsulinType.RAPID
         } as InsulinModel;

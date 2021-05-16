@@ -31,7 +31,7 @@ export default class FoodDiaryParser extends DataParser {
         }
         //auto-fills empty cells in the Excel
         if(this.doAutoFill){
-            const filledFoodDiaryData: FoodDiaryData[] = this.autoFill(this.foodDiaryData);
+            const filledFoodDiaryData: FoodDiaryData[] = this.preprocess(this.foodDiaryData);
             this.foodParser = new FoodParser(filledFoodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
             this.insulinParser = new InsulinParser(filledFoodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
         }else{
@@ -48,7 +48,25 @@ export default class FoodDiaryParser extends DataParser {
      * This is done with raw data, because the order of the rows matters and most columns are needed
      * @param rawData Array of FoodDiary items 
      */
-    private autoFill(rawData: FoodDiaryData[]): FoodDiaryData[]{
+    private preprocess(rawData: FoodDiaryData[]): FoodDiaryData[]{
+
+
+        // TODO for excel uploads this can be included during read, but possibly not for onedrive excels
+        // rawData = rawData.filter((entry: FoodDiaryData) => {
+        //     // filter out empty rows
+        //     return (
+        //         entry.date !== '' ||
+        //         entry.time !== '' ||
+        //         entry.description !== '' ||
+        //         entry.carbohydrates !== '' ||
+        //         entry.base_insulin !== '' ||
+        //         entry.sports_correction_insulin !== '' ||
+        //         entry.high_correction_insulin !== '' ||
+        //         entry.total_insulin !== ''
+        //     );
+        // });
+
+
         // TODO PROBABLY VERY SLOW
         let lastDate: string = '';
 

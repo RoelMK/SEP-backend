@@ -21,7 +21,8 @@ export default class ExcelParser {
                 raw: false, // Use raw values (true) or formatted strings (false)
                 header: getKeys(dataSource), // use keys of interface
                 range: 1, // if keys are specified under header property, the package does not remove the header so start at 1
-                defval: '' // standard value for missing values
+                defval: '', // standard value for missing values
+                blankrows: false
                 });
                 resolve(resultData);
         });

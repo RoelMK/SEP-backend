@@ -66,7 +66,15 @@ export default class FoodDiaryParser extends DataParser {
         //     );
         // });
 
-
+        if(this.oneDriveToken){
+            for (let index = 0; index < this.foodDiaryData.length; index++) {
+                const element = this.foodDiaryData[index];
+    
+                // automatically fills in the last known date if not specified
+              element.date=this.formatYear(element.date); 
+        }
+    }
+        
         // TODO PROBABLY VERY SLOW
         let lastDate: string = '';
 
@@ -93,6 +101,15 @@ export default class FoodDiaryParser extends DataParser {
         }
         return rawData;
     }
+
+
+    private formatYear (input) {
+        let date = input.match(/\d+/g),
+        year = date[2].substring(2), // get only two digits
+        month = date[1], day = date[0];
+      
+        return day+'/'+month+'/'+year;
+      }
 }   
 
 
@@ -128,8 +145,3 @@ export type FoodDiaryData = {
            ('high_correction_insulin' in object) &&
            ('total_insulin' in object)        
 }
-
-
-
-
-

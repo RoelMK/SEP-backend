@@ -7,7 +7,7 @@ import { getFileExtension } from "../services/utils/files";
 import FoodDiaryParser from "../services/dataParsers/foodDiaryParser";
 
 const upload = multer({ dest: 'uploads/abbott/' });
-const uploadRouter = new Router();
+const uploadRouter = Router();
 
 
 uploadRouter.post('/upload-abbott', upload.single('file'), function(req, res){uploadFile(req, res, new AbbottParser())});

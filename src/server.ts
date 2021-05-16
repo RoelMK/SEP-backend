@@ -1,4 +1,5 @@
-require('dotenv').config({ path: './env.local' });
+//require('dotenv').config({ path: __dirname.split('\\').slice( 0, -1 ).join('\\') + '\\.env.local' });
+require('dotenv').config();
 const express = require('express');
 const errorhandler = require('errorhandler');
 
@@ -7,6 +8,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Create app object
 const app = express();
 const port = 8080;
+app.use(express.json());            
+
+// ---- Do not add routes above this line! ----
 app.use(require('./routes'));
 if (!isProduction) {
     app.use(errorhandler());

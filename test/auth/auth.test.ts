@@ -1,13 +1,15 @@
 import jwt from 'jsonwebtoken';
-import { createJWT } from '../../test/auth/authUtils';
+import { createJWT } from '../../src/utils/authUtils';
 
 test('creating JWT', () => {
     const tokenSecret = 'test';
-    // TODO: change createJWT so it doesn't use environment variables and can be tested without them
-    let token = createJWT('id1', 'a1', 'r1', 'test', '30d', 'https://tue.nl');
+    process.env.TOKEN_SECRET = tokenSecret;
+    process.env.TOKEN_EXPIRES_IN = '30d';
+    process.env.TOKEN_ISSUER = 'https://tue.nl';
+    let token = createJWT('id1', 'a1', 'r1');
     let decoded = jwt.verify(token, tokenSecret) as any;
     let expectedDecodedResult = {
-        userId: 'id1',
+        playerId: 'id1',
         accessToken: 'a1',
         refreshToken: 'r1'
     };

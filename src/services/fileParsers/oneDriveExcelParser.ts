@@ -1,4 +1,6 @@
+import { OneDriveClient } from "../../onedrive/odClient";
 import { DataSource } from "../dataParsers/dataParser";
+import { getFileDirectory, getFileName } from "../utils/files";
 import { getKeys } from "../utils/interfaceKeys";
 
 /**
@@ -20,8 +22,9 @@ export default class OneDriveExcelParser {
     async parse(filePath: string, dataSource: DataSource, oneDriveToken: string):  Promise<Record<string, string>[]>{ 
 
         // Initiate oneDrive read
-        return new Promise((resolve) => {
-            let result = this.assignKeys(this.tempTest, getKeys(dataSource));
+        return new Promise(async (resolve) => {
+            let odClient = new OneDriveClient(oneDriveToken, getFileName(filePath), getFileDirectory(filePath));
+            let result = this.assignKeys(await odClient.getRangeText("A1","H10"), getKeys(dataSource));
             resolve(result);
         });
     }

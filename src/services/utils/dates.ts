@@ -1,4 +1,4 @@
-import { parse, getUnixTime, isValid } from 'date-fns';
+import { parse, getUnixTime, isValid, add, format } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -47,6 +47,42 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
 };
 
 /**
+ * Some excel libraries do not offer possibility to convert dates to string format
+ * and instead return the number of days since the start of 1900. This function converts those numbers
+ * to a readable dateformat // TODO now only usable for fooddiary onedrive imports
+ * @param daysSince1900 the number of days since 1900, i.e. the way excel stores dates
+ */
+const parseExcelDate = (daysSince1900: number): string =>{
+    const start = parse("1/1/1900", 'd/M/yyyy', new Date());
+
+    // duration as date-fns duration objects
+    // https://www.epochconverter.com/seconds-days-since-y0#:~:text=Days%20Since%201900%2D01%2D01,the%20number%20on%20this%20page.
+    // the excel format has two extra days as specified by the article above
+    const offset = {
+        days: daysSince1900 - 2,  
+      }
+    return (format(add(start, offset), DateFormat.FOOD_DIARY));
+}
+ 
+
+/**
+ * Some excel libraries do not offer possibility to convert times to string format
+ * and instead return the fraction of a day, for example 0.5 for noon
+ * This function converts the fraction to a readable dateformat (HH:mm) // TODO now only usable for fooddiary onedrive imports
+ * @param daysSince1900 the fraction of the day, i.e. how excel stores time
+ */
+ const parseExcelTime = (dayFraction: number): string =>{
+    const hours: number   = Math.floor(dayFraction * 24);
+    const minutes: number = Math.round(((dayFraction * 24) % hours) * 60);
+
+    // return the time in the HH:mm format
+    return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0");
+}
+ 
+
+
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -58,4 +94,4 @@ enum DateFormat {
     NONE = ''
 }
 
-export { parseDate, getDateFormat, DateFormat };
+export { parseDate, getDateFormat, parseExcelDate,parseExcelTime, DateFormat };

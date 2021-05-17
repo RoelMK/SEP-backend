@@ -1,5 +1,5 @@
-import { parse, getUnixTime } from 'date-fns';
-import { DateFormat, getDateFormat, parseDate } from '../../../src/services/utils/dates';
+import { parse, getUnixTime, format } from 'date-fns';
+import { DateFormat, getDateFormat, parseDate, parseExcelDate, parseExcelTime } from '../../../src/services/utils/dates';
 
 test('Getting date format from string', () => {
     const dateStringEU = '25/01/2020 14:53';
@@ -50,3 +50,42 @@ test('Parsing date string with unknown date format to Date', () => {
 
     expect(parseDate(dateStringUnknown, DateFormat.NONE, undefined, true)).toStrictEqual(NaN);
 });
+
+
+test('Parsing excel date format (days from 1900) to readable food diary format', () => {
+    const daysSince1900 = 39448;
+    const correspondingDate = '01/01/2008';
+    expect(parseExcelDate(daysSince1900))
+                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yyyy', new Date()), DateFormat.FOOD_DIARY));
+});
+
+
+test('Parsing excel date format (days from 1900) to readable food diary format', () => {
+    const daysSince1900 = 44325;
+    const correspondingDate = '09/05/21';
+    expect(parseExcelDate(daysSince1900))
+                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yyyy', new Date()), DateFormat.FOOD_DIARY));
+});
+
+test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
+    const dayFraction = 0.5;
+    const correspondingTime = '12:00';
+    expect(parseExcelTime(dayFraction))
+                .toStrictEqual(correspondingTime);
+});
+
+test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
+    const dayFraction = 0.863194444;
+    const correspondingTime = '20:43';
+    expect(parseExcelTime(dayFraction))
+                .toStrictEqual(correspondingTime);
+});
+
+test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
+    const dayFraction = 0.417361111;
+    const correspondingTime = '10:01';
+    expect(parseExcelTime(dayFraction))
+                .toStrictEqual(correspondingTime);
+});
+
+

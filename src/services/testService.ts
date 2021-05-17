@@ -26,6 +26,10 @@ async function testExcel() {
         console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     }catch(e){
         console.log(e.message);
+        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
+        await foodDiaryParser.process();
+        console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
+        console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     }
 }
 
@@ -42,5 +46,5 @@ async function testOneDrive() {
 
 
 //testAbbott();
-//testExcel();
-testOneDrive();
+testExcel();
+//testOneDrive();

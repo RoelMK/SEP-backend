@@ -53,7 +53,7 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
  * @param daysSince1900 the number of days since 1900, i.e. the way excel stores dates
  */
 const parseExcelDate = (daysSince1900: number): string =>{
-    const start = parse("1/1/1900", 'd/M/yyyy', new Date());
+    const start = parse("01/01/1900", 'dd/MM/yyyy', new Date());
 
     // duration as date-fns duration objects
     // https://www.epochconverter.com/seconds-days-since-y0#:~:text=Days%20Since%201900%2D01%2D01,the%20number%20on%20this%20page.
@@ -79,6 +79,26 @@ const parseExcelDate = (daysSince1900: number): string =>{
     return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0");
 }
  
+/**
+ * Converts raw excel date and time formats to more readable formats (dd/MM/yy and HH:mm respectively)
+ * @param objects array of excel objects, assuming date property is called date and time property is called time
+ * @returns array of objects with converted date and time properties
+ */
+const convertExcelDateTimes = (objects: Record<string, string>[]): Record<string, string>[] =>{
+    // only change date and time if they both exist
+    if(objects[0].date === undefined && objects[0].time === undefined){
+        return objects;
+    }
+    objects.forEach(function(object){
+        if(object.date !== undefined && object.date !== ''){
+            object.date = parseExcelDate(parseInt(object.date));
+        }
+        if(object.time !== undefined && object.time !== ''){
+            object.time = parseExcelTime(parseFloat(object.time));
+        }
+    });
+    return objects;
+}
 
 
 
@@ -89,8 +109,7 @@ enum DateFormat {
     ABBOTT_US = 'MM-dd-yyyy p',
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
     FOOD_DIARY = 'dd/MM/yy HH:mm',
-    FOOD_DIARY_2 = "dd-MM-yy",
     NONE = ''
 }
 
-export { parseDate, getDateFormat, parseExcelDate,parseExcelTime, DateFormat };
+export { parseDate, getDateFormat, parseExcelDate, parseExcelTime, convertExcelDateTimes, DateFormat };

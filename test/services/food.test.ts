@@ -36,8 +36,7 @@ test('import standardized food diary with missing values', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 5,
         description: '',
-        // TODO TODO, this date is the wrong way round
-        timestamp: getUnixTime(parse('05/08/21 23:12', DateFormat.FOOD_DIARY, new Date()))
+        timestamp: getUnixTime(parse('08/05/21 23:12', DateFormat.FOOD_DIARY, new Date()))
     };
     expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.FOOD) as FoodModel[])[2]).toStrictEqual(expectedResult);
 });

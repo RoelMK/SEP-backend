@@ -1,6 +1,6 @@
 import { OneDriveClient } from "../../onedrive/odClient";
 import { DataSource } from "../dataParsers/dataParser";
-import { parseExcelDate, parseExcelTime } from "../utils/dates";
+import { convertExcelDateTimes, parseExcelDate, parseExcelTime } from "../utils/dates";
 import { getFileDirectory, getFileName } from "../utils/files";
 import { getKeys } from "../utils/interfaceKeys";
 
@@ -26,27 +26,11 @@ export default class OneDriveExcelParser {
         return new Promise(async (resolve) => {
             let odClient = new OneDriveClient(oneDriveToken, getFileName(filePath), getFileDirectory(filePath));
             let result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
-            result = this.convertExcelDateTimes(result);
+            result = convertExcelDateTimes(result);
             resolve(result);
         });
     }
 
-
-    convertExcelDateTimes(objects: Record<string, string>[]): Record<string, string>[]{
-        // only change date and time if they both exist
-        if(objects[0].date === undefined && objects[0].time === undefined){
-            return objects;
-        }
-        objects.forEach(function(object){
-            if(object.date !== undefined && object.date !== ''){
-                object.date = parseExcelDate(parseInt(object.date));
-            }
-            if(object.time !== undefined && object.time !== ''){
-                object.time = parseExcelTime(parseFloat(object.time));
-            }
-        });
-        return objects;
-    }
 
     
     /**

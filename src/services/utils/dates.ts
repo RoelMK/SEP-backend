@@ -61,7 +61,7 @@ const parseExcelDate = (daysSince1900: number): string =>{
     const offset = {
         days: daysSince1900 - 2,  
       }
-    return (format(add(start, offset), DateFormat.FOOD_DIARY));
+    return (format(add(start, offset), 'd/M/yy'));
 }
  
 
@@ -88,7 +88,7 @@ const parseExcelDate = (daysSince1900: number): string =>{
 enum DateFormat {
     ABBOTT_US = 'MM-dd-yyyy p',
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
-    FOOD_DIARY = "d/M/yy",
+    FOOD_DIARY = "d/M/yy HH:mm",
     FOOD_DIARY_2 = "dd-MM-yy",
     FOOD_DIARY_3= 'dd/MM/yy HH:mm',
     NONE = ''

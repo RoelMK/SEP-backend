@@ -26,7 +26,6 @@ export default class FoodDiaryParser extends DataParser {
 
         // TODO is this at the correct place
         if (!FoodDiaryDataGuard(this.foodDiaryData[0])){
-            console.log(this.foodDiaryData[0]);
             throw Error("Wrong input data for processing food diary data!");
         }
         //auto-fills empty cells in the Excel + other preprocessing

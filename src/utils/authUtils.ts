@@ -22,7 +22,6 @@ export function finishLoginAttempt(loginToken: string): string | undefined {
         dbClient.close();
         return createJWT(playerId, accessToken, refreshToken);
     }
-
     dbClient.close();
     return undefined;
 }
@@ -44,10 +43,17 @@ export function registerConnectCallback(playerId: string, accessToken: string, r
 /**
  * Starts a login attempt from our side.
  * @param email Email to start attempt for
+ * @param interpretEmailAsToken Skip asking for player id step and use email as player id
  * @returns Attempt token or undefined if failed to start attempt
  */
-export async function startLoginAttempt(email: string): Promise<LoginAttemptToken | undefined> {
-    let playerId = await getPlayerIdByEmail(email);
+export async function startLoginAttempt(email: string, interpretEmailAsPlayerId?: boolean): Promise<LoginAttemptToken | undefined> {
+    let playerId: string | undefined;
+    if (interpretEmailAsPlayerId) {
+        playerId = email;
+    } else {
+        playerId = await getPlayerIdByEmail(email);
+    }
+
     if (playerId) {
         let dbClient: DBClient = new DBClient();
         dbClient.cleanLoginAttempts();
@@ -55,9 +61,11 @@ export async function startLoginAttempt(email: string): Promise<LoginAttemptToke
         let expires: Date = new Date(new Date().getTime() + loginAttemptValidityInMinutes * 60000);
         let registered = dbClient.registerLoginAttempt(playerId, loginToken, expires);
         dbClient.close();
-
+        
         if (registered) {
-            return { token: loginToken, expires: expires };
+            return { loginToken: loginToken, expires: expires };
+        } else {
+            return undefined;
         }
     }
     return undefined;
@@ -130,7 +138,7 @@ export function refreshJWT(playerId: string, refreshToken: string): string {
 }
 
 export interface LoginAttemptToken {
-    token: string,
+    loginToken: string,
     expires: Date
 }
 

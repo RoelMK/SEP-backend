@@ -26,6 +26,14 @@ export class DBClient {
     }
 
     /**
+     * Removes all entries from the database.
+     */
+    reset(): void {
+        this.db.exec("DROP TABLE IF EXISTS login_attempts");
+        this.initialize();
+    }
+
+    /**
      * Removes all login attempts which have invalidated.
      * @returns If cleaning attempt succeeded
      */

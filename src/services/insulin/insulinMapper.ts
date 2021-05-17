@@ -67,7 +67,7 @@ export default class InsulinMapper {
         }
        
         return {
-            timestamp:parseDate(entry.device_timestamp, dateFormat, new Date(), true),
+            timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
             insulinAmount: insulin_amount,
             insulinType: insulin_type
         } as InsulinModel;

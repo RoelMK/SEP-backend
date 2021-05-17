@@ -16,7 +16,7 @@ export default class AbbottParser extends DataParser {
 
     /**
      * DataParser construction with DataSource set
-     * @param abbotFile file path of Abbott file
+     * @param abbottFile file path of Abbott file
      */
     constructor(private abbotFile?: string) {
         super(DataSource.ABBOTT, abbotFile);
@@ -147,7 +147,7 @@ const emptyAbbottData = (): AbbottData => ({
  * Raw Abbott .csv data format
  * TODO: what is non_numeric_food?
  */
-export type AbbottData =  { 
+export type AbbottData = {
     device: string;
     serial_number: string;
     device_timestamp: string;
@@ -171,7 +171,7 @@ export type AbbottData =  {
     meal_insulin__units_: string;
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
-}
+};
 
 /**
  * Function to check if an object belongs to the AbbottData interface

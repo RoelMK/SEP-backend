@@ -1,4 +1,4 @@
-import { getUnixTime, parse } from 'date-fns';
+import { parse } from 'date-fns';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { DateFormat } from '../../src/services/utils/dates';
@@ -8,7 +8,7 @@ import { parseAbbott } from './parseUtils';
 test('import Abbott EU glucose', async () => {
     let expectedResult: GlucoseModel = {
         glucoseLevel: 6.4,
-        timestamp: getUnixTime(parse('25/01/2020 14:53', DateFormat.ABBOTT_EU, new Date()))
+        timestamp: parse('25/01/2020 14:53', DateFormat.ABBOTT_EU, new Date()).getTime()
     };
     expect(await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.GLUCOSE)).toStrictEqual([
         expectedResult
@@ -18,7 +18,7 @@ test('import Abbott EU glucose', async () => {
 test('import Abbott US glucose', async () => {
     let expectedResult: GlucoseModel = {
         glucoseLevel: convertMG_DLtoMMOL_L(82),
-        timestamp: getUnixTime(parse('11-29-2018 11:24 AM', DateFormat.ABBOTT_US, new Date()))
+        timestamp: parse('11-29-2018 11:24 AM', DateFormat.ABBOTT_US, new Date()).getTime()
     };
     expect(await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.GLUCOSE)).toStrictEqual([
         expectedResult

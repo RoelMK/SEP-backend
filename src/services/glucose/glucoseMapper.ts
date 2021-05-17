@@ -1,5 +1,3 @@
-import { getUnixTime } from 'date-fns';
-import { parse } from 'date-fns';
 import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
 import { AbbottData, RecordType } from '../dataParsers/abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';
@@ -46,7 +44,7 @@ export default class GlucoseMapper {
                         ? parseFloat(entry.historic_glucose_mmol_l as string)
                         : convertMG_DLtoMMOL_L(parseFloat(entry.historic_glucose_mg_dl as string));
                 return {
-                    timestamp: parseDate(entry.device_timestamp, dateFormat, new Date(),true),
+                    timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
                     glucoseLevel: glucose_level_mmol
                 } as GlucoseModel;
 
@@ -59,7 +57,7 @@ export default class GlucoseMapper {
                         : convertMG_DLtoMMOL_L(parseFloat(entry.scan_glucose_mg_dl as string));
 
                 return {
-                    timestamp: parseDate(entry.device_timestamp, dateFormat, new Date(),true),
+                    timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
                     glucoseLevel: glucose_level_mmol
                 } as GlucoseModel;
 
@@ -72,7 +70,7 @@ export default class GlucoseMapper {
                         : convertMG_DLtoMMOL_L(parseFloat(entry.strip_glucose_mg_dl as string));
 
                 return {
-                    timestamp: parseDate(entry.device_timestamp, dateFormat, new Date(),true),
+                    timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
                     glucoseLevel: glucose_level_mmol
                 } as GlucoseModel;
         }

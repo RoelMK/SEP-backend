@@ -1,5 +1,4 @@
 import axios, { AxiosInstance , AxiosRequestConfig} from 'axios';
-const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class OneDriveClient {
     // Axios client
@@ -7,7 +6,7 @@ export class OneDriveClient {
 
     private token: string;
     private fileName: string;
-    private folderPath: string | undefined;
+    private folderPath: string | undefined; //Undefined means it is in the root
     private sheetName: string;
 
     // Create Axios instance, can add options if needed
@@ -19,6 +18,94 @@ export class OneDriveClient {
         this.sheetName = sheetName ?? "Sheet1"; //Default value
     }
 
+    async getTableValues(tableName: string) {
+        let result = await this.getTableResult(tableName);
+        let returnArray : any[][]= [];
+        for (const entry of result?.data.value) { 
+            returnArray.push(entry.values[0])
+        }
+        return returnArray;
+    }
+
+    private async getTableDetailed(workbookID: string, token: string, sessionID: string, workSheetName: string, tableName: string) {
+        let requestHeaders = {
+            'content-type': 'Application/Json',
+            'authorization': `Bearer ${token}`,
+            'workbook-session-id': `Bearer ${sessionID}`
+        }
+        try {
+            let config : AxiosRequestConfig = {
+                method: 'GET',
+                url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/tables('${tableName}')/rows`,
+                headers: requestHeaders,
+                data: {}
+            }
+            let response = await this.client.request(config);
+            return response;
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
+
+    private async getTableResult(tableName: string) {
+        console.log("Get fileID");
+        let fileResult = await this.getFile(this.token,this.fileName,this.folderPath);
+        let workbookID = fileResult.id;
+    
+        console.log("Get session");
+        let sessionResult = await this.getExcelSession(workbookID,this.token);
+        let sessionID = sessionResult.data.id;
+    
+        console.log("Get range");
+        let rangeResult = await this.getTableDetailed(workbookID,this.token,sessionID,this.sheetName,tableName);
+        return rangeResult;
+    }
+
+    async getTableList(tableName: string) {
+        console.log("Get fileID");
+        let fileResult = await this.getFile(this.token,this.fileName,this.folderPath);
+        let workbookID = fileResult.id;
+    
+        console.log("Get session");
+        let sessionResult = await this.getExcelSession(workbookID,this.token);
+        let sessionID = sessionResult.data.id;
+    
+        console.log("Get Table list");
+        let rangeResult = await this.getTableListDetailed(workbookID,this.token,sessionID,this.sheetName);
+        return rangeResult;
+    }
+
+    private async getTableListDetailed(workbookID: string, token: string, sessionID: string, workSheetName: string) {
+        let requestHeaders = {
+            'accept': 'Application/Json',
+            'authorization': `Bearer ${token}`,
+            'workbook-session-id': `Bearer ${sessionID}`
+        }
+        try {
+            let config : AxiosRequestConfig = {
+                method: 'GET',
+                url: `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/worksheets('${workSheetName}')/tables`,
+                headers: requestHeaders,
+                data: {}
+            }
+            let response = await this.client.request(config);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
+
     /**
      * Retrieves the data in the remote excel file as a text array using data from constructor
      * @param topLeft Topleft cell of the to be retrieved range
@@ -26,7 +113,12 @@ export class OneDriveClient {
      * @returns 2D array of text with topLeft as [0][0]
      */
     async getRangeText(topLeft: string, bottomRight: string) {
-        let result = await this.getRange(topLeft,bottomRight);
+        let result = await this.getRangeResult(topLeft,bottomRight);
+        return result.data.text;
+    }
+
+    async getColumnsText(left: string, right: string) {
+        let result = await this.getRangeResult(left,right);
         return result.data.text;
     }
 
@@ -37,7 +129,7 @@ export class OneDriveClient {
      * @returns 2D array of values with topLeft as [0][0]
      */
     async getRangeValues(topLeft: string, bottomRight: string) {
-        let result = await this.getRange(topLeft,bottomRight);
+        let result = await this.getRangeResult(topLeft,bottomRight);
         return result.data.values;
     }
 
@@ -47,7 +139,7 @@ export class OneDriveClient {
      * @param bottomRight Bottomright cell of the to be retrieved range
      * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done 
      */
-    private async getRange(topLeft: string, bottomRight: string) {
+    private async getRangeResult(topLeft: string, bottomRight: string) {
         //console.log("Get fileID");
         let fileResult = await this.getFile(this.token,this.fileName,this.folderPath);
         let workbookID = fileResult.id;
@@ -80,7 +172,6 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: {}
         }
-        console.log(config.url)
         let response = await this.client.request(config);
         return response;
     }

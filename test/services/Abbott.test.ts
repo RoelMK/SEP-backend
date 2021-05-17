@@ -12,3 +12,11 @@ test('test robustness of Abbott data parser', async () => {
             expect(e.message).toBe("Wrong input data for processing Abbott data!");
         }
 });
+
+/** TODO async error, looks like a catch is needed
+ * test('test robustness of Abbott data parser', async () => {
+     expect(async () => {
+        (await parseAbbott('test/services/data/foodDiary_standard.xlsx', OutputDataType.INSULIN) as InsulinModel[])[1]
+        }).toThrow('Wrong input data for processing Abbott data!');
+});
+ */

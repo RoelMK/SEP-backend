@@ -1,10 +1,10 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
-import EetMeterParser from '../../src/services/eetmeterParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
 import { testToken } from '../../src/services/testService';
+import EetMeterParser from '../../src/services/dataParsers/eetmeterParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data

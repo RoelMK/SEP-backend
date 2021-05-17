@@ -4,19 +4,20 @@ import { InsulinModel } from '../../gb/models/insulinModel';
 import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
+import XMLParser from '../fileParsers/xmlParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension } from '../utils/files';
-import { AbbottData } from './abbottParser';
-import { FoodDiaryData } from './foodDiaryParser';
+
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
  */
 export abstract class DataParser {
     protected csvParser: CSVParser = new CSVParser();
     protected excelParser: ExcelParser = new ExcelParser();
+    protected xmlParser: XMLParser = new XMLParser();
     protected oneDriveExcelParser: OneDriveExcelParser = new OneDriveExcelParser();
     protected rawData: Record<string, string>[] = [];
     protected dateFormat: DateFormat = DateFormat.NONE;
@@ -55,7 +56,9 @@ export abstract class DataParser {
                 else 
                 return (await this.oneDriveExcelParser.parse(this.filePath, this.dataSource, this.oneDriveToken, this.tableName as string));
             case "xml":
-                //TODO
+                if (this.dataSource == DataSource.EETMETER) {
+                    this.rawData = (await this.xmlParser.parse(this.filePath));
+                }
         }      
     }
 
@@ -92,7 +95,8 @@ export abstract class DataParser {
 
 export enum DataSource {
     ABBOTT = 0,
-    FOOD_DIARY = 1
+    FOOD_DIARY = 1,
+    EETMETER = 2
 }
 
 export enum OutputDataType {

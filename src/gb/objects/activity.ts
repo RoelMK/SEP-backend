@@ -1,6 +1,6 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
-import { ActivityModel, ActivityProperty } from '../models/activityModel';
+import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 

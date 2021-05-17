@@ -60,7 +60,7 @@ export enum FoodSource {
 /**
  * All possible input types for food data, 
  */
-export type FoodInput = XOR< EetmeterModels.Consumptie, XOR<AbbottData[], FoodDiaryData[]>>;
+export type FoodInput = XOR< EetmeterModels.Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;
 
 
 

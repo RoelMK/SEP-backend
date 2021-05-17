@@ -1,7 +1,7 @@
 import FoodModel from '../../src/gb/models/foodModel';
 import { parse, getUnixTime } from 'date-fns';
 import { DateFormat } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseOneDriveFoodDiary } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 
 test('import Abbott EU food', async () => {
@@ -39,4 +39,14 @@ test('import standardized food diary with missing values', async () => {
         timestamp: getUnixTime(parse('05/08/21 23:12', DateFormat.FOOD_DIARY_3, new Date()))
     };
     expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.FOOD) as FoodModel[])[2]).toStrictEqual(expectedResult);
+});
+
+
+test('import standardized food diary with missing values from a onedrive', async () => {
+    let expectedResult: FoodModel = {
+        carbohydrates: 5,
+        description: '',
+        timestamp: getUnixTime(parse('05/08/21 23:12', DateFormat.FOOD_DIARY_3, new Date()))
+    };
+    expect((await parseOneDriveFoodDiary('Documents/DeepFolder/diary.xlsx', OutputDataType.FOOD) as FoodModel[])[2]).toStrictEqual(expectedResult);
 });

@@ -1,5 +1,6 @@
 import { OneDriveClient } from "../../onedrive/odClient";
 import { DataSource } from "../dataParsers/dataParser";
+import { parseExcelDate, parseExcelTime } from "../utils/dates";
 import { getFileDirectory, getFileName } from "../utils/files";
 import { getKeys } from "../utils/interfaceKeys";
 
@@ -19,16 +20,35 @@ export default class OneDriveExcelParser {
      * @param oneDriveToken authorization token for OneDrive
      * @returns Array of excel entry objects
      */
-    async parse(filePath: string, dataSource: DataSource, oneDriveToken: string):  Promise<Record<string, string>[]>{ 
+    async parse(filePath: string, dataSource: DataSource, oneDriveToken: string, tableName: string):  Promise<Record<string, string>[]>{ 
 
         // Initiate oneDrive read
         return new Promise(async (resolve) => {
             let odClient = new OneDriveClient(oneDriveToken, getFileName(filePath), getFileDirectory(filePath));
-            let result = this.assignKeys(await odClient.getRangeText("A1","H10"), getKeys(dataSource));
+            let result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+            result = this.convertExcelDateTimes(result);
             resolve(result);
         });
     }
 
+
+    convertExcelDateTimes(objects: Record<string, string>[]): Record<string, string>[]{
+        // only change date and time if they both exist
+        if(objects[0].date === undefined && objects[0].time === undefined){
+            return objects;
+        }
+        objects.forEach(function(object){
+            if(object.date !== undefined && object.date !== ''){
+                object.date = parseExcelDate(parseInt(object.date));
+            }
+            if(object.time !== undefined && object.time !== ''){
+                object.time = parseExcelTime(parseFloat(object.time));
+            }
+        });
+        return objects;
+    }
+
+    
     /**
      * Helper function to convert the 2D array input from the OneDrive data collecter into an array of objects
      * @param array2D string[][], array that contains arrays which represent objects

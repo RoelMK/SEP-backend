@@ -13,7 +13,7 @@ export default class FoodDiaryParser extends DataParser {
 
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private readonly doAutoFill: boolean, private foodDiaryFile?: string, protected oneDriveToken?: string) {
+    constructor(private foodDiaryFile?: string, protected oneDriveToken?: string) {
         super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken);
     }
 
@@ -30,14 +30,9 @@ export default class FoodDiaryParser extends DataParser {
             throw Error("Wrong input data for processing food diary data!");
         }
         //auto-fills empty cells in the Excel
-        if(this.doAutoFill){
-            const filledFoodDiaryData: FoodDiaryData[] = this.preprocess(this.foodDiaryData);
-            this.foodParser = new FoodParser(filledFoodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-            this.insulinParser = new InsulinParser(filledFoodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-        }else{
-            this.foodParser = new FoodParser(this.foodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-            this.insulinParser = new InsulinParser(this.foodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
-        }
+        const filledFoodDiaryData: FoodDiaryData[] = this.preprocess(this.foodDiaryData);
+        this.foodParser = new FoodParser(filledFoodDiaryData, FoodSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
+        this.insulinParser = new InsulinParser(filledFoodDiaryData, InsulinSource.FOOD_DIARY_EXCEL, DateFormat.FOOD_DIARY);
     }
 
     /**

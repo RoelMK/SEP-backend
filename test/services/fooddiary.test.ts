@@ -5,7 +5,7 @@ import { parseFoodDiary } from "./parseUtils";
 
 test('test robustness of Food diary data parser', async () => {
         try {
-            (await parseFoodDiary('test/services/data/abbott_eu.csv', OutputDataType.INSULIN, true) as InsulinModel[])[1]
+            (await parseFoodDiary('test/services/data/abbott_eu.csv', OutputDataType.INSULIN) as InsulinModel[])[1]
             // Fail test if above expression doesn't throw anything.
             expect(true).toBe(false);
         } catch (e) {

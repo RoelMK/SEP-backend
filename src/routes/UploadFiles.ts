@@ -15,7 +15,7 @@ uploadRouter.get('/upload-abbott', function (req, res) {
     res.sendFile(__dirname + "/testHTMLabbott.html");
 });
 
-uploadRouter.post('/upload-fooddiary', upload.single('file'), function(req, res){uploadFile(req, res, new FoodDiaryParser(true))});
+uploadRouter.post('/upload-fooddiary', upload.single('file'), function(req, res){uploadFile(req, res, new FoodDiaryParser())});
 uploadRouter.get('/upload-fooddiary', function (req, res) {
     res.sendFile(__dirname +"/testHTMLfooddiary.html");
 });
@@ -33,16 +33,14 @@ async function uploadFile(req, res, dataParser: DataParser) {
         // if renaming fails for some reason, send error // TODO
         if ( err ) {
             console.log('ERROR: ' + err)
-            res.status(500).send('Could not store file!') // TODO
+            res.status(500).send('Could not store file!'); // TODO
             return;
         }
 
         // rest of the function is included in this function to synchronize the control flow
-        //const parser: dataParser = new dataParser(filePath);
         await dataParser.process();
-        
 
-        // TODO just for testing
+        // TODO just for testing, get some insulin data and send it back
         const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
 
         res.send(

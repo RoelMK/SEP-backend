@@ -33,7 +33,7 @@ test('import standardized food diary insulin values full', async () => {
         insulinType: InsulinType.RAPID,
         timestamp: getUnixTime(parse('09/05/21 20:43', DateFormat.FOOD_DIARY_3, new Date()))
     };
-    expect((await parseFoodDiary('test/services/data/foodDiary_standard.xlsx', OutputDataType.INSULIN, false) as InsulinModel[])[0]).toStrictEqual(expectedResult);
+    expect((await parseFoodDiary('test/services/data/foodDiary_standard.xlsx', OutputDataType.INSULIN) as InsulinModel[])[0]).toStrictEqual(expectedResult);
 });
 
 // check third row of standard, missing food diary test file
@@ -43,5 +43,5 @@ test('import standardized food diary insulin values with missing values', async 
         insulinType: InsulinType.RAPID,
         timestamp: getUnixTime(parse('05/08/21 12:01', DateFormat.FOOD_DIARY_3, new Date()))
     };
-    expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.INSULIN, true) as InsulinModel[])[1]).toStrictEqual(expectedResult);
+    expect((await parseFoodDiary('test/services/data/foodDiary_standard_missing.xlsx', OutputDataType.INSULIN) as InsulinModel[])[1]).toStrictEqual(expectedResult);
 });

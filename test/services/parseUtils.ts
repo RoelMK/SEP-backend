@@ -20,8 +20,8 @@ export async function parseAbbott(filePath: string, type: OutputDataType) {
  * @param type Type of data to be retrieved from file
  * @returns Data of type {type}
  */
- export async function parseFoodDiary(filePath: string, type: OutputDataType, autoFill: boolean) {
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(autoFill, filePath);
+ export async function parseFoodDiary(filePath: string, type: OutputDataType) {
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath);
     await foodDiaryParser.process();
     return foodDiaryParser.getData(type);
 }

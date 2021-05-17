@@ -77,7 +77,7 @@ export default class InsulinMapper {
 
     private static mapFoodDiaryInsulin(entry: any): InsulinModel{
         return {
-            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY_3, new Date(), true),
+            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY, new Date(), true),
             insulinAmount: parseFloat(entry.total_insulin),
             insulinType: InsulinType.RAPID
         } as InsulinModel;

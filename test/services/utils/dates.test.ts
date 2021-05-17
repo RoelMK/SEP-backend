@@ -56,7 +56,7 @@ test('Parsing excel date format (days from 1900) to readable food diary format',
     const daysSince1900 = 39448;
     const correspondingDate = '01/01/08';
     expect(parseExcelDate(daysSince1900))
-                .toStrictEqual(format(parse(correspondingDate, 'd/M/yy', new Date()), 'd/M/yy'));
+                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy'));
 });
 
 
@@ -64,7 +64,7 @@ test('Parsing excel date format (days from 1900) to readable food diary format',
     const daysSince1900 = 44325;
     const correspondingDate = '09/05/21';
     expect(parseExcelDate(daysSince1900))
-                .toStrictEqual(format(parse(correspondingDate, 'd/M/yy', new Date()), 'd/M/yy'));
+                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy'));
 });
 
 test('Parsing excel time format (fraction of a day) to readable food diary format', () => {

@@ -263,24 +263,41 @@ async function execute() {
     console.log(resultValue)
 }
 
-execute2()
 
 async function execute2() {
-    let sheetName = "Sheet2";
+    let sheetName = "Sheet1";
     //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
     //let fileName = "MyFirstSheet.xlsx";
     //let folderPath = undefined;
-    let fileName = "DeepExcel.xlsx";
+    let fileName = "diary.xlsx";
     let folderPath = "Documents/DeepFolder";
-    let excelToken = oneDriveToken;
+    let excelToken = oneDriveToken; //token is obtained from http://localhost:8080/onedrive/login 
     let topLeft = "A1";
-    let bottomRight = "H4";
+    let bottomRight = "H8";
 
-    
+
     let odClient : OneDriveClient = new OneDriveClient(excelToken,fileName,folderPath,sheetName);
     let result = await odClient.getRangeText(topLeft,bottomRight)
     console.log("Done")
     console.log(result)
 }
 
+async function execute3() {
+    let sheetName = "Sheet1";
+    //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
+    //let fileName = "MyFirstSheet.xlsx";
+    //let folderPath = undefined;
+    let fileName = "diary.xlsx";
+    let folderPath = "Documents/DeepFolder";
+    let excelToken = oneDriveToken; //token is obtained from http://localhost:8080/onedrive/login 
+    let tableName = "fooddiary"
+
+
+    let odClient : OneDriveClient = new OneDriveClient(excelToken,fileName,folderPath,sheetName);
+    let result = await odClient.getTableValues(tableName)
+    console.log("Done")
+    console.log(result)
+}
+
+execute3()
 //http://localhost:8080/onedrive/login

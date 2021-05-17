@@ -32,11 +32,11 @@ async function testExcel() {
 async function testOneDrive() {
     var testPath = 'smthonaonedrive.xlsx'
     console.log(await new OneDriveExcelParser().parse(testPath, DataSource.FOOD_DIARY, 'token'))
-    /** TODO
+    
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(true, testPath, 'token');
     await foodDiaryParser.process();
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
-    console.log(foodDiaryParser.getData(OutputDataType.FOOD)); */
+    console.log(foodDiaryParser.getData(OutputDataType.FOOD)); 
 }
 
 

@@ -78,7 +78,7 @@ export async function getAccessToken(authorizationCode: string): Promise<OneDriv
             return {
                 homeAccountId: response.account.homeAccountId,
                 accessToken: response.accessToken,
-                expiresOn: response.expiresOn ?? undefined // TODO Why is this Date | null instead of Date as on Kevin's
+                expiresOn: response.expiresOn ?? undefined //TODO: null coalescing is used, because response.expiresOn can return null, which it didn't in previous builds
             };
         } else {
             return undefined;
@@ -109,7 +109,7 @@ export async function getAccessTokenSilent(homeAccountId: string): Promise<OneDr
                 return {
                     homeAccountId: homeAccountId,
                     accessToken: response.accessToken,
-                    expiresOn: response.expiresOn ?? undefined // TODO Why is this Date | null instead of Date as on Kevin's
+                    expiresOn: response.expiresOn ?? undefined //TODO: null coalescing is used, because response.expiresOn can return null, which it didn't in previous builds
                 };
             }
         } 

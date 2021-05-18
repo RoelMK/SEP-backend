@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import AbbottParser from './dataParsers/abbottParser';
-import { DataSource, OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
-import OneDriveExcelParser from './fileParsers/oneDriveExcelParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -16,8 +15,8 @@ async function testAbbott() {
 }
 
 async function testExcel() {
-    var testPath = 'test/services/data/foodDiary_standard_missing.xlsx';
-    var wrongTestPath = 'test/services/data/abbott_eu.csv';
+    const testPath = 'test/services/data/foodDiary_standard_missing.xlsx';
+    const wrongTestPath = 'test/services/data/abbott_eu.csv';
 
     try {
         const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(wrongTestPath);

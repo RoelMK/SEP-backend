@@ -1,17 +1,11 @@
-import { getUnixTime } from 'date-fns';
-import { parse } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { InsulinSource } from './insulinParser';
 import { DateFormat, parseDate } from '../utils/dates';
-import { AbbottData } from '../dataParsers/abbottParser';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
  */
 export default class InsulinMapper {
-    private constructor() {}
-
     /**
      * Main function that returns the correct mapping function based on given source
      * @param insulineSource Insulin source given as enum

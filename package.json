@@ -9,7 +9,9 @@
         "test-services": "ts-node src/services/testService.ts",
         "test-excel-import": "ts-node src/services/excelParser.ts",
         "test": "jest",
-        "build": "tsc"
+        "build": "tsc",
+        "lint": "eslint . --ext .ts",
+        "lint-fix": "eslint . --ext .ts --fix"
     },
     "repository": {
         "type": "git",
@@ -29,11 +31,10 @@
     },
     "homepage": "https://github.com/RoelMK/SEP-backend#readme",
     "dependencies": {
-        "@types/lodash": "^4.14.168",
+        "@azure/msal-node": "^1.0.3",
         "axios": "^0.21.1",
         "better-sqlite3": "^7.3.1",
         "cors": "^2.8.5",
-        "@azure/msal-node": "^1.0.3",
         "date-fns": "^2.21.1",
         "dotenv": "^8.6.0",
         "errorhandler": "^1.5.1",
@@ -48,8 +49,8 @@
         "multer": "^1.4.2",
         "node-fetch": "^2.6.1",
         "papaparse": "^5.3.0",
-        "winston": "^3.3.3",
         "ts-xor": "^1.0.8",
+        "winston": "^3.3.3",
         "xlsx": "^0.16.9",
         "xml2js": "^0.4.23"
     },
@@ -60,9 +61,14 @@
         "@types/jest": "^26.0.23",
         "@types/jquery": "^3.5.5",
         "@types/jsonwebtoken": "^8.5.1",
+        "@types/lodash": "^4.14.168",
         "@types/node": "^15.0.2",
         "@types/papaparse": "^5.2.5",
         "@types/xml2js": "^0.4.8",
+        "@typescript-eslint/eslint-plugin": "^4.24.0",
+        "@typescript-eslint/parser": "^4.24.0",
+        "eslint": "^7.26.0",
+        "eslint-plugin-import": "^2.23.2",
         "jest": "^26.6.3",
         "jest-fetch-mock": "^3.0.3",
         "prettier": "2.3.0",

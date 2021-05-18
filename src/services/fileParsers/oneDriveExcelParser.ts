@@ -1,6 +1,6 @@
 import { OneDriveClient } from '../../onedrive/odClient';
 import { DataSource } from '../dataParsers/dataParser';
-import { convertExcelDateTimes, parseExcelDate, parseExcelTime } from '../utils/dates';
+import { convertExcelDateTimes } from '../utils/dates';
 import { getFileDirectory, getFileName } from '../utils/files';
 import { getKeys } from '../utils/interfaceKeys';
 
@@ -9,8 +9,6 @@ import { getKeys } from '../utils/interfaceKeys';
  */
 export default class OneDriveExcelParser {
     private tempTest: string[][] = [['5/9/2021', '20:43', 'Meeting', '10', '5', '2', '', '7']];
-
-    constructor() {}
 
     /**
      * Asynchronous function that parses Excel data on a onedrive
@@ -27,11 +25,12 @@ export default class OneDriveExcelParser {
         sampleInput?: any[]
     ): Promise<Record<string, string>[]> {
         // Initiate oneDrive read
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
             let result;
             if (sampleInput === undefined) {
                 console.log(sampleInput);
-                let odClient = new OneDriveClient(
+                const odClient = new OneDriveClient(
                     oneDriveToken,
                     getFileName(filePath),
                     getFileDirectory(filePath)
@@ -63,7 +62,7 @@ export default class OneDriveExcelParser {
         }
 
         // resulting object array
-        let result: Record<string, string>[] = [];
+        const result: Record<string, string>[] = [];
         // to be constructed object
         let object: Record<string, string>;
 

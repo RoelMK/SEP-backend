@@ -110,16 +110,16 @@ test('Parsing excel time format (fraction of a day) to readable food diary forma
     expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
 
-
 test('test robustness of excel time parser', async () => {
     const dayFraction = -0.417361111;
-    expect( () => {parseExcelTime(dayFraction)
-       }).toThrow('Invalid day fraction!');
+    expect(() => {
+        parseExcelTime(dayFraction);
+    }).toThrow('Invalid day fraction!');
 });
-
 
 test('test robustness of excel date parser', async () => {
     const daysSince1900 = -44325;
-    expect( () => {parseExcelDate(daysSince1900)
-       }).toThrow('Invalid amount of days since 1900!');
+    expect(() => {
+        parseExcelDate(daysSince1900);
+    }).toThrow('Invalid amount of days since 1900!');
 });

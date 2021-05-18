@@ -5,9 +5,9 @@ export interface ConnectionData {
 }
 
 export interface ActivityPOSTData {
-    gameDescriptorTK: String;
-    dataProviderName: String;
-    image: String;
+    gameDescriptorTK: string;
+    dataProviderName: string;
+    image: string;
     date: number;
     propertyInstances: PropertyInstancePOST[];
     players: number[];

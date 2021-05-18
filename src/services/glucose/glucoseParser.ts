@@ -1,7 +1,5 @@
-import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 
@@ -34,7 +32,7 @@ export default class GlucoseParser {
      */
     private process() {
         // indicates in which unit the glucose levels are measured
-        var glucoseUnit: GlucoseUnit;
+        let glucoseUnit: GlucoseUnit;
 
         // We assume that the dateFormat also defines which unit to use
         switch (this.dateFormat) {

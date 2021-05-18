@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { DBClient } from '../db/dbClient';
 import { GameBusClient } from '../gb/gbClient';
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-const gbClientAuthHeader = 'Basic ' + process.env.GAMEBUS_CLIENT_AUTH_HEADER as string;
-const loginAttemptValidityInMinutes: number = 5;
+const gbClientAuthHeader = ('Basic ' + process.env.GAMEBUS_CLIENT_AUTH_HEADER) as string;
+const loginAttemptValidityInMinutes = 5;
 
 /**
  * Finishes a login attempt and generates a JWT with credentials.
@@ -12,13 +12,13 @@ const loginAttemptValidityInMinutes: number = 5;
  * @returns A JWT with credentials or undefined if failed to finish login attempt
  */
 export function finishLoginAttempt(loginToken: string): string | undefined {
-    let dbClient: DBClient = new DBClient();
+    const dbClient: DBClient = new DBClient();
     dbClient.cleanLoginAttempts();
-    let loginRow = dbClient.getLoginAttemptByLoginToken(loginToken); // Get ongoing attempt from database
+    const loginRow = dbClient.getLoginAttemptByLoginToken(loginToken); // Get ongoing attempt from database
     if (loginRow && loginRow.player_id && loginRow.access_token && loginRow.refresh_token) {
-        let playerId = loginRow.player_id as string;
-        let accessToken = loginRow.access_token as string;
-        let refreshToken = loginRow.refresh_token as string;
+        const playerId = loginRow.player_id as string;
+        const accessToken = loginRow.access_token as string;
+        const refreshToken = loginRow.refresh_token as string;
         dbClient.removeFinishedLoginAttempt(playerId);
         dbClient.close();
         return createJWT(playerId, accessToken, refreshToken);
@@ -34,9 +34,13 @@ export function finishLoginAttempt(loginToken: string): string | undefined {
  * @param refreshToken Refresh token received
  * @returns If registration succeeded
  */
-export function registerConnectCallback(playerId: string, accessToken: string, refreshToken: string): boolean {
-    let dbClient: DBClient = new DBClient();
-    let callbackRegistered = dbClient.registerCallback(playerId, accessToken, refreshToken);
+export function registerConnectCallback(
+    playerId: string,
+    accessToken: string,
+    refreshToken: string
+): boolean {
+    const dbClient: DBClient = new DBClient();
+    const callbackRegistered = dbClient.registerCallback(playerId, accessToken, refreshToken);
     dbClient.close();
     return callbackRegistered;
 }
@@ -47,7 +51,10 @@ export function registerConnectCallback(playerId: string, accessToken: string, r
  * @param interpretEmailAsToken Skip asking for player id step and use email as player id
  * @returns Attempt token or undefined if failed to start attempt
  */
-export async function startLoginAttempt(email: string, interpretEmailAsPlayerId?: boolean): Promise<LoginAttemptToken | undefined> {
+export async function startLoginAttempt(
+    email: string,
+    interpretEmailAsPlayerId?: boolean
+): Promise<LoginAttemptToken | undefined> {
     let playerId: string | undefined;
     if (interpretEmailAsPlayerId) {
         playerId = email;
@@ -56,11 +63,13 @@ export async function startLoginAttempt(email: string, interpretEmailAsPlayerId?
     }
 
     if (playerId) {
-        let dbClient: DBClient = new DBClient();
+        const dbClient: DBClient = new DBClient();
         dbClient.cleanLoginAttempts();
-        let loginToken = crypto.randomBytes(16).toString('hex');
-        let expires: Date = new Date(new Date().getTime() + loginAttemptValidityInMinutes * 60000);
-        let registered = dbClient.registerLoginAttempt(playerId, loginToken, expires);
+        const loginToken = crypto.randomBytes(16).toString('hex');
+        const expires: Date = new Date(
+            new Date().getTime() + loginAttemptValidityInMinutes * 60000
+        );
+        const registered = dbClient.registerLoginAttempt(playerId, loginToken, expires);
         dbClient.close();
 
         if (registered) {
@@ -78,11 +87,21 @@ export async function startLoginAttempt(email: string, interpretEmailAsPlayerId?
  * @returns Player id or undefined if none found
  */
 async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
-    let clientAccessCode = await getClientAccessToken();
+    const clientAccessCode = await getClientAccessToken();
     if (clientAccessCode) {
-        let gbClient: GameBusClient = new GameBusClient(undefined, true);
-        let response = await gbClient.get('users', { 'Authorization': 'Bearer ' + clientAccessCode }, { 'q': email });
-        if (response && Array.isArray(response) && response.length > 0 && response[0].player && response[0].player.id) {
+        const gbClient: GameBusClient = new GameBusClient(undefined, true);
+        const response = await gbClient.get(
+            'users',
+            { Authorization: 'Bearer ' + clientAccessCode },
+            { q: email }
+        );
+        if (
+            response &&
+            Array.isArray(response) &&
+            response.length > 0 &&
+            response[0].player &&
+            response[0].player.id
+        ) {
             return response[0].player.id.toString();
         }
     }
@@ -94,12 +113,15 @@ async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
  * @returns An access token or undefined if none is available
  */
 async function getClientAccessToken(): Promise<string | undefined> {
-    let gbClient: GameBusClient = new GameBusClient();
+    const gbClient: GameBusClient = new GameBusClient();
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
 
-    let response = await gbClient.post('oauth/token', params.toString(), { 'Authorization': gbClientAuthHeader, 'Content-Type': 'application/x-www-form-urlencoded' });
+    const response = await gbClient.post('oauth/token', params.toString(), {
+        Authorization: gbClientAuthHeader,
+        'Content-Type': 'application/x-www-form-urlencoded'
+    });
     if (response && response.access_token) {
         return response.access_token as string;
     } else {
@@ -121,7 +143,11 @@ export function createJWT(playerId: string, accessToken: string, refreshToken: s
     return jwt.sign(
         { playerId: playerId, accessToken: accessToken, refreshToken: refreshToken },
         process.env.TOKEN_SECRET as string,
-        { expiresIn: process.env.TOKEN_EXPIRES_IN, issuer: process.env.TOKEN_ISSUER, algorithm: 'HS256' }
+        {
+            expiresIn: process.env.TOKEN_EXPIRES_IN,
+            issuer: process.env.TOKEN_ISSUER,
+            algorithm: 'HS256'
+        }
     );
 }
 
@@ -131,9 +157,10 @@ export function createJWT(playerId: string, accessToken: string, refreshToken: s
  * @param refreshToken Refresh token in previous JWT
  * @returns New JWT
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function refreshJWT(playerId: string, refreshToken: string): string {
-    let newAccessToken: string = ''; // TODO: add call to GameBus to refresh tokens
-    let newRefreshToken: string = ''; // Same TODO
+    const newAccessToken = ''; // TODO: add call to GameBus to refresh tokens
+    const newRefreshToken = ''; // Same TODO
     return createJWT(playerId, newAccessToken, newRefreshToken);
 }
 
@@ -142,8 +169,8 @@ export function refreshJWT(playerId: string, refreshToken: string): string {
  * expires: when the token expires as Unix timestamp
  */
 export interface LoginAttemptToken {
-    loginToken: string,
-    expires: number
+    loginToken: string;
+    expires: number;
 }
 
 /**

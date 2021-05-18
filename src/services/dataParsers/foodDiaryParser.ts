@@ -1,4 +1,4 @@
-import { DataParser, DataSource, OutputDataType } from './dataParser';
+import { DataParser, DataSource } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat } from '../utils/dates';
@@ -74,7 +74,7 @@ export default class FoodDiaryParser extends DataParser {
         //}
 
         // TODO PROBABLY VERY SLOW
-        let lastDate: string = '';
+        let lastDate = '';
 
         // loop over raw data
         for (let index = 0; index < rawData.length; index++) {

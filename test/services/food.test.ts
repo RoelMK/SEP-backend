@@ -1,11 +1,10 @@
 import FoodModel from '../../src/gb/models/foodModel';
-import { parse, getUnixTime } from 'date-fns';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary, parseEetmeter, parseOneDriveFoodDiary } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseEetmeter } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 
 test('import Abbott EU food', async () => {
-    let expectedResult: FoodModel = {
+    const expectedResult: FoodModel = {
         carbohydrates: 101,
         description: '',
         timestamp: parseDate('15/01/2021 13:13', DateFormat.ABBOTT_EU, new Date(), true) as number
@@ -16,10 +15,15 @@ test('import Abbott EU food', async () => {
 });
 
 test('import Abbott US food', async () => {
-    let expectedResult: FoodModel = {
+    const expectedResult: FoodModel = {
         carbohydrates: 120,
         description: '',
-        timestamp: parseDate('11-29-2018 11:29 AM', DateFormat.ABBOTT_US, new Date(), true) as number
+        timestamp: parseDate(
+            '11-29-2018 11:29 AM',
+            DateFormat.ABBOTT_US,
+            new Date(),
+            true
+        ) as number
     };
     expect(
         await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.FOOD)
@@ -27,7 +31,7 @@ test('import Abbott US food', async () => {
 });
 
 test('import standardized food diary full', async () => {
-    let expectedResult: FoodModel = {
+    const expectedResult: FoodModel = {
         carbohydrates: 10,
         description: 'Meeting',
         timestamp: parseDate('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date(), true) as number
@@ -43,7 +47,7 @@ test('import standardized food diary full', async () => {
 });
 
 test('import standardized food diary with missing values', async () => {
-    let expectedResult: FoodModel = {
+    const expectedResult: FoodModel = {
         carbohydrates: 5,
         description: '',
         timestamp: parseDate('08/05/21 23:12', DateFormat.FOOD_DIARY, new Date(), true) as number
@@ -59,7 +63,7 @@ test('import standardized food diary with missing values', async () => {
 });
 
 test('import single Eetmeter entry', async () => {
-    let expectedResult = [
+    const expectedResult = [
         {
             timestamp: parseDate('5/5/2021 9:00', DateFormat.EETMETER, new Date(), true) as number,
             calories: 27.92,
@@ -73,12 +77,12 @@ test('import single Eetmeter entry', async () => {
         }
     ];
 
-    var result = await parseEetmeter('test/services/data/eetmeter.xml');
+    const result = await parseEetmeter('test/services/data/eetmeter.xml');
     expect(result).toStrictEqual(expectedResult);
 });
 
 test('import many Eetmeter entries', async () => {
-    let expectedResult = [
+    const expectedResult = [
         {
             timestamp: parseDate('5/5/2021 9:00', DateFormat.EETMETER, new Date(), true) as number,
             calories: 27.92,
@@ -103,6 +107,6 @@ test('import many Eetmeter entries', async () => {
         }
     ];
 
-    var result = await parseEetmeter('test/services/data/eetmeterMany.xml');
+    const result = await parseEetmeter('test/services/data/eetmeterMany.xml');
     expect(result).toStrictEqual(expectedResult);
 });

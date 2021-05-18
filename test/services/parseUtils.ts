@@ -3,9 +3,8 @@ import { DataSource, OutputDataType } from '../../src/services/dataParsers/dataP
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
-import { testToken } from '../../src/services/testService';
-import EetMeterParser from '../../src/services/dataParsers/eetmeterParser';
 import OneDriveExcelParser from '../../src/services/fileParsers/oneDriveExcelParser';
+import { EetMeterParser } from '../../src/services/dataParsers/eetmeterParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data

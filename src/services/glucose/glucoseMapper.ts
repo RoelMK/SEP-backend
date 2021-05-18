@@ -1,5 +1,5 @@
 import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
-import { AbbottData, RecordType } from '../dataParsers/abbottParser';
+import { RecordType } from '../dataParsers/abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
 import { GlucoseSource } from './glucoseParser';
@@ -8,8 +8,6 @@ import { GlucoseSource } from './glucoseParser';
  * Helper class to map the different glucose sources to 1 glucoseModel
  */
 export default class GlucoseMapper {
-    private constructor() {}
-
     /**
      * Main function that returns the correct mapping function based on given source
      * @param glucoseSource Glucose source given as enum

@@ -6,7 +6,7 @@ import { GameBusObject } from './base';
  * Class for insulin-specific functions
  */
 export class Insulin extends GameBusObject {
-    private insulinId: number = 0; // TODO: assign to GameBus-given activity ID
+    private insulinId = 0; // TODO: assign to GameBus-given activity ID
 
     /**
      * Example function that retrieves all activities with pre-set ID

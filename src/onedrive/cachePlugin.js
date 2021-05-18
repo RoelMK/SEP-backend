@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 // Source: https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/samples/msal-node-samples/cachePlugin.js
 /*
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -5,7 +7,7 @@
  */
 const fs = require('fs');
 
- /**
+/**
  * Cache Plugin configuration
  */
 
@@ -13,7 +15,7 @@ module.exports = function (cacheLocation) {
     const beforeCacheAccess = (cacheContext) => {
         return new Promise((resolve, reject) => {
             if (fs.existsSync(cacheLocation)) {
-                fs.readFile(cacheLocation, "utf-8", (err, data) => {
+                fs.readFile(cacheLocation, 'utf-8', (err, data) => {
                     if (err) {
                         reject();
                     } else {
@@ -22,18 +24,18 @@ module.exports = function (cacheLocation) {
                     }
                 });
             } else {
-               fs.writeFile(cacheLocation, cacheContext.tokenCache.serialize(), (err) => {
+                fs.writeFile(cacheLocation, cacheContext.tokenCache.serialize(), (err) => {
                     if (err) {
                         reject();
                     }
                 });
             }
         });
-    }
-    
+    };
+
     const afterCacheAccess = (cacheContext) => {
         return new Promise((resolve, reject) => {
-            if(cacheContext.cacheHasChanged){
+            if (cacheContext.cacheHasChanged) {
                 fs.writeFile(cacheLocation, cacheContext.tokenCache.serialize(), (err) => {
                     if (err) {
                         reject(err);
@@ -45,10 +47,9 @@ module.exports = function (cacheLocation) {
             }
         });
     };
-    
-    
+
     return {
         beforeCacheAccess,
         afterCacheAccess
-    }
-}
+    };
+};

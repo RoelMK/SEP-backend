@@ -1,4 +1,4 @@
-import { DataParser, DataSource, OutputDataType } from './dataParser';
+import { DataParser, DataSource } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';

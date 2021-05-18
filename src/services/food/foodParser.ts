@@ -1,7 +1,9 @@
 import FoodModel from '../../gb/models/foodModel';
-import { AbbottData, AbbottDataType } from '../abbottParser';
+import { AbbottData } from '../dataParsers/abbottParser';
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
+import { XOR } from 'ts-xor';
 import * as EetmeterModels from '../../models/eetmeterModel';
 
 /**
@@ -15,9 +17,14 @@ export default class FoodParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
-    // TODO: change to other inputs if needed
+    /**
+     * Create foodparser with list of food datapoints that can stem from several sources
+     * @param glucoseInput array of food inputs
+     * @param glucoseSource specifies where the food input comes from
+     * @param dateFormat specifies the format in which dates are represented
+     */
     constructor(
-        private readonly foodInput: FoodInput[],
+        private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
@@ -29,9 +36,6 @@ export default class FoodParser {
      * Processes the data (if necessary) and maps it to the FoodModel
      */
     private process() {
-        console.log(this.foodInput);
-        console.log(this.foodInput.length);
-
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
     }
 
@@ -48,10 +52,11 @@ export default class FoodParser {
  */
 export enum FoodSource {
     ABBOTT = 0,
-    EETMETER = 1
+    FOOD_DIARY_EXCEL = 1,
+    EETMETER = 2
 }
 
-export type FoodInput = XOR<AbbottData, EetmeterModels.Consumptie>;
-
-type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
-type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+/**
+ * All possible input types for food data,
+ */
+export type FoodInput = XOR<EetmeterModels.Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;

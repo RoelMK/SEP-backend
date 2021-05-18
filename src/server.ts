@@ -1,7 +1,7 @@
-require('dotenv').config({ path: __dirname.split('\\').slice(0, -1).join('\\') + '\\.env' });
+//require('dotenv').config({ path: __dirname.split('\\').slice( 0, -1 ).join('\\') + '\\.env' });
+require('dotenv').config();
 const express = require('express');
 const errorhandler = require('errorhandler');
-const cors = require('cors');
 import winston from 'winston';
 import expressWinston from 'express-winston';
 import { DBClient } from './db/dbClient';
@@ -25,8 +25,6 @@ app.use(
     })
 );
 
-// TODO: cors might not be needed
-app.use(cors());
 app.use(express.json());
 
 // ---- Do not add routes above this line! ----

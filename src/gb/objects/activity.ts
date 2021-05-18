@@ -1,6 +1,6 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { fromUnixTime, format, addDays, getUnixTime } from 'date-fns';
-import { ActivityModel, ActivityProperty } from '../models/activityModel';
+import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 
@@ -19,7 +19,11 @@ export class Activity {
      * @param query Any queries
      * @returns Activity associated to given ID
      */
-    async getActivityById(activityId: number, headers?: Headers, query?: Query): Promise<ActivityGETData> {
+    async getActivityById(
+        activityId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData> {
         const activity: ActivityGETData = await this.gamebus.get(
             `activities/${activityId}`,
             headers,
@@ -33,7 +37,11 @@ export class Activity {
      * Gets all activities for given player
      * @returns All activities of player
      */
-    async getAllActivities(playerId: number, headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
+    async getAllActivities(
+        playerId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
         const activity: ActivityGETData[] = await this.gamebus.get(
             `players/${playerId}/activities`,
             headers,
@@ -83,7 +91,11 @@ export class Activity {
             // Add rest of query
             ...query
         };
-        const activities: ActivityGETData[] = await this.getAllActivities(playerId, headers, dateQuery);
+        const activities: ActivityGETData[] = await this.getAllActivities(
+            playerId,
+            headers,
+            dateQuery
+        );
         return activities;
     }
 

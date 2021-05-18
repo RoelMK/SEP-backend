@@ -83,7 +83,15 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ) {
-        return this.request(path, RequestMethod.PUT, body, headers, query, authRequired, fullResponse);
+        return this.request(
+            path,
+            RequestMethod.PUT,
+            body,
+            headers,
+            query,
+            authRequired,
+            fullResponse
+        );
     }
 
     /**
@@ -104,7 +112,15 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ) {
-        return this.request(path, RequestMethod.POST, body, headers, query, authRequired, fullResponse);
+        return this.request(
+            path,
+            RequestMethod.POST,
+            body,
+            headers,
+            query,
+            authRequired,
+            fullResponse
+        );
     }
 
     /**
@@ -116,8 +132,22 @@ export class GameBusClient {
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
      */
-    async get(path: string, headers?: Headers, query?: Query, authRequired?: boolean, fullResponse?: boolean) {
-        return this.request(path, RequestMethod.GET, undefined, headers, query, authRequired, fullResponse);
+    async get(
+        path: string,
+        headers?: Headers,
+        query?: Query,
+        authRequired?: boolean,
+        fullResponse?: boolean
+    ) {
+        return this.request(
+            path,
+            RequestMethod.GET,
+            undefined,
+            headers,
+            query,
+            authRequired,
+            fullResponse
+        );
     }
 
     /**

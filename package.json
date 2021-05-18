@@ -7,12 +7,20 @@
         "test-api": "ts-node src/gb/test.ts",
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
+        "test-excel-import": "ts-node src/services/excelParser.ts",
         "test": "jest",
         "build": "tsc"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/RoelMK/SEP-backend.git"
+    },
+    "prettier": {
+        "trailingComma": "none",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true,
+        "printWidth": 100
     },
     "author": "Group 3",
     "license": "ISC",
@@ -25,6 +33,8 @@
         "axios": "^0.21.1",
         "better-sqlite3": "^7.3.1",
         "cors": "^2.8.5",
+        "@azure/msal-node": "^1.0.3",
+        "date-fns": "^2.21.1",
         "dotenv": "^8.6.0",
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
@@ -35,11 +45,12 @@
         "https": "^1.0.0",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.21",
-        "node-fetch": "^2.6.1",
-        "date-fns": "^2.21.1",
         "multer": "^1.4.2",
+        "node-fetch": "^2.6.1",
         "papaparse": "^5.3.0",
         "winston": "^3.3.3",
+        "ts-xor": "^1.0.8",
+        "xlsx": "^0.16.9",
         "xml2js": "^0.4.23"
     },
     "devDependencies": {
@@ -47,15 +58,17 @@
         "@types/express": "^4.17.11",
         "@types/express-jwt": "^6.0.1",
         "@types/jest": "^26.0.23",
+        "@types/jquery": "^3.5.5",
         "@types/jsonwebtoken": "^8.5.1",
         "@types/node": "^15.0.2",
         "@types/papaparse": "^5.2.5",
         "@types/xml2js": "^0.4.8",
         "jest": "^26.6.3",
+        "jest-fetch-mock": "^3.0.3",
+        "prettier": "2.3.0",
         "ts-jest": "^26.5.5",
         "ts-node": "^9.1.1",
         "tsc": "^1.20150623.0",
-        "typescript": "^4.2.4",
-        "jest-fetch-mock": "^3.0.3"
+        "typescript": "^4.2.4"
     }
 }

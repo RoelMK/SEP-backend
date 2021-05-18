@@ -1,13 +1,12 @@
-import { parse } from "dotenv";
-import { runAuthTests } from "../../test/auth/testAuth";
-import { checkJwt } from "../middlewares/checkJwt";
+import { parse } from 'dotenv';
+import { runAuthTests } from '../../test/auth/testAuth';
+import { checkJwt } from '../middlewares/checkJwt';
 
 const testRouter = require('express').Router();
 
 testRouter.get('/', (req: any, res: any) => {
     res.send('Hello World!');
 });
-
 
 testRouter.get('/test', (req: any, res: any) => {
     res.send('Hi, this was a success!');

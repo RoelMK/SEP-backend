@@ -1,5 +1,12 @@
 import { parse, getUnixTime, format } from 'date-fns';
-import { DateFormat, fromUnixMsTime, getDateFormat, parseDate, parseExcelDate, parseExcelTime } from '../../../src/services/utils/dates';
+import {
+    DateFormat,
+    fromUnixMsTime,
+    getDateFormat,
+    parseDate,
+    parseExcelDate,
+    parseExcelTime
+} from '../../../src/services/utils/dates';
 
 describe('getting date format from string', () => {
     test('Getting date format from normal string', () => {
@@ -69,41 +76,36 @@ describe('converting from unix milliseconds to date', () => {
     });
 });
 
-
 test('Parsing excel date format (days from 1900) to readable food diary format', () => {
     const daysSince1900 = 39448;
     const correspondingDate = '01/01/08';
-    expect(parseExcelDate(daysSince1900))
-                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy'));
+    expect(parseExcelDate(daysSince1900)).toStrictEqual(
+        format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy')
+    );
 });
-
 
 test('Parsing excel date format (days from 1900) to readable food diary format', () => {
     const daysSince1900 = 44325;
     const correspondingDate = '09/05/21';
-    expect(parseExcelDate(daysSince1900))
-                .toStrictEqual(format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy'));
+    expect(parseExcelDate(daysSince1900)).toStrictEqual(
+        format(parse(correspondingDate, 'dd/MM/yy', new Date()), 'dd/MM/yy')
+    );
 });
 
 test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
     const dayFraction = 0.5;
     const correspondingTime = '12:00';
-    expect(parseExcelTime(dayFraction))
-                .toStrictEqual(correspondingTime);
+    expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
 
 test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
     const dayFraction = 0.863194444;
     const correspondingTime = '20:43';
-    expect(parseExcelTime(dayFraction))
-                .toStrictEqual(correspondingTime);
+    expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
 
 test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
     const dayFraction = 0.417361111;
     const correspondingTime = '10:01';
-    expect(parseExcelTime(dayFraction))
-                .toStrictEqual(correspondingTime);
+    expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
-
-

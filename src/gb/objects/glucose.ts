@@ -15,6 +15,6 @@ export class Glucose extends GameBusObject {
     async getAllGlucoseActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
         const glucose = await this.activity.getAllActivitiesWithId(this.glucoseId, headers, query);
-        return (glucose as unknown) as ActivityGETData[];
+        return glucose as unknown as ActivityGETData[];
     }
 }

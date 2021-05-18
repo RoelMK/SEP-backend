@@ -3,7 +3,7 @@ import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
-import {XOR} from "ts-xor";
+import { XOR } from 'ts-xor';
 import * as EetmeterModels from '../../models/eetmeterModel';
 
 /**
@@ -28,7 +28,6 @@ export default class FoodParser {
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat
     ) {
-
         // Process incoming foodInput data
         this.process();
     }
@@ -58,9 +57,6 @@ export enum FoodSource {
 }
 
 /**
- * All possible input types for food data, 
+ * All possible input types for food data,
  */
-export type FoodInput = XOR< EetmeterModels.Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;
-
-
-
+export type FoodInput = XOR<EetmeterModels.Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;

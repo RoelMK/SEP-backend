@@ -8,9 +8,18 @@ import { parse, getUnixTime, isValid, fromUnixTime, add, format } from 'date-fns
  * @param unix (Optional) Whether a unix timestamp should be returned, default is false
  * @returns Date or unix timestamp of given date string, NaN if dateString does not match DateFormat
  */
-const parseDate = (dateString: string, dateFormat: DateFormat, referenceDate?: Date, unix?: boolean): Date | number => {
+const parseDate = (
+    dateString: string,
+    dateFormat: DateFormat,
+    referenceDate?: Date,
+    unix?: boolean
+): Date | number => {
     // Parse date using specified format
-    const date = parse(dateString, dateFormat.toString(), referenceDate ? referenceDate : new Date());
+    const date = parse(
+        dateString,
+        dateFormat.toString(),
+        referenceDate ? referenceDate : new Date()
+    );
     // If unix isn't specified, return the date
     if (!unix) {
         return date;
@@ -34,7 +43,9 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
         let valid: boolean;
         try {
             // Try to make a valid date using the format
-            valid = isValid(parse(dateString, DateFormat[format], referenceDate ? referenceDate : new Date()));
+            valid = isValid(
+                parse(dateString, DateFormat[format], referenceDate ? referenceDate : new Date())
+            );
             // If the date is valid, return the used format
             if (valid) {
                 return DateFormat[format];
@@ -54,18 +65,17 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
  * to a readable dateformat // TODO now only usable for fooddiary onedrive imports
  * @param daysSince1900 the number of days since 1900, i.e. the way excel stores dates
  */
-const parseExcelDate = (daysSince1900: number): string =>{
-    const start = parse("01/01/1900", 'dd/MM/yyyy', new Date());
+const parseExcelDate = (daysSince1900: number): string => {
+    const start = parse('01/01/1900', 'dd/MM/yyyy', new Date());
 
     // duration as date-fns duration objects
     // https://www.epochconverter.com/seconds-days-since-y0#:~:text=Days%20Since%201900%2D01%2D01,the%20number%20on%20this%20page.
     // the excel format has two extra days as specified by the article above
     const offset = {
-        days: daysSince1900 - 2,  
-      }
-    return (format(add(start, offset), 'dd/MM/yy'));
-}
- 
+        days: daysSince1900 - 2
+    };
+    return format(add(start, offset), 'dd/MM/yy');
+};
 
 /**
  * Some excel libraries do not offer possibility to convert times to string format
@@ -73,34 +83,34 @@ const parseExcelDate = (daysSince1900: number): string =>{
  * This function converts the fraction to a readable dateformat (HH:mm) // TODO now only usable for fooddiary onedrive imports
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
- const parseExcelTime = (dayFraction: number): string =>{
-    const hours: number   = Math.floor(dayFraction * 24);
+const parseExcelTime = (dayFraction: number): string => {
+    const hours: number = Math.floor(dayFraction * 24);
     const minutes: number = Math.round(((dayFraction * 24) % hours) * 60);
 
     // return the time in the HH:mm format
-    return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0");
-}
- 
+    return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+};
+
 /**
  * Converts raw excel date and time formats to more readable formats (dd/MM/yy and HH:mm respectively)
  * @param objects array of excel objects, assuming date property is called date and time property is called time
  * @returns array of objects with converted date and time properties
  */
-const convertExcelDateTimes = (objects: Record<string, string>[]): Record<string, string>[] =>{
+const convertExcelDateTimes = (objects: Record<string, string>[]): Record<string, string>[] => {
     // only change date and time if they both exist
-    if(objects[0].date === undefined && objects[0].time === undefined){
+    if (objects[0].date === undefined && objects[0].time === undefined) {
         return objects;
     }
-    objects.forEach(function(object){
-        if(object.date !== undefined && object.date !== ''){
+    objects.forEach(function (object) {
+        if (object.date !== undefined && object.date !== '') {
             object.date = parseExcelDate(parseInt(object.date));
         }
-        if(object.time !== undefined && object.time !== ''){
+        if (object.time !== undefined && object.time !== '') {
             object.time = parseExcelTime(parseFloat(object.time));
         }
     });
     return objects;
-}
+};
 
 /**
  * Function that will get the date from the given unix timestamp (in milliseconds)
@@ -126,4 +136,12 @@ enum DateFormat {
     NONE = ''
 }
 
-export { parseDate, getDateFormat, fromUnixMsTime, parseExcelDate, parseExcelTime, convertExcelDateTimes, DateFormat };
+export {
+    parseDate,
+    getDateFormat,
+    fromUnixMsTime,
+    parseExcelDate,
+    parseExcelTime,
+    convertExcelDateTimes,
+    DateFormat
+};

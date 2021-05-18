@@ -11,8 +11,7 @@ import { XOR } from 'ts-xor';
  */
 export default class InsulinParser {
     insulinData?: InsulinModel[];
-   
-    
+
     /**
      * List of insulin datapoints that can stem from several sources
      * @param insulinInput array of insulin inputs
@@ -32,8 +31,9 @@ export default class InsulinParser {
      * Processes the data (if necessary) and maps it to the insulinModel
      */
     private process() {
-        this.insulinData = this.insulinInput.map(InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat));
-
+        this.insulinData = this.insulinInput.map(
+            InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat)
+        );
     }
 
     /**
@@ -50,7 +50,6 @@ export enum InsulinSource {
     ABBOTT = 0,
     FOOD_DIARY_EXCEL = 1
 }
-
 
 /**
  * All possible input types for insulin data

@@ -25,21 +25,20 @@ export async function parseAbbott(filePath: string, type: OutputDataType) {
  * @param type Type of data to be retrieved from file
  * @returns Data of type {type}
  */
- export async function parseFoodDiary(filePath: string, type: OutputDataType) {
+export async function parseFoodDiary(filePath: string, type: OutputDataType) {
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath);
     await foodDiaryParser.process();
     return foodDiaryParser.getData(type);
 }
 
-
-export async function parseOneDriveFoodDiary(filePath: string, sampleInput?){
+export async function parseOneDriveFoodDiary(filePath: string, sampleInput?) {
     const odParser: OneDriveExcelParser = new OneDriveExcelParser();
     return await odParser.parse(filePath, DataSource.FOOD_DIARY, '', '', sampleInput);
 }
 export async function parseEetmeter(filePath: string) {
     const eetmeterParser: EetMeterParser = new EetMeterParser(filePath);
     await eetmeterParser.process();
-    return eetmeterParser.getData()
+    return eetmeterParser.getData();
 }
 
 export async function parseCsv(filePath: string): Promise<any[]> {

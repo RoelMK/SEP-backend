@@ -1,12 +1,11 @@
-import * as msal from "@azure/msal-node";
-import path from "path";
-import { OneDriveTokenModel } from "./models/onedriveTokenModel";
+import * as msal from '@azure/msal-node';
+import path from 'path';
+import { OneDriveTokenModel } from './models/onedriveTokenModel';
 const fs = require('fs');
 
 // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/samples/msal-node-samples/silent-flow/index.js
 // https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/auth-code
 // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
-
 
 // Cache
 const baseDirectoryPath = path.resolve('./');
@@ -21,7 +20,7 @@ const cachePlugin = require('./cachePlugin')(cacheFilePath);
 const config: msal.Configuration = {
     auth: {
         clientId: process.env.AZURE_CLIENT_ID as string,
-        authority: "https://login.microsoftonline.com/common",
+        authority: 'https://login.microsoftonline.com/common',
         clientSecret: process.env.AZURE_CLIENT_SECRET as string
     },
     system: {
@@ -30,7 +29,7 @@ const config: msal.Configuration = {
                 console.log(message);
             },
             piiLoggingEnabled: false,
-            logLevel: msal.LogLevel.Info,
+            logLevel: msal.LogLevel.Info
         }
     },
     cache: {
@@ -39,9 +38,8 @@ const config: msal.Configuration = {
 };
 const cca = new msal.ConfidentialClientApplication(config);
 const msalTokenCache = cca.getTokenCache();
-const redirectUri = "http://localhost:8080/onedrive/redirect";      // TODO: this should not be hardcoded here...
-const scopes = ["user.read", "Files.Read"];
-
+const redirectUri = 'http://localhost:8080/onedrive/redirect'; // TODO: this should not be hardcoded here...
+const scopes = ['user.read', 'Files.Read'];
 
 /**
  * Gets a url where the user can login with his OneDrive-account.
@@ -51,7 +49,7 @@ export async function getAuthorizationUrl(): Promise<string | undefined> {
     try {
         return await cca.getAuthCodeUrl({
             scopes: scopes,
-            redirectUri: redirectUri,
+            redirectUri: redirectUri
         });
     } catch (e) {
         console.log(JSON.stringify(e));
@@ -64,11 +62,13 @@ export async function getAuthorizationUrl(): Promise<string | undefined> {
  * @param authorizationCode Authorization code
  * @returns Account info containing an access token or undefined if an error occurred
  */
-export async function getAccessToken(authorizationCode: string): Promise<OneDriveTokenModel | undefined> {
+export async function getAccessToken(
+    authorizationCode: string
+): Promise<OneDriveTokenModel | undefined> {
     const tokenRequest = {
         code: authorizationCode,
         scopes: scopes,
-        redirectUri: redirectUri,
+        redirectUri: redirectUri
     };
 
     try {
@@ -94,15 +94,17 @@ export async function getAccessToken(authorizationCode: string): Promise<OneDriv
  * @param homeAccountId Account to get access token for
  * @returns A token or undefined if not available / an error occurred
  */
-export async function getAccessTokenSilent(homeAccountId: string): Promise<OneDriveTokenModel | undefined> {
+export async function getAccessTokenSilent(
+    homeAccountId: string
+): Promise<OneDriveTokenModel | undefined> {
     try {
         let account = await msalTokenCache.getAccountByHomeId(homeAccountId);
         if (account) {
             const silentRequest: msal.SilentFlowRequest = {
                 scopes: scopes,
                 account: account
-            }
-            
+            };
+
             // Make the request
             let response = await cca.acquireTokenSilent(silentRequest);
             if (response) {
@@ -112,10 +114,10 @@ export async function getAccessTokenSilent(homeAccountId: string): Promise<OneDr
                     expiresOn: response.expiresOn ?? undefined //TODO: null coalescing is used, because response.expiresOn can return null, which it didn't in previous builds
                 };
             }
-        } 
+        }
         return undefined;
     } catch (e) {
         console.log(JSON.stringify(e));
-        return undefined;   
+        return undefined;
     }
 }

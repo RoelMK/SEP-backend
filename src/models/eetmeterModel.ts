@@ -12,7 +12,7 @@ export type Consumptie = {
     Datum: Datum;
     Product: Product;
     Nutrienten: Nutrienten;
-}
+};
 export interface Nutrienten {
     Koolhydraten: Koolhydraten;
     Energie: Energie;

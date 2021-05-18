@@ -1,5 +1,5 @@
 export interface OneDriveTokenModel {
-    homeAccountId: string,
-    accessToken?: string,
-    expiresOn?: Date
+    homeAccountId: string;
+    accessToken?: string;
+    expiresOn?: Date;
 }

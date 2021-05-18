@@ -29,10 +29,9 @@ export default class InsulinMapper {
                 return this.mapFoodDiaryInsulin;
             default:
                 // TODO this should not happen
-                return this.mapFoodDiaryInsulin; 
-                
+                return this.mapFoodDiaryInsulin;
+        }
     }
-}
 
     /**
      * Abbott mapping function
@@ -41,7 +40,7 @@ export default class InsulinMapper {
      */
     private static mapAbbott(entry: any, dateFormat: DateFormat): InsulinModel {
         let insulin_amount: number;
-        
+
         // based on its recordtype, different insulin types are available
         //Type Rapid by default
         let insulin_type: InsulinType = InsulinType.RAPID;
@@ -49,8 +48,8 @@ export default class InsulinMapper {
         if (
             !(
                 entry.rapid_acting_insulin__units_ ||
-                entry.long_acting_insulin_value__units_ || 
-                entry.long_acting_insulin__units_ 
+                entry.long_acting_insulin_value__units_ ||
+                entry.long_acting_insulin__units_
             )
         ) {
             return emptyInsulinModel();
@@ -59,13 +58,13 @@ export default class InsulinMapper {
         if (entry.rapid_acting_insulin__units_) {
             insulin_amount = parseInt(entry.rapid_acting_insulin__units_);
         } else {
-            insulin_amount = (dateFormat == DateFormat.ABBOTT_US) ?
-                             parseInt(entry.long_acting_insulin__units_)
-                             : parseInt(entry.long_acting_insulin_value__units_);
+            insulin_amount =
+                dateFormat == DateFormat.ABBOTT_US
+                    ? parseInt(entry.long_acting_insulin__units_)
+                    : parseInt(entry.long_acting_insulin_value__units_);
             insulin_type = InsulinType.LONG;
-            
         }
-       
+
         return {
             timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
             insulinAmount: insulin_amount,
@@ -73,19 +72,19 @@ export default class InsulinMapper {
         } as InsulinModel;
     }
 
-
-
-    private static mapFoodDiaryInsulin(entry: any): InsulinModel{
+    private static mapFoodDiaryInsulin(entry: any): InsulinModel {
         return {
-            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY, new Date(), true),
+            timestamp: parseDate(
+                entry.date.replace(/-/g, '/') + ' ' + entry.time,
+                DateFormat.FOOD_DIARY,
+                new Date(),
+                true
+            ),
             insulinAmount: parseFloat(entry.total_insulin),
             insulinType: InsulinType.RAPID
         } as InsulinModel;
     }
-
 }
-
-
 
 /**
  * Function that can return an empty insulinModel entry that might be needed for easy returns

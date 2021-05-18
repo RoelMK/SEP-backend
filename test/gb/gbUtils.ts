@@ -2,7 +2,9 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 jest.mock('axios');
 
-export function mockGameBusRequest(requestHandler: (req: AxiosRequestConfig) => Promise<Partial<AxiosResponse>>) {
+export function mockGameBusRequest(
+    requestHandler: (req: AxiosRequestConfig) => Promise<Partial<AxiosResponse>>
+) {
     // Mock the Axios client to get our own response from a request URL
     const request = jest.fn();
 

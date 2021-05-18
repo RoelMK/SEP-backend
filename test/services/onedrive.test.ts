@@ -1,9 +1,8 @@
-import { OutputDataType } from "../../src/services/dataParsers/dataParser";
-import { parseOneDriveFoodDiary } from "./parseUtils";
+import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { parseOneDriveFoodDiary } from './parseUtils';
 
 test('import standardized food diary with missing values from a onedrive', async () => {
-
-    let sampleODInput =  [[ '', 0.966666666666667, '', 5, 2, 1, '', '' ]]
+    let sampleODInput = [['', 0.966666666666667, '', 5, 2, 1, '', '']];
     let expectedResult: Record<string, any> = {
         date: '',
         time: '23:12',
@@ -13,6 +12,8 @@ test('import standardized food diary with missing values from a onedrive', async
         high_correction_insulin: 1,
         sports_correction_insulin: '',
         total_insulin: ''
-      };
-    expect((await parseOneDriveFoodDiary('Documents/DeepFolder/diary.xlsx', sampleODInput))[0]).toStrictEqual(expectedResult);
+    };
+    expect(
+        (await parseOneDriveFoodDiary('Documents/DeepFolder/diary.xlsx', sampleODInput))[0]
+    ).toStrictEqual(expectedResult);
 });

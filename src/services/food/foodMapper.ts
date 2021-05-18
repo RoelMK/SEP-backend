@@ -57,9 +57,14 @@ export default class FoodMapper {
      * @param entry FoodDiary row
      * @returns FoodModel filled with information
      */
-    private static mapFoodDiary(entry: any): FoodModel{
+    private static mapFoodDiary(entry: any): FoodModel {
         return {
-            timestamp: parseDate(entry.date.replace(/-/g, "/") + " " + entry.time, DateFormat.FOOD_DIARY, new Date(),true),
+            timestamp: parseDate(
+                entry.date.replace(/-/g, '/') + ' ' + entry.time,
+                DateFormat.FOOD_DIARY,
+                new Date(),
+                true
+            ),
             carbohydrates: parseFloat(entry.carbohydrates),
             description: entry.description
         } as FoodModel;

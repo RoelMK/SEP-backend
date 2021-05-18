@@ -32,41 +32,48 @@ export abstract class DataParser {
      * @param filePath Path to .csv file
      * @param dataSource Data source of .csv file (see below)
      */
-    constructor(protected readonly dataSource: DataSource, protected filePath?: string, 
-                    protected oneDriveToken?: string, protected tableName?: string) {}
-
+    constructor(
+        protected readonly dataSource: DataSource,
+        protected filePath?: string,
+        protected oneDriveToken?: string,
+        protected tableName?: string
+    ) {}
 
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
     protected async parse(): Promise<Record<string, string>[] | undefined> {
-
-        if(!this.filePath){
-            throw Error("File path is not set!")
+        if (!this.filePath) {
+            throw Error('File path is not set!');
         }
         // determine method of parsing by checking file extension
         let extension: string = getFileExtension(this.filePath);
-        switch(extension){
-            case "csv":
+        switch (extension) {
+            case 'csv':
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
-                return (await this.csvParser.parse(this.filePath, skipLine));
-            case "xlsx":
-                if(!this.oneDriveToken) 
-                return (await this.excelParser.parse(this.filePath, this.dataSource));
-                else 
-                return (await this.oneDriveExcelParser.parse(this.filePath, this.dataSource, this.oneDriveToken, this.tableName as string));
-            case "xml":
+                return await this.csvParser.parse(this.filePath, skipLine);
+            case 'xlsx':
+                if (!this.oneDriveToken)
+                    return await this.excelParser.parse(this.filePath, this.dataSource);
+                else
+                    return await this.oneDriveExcelParser.parse(
+                        this.filePath,
+                        this.dataSource,
+                        this.oneDriveToken,
+                        this.tableName as string
+                    );
+            case 'xml':
                 if (this.dataSource == DataSource.EETMETER) {
-                    this.rawData = (await this.xmlParser.parse(this.filePath));
+                    this.rawData = await this.xmlParser.parse(this.filePath);
                 }
-        }      
+        }
     }
 
     /**
      * Allows the program to define the path after the object has been created
      * @param path string representation of the path to the file
      */
-    setFilePath(path: string){
+    setFilePath(path: string) {
         this.filePath = path;
     }
 
@@ -77,20 +84,19 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-     getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined
-     {
-         switch (outputType) {
+    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
+        switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
-             case OutputDataType.INSULIN:
-                 return this.insulinParser?.insulinData;
-             case OutputDataType.FOOD:
-                 return this.foodParser?.foodData;
+            case OutputDataType.INSULIN:
+                return this.insulinParser?.insulinData;
+            case OutputDataType.FOOD:
+                return this.foodParser?.foodData;
             default:
                 // TODO this should not happen
-                return []
-         }
-     }
+                return [];
+        }
+    }
 }
 
 export enum DataSource {

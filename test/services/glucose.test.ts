@@ -10,9 +10,9 @@ test('import Abbott EU glucose', async () => {
         glucoseLevel: 6.4,
         timestamp: parse('25/01/2020 14:53', DateFormat.ABBOTT_EU, new Date()).getTime()
     };
-    expect(await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.GLUCOSE)).toStrictEqual([
-        expectedResult
-    ]);
+    expect(
+        await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.GLUCOSE)
+    ).toStrictEqual([expectedResult]);
 });
 
 test('import Abbott US glucose', async () => {
@@ -20,7 +20,7 @@ test('import Abbott US glucose', async () => {
         glucoseLevel: convertMG_DLtoMMOL_L(82),
         timestamp: parse('11-29-2018 11:24 AM', DateFormat.ABBOTT_US, new Date()).getTime()
     };
-    expect(await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.GLUCOSE)).toStrictEqual([
-        expectedResult
-    ]);
+    expect(
+        await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.GLUCOSE)
+    ).toStrictEqual([expectedResult]);
 });

@@ -13,7 +13,7 @@ import GlucoseMapper from './glucoseMapper';
 export default class GlucoseParser {
     // Glucose data to be exported
     glucoseData?: GlucoseModel[];
-      
+
     /**
      * List of glucose datapoints that can stem from several sources
      * @param glucoseInput array of glucose inputs
@@ -68,7 +68,6 @@ export default class GlucoseParser {
 export enum GlucoseSource {
     ABBOTT = 1
 }
-
 
 /**
  * All possible input types for glucose data

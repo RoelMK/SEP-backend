@@ -1,8 +1,8 @@
-import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from "../onedrive/auth";
+import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 
 const onedriveRouter = require('express').Router();
 
-onedriveRouter.get('/login', async(req: any, res: any) => {
+onedriveRouter.get('/login', async (req: any, res: any) => {
     // Try to login using given account id if possible
     if (req.query.homeAccountId) {
         let account = await getAccessTokenSilent(req.query.homeAccountId);
@@ -20,7 +20,7 @@ onedriveRouter.get('/login', async(req: any, res: any) => {
     }
 });
 
-onedriveRouter.get('/redirect', async(req: any, res: any) => {
+onedriveRouter.get('/redirect', async (req: any, res: any) => {
     if (req.query.code) {
         let account = await getAccessToken(req.query.code);
         if (account) {

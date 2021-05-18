@@ -24,13 +24,21 @@ export default class EetMeterParser extends DataParser {
      */
     async process() {
         await this.parse();
-        let eetmeterData: EetmeterModels.EetmeterData = (this.rawData as unknown as EetmeterModels.EetmeterData); 
-        this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as EetmeterModels.Consumptie[];
+        let eetmeterData: EetmeterModels.EetmeterData = this
+            .rawData as unknown as EetmeterModels.EetmeterData;
+        this.eetmeterConsumptionData = eetmeterData.Consumpties
+            .Consumptie as EetmeterModels.Consumptie[];
         // Not sure why it does not always map it to an array (even with a single element)
         if (this.eetmeterConsumptionData.length == undefined) {
-            this.eetmeterConsumptionData = [this.eetmeterConsumptionData as unknown as EetmeterModels.Consumptie];
+            this.eetmeterConsumptionData = [
+                this.eetmeterConsumptionData as unknown as EetmeterModels.Consumptie
+            ];
         }
-        this.foodParser = new FoodParser(this.eetmeterConsumptionData, FoodSource.EETMETER, this.dateFormat);
+        this.foodParser = new FoodParser(
+            this.eetmeterConsumptionData,
+            FoodSource.EETMETER,
+            this.dateFormat
+        );
     }
 
     getData(): FoodModel[] | undefined {

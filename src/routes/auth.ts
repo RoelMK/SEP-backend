@@ -1,23 +1,49 @@
 import { Router, Request, Response } from 'express';
-import { createJWT, validateConnectRequest } from '../utils/authUtils';
+import { finishLoginAttempt, registerConnectCallback, startLoginAttempt } from '../utils/authUtils';
 
 const router = Router();
 
-router.post('/connect', (req: Request, res: Response) => {
-    let userId = req.body.player_id;
-    let accessToken = req.body.access_token;
-    let refreshToken = req.body.refresh_token;
+router.get('/login', async (req: Request, res: Response) => {
+    let email = req.query.email;
+    let loginToken = req.query.loginToken;
 
-    if (userId && accessToken && refreshToken) {
-        if (validateConnectRequest(userId, accessToken)) {
-            let jwt: string = createJWT(userId, accessToken, refreshToken);
-            return res.status(200).json({ token: jwt }); // TODO: this token must be saved locally on the computer of the end-user.
+    if (email) {
+        let attemptToken = await startLoginAttempt(email as string);
+        if (attemptToken) {
+            return res.status(200).json(attemptToken);
         } else {
-            return res.status(403).send(); // Invalid user id and/or token provided
+            return res.status(403).send();
+        }
+    } else if (loginToken) {
+        let newJwt = finishLoginAttempt(loginToken as string);
+        if (newJwt) {
+            return res.status(200).json({ newJwt: newJwt });
+        } else {
+            return res.status(403).send();
+        }
+    } else {
+        return res.status(400).send();
+    }
+});
+
+router.post('/gamebus/callback', (req: Request, res: Response) => {
+    // This is now provided in the request URL as queries
+    let playerId = req.query.player_id as string;
+    let accessToken = req.query.access_token as string;
+    let refreshToken = req.query.refresh_token as string;
+
+    if (playerId && accessToken && refreshToken) {
+        let registered = registerConnectCallback(playerId, accessToken, refreshToken);
+        if (registered) {
+            return res.status(200).send();
+        } else {
+            return res.status(403).send();
         }
     } else {
         return res.status(400).send(); // Bad request
     }
 });
+
+// TODO: add DELETE endpoint on Disconnect URL (/gamebus/disconnect)
 
 module.exports = router;

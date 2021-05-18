@@ -16,10 +16,9 @@ export class GameBusClient {
     private gamebusFood: Food;
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
-    private tokenHandler?: TokenHandler;
 
     // Create Axios instance, can add options if needed
-    constructor(private readonly verbose?: boolean, private readonly token?: string) {
+    constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
         this.client = axios.create();
 
         // Create necessary classes
@@ -28,11 +27,6 @@ export class GameBusClient {
         this.gamebusFood = new Food(this.gamebusActivity, true);
         this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
-
-        // If a token is provided, authenticate using the token
-        if (token) {
-            this.login(token);
-        }
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -54,15 +48,6 @@ export class GameBusClient {
 
     insulin() {
         return this.gamebusInsulin;
-    }
-
-    /**
-     * Creates a token handler for the given token
-     * @param token (Valid) API token
-     */
-    login(token: string) {
-        // Authenticate via token handler
-        this.tokenHandler = new TokenHandler(this, token);
     }
 
     /**
@@ -175,10 +160,7 @@ export class GameBusClient {
         if (authRequired) {
             if (!this.tokenHandler) {
                 throw new Error(`You must be authorized to access this path: ${endpoint + path}`);
-            } else {
-                // If the token handler does not have a token (yet), wait for it to be ready
-                await this.tokenHandler.Ready;
-            }
+            } 
         }
 
         // Request headers are created, Content-Type and User-Agent are set by default
@@ -232,7 +214,11 @@ export class GameBusClient {
 
         // Add authentication token to Authorization header if provided (and needed)
         if (authRequired && this.tokenHandler) {
-            headers['Authorization'] = `Bearer ${this.tokenHandler.getToken()}`;
+            const token = this.tokenHandler.getToken();
+            // TODO: should we handle this differently?
+            //this.playerId = token.playerId;
+            // Only add the access token part of the token
+            headers['Authorization'] = `Bearer ${token.accessToken}`;
         } else if (authRequired && !this.tokenHandler) {
             throw new Error('You must be authenticated to use this function');
         }

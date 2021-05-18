@@ -35,7 +35,6 @@ export class Activity {
 
     /**
      * Gets all activities for given player
-     * @param playerId Player ID
      * @returns All activities of player
      */
     async getAllActivities(
@@ -65,7 +64,6 @@ export class Activity {
 
     /**
      * Get all activities on a specified date range
-     * @param playerId Player ID
      * @param startDate Start date (inclusive)
      * @param endDate End date (exclusive)
      * @param limit Amount of activities (default 30)

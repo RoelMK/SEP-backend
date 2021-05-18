@@ -8,12 +8,12 @@ let userKevin = {
     userID: process.env.kevin_userID!
 };
 
-let client: GameBusClient = new GameBusClient(true, userKevin.token);
-
+//let client: GameBusClient = new GameBusClient(true, userKevin.token);
+/*
 async function testClientGetAllActs2(client: GameBusClient, playerId: number) {
     const activity = await client.activity().getActivitiesOnUnixDate(playerId, 1618848682);
     const activityAsModel = Activity.getActivityInfoFromActivity(activity[0]);
     console.log(activityAsModel);
 }
 
-testClientGetAllActs2(client, parseInt(userKevin.playerID));
+testClientGetAllActs2(client, parseInt(userKevin.playerID));*/

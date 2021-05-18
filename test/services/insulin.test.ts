@@ -1,14 +1,14 @@
 import { parse, getUnixTime } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { DateFormat, getDateFormat } from '../../src/services/utils/dates';
+import { DateFormat, getDateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseFoodDiary } from './parseUtils';
 
 test('import Abbott EU insulin', async () => {
     let expectedResult: InsulinModel = {
         insulinAmount: 9,
         insulinType: InsulinType.RAPID,
-        timestamp: parse('01/03/2021 14:36', DateFormat.ABBOTT_EU, new Date()).getTime()
+        timestamp: parseDate('01/03/2021 14:36', DateFormat.ABBOTT_EU, new Date(), true) as number
     };
     expect(
         await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.INSULIN)
@@ -19,7 +19,7 @@ test('import Abbott US insulin', async () => {
     let expectedResult: InsulinModel = {
         insulinAmount: 14,
         insulinType: InsulinType.RAPID,
-        timestamp: parse('11-29-2018 11:34 AM', DateFormat.ABBOTT_US, new Date()).getTime()
+        timestamp: parseDate('11-29-2018 11:34 AM', DateFormat.ABBOTT_US, new Date(), true) as number
     };
     expect(
         await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.INSULIN)
@@ -31,7 +31,7 @@ test('import standardized food diary insulin values full', async () => {
     let expectedResult: InsulinModel = {
         insulinAmount: 7,
         insulinType: InsulinType.RAPID,
-        timestamp: parse('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date()).getTime()
+        timestamp: parseDate('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (
@@ -48,7 +48,7 @@ test('import standardized food diary insulin values with missing values', async 
     let expectedResult: InsulinModel = {
         insulinAmount: 4,
         insulinType: InsulinType.RAPID,
-        timestamp: parse('08/05/21 12:01', DateFormat.FOOD_DIARY, new Date()).getTime()
+        timestamp: parseDate('08/05/21 12:01', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (

@@ -1,6 +1,6 @@
 import FoodModel from '../../src/gb/models/foodModel';
 import { parse, getUnixTime } from 'date-fns';
-import { DateFormat } from '../../src/services/utils/dates';
+import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseFoodDiary, parseEetmeter, parseOneDriveFoodDiary } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 
@@ -8,7 +8,7 @@ test('import Abbott EU food', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 101,
         description: '',
-        timestamp: getUnixTime(parse('15/01/2021 13:13', DateFormat.ABBOTT_EU, new Date())) * 1000
+        timestamp: parseDate('15/01/2021 13:13', DateFormat.ABBOTT_EU, new Date(), true) as number
     };
     expect(
         await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.FOOD)
@@ -19,8 +19,7 @@ test('import Abbott US food', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 120,
         description: '',
-        timestamp:
-            getUnixTime(parse('11-29-2018 11:29 AM', DateFormat.ABBOTT_US, new Date())) * 1000
+        timestamp: parseDate('11-29-2018 11:29 AM', DateFormat.ABBOTT_US, new Date(), true) as number
     };
     expect(
         await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.FOOD)
@@ -31,7 +30,7 @@ test('import standardized food diary full', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 10,
         description: 'Meeting',
-        timestamp: getUnixTime(parse('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date())) * 1000
+        timestamp: parseDate('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (
@@ -47,7 +46,7 @@ test('import standardized food diary with missing values', async () => {
     let expectedResult: FoodModel = {
         carbohydrates: 5,
         description: '',
-        timestamp: getUnixTime(parse('08/05/21 23:12', DateFormat.FOOD_DIARY, new Date())) * 1000
+        timestamp: parseDate('08/05/21 23:12', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (
@@ -62,7 +61,7 @@ test('import standardized food diary with missing values', async () => {
 test('import single Eetmeter entry', async () => {
     let expectedResult = [
         {
-            timestamp: parse('5/5/2021 9:00', DateFormat.EETMETER, new Date()).getTime(),
+            timestamp: parseDate('5/5/2021 9:00', DateFormat.EETMETER, new Date(), true) as number,
             calories: 27.92,
             carbohydrates: 6.98,
             fat: 4.72,
@@ -81,7 +80,7 @@ test('import single Eetmeter entry', async () => {
 test('import many Eetmeter entries', async () => {
     let expectedResult = [
         {
-            timestamp: parse('5/5/2021 9:00', DateFormat.EETMETER, new Date()).getTime(),
+            timestamp: parseDate('5/5/2021 9:00', DateFormat.EETMETER, new Date(), true) as number,
             calories: 27.92,
             carbohydrates: 6.98,
             fat: 4.72,
@@ -92,7 +91,7 @@ test('import many Eetmeter entries', async () => {
             description: 'Vegetarische balletjes'
         },
         {
-            timestamp: parse('5/5/2021 9:00', DateFormat.EETMETER, new Date()).getTime(),
+            timestamp: parseDate('5/5/2021 9:00', DateFormat.EETMETER, new Date(), true) as number,
             calories: 46,
             carbohydrates: 11.5,
             fat: 1.75,

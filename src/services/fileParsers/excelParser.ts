@@ -8,10 +8,9 @@ import { getKeys } from '../utils/interfaceKeys';
  */
 
 export default class ExcelParser {
-    constructor() {}
+    constructor(private readonly config: ExcelConfig = defaultExcelConfig) {}
 
     async parse(filePath: string, dataSource: DataSource): Promise<Record<string, string>[]> {
-        //
 
         const workbook = XLSX.read(filePath, { type: 'file' });
         const [firstSheetName] = workbook.SheetNames;
@@ -19,14 +18,28 @@ export default class ExcelParser {
 
         return new Promise((resolve) => {
             let resultData: Record<string, string>[] = XLSX.utils.sheet_to_json(worksheet, {
-                raw: true, // Use raw values (true) or formatted strings (false)
+                ...this.config, 
                 header: getKeys(dataSource), // use keys of interface
-                range: 1, // if keys are specified under header property, the package does not remove the header so start at 1
-                defval: '', // standard value for missing values
-                blankrows: false
             });
             resultData = convertExcelDateTimes(resultData);
             resolve(resultData);
         });
     }
+}
+
+/**
+ * Default ecel parsing config that assumes the presence of headers and transforms them to remove spaces and capitals
+ */
+const defaultExcelConfig: ExcelConfig = {
+    raw: true, // Use raw values to parse dates uniformly
+    range: 1, // if keys are specified under header property, the package does not remove the header so start at 1
+    defval: '', // standard value for missing values
+    blankrows: false
+};
+
+type ExcelConfig = {
+    raw: boolean,
+    range: number,
+    defval: any,
+    blankrows: boolean,
 }

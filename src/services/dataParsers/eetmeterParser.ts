@@ -28,7 +28,9 @@ export default class EetMeterParser extends DataParser {
         this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as EetmeterModels.Consumptie[];
         // Not sure why it does not always map it to an array (even with a single element)
         if (this.rawData.length == undefined) {
-               //TODO fix this.eetmeterConsumptionData = [this.eetmeterConsumptionData];
+            console.log(this.eetmeterConsumptionData);
+            // TODO I think it fails here (even after removing the comment)
+            //this.eetmeterConsumptionData = [this.eetmeterConsumptionData as unknown as EetmeterModels.Consumptie];
         }
         this.foodParser = new FoodParser(this.eetmeterConsumptionData, FoodSource.EETMETER, this.dateFormat);
     }

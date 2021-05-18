@@ -4,6 +4,8 @@ import { mockGameBusRequest } from './gbUtils';
 
 jest.mock('axios');
 
+// TODO: improve coverage
+
 describe('with mocked activities get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockGameBusRequest(() => {
@@ -16,7 +18,6 @@ describe('with mocked activities get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    // TODO: change to JWT once feature/authentication is merged
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
 
     test('GET activities on date', async () => {

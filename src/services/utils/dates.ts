@@ -66,6 +66,7 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
  * @param daysSince1900 the number of days since 1900, i.e. the way excel stores dates
  */
 const parseExcelDate = (daysSince1900: number): string => {
+    if (daysSince1900 < 0) throw Error('Invalid amount of days since 1900!');
     const start = parse('01/01/1900', 'dd/MM/yyyy', new Date());
 
     // duration as date-fns duration objects
@@ -84,6 +85,7 @@ const parseExcelDate = (daysSince1900: number): string => {
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {
+    if (dayFraction < 0 || dayFraction >= 1) throw Error('Invalid day fraction!');
     const hours: number = Math.floor(dayFraction * 24);
     const minutes: number = Math.round(((dayFraction * 24) % hours) * 60);
 

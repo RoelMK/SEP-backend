@@ -64,7 +64,7 @@ export abstract class DataParser {
                     );
             case 'xml':
                 if (this.dataSource == DataSource.EETMETER) {
-                    this.rawData = await this.xmlParser.parse(this.filePath);
+                    return await this.xmlParser.parse(this.filePath);
                 }
         }
     }

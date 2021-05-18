@@ -23,9 +23,8 @@ export default class EetMeterParser extends DataParser {
      * Function that is called (async) that creates the parsers and filers the data to the correct parsers
      */
     async process() {
-        await this.parse();
-        let eetmeterData: EetmeterModels.EetmeterData = this
-            .rawData as unknown as EetmeterModels.EetmeterData;
+        let eetmeterData: EetmeterModels.EetmeterData =
+            (await this.parse()) as unknown as EetmeterModels.EetmeterData;
         this.eetmeterConsumptionData = eetmeterData.Consumpties
             .Consumptie as EetmeterModels.Consumptie[];
         // Not sure why it does not always map it to an array (even with a single element)

@@ -2,7 +2,7 @@ import { getUnixTime } from 'date-fns';
 import { parse } from 'date-fns';
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { AbbottData } from '../abbottParser';
-import { DateFormat } from '../utils/dates';
+import { DateFormat, parseDate } from '../utils/dates';
 import { InsulinSource } from './insulinParser';
 
 /**
@@ -69,7 +69,7 @@ export default class InsulinMapper {
         }
 
         return {
-            timestamp: getUnixTime(parse(entry.device_timestamp, dateFormat, new Date())),
+            timestamp: parseDate(entry.device_timestamp, dateFormat, undefined, true),
             insulinAmount: insulin_amount,
             insulinType: insulin_type
         } as InsulinModel;

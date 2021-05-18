@@ -8,6 +8,11 @@ testRouter.get('/', (req: any, res: any) => {
     res.send('Hello World!');
 });
 
+
+testRouter.get('/test', (req: any, res: any) => {
+    res.send('Hi, this was a success!');
+});
+
 testRouter.get('/jwt-test', checkJwt, (req: any, res: any) => {
     res.send('Finished JWT test, your token payload: ' + JSON.stringify(req.user));
 });

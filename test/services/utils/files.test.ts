@@ -7,6 +7,15 @@ test('Get extension from a file path', () => {
     expect(getFileExtension(filePath2)).toBe('xlsx');
 });
 
+test('Get extension from a file path, robustness', () => {
+    const filePath = 'random/path/to/randomnothin';
+    const filePath2 = 'file';
+    const filePath3 = 'file.random/otherfile';
+    expect(getFileExtension(filePath)).toBe('');
+    expect(getFileExtension(filePath2)).toBe('');
+    expect(getFileExtension(filePath3)).toBe('');
+});
+
 test('Getting directory from file path', () => {
     const filePath = 'random/path/to/file.csv';
     const filePath2 = 'random\\path\\to\\file.csv';

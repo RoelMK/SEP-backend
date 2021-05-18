@@ -3,8 +3,12 @@
  * @param filePath path that leads to a file with a certain extension
  * @returns the extension of the file
  */
-const getFileExtension = (filePath: string): string => {
+const getFileExtension = (filePath: string, forwardSlash?: boolean): string => {
+    if (forwardSlash === undefined) forwardSlash = true;
+    const indicator = forwardSlash ? '/' : '\\';
+    const indexIndicator = filePath.lastIndexOf(indicator);
     const index = filePath.lastIndexOf('.');
+    if (indexIndicator > index) return '';
     // if no point can be found, return '', else return the extension
     return index == -1 ? '' : filePath.substring(index + 1);
 };

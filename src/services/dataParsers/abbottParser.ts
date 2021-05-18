@@ -25,7 +25,6 @@ export default class AbbottParser extends DataParser {
         // specify the type of parsed data
         this.abbottData = (await this.parse()) as AbbottData[];
 
-        // TODO is this at the correct place
         if (!AbbottDataGuard(this.abbottData[0])) {
             console.log(this.abbottData[0]);
             throw Error('Wrong input data for processing Abbott data!');

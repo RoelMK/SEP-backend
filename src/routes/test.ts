@@ -16,11 +16,6 @@ testRouter.get('/jwt-test', checkJwt, (req: any, res: any) => {
     res.send('Finished JWT test, your token payload: ' + JSON.stringify(req.user));
 });
 
-testRouter.get('/auth-test', async (req: any, res: any) => {
-    console.log('x: ' + await startLoginAttempt('r.m.koopman@student.tue.nl'));
-    res.status(200).send()
-});
-
 testRouter.get('/clean', async (req: any, res: any) => {
     let dbClient: DBClient = new DBClient(true);
     let result = dbClient.cleanLoginAttempts();

@@ -16,4 +16,4 @@ async function testClientGetAllActs2(client: GameBusClient, playerId: number) {
     console.log(activityAsModel);
 }
 
-testClientGetAllActs2(client, parseInt(userKevin.playerID));
+testClientGetAllActs2(client, parseInt(userKevin.playerID));*/

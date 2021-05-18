@@ -1,3 +1,4 @@
+import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { createJWT } from '../../src/utils/authUtils';
 import { mockGameBusRequest } from './gbUtils';
@@ -5,8 +6,6 @@ import { mockGameBusRequest } from './gbUtils';
 jest.mock('axios');
 
 describe('with mocked activities get call', () => {
-    // Test token we'll be using
-    const mockToken = createJWT('0', 'testToken', 'refreshToken');
     // Request handler that simply returns empty data for every request
     const request = mockGameBusRequest((req) => {
         return Promise.resolve({
@@ -19,7 +18,7 @@ describe('with mocked activities get call', () => {
 
     // GameBusClient using mockToken
     // TODO: change to JWT once feature/authentication is merged
-    const client = new GameBusClient(mockToken);
+    const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
 
     test('GET activities on date', async () => {
         // Get activities from a date (as Date object)

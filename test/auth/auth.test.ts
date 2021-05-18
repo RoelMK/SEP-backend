@@ -3,13 +3,6 @@ import { DBClient } from '../../src/db/dbClient';
 import { createJWT, finishLoginAttempt, registerConnectCallback, startLoginAttempt } from '../../src/utils/authUtils';
 const fs = require('fs');
 
-beforeAll(() => {
-    // Define constants
-    process.env.TOKEN_SECRET = 'test';
-    process.env.TOKEN_EXPIRES_IN = '30d';
-    process.env.TOKEN_ISSUER = 'https://tue.nl';
-});
-
 beforeEach(() => {
     // Reset database
     process.env.DATABASE = 'auth.test.db';

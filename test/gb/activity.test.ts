@@ -18,7 +18,7 @@ describe('with mocked activities get call', () => {
 
     // GameBusClient using mockToken
     // TODO: change to JWT once feature/authentication is merged
-    const client = new GameBusClient(false, mockToken);
+    const client = new GameBusClient(mockToken);
 
     test('GET activities on date', async () => {
         // Get activities from a date (as Date object)

@@ -16,7 +16,7 @@ afterAll(() => {
 });
 
 test('database initialization', () => {
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
     dbClient.initialize();
     dbClient.close();
 });
@@ -28,7 +28,7 @@ test('database full login procedure', () => {
     const accessToken = "a1";
     const refreshToken = "r1";
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
 
     expect(dbClient.registerLoginAttempt(playerId, loginToken, expireTime)).toBeTruthy();
     expect(dbClient.registerCallback(playerId, accessToken, refreshToken)).toBeTruthy();
@@ -50,7 +50,7 @@ test('database clean non-expired', () => {
     const loginToken = "a23454";
     const expireTime = new Date(new Date().getTime() + 1 * 60000); // Valid for 1 min
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
 
     expect(dbClient.registerLoginAttempt(playerId, loginToken, expireTime)).toBeTruthy();
     expect(dbClient.cleanLoginAttempts()).toBeTruthy();
@@ -65,7 +65,7 @@ test('database clean expired', () => {
     const loginToken = "a23";
     const expireTime = new Date(new Date().getTime() - 1); // Immediately invalid
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
 
     expect(dbClient.registerLoginAttempt(playerId, loginToken, expireTime)).toBeTruthy();
     expect(dbClient.cleanLoginAttempts()).toBeTruthy();
@@ -80,7 +80,7 @@ test('database callback non-existing', () => {
     const accessToken = "a12";
     const refreshToken = "r12";
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
 
     expect(dbClient.registerCallback(playerId, accessToken, refreshToken)).toBeFalsy();
 
@@ -91,7 +91,7 @@ test('database get undefined', () => {
     const playerId = "1234";
     const loginToken = "adwd3r";
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
 
     expect(dbClient.getLoginAttemptByPlayerId(playerId)).toBeUndefined();
     expect(dbClient.getLoginAttemptByLoginToken(loginToken)).toBeUndefined();
@@ -102,10 +102,10 @@ test('database get undefined', () => {
 test('database register double login attempt', () => {
     const playerId = "443";
 
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
     expect(dbClient.registerLoginAttempt(playerId, '12', new Date())).toBeTruthy();
     dbClient.close();
-    dbClient = new DBClient(true);
+    dbClient = new DBClient();
     expect(dbClient.registerLoginAttempt(playerId, '123', new Date())).toBeFalsy();
     expect(dbClient.removeFinishedLoginAttempt(playerId)).toBeTruthy();
     dbClient.close();

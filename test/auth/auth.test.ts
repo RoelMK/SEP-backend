@@ -51,7 +51,7 @@ test('full login attempt', async() => {
     // Make login attempt
     let token = await startLoginAttempt(playerId, true);
     expect(token).toBeDefined();
-    expect(token?.expires.getTime()).toBeGreaterThan(new Date().getTime());
+    expect(token?.expires).toBeGreaterThan(new Date().getTime());
     expect(token?.loginToken).toBeDefined();
     expect(registerConnectCallback(playerId, accessToken, refreshToken)).toBeTruthy();
     let generatedJwt = finishLoginAttempt(token?.loginToken as string);
@@ -80,7 +80,7 @@ test('start login attempt twice', async() => {
     expect(await startLoginAttempt(playerId, true)).toBeUndefined();
 
     // Clean database
-    let dbClient = new DBClient(true);
+    let dbClient = new DBClient();
     expect(dbClient.removeFinishedLoginAttempt(playerId)).toBeTruthy();
     dbClient.close();
 });

@@ -4,7 +4,7 @@ import { GameBusClient } from '../gb/gbClient';
 const crypto = require('crypto');
 
 const gbClientAuthHeader = 'Basic ' + process.env.GAMEBUS_CLIENT_AUTH_HEADER as string;
-const loginAttemptValidityInMinutes: number = 10;
+const loginAttemptValidityInMinutes: number = 5;
 
 /**
  * Finishes a login attempt and generates a JWT with credentials.
@@ -13,6 +13,7 @@ const loginAttemptValidityInMinutes: number = 10;
  */
 export function finishLoginAttempt(loginToken: string): string | undefined {
     let dbClient: DBClient = new DBClient();
+    dbClient.cleanLoginAttempts();
     let loginRow = dbClient.getLoginAttemptByLoginToken(loginToken); // Get ongoing attempt from database
     if (loginRow && loginRow.player_id && loginRow.access_token && loginRow.refresh_token) {
         let playerId = loginRow.player_id as string;
@@ -61,9 +62,9 @@ export async function startLoginAttempt(email: string, interpretEmailAsPlayerId?
         let expires: Date = new Date(new Date().getTime() + loginAttemptValidityInMinutes * 60000);
         let registered = dbClient.registerLoginAttempt(playerId, loginToken, expires);
         dbClient.close();
-        
+
         if (registered) {
-            return { loginToken: loginToken, expires: expires };
+            return { loginToken: loginToken, expires: expires.getTime() };
         } else {
             return undefined;
         }
@@ -81,7 +82,6 @@ async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
     if (clientAccessCode) {
         let gbClient: GameBusClient = new GameBusClient(undefined, true);
         let response = await gbClient.get('users', { 'Authorization': 'Bearer ' + clientAccessCode }, { 'q': email });
-        console.log(JSON.stringify(response));
         if (response && Array.isArray(response) && response.length > 0 && response[0].player && response[0].player.id) {
             return response[0].player.id.toString();
         }
@@ -137,9 +137,13 @@ export function refreshJWT(playerId: string, refreshToken: string): string {
     return createJWT(playerId, newAccessToken, newRefreshToken);
 }
 
+/**
+ * loginToken: token which should be used for login attempt
+ * expires: when the token expires as Unix timestamp
+ */
 export interface LoginAttemptToken {
     loginToken: string,
-    expires: Date
+    expires: number
 }
 
 /**

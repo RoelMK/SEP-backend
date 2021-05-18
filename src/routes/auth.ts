@@ -3,7 +3,7 @@ import { finishLoginAttempt, registerConnectCallback, startLoginAttempt } from '
 
 const router = Router();
 
-router.get('/login', async(req: Request, res: Response) => {
+router.get('/login', async (req: Request, res: Response) => {
     let email = req.query.email;
     let loginToken = req.query.loginToken;
 
@@ -15,12 +15,14 @@ router.get('/login', async(req: Request, res: Response) => {
             return res.status(403).send();
         }
     } else if (loginToken) {
-        let jwt = finishLoginAttempt(loginToken as string);
-        if (jwt) {
-            return res.status(200).send(jwt);
+        let newJwt = finishLoginAttempt(loginToken as string);
+        if (newJwt) {
+            return res.status(200).json({ newJwt: newJwt });
         } else {
             return res.status(403).send();
         }
+    } else {
+        return res.status(400).send();
     }
 });
 

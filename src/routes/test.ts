@@ -1,8 +1,6 @@
 import { parse } from "dotenv";
 import { runAuthTests } from "../../test/auth/testAuth";
 import { checkJwt } from "../middlewares/checkJwt";
-import AbbottParser from "../services/abbottParser";
-import EetMeterParser from "../services/eetmeterParser";
 
 const testRouter = require('express').Router();
 

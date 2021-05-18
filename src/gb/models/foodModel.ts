@@ -4,11 +4,11 @@
  */
 export default interface FoodModel {
     timestamp: number;
-    calories: number;
+    carbohydrates: number;
+    calories?: number;
     fat?: number;
     saturatedFat?: number;
     proteins?: number;
-    carbohydrates?: number;
     fibers?: number;
     salt?: number;
     water?: number;

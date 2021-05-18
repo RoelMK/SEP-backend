@@ -20,7 +20,7 @@ export class Exercise extends GameBusObject {
         // TODO: implement getAllActivitiesWithId()
         const exercise = await this.activity.getAllActivitiesWithId(activityType, headers, query);
         // TODO: fix the return type, this is just a hack to get TypeScript to not complain
-        return (exercise as unknown) as ActivityGETData[];
+        return exercise as unknown as ActivityGETData[];
     }
 }
 

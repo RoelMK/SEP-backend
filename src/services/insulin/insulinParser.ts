@@ -1,8 +1,9 @@
 import { InsulinModel } from '../../gb/models/insulinModel';
-import { AbbottData } from '../abbottParser';
+import { AbbottData } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
-
+import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
+import { XOR } from 'ts-xor';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
@@ -10,13 +11,16 @@ import InsulinMapper from './insulinMapper';
  */
 export default class InsulinParser {
     insulinData?: InsulinModel[];
+
     /**
-     * File from filePath is read in constructor and parsed, waiting until Ready is advised.
-     * @param filePath path to insulin .csv file
+     * List of insulin datapoints that can stem from several sources
+     * @param insulinInput array of insulin inputs
+     * @param insulinSource specifies where the insulin input comes from
+     * @param dateFormat specifies the format in which dates are represented
      */
     constructor(
-        private readonly insulinInput: AbbottData[],
-        private readonly insulinSource: InsulinSource = InsulinSource.ABBOTT,
+        private readonly insulinInput: InsulinInput,
+        private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat
     ) {
         // Process incoming insulinInput data
@@ -27,7 +31,9 @@ export default class InsulinParser {
      * Processes the data (if necessary) and maps it to the insulinModel
      */
     private process() {
-        this.insulinData = this.insulinInput.map(InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat));
+        this.insulinData = this.insulinInput.map(
+            InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat)
+        );
     }
 
     /**
@@ -41,5 +47,11 @@ export default class InsulinParser {
  * Current insulin sources available //TODO ? Add more
  */
 export enum InsulinSource {
-    ABBOTT = 0
+    ABBOTT = 0,
+    FOOD_DIARY_EXCEL = 1
 }
+
+/**
+ * All possible input types for insulin data
+ */
+type InsulinInput = XOR<AbbottData[], FoodDiaryData[]>;

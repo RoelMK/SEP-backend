@@ -1,5 +1,5 @@
 import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
-import { AbbottData, RecordType } from '../abbottParser';
+import { AbbottData, RecordType } from '../dataParsers/abbottParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
 import { GlucoseSource } from './glucoseParser';
@@ -17,11 +17,15 @@ export default class GlucoseMapper {
      * @param glucoseUnit GlucoseUnit in which the glucose level is measured
      * @returns Mapping function that maps an entry from the source to a glucoseModel
      */
-    public static mapGlucose(glucoseSource: GlucoseSource, dateFormat: DateFormat, glucoseUnit: GlucoseUnit) {
+    public static mapGlucose(
+        glucoseSource: GlucoseSource,
+        dateFormat: DateFormat,
+        glucoseUnit: GlucoseUnit
+    ) {
         switch (glucoseSource) {
             case GlucoseSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
-                return function (entry: AbbottData): GlucoseModel {
+                return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapAbbott(entry, dateFormat, glucoseUnit);
                 };
         }
@@ -32,7 +36,11 @@ export default class GlucoseMapper {
      * @param entry Abbott entry
      * @returns glucoseModel with time and glucose level in mmol/L
      */
-    private static mapAbbott(entry: AbbottData, dateFormat: DateFormat, glucoseUnit: GlucoseUnit): GlucoseModel {
+    private static mapAbbott(
+        entry: any,
+        dateFormat: DateFormat,
+        glucoseUnit: GlucoseUnit
+    ): GlucoseModel {
         // based on its recordtype, different glucose data is available
         let glucose_level_mmol: number;
         switch (parseInt(entry.record_type)) {

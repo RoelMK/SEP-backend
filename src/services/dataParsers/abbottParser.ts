@@ -1,63 +1,46 @@
-import FoodModel from '../gb/models/foodModel';
-import { GlucoseModel } from '../gb/models/glucoseModel';
-import { InsulinModel } from '../gb/models/insulinModel';
-import { DataParser, DataSource } from './dataParser';
-import FoodParser, { FoodSource } from './food/foodParser';
-import GlucoseParser, { GlucoseSource } from './glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from './insulin/insulinParser';
-import { getDateFormat } from './utils/dates';
+import { DataParser, DataSource, OutputDataType } from './dataParser';
+import FoodParser, { FoodSource } from '../food/foodParser';
+import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
+import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { getDateFormat } from '../utils/dates';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
-export default class AbbottParser extends DataParser<AbbottData> {
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    // alternatively, you can create a public method in the AbbottParser for each data type POST individually
-    private foodParser?: FoodParser;
-    private glucoseParser?: GlucoseParser;
-    private insulinParser?: InsulinParser;
+export default class AbbottParser extends DataParser {
+    private abbottData: AbbottData[] = [];
 
     /**
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private readonly abbottFile: string) {
-        super(abbottFile, DataSource.ABBOTT);
+    constructor(private abbotFile?: string) {
+        super(DataSource.ABBOTT, abbotFile);
     }
 
     /**
-     * Function that is called (async) that creates the parsers and filers the data to the correct parsers
+     * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
-        await this.parse();
+        // specify the type of parsed data
+        this.abbottData = (await this.parse()) as AbbottData[];
+
+        if (!AbbottDataGuard(this.abbottData[0])) {
+            console.log(this.abbottData[0]);
+            throw Error('Wrong input data for processing Abbott data!');
+        }
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
+
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
-        const foodData = this.filterFood();
+        const foodData: AbbottData[] = this.filterFood();
         this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
 
-        const glucoseData = this.filterGlucose();
+        const glucoseData: AbbottData[] = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
-        const insulinData = this.filterInsulin();
+        const insulinData: AbbottData[] = this.filterInsulin();
         this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
-    }
-
-    /**
-     * Debugging function to get data contained in the parsers
-     * @param abbottDataType Data type to get
-     * @returns Data from data type's parser
-     */
-    getData(abbottDataType: AbbottDataType): GlucoseModel[] | InsulinModel[] | FoodModel[] | undefined {
-        switch (abbottDataType) {
-            case AbbottDataType.GLUCOSE:
-                return this.glucoseParser?.glucoseData;
-            case AbbottDataType.INSULIN:
-                return this.insulinParser?.insulinData;
-            case AbbottDataType.FOOD:
-                return this.foodParser?.foodData;
-        }
     }
 
     /**
@@ -65,7 +48,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All glucose entries
      */
     private filterGlucose(): AbbottData[] {
-        const glucose = this.rawData?.filter((entry: AbbottData) => {
+        const glucose = this.abbottData?.filter((entry: AbbottData) => {
             // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
             // We also only include entries for which the date is specified
             return (
@@ -89,8 +72,11 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All food entries
      */
     private filterFood(): AbbottData[] {
-        const food = this.rawData?.filter((entry: AbbottData) => {
-            return parseInt(entry.record_type) === RecordType.CARBOHYDRATES && entry.carbohydrates__grams_;
+        const food = this.abbottData?.filter((entry: AbbottData) => {
+            return (
+                parseInt(entry.record_type) === RecordType.CARBOHYDRATES &&
+                entry.carbohydrates__grams_
+            );
         });
         // TODO: come up with a better way to return AbbottData if there is no food data
         if (food?.length === 0) {
@@ -104,8 +90,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
      * @returns All insulin entries
      */
     private filterInsulin(): AbbottData[] {
-        //console.log(this.rawData);
-        const insulin = this.rawData?.filter((entry: AbbottData) => {
+        const insulin = this.abbottData?.filter((entry: AbbottData) => {
             return parseInt(entry.record_type) === RecordType.INSULIN;
         });
         if (insulin?.length === 0) {
@@ -120,7 +105,7 @@ export default class AbbottParser extends DataParser<AbbottData> {
     private getLocale(): void {
         // TODO check if the first entry is NONE, but others are not
         // TODO involves checking if first can be NONE at all
-        this.dateFormat = getDateFormat(this.rawData?.[0].device_timestamp);
+        this.dateFormat = getDateFormat(this.abbottData?.[0].device_timestamp);
     }
 }
 
@@ -173,8 +158,8 @@ export type AbbottData = {
     carbohydrates__grams_: string;
     carbohydrates__servings_: string;
     non_numeric_long_acting_insulin: string;
-    long_acting_insulin__units_: string;
-    long_acting_insulin_value__units_: string;
+    long_acting_insulin__units_?: string; // apparently there is a difference between US and EU names for these
+    long_acting_insulin_value__units_?: string;
     notes: string;
     strip_glucose_mg_dl?: string;
     strip_glucose_mmol_l?: string;
@@ -183,6 +168,31 @@ export type AbbottData = {
     correction_insulin__units_: string;
     user_change_insulin__units_: string;
 };
+
+/**
+ * Function to check if an object belongs to the AbbottData interface
+ * @param object any object
+ * @returns whether the object is part of the interface AbbottData
+ */
+function AbbottDataGuard(object: any): object is AbbottData {
+    return (
+        object.device !== undefined &&
+        object.serial_number !== undefined &&
+        object.device_timestamp !== undefined &&
+        object.record_type !== undefined &&
+        object.non_numeric_rapid_acting_insulin !== undefined &&
+        object.rapid_acting_insulin__units_ !== undefined &&
+        object.non_numeric_food !== undefined &&
+        object.carbohydrates__grams_ !== undefined &&
+        object.carbohydrates__servings_ !== undefined &&
+        object.non_numeric_long_acting_insulin !== undefined &&
+        object.notes !== undefined &&
+        object.ketone_mmol_l !== undefined &&
+        object.meal_insulin__units_ !== undefined &&
+        object.correction_insulin__units_ !== undefined &&
+        object.user_change_insulin__units_ !== undefined
+    );
+}
 
 /**
  * Different record type meanings
@@ -197,10 +207,4 @@ export enum RecordType {
     INSULIN = 4,
     CARBOHYDRATES = 5,
     NOTES = 6
-}
-
-export enum AbbottDataType {
-    GLUCOSE = 0,
-    INSULIN = 1,
-    FOOD = 2
 }

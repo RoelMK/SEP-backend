@@ -49,3 +49,4 @@ plots/
 localdb.db
 test.bat
 dist/
+data/

@@ -1,16 +1,8 @@
 import { GameBusClient } from '../../src/gb/gbClient';
 import { createJWT } from '../../src/utils/authUtils';
 import { mockGameBusRequest } from './gbUtils';
-require('dotenv').config();
 
 jest.mock('axios');
-
-beforeAll(() => {
-    // Define constants
-    process.env.TOKEN_SECRET = 'test';
-    process.env.TOKEN_EXPIRES_IN = '30d';
-    process.env.TOKEN_ISSUER = 'https://tue.nl';
-});
 
 describe('with mocked activities get call', () => {
     // Test token we'll be using

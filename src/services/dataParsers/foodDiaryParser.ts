@@ -105,15 +105,6 @@ export default class FoodDiaryParser extends DataParser {
         }
         return rawData;
     }
-
-    private formatYear(input) {
-        let date = input.match(/\d+/g),
-            year = date[2].substring(2), // get only two digits
-            month = date[1],
-            day = date[0];
-
-        return day + '/' + month + '/' + year;
-    }
 }
 
 /**

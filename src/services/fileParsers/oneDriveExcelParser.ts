@@ -20,12 +20,18 @@ export default class OneDriveExcelParser {
      * @param oneDriveToken authorization token for OneDrive
      * @returns Array of excel entry objects
      */
-    async parse(filePath: string, dataSource: DataSource, oneDriveToken: string, tableName: string):  Promise<Record<string, string>[]>{ 
+    async parse(filePath: string, dataSource: DataSource, oneDriveToken: string, tableName: string, sampleInput?: any[]):  Promise<Record<string, string>[]>{ 
 
         // Initiate oneDrive read
         return new Promise(async (resolve) => {
-            let odClient = new OneDriveClient(oneDriveToken, getFileName(filePath), getFileDirectory(filePath));
-            let result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+            let result;
+            if(sampleInput === undefined){
+                console.log(sampleInput)
+                let odClient = new OneDriveClient(oneDriveToken, getFileName(filePath), getFileDirectory(filePath));
+                result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+            }else{
+                result = this.assignKeys(sampleInput, getKeys(dataSource));
+            }
             result = convertExcelDateTimes(result);
             resolve(result);
         });

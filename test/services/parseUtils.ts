@@ -1,10 +1,11 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { DataSource, OutputDataType } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
 import { testToken } from '../../src/services/testService';
 import EetMeterParser from '../../src/services/dataParsers/eetmeterParser';
+import OneDriveExcelParser from '../../src/services/fileParsers/oneDriveExcelParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data
@@ -31,10 +32,9 @@ export async function parseAbbott(filePath: string, type: OutputDataType) {
 }
 
 
-export async function parseOneDriveFoodDiary(filePath: string, type: OutputDataType){
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath, testToken);
-    await foodDiaryParser.process();
-    return foodDiaryParser.getData(type);
+export async function parseOneDriveFoodDiary(filePath: string, sampleInput?){
+    const odParser: OneDriveExcelParser = new OneDriveExcelParser();
+    return await odParser.parse(filePath, DataSource.FOOD_DIARY, '', '', sampleInput);
 }
 export async function parseEetmeter(filePath: string) {
     const eetmeterParser: EetMeterParser = new EetMeterParser(filePath);

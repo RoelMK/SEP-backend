@@ -160,14 +160,14 @@ export class GameBusClient {
         if (authRequired) {
             if (!this.tokenHandler) {
                 throw new Error(`You must be authorized to access this path: ${endpoint + path}`);
-            } 
+            }
         }
 
         // Request headers are created, Content-Type and User-Agent are set by default
-        let requestHeaders: Headers = this.createHeader(authRequired, headers);
+        const requestHeaders: Headers = this.createHeader(authRequired, headers);
 
         // URL is created based on endpoint and path
-        let url: string = this.createURL(path, query);
+        const url: string = this.createURL(path, query);
 
         // Print request information if verbose is true
         if (this.verbose) {
@@ -178,7 +178,7 @@ export class GameBusClient {
         }
 
         // Make request with method, url, headers and body
-        let response = await this.client.request({
+        const response = await this.client.request({
             method: method,
             url: url,
             headers: requestHeaders,
@@ -205,7 +205,7 @@ export class GameBusClient {
      */
     createHeader(authRequired?: boolean, extraHeaders?: Headers): Headers {
         // Set Content-Type and User-Agent by default
-        let headers: Headers = {
+        const headers: Headers = {
             'Content-Type': 'application/json',
             'User-Agent': 'Diabetter Client',
             Accept: 'application/json',

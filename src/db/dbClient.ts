@@ -1,5 +1,4 @@
-import Database from "better-sqlite3";
-
+import Database from 'better-sqlite3';
 
 export class DBClient {
     private readonly db: Database.Database;
@@ -22,14 +21,16 @@ export class DBClient {
      * @throws Will throw an error if unable to initialize the database
      */
     initialize(): void {
-        this.db.exec("CREATE TABLE IF NOT EXISTS login_attempts (player_id TEXT PRIMARY KEY, login_token TEXT NOT NULL, expire_time DATETIME NOT NULL, access_token TEXT, refresh_token TEXT);")
+        this.db.exec(
+            'CREATE TABLE IF NOT EXISTS login_attempts (player_id TEXT PRIMARY KEY, login_token TEXT NOT NULL, expire_time DATETIME NOT NULL, access_token TEXT, refresh_token TEXT);'
+        );
     }
 
     /**
      * Removes all entries from the database.
      */
     reset(): void {
-        this.db.exec("DROP TABLE IF EXISTS login_attempts");
+        this.db.exec('DROP TABLE IF EXISTS login_attempts');
         this.initialize();
     }
 
@@ -71,8 +72,11 @@ export class DBClient {
      */
     registerLoginAttempt(playerId: string, loginToken: string, expireTime: Date): boolean {
         try {
-            if (this.getLoginAttemptByPlayerId(playerId) === undefined) {     // Only create new ones
-                const stmt = this.db.prepare('INSERT OR REPLACE INTO login_attempts(player_id, login_token, expire_time) VALUES(?, ?, ?)');
+            if (this.getLoginAttemptByPlayerId(playerId) === undefined) {
+                // Only create new ones
+                const stmt = this.db.prepare(
+                    'INSERT OR REPLACE INTO login_attempts(player_id, login_token, expire_time) VALUES(?, ?, ?)'
+                );
                 stmt.run(playerId, loginToken, expireTime.toISOString());
                 return true;
             } else {
@@ -93,7 +97,9 @@ export class DBClient {
     registerCallback(playerId: string, accessToken: string, refreshToken: string): boolean {
         try {
             if (this.getLoginAttemptByPlayerId(playerId)) {
-                const stmt = this.db.prepare('UPDATE login_attempts SET access_token=?, refresh_token=? WHERE player_id=?');
+                const stmt = this.db.prepare(
+                    'UPDATE login_attempts SET access_token=?, refresh_token=? WHERE player_id=?'
+                );
                 stmt.run(accessToken, refreshToken, playerId);
                 return true;
             } else {
@@ -111,8 +117,10 @@ export class DBClient {
      */
     getLoginAttemptByLoginToken(loginToken: string): any {
         try {
-            return this.db.prepare('SELECT * FROM login_attempts WHERE login_token=?').get(loginToken);
-        } catch(e) {
+            return this.db
+                .prepare('SELECT * FROM login_attempts WHERE login_token=?')
+                .get(loginToken);
+        } catch (e) {
             return undefined;
         }
     }
@@ -125,7 +133,7 @@ export class DBClient {
     getLoginAttemptByPlayerId(playerId: string): any {
         try {
             return this.db.prepare('SELECT * FROM login_attempts WHERE player_id=?').get(playerId);
-        } catch(e) {
+        } catch (e) {
             return undefined;
         }
     }

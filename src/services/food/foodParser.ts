@@ -4,7 +4,7 @@ import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
 import { XOR } from 'ts-xor';
-import * as EetmeterModels from '../../models/eetmeterModel';
+import { Consumptie } from '../dataParsers/eetmeterParser';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -59,4 +59,4 @@ export enum FoodSource {
 /**
  * All possible input types for food data,
  */
-export type FoodInput = XOR<EetmeterModels.Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;
+export type FoodInput = XOR<Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;

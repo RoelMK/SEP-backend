@@ -47,9 +47,10 @@ export abstract class DataParser {
             throw Error('File path is not set!');
         }
         // determine method of parsing by checking file extension
-        let extension: string = getFileExtension(this.filePath);
+        const extension: string = getFileExtension(this.filePath);
         switch (extension) {
             case 'csv':
+                // eslint-disable-next-line no-case-declarations
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
                 return await this.csvParser.parse(this.filePath, skipLine);
             case 'xlsx':

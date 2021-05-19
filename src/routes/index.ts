@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const indexRouter = require('express').Router();
 
 indexRouter.use('/', require('./test'));

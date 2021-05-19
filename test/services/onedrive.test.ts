@@ -1,9 +1,8 @@
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { parseOneDriveFoodDiary } from './parseUtils';
 
 test('import standardized food diary with missing values from a onedrive', async () => {
-    let sampleODInput = [['', 0.966666666666667, '', 5, 2, 1, '', '']];
-    let expectedResult: Record<string, any> = {
+    const sampleODInput = [['', 0.966666666666667, '', 5, 2, 1, '', '']];
+    const expectedResult: Record<string, any> = {
         date: '',
         time: '23:12',
         description: '',

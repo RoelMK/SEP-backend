@@ -11,15 +11,14 @@ export default class ExcelParser {
     constructor(private readonly config: ExcelConfig = defaultExcelConfig) {}
 
     async parse(filePath: string, dataSource: DataSource): Promise<Record<string, string>[]> {
-
         const workbook = XLSX.read(filePath, { type: 'file' });
         const [firstSheetName] = workbook.SheetNames;
         const worksheet = workbook.Sheets[firstSheetName];
 
         return new Promise((resolve) => {
             let resultData: Record<string, string>[] = XLSX.utils.sheet_to_json(worksheet, {
-                ...this.config, 
-                header: getKeys(dataSource), // use keys of interface
+                ...this.config,
+                header: getKeys(dataSource) // use keys of interface
             });
             resultData = convertExcelDateTimes(resultData);
             resolve(resultData);
@@ -38,8 +37,8 @@ const defaultExcelConfig: ExcelConfig = {
 };
 
 type ExcelConfig = {
-    raw: boolean,
-    range: number,
-    defval: any,
-    blankrows: boolean,
-}
+    raw: boolean;
+    range: number;
+    defval: any;
+    blankrows: boolean;
+};

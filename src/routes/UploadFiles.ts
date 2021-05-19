@@ -55,6 +55,7 @@ async function uploadFile(req, res, dataParser: DataParser) {
         );
 
         // check if file still exists (must be the case)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         fs.stat(filePath, function (err, stats) {
             if (err) {
                 res.status(500).send('Could not remove file, it does not exist!'); // TODO

@@ -1,7 +1,7 @@
 import * as msal from '@azure/msal-node';
 import path from 'path';
 import { OneDriveTokenModel } from './models/onedriveTokenModel';
-const fs = require('fs');
+import fs from 'fs';
 
 // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/samples/msal-node-samples/silent-flow/index.js
 // https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/auth-code
@@ -14,6 +14,7 @@ const cacheFilePath = path.join(cacheDirectoryPath, 'msalCache.json');
 if (!fs.existsSync(cacheDirectoryPath)) {
     fs.mkdirSync(cacheDirectoryPath);
 }
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const cachePlugin = require('./cachePlugin')(cacheFilePath);
 
 // MSAL config
@@ -25,6 +26,7 @@ const config: msal.Configuration = {
     },
     system: {
         loggerOptions: {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loggerCallback(loglevel, message, containsPii) {
                 console.log(message);
             },
@@ -73,7 +75,7 @@ export async function getAccessToken(
 
     try {
         // Make the request
-        let response = await cca.acquireTokenByCode(tokenRequest);
+        const response = await cca.acquireTokenByCode(tokenRequest);
         if (response && response.account) {
             return {
                 homeAccountId: response.account.homeAccountId,
@@ -98,7 +100,7 @@ export async function getAccessTokenSilent(
     homeAccountId: string
 ): Promise<OneDriveTokenModel | undefined> {
     try {
-        let account = await msalTokenCache.getAccountByHomeId(homeAccountId);
+        const account = await msalTokenCache.getAccountByHomeId(homeAccountId);
         if (account) {
             const silentRequest: msal.SilentFlowRequest = {
                 scopes: scopes,
@@ -106,7 +108,7 @@ export async function getAccessTokenSilent(
             };
 
             // Make the request
-            let response = await cca.acquireTokenSilent(silentRequest);
+            const response = await cca.acquireTokenSilent(silentRequest);
             if (response) {
                 return {
                     homeAccountId: homeAccountId,

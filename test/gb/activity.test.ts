@@ -1,13 +1,14 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { createJWT } from '../../src/utils/authUtils';
 import { mockGameBusRequest } from './gbUtils';
 
 jest.mock('axios');
 
+// TODO: improve coverage
+
 describe('with mocked activities get call', () => {
     // Request handler that simply returns empty data for every request
-    const request = mockGameBusRequest((req) => {
+    const request = mockGameBusRequest(() => {
         return Promise.resolve({
             data: []
         });
@@ -17,7 +18,6 @@ describe('with mocked activities get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    // TODO: change to JWT once feature/authentication is merged
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
 
     test('GET activities on date', async () => {
@@ -30,7 +30,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&limit=30&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: `Bearer testToken`
+                    Authorization: 'Bearer testToken'
                 })
             })
         );
@@ -48,7 +48,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&limit=30&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: `Bearer testToken`
+                    Authorization: 'Bearer testToken'
                 })
             })
         );
@@ -65,7 +65,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&limit=30&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: `Bearer testToken`
+                    Authorization: 'Bearer testToken'
                 })
             })
         );
@@ -85,7 +85,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&limit=30&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: `Bearer testToken`
+                    Authorization: 'Bearer testToken'
                 })
             })
         );

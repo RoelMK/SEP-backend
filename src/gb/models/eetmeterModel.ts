@@ -28,7 +28,7 @@ export interface Periode {
 }
 
 export interface Product {
-    Naam: String;
+    Naam: string;
 }
 
 export interface Datum {

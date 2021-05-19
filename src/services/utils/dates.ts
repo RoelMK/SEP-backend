@@ -1,4 +1,4 @@
-import { parse, getUnixTime, isValid, fromUnixTime, add, format } from 'date-fns';
+import { parse, isValid, fromUnixTime, add, format } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -38,7 +38,7 @@ const parseDate = (
  */
 const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => {
     // Try all the defined formats
-    for (let format in DateFormat) {
+    for (const format in DateFormat) {
         //console.log(`Parsing {${dateString}} as {${DateFormat[format as keyof typeof DateFormat]}}`);
         let valid: boolean;
         try {

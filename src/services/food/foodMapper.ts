@@ -1,18 +1,12 @@
 import FoodModel from '../../gb/models/foodModel';
-import { AbbottData } from '../dataParsers/abbottParser';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
+import { Consumptie } from '../dataParsers/eetmeterParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
-import { getUnixTime } from 'date-fns';
-import { parse } from 'date-fns';
-import * as EetmeterModels from '../../models/eetmeterModel';
 
 /**
  * Helper class to map the different food sources to 1 foodModel
  */
 export default class FoodMapper {
-    private constructor() {}
-
     /**
      * Main function that returns the correct mapping function based on given source
      * @param foodSource Food source given as enum
@@ -75,17 +69,17 @@ export default class FoodMapper {
      * @param entry Consumptie entry
      * @returns foodModel with information
      */
-    private static mapEetmeter(entry: EetmeterModels.Consumptie): FoodModel {
-        var consumption = entry;
+    private static mapEetmeter(entry: Consumptie): FoodModel {
+        const consumption = entry;
 
-        var date = FoodMapper.dateParser(
+        const date = FoodMapper.dateParser(
             consumption.Datum.Jaar,
             consumption.Datum.Maand,
             consumption.Datum.Dag,
             consumption.Attributes.Periode
         );
 
-        let meal = {
+        const meal = {
             timestamp: date,
             calories: consumption.Nutrienten.Koolhydraten.Value * 4,
             carbohydrates: consumption.Nutrienten.Koolhydraten.Value,
@@ -101,7 +95,7 @@ export default class FoodMapper {
     }
 
     private static dateParser(year: number, month: number, day: number, period: string) {
-        var hour = 0;
+        let hour = 0;
         if (period == 'Ontbijt') {
             hour = 9;
         } else if (period == 'Lunch') {

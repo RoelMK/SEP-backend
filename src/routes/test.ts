@@ -1,7 +1,7 @@
-import { DBClient } from "../db/dbClient";
-import { checkJwt } from "../middlewares/checkJwt";
-import { startLoginAttempt } from "../utils/authUtils";
+import { DBClient } from '../db/dbClient';
+import { checkJwt } from '../middlewares/checkJwt';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const testRouter = require('express').Router();
 
 testRouter.get('/', (req: any, res: any) => {
@@ -17,12 +17,10 @@ testRouter.get('/jwt-test', checkJwt, (req: any, res: any) => {
 });
 
 testRouter.get('/clean', async (req: any, res: any) => {
-    let dbClient: DBClient = new DBClient(true);
-    let result = dbClient.cleanLoginAttempts();
+    const dbClient: DBClient = new DBClient(true);
+    const result = dbClient.cleanLoginAttempts();
     dbClient.close();
     res.send(result);
 });
-
-
 
 module.exports = testRouter;

@@ -70,4 +70,4 @@ export enum GlucoseSource {
 /**
  * All possible input types for glucose data
  */
-type GlucoseInput = AbbottData[];
+export type GlucoseInput = AbbottData[];

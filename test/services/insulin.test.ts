@@ -1,7 +1,9 @@
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
+import { InsulinSource } from '../../src/services/insulin/insulinParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary } from './parseUtils';
+import { parseAbbott, parseFoodDiary, postInsulinData } from './parseUtils';
 
 test('import Abbott EU insulin', async () => {
     const expectedResult: InsulinModel = {
@@ -62,4 +64,26 @@ test('import standardized food diary insulin values with missing values', async 
             )) as InsulinModel[]
         )[1]
     ).toStrictEqual(expectedResult);
+});
+
+test('POSTing insulinmodels', async () => {
+    const insulin: FoodDiaryData[] = [
+        {
+            date: '01/01/2020',
+            time: '00:00',
+            description: '',
+            carbohydrates: '',
+            base_insulin: '',
+            high_correction_insulin: '',
+            sports_correction_insulin: '',
+            total_insulin: '1'
+        }
+    ];
+    const response = await postInsulinData(
+        insulin,
+        InsulinSource.FOOD_DIARY_EXCEL,
+        DateFormat.FOOD_DIARY
+    );
+    // TODO: change response once implemented
+    expect(response).toBe(undefined);
 });

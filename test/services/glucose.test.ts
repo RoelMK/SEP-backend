@@ -1,17 +1,44 @@
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
+import { AbbottData } from '../../src/services/dataParsers/abbottParser';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { GlucoseSource } from '../../src/services/glucose/glucoseParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
-import { parseAbbott } from './parseUtils';
+import { parseAbbott, postGlucoseData } from './parseUtils';
 
 test('import Abbott EU glucose', async () => {
-    const expectedResult: GlucoseModel = {
-        glucoseLevel: 6.4,
-        timestamp: parseDate('25/01/2020 14:53', DateFormat.ABBOTT_EU, new Date(), true) as number
-    };
+    const expectedResult: GlucoseModel[] = [
+        {
+            glucoseLevel: 6.4,
+            timestamp: parseDate(
+                '25/01/2020 14:53',
+                DateFormat.ABBOTT_EU,
+                new Date(),
+                true
+            ) as number
+        },
+        {
+            glucoseLevel: 5.8,
+            timestamp: parseDate(
+                '25/01/2020 14:58',
+                DateFormat.ABBOTT_EU,
+                undefined,
+                true
+            ) as number
+        },
+        {
+            glucoseLevel: 4,
+            timestamp: parseDate(
+                '25/01/2020 15:03',
+                DateFormat.ABBOTT_EU,
+                undefined,
+                true
+            ) as number
+        }
+    ];
     expect(
         await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.GLUCOSE)
-    ).toStrictEqual([expectedResult]);
+    ).toStrictEqual(expectedResult);
 });
 
 test('import Abbott US glucose', async () => {
@@ -27,4 +54,37 @@ test('import Abbott US glucose', async () => {
     expect(
         await parseAbbott('test/services/data/abbott_us.csv', OutputDataType.GLUCOSE)
     ).toStrictEqual([expectedResult]);
+});
+
+test('POSTing glucosemodels', async () => {
+    const glucose: AbbottData[] = [
+        {
+            device: '',
+            serial_number: '',
+            device_timestamp: '01/01/2020 00:00',
+            record_type: '0',
+            historic_glucose_mg_dl: '',
+            historic_glucose_mmol_l: '6',
+            scan_glucose_mg_dl: '',
+            scan_glucose_mmol_l: '',
+            non_numeric_rapid_acting_insulin: '',
+            rapid_acting_insulin__units_: '',
+            non_numeric_food: '',
+            carbohydrates__grams_: '',
+            carbohydrates__servings_: '',
+            non_numeric_long_acting_insulin: '',
+            long_acting_insulin__units_: '',
+            long_acting_insulin_value__units_: '',
+            notes: '',
+            strip_glucose_mg_dl: '',
+            strip_glucose_mmol_l: '',
+            ketone_mmol_l: '',
+            meal_insulin__units_: '',
+            correction_insulin__units_: '',
+            user_change_insulin__units_: ''
+        }
+    ];
+    const response = await postGlucoseData(glucose, GlucoseSource.ABBOTT, DateFormat.ABBOTT_EU);
+    // TODO: change response once implemented
+    expect(response).toBe(undefined);
 });

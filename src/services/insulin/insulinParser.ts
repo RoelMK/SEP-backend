@@ -54,4 +54,4 @@ export enum InsulinSource {
 /**
  * All possible input types for insulin data
  */
-type InsulinInput = XOR<AbbottData[], FoodDiaryData[]>;
+export type InsulinInput = XOR<AbbottData[], FoodDiaryData[]>;

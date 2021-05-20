@@ -1,4 +1,4 @@
-import { MoodModel } from "../../gb/models/moodModel";
+import { MoodModel } from '../../gb/models/moodModel';
 
 export default class MoodParser {
     // Mood data to be exported

@@ -36,7 +36,7 @@ export abstract class DataParser {
         protected readonly dataSource: DataSource,
         protected filePath?: string,
         protected oneDriveToken?: string,
-        protected tableName?: string
+        protected tableName?: string // for excel parsing
     ) {}
 
     /**
@@ -54,9 +54,9 @@ export abstract class DataParser {
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
                 return await this.csvParser.parse(this.filePath, skipLine);
             case 'xlsx':
-                if (this.oneDriveToken === undefined)
+                if (this.oneDriveToken === undefined) {
                     return await this.excelParser.parse(this.filePath, this.dataSource);
-                else {
+                } else {
                     return await this.oneDriveExcelParser.parse(
                         this.filePath,
                         this.dataSource,

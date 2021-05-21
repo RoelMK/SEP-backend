@@ -29,8 +29,10 @@ export function FoodDiaryDataKeys(): string[] {
     return [
         'date',
         'time',
+        'meal_type',
         'description',
         'carbohydrates',
+        'glycemic_index',
         'base_insulin',
         'high_correction_insulin',
         'sports_correction_insulin',

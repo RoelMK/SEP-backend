@@ -104,6 +104,12 @@ test('Parsing excel time format (fraction of a day) to readable food diary forma
     expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
 
+test('Parsing excel time format of 00:00 to readable food diary format', () => {
+    const dayFraction = 0.0;
+    const correspondingTime = '00:00';
+    expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
+});
+
 test('Parsing excel time format (fraction of a day) to readable food diary format', () => {
     const dayFraction = 0.417361111;
     const correspondingTime = '10:01';

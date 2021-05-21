@@ -85,7 +85,9 @@ const parseExcelDate = (daysSince1900: number): string => {
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {
-    if (dayFraction < 0 || dayFraction >= 1) throw Error('Invalid day fraction!');
+    if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction +': Invalid day fraction!');
+    // to prevent math errors in the modulo
+    if (dayFraction == 0) {return "00:00"};
     const hours: number = Math.floor(dayFraction * 24);
     const minutes: number = Math.round(((dayFraction * 24) % hours) * 60);
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { table } from 'console';
 import { oneDriveToken } from '../gb/usersExport';
 import { OneDriveClient } from './odClient';
 
@@ -313,9 +314,10 @@ async function execute3() {
         excelToken,
         fileName,
         folderPath,
+        tableName,
         sheetName
     );
-    const result = await odClient.getTableValues(tableName);
+    const result = await odClient.getTableValues();
     console.log('Done');
     console.log(result);
 }
@@ -334,6 +336,7 @@ async function execute4() {
         excelToken,
         fileName,
         folderPath,
+        tableName,
         sheetName
     );
     // @ts-ignore

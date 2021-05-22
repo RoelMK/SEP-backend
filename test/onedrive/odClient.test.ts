@@ -499,11 +499,11 @@ describe('with mocked activities get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    const client = new OneDriveClient("token","diary.xlsx","Documents/DeepFolder","Sheet1");
+    const client = new OneDriveClient("token","diary.xlsx","Documents/DeepFolder", "fooddiary","Sheet1");
 
     test('Get tableValues', async () => {
         // Get activities from a date (as Date object)
-        const results = await client.getTableValues("fooddiary");
+        const results = await client.getTableValues();
         const expectation = [
             [ 44444,  0.5,          '',                   'Pasta', 10,  4,  5,  2, '',  7 ],
             [ 44413, 0.55,          '',                   'Pizza',  3,  2,  4, '', '',  4 ],
@@ -532,7 +532,7 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
-    test('Get tableValues', async () => {
+    test('Get rangeValues', async () => {
         // Get activities from a date (as Date object)
         const results = await client.getRangeValues("A2","J9");
         const expectation = [
@@ -561,5 +561,27 @@ describe('with mocked activities get call', () => {
         */
         //expect(activities).toEqual([["A1","A2","A3"],["B1","B2","B3"]]);
         expect(results).toEqual(expectation);
+    });
+
+    test('Debug booleans TF', async () => {
+      client.setPrintValues(true, false);
+      // @ts-ignore
+      expect(client.doPrint).toEqual(true);
+      // @ts-ignore
+      expect(client.printDeep).toEqual(false);
+    });
+    test('Debug booleans FT', async () => {
+      client.setPrintValues(false, true);
+      // @ts-ignore
+      expect(client.doPrint).toEqual(false);
+      // @ts-ignore
+      expect(client.printDeep).toEqual(true);
+    });
+    test('Debug booleans TT', async () => {
+      client.setPrintValues(true, true);
+      // @ts-ignore
+      expect(client.doPrint).toEqual(true);
+      // @ts-ignore
+      expect(client.printDeep).toEqual(true);
     });
 });

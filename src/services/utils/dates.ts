@@ -88,8 +88,13 @@ const parseExcelTime = (dayFraction: number): string => {
     if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction +': Invalid day fraction!');
     // to prevent math errors in the modulo
     if (dayFraction == 0) {return '00:00';}
-    const hours: number = Math.floor(dayFraction * 24);
-    const minutes: number = Math.round(((dayFraction * 24) % hours) * 60);
+
+    // calculate total amount of minutes into the day
+    const totalMinutes: number = Math.round(dayFraction * 24 * 60);
+
+    // from this, calculate amount of passed hours and minutes within the hour
+    const hours: number = Math.floor(totalMinutes / 60);
+    const minutes: number = totalMinutes % 60;
 
     // return the time in the HH:mm format
     return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');

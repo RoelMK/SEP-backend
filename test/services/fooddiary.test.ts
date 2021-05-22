@@ -1,5 +1,4 @@
 import { InsulinModel } from '../../src/gb/models/insulinModel';
-import { Food } from '../../src/gb/objects/food';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
 import { parseFoodDiary } from './parseUtils';
@@ -28,8 +27,8 @@ test('test automatic date + total insulin fill', async () => {
         high_correction_insulin: '',
         sports_correction_insulin: '',
         total_insulin: '4'
-      },
-      {
+    },
+    {
         date: '',
         time: '00:00',
         meal_type: 'Snack',
@@ -40,9 +39,9 @@ test('test automatic date + total insulin fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: ''
-      }]
+    }];
 
-      const preprocessedFoodData = [{
+    const preprocessedFoodData = [{
         date: '08/05/21',
         time: '13:12',
         meal_type: '',
@@ -53,8 +52,8 @@ test('test automatic date + total insulin fill', async () => {
         high_correction_insulin: '',
         sports_correction_insulin: '',
         total_insulin: '4'
-      },
-      {
+    },
+    {
         date: '08/05/21',
         time: '00:00',
         meal_type: 'Snack',
@@ -65,13 +64,13 @@ test('test automatic date + total insulin fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: '3'
-      }]
-      expect(
+    }];
+    expect(
         (
             await FoodDiaryParser.preprocess(rawFoodData) 
         )
     ).toStrictEqual(preprocessedFoodData);
-})
+});
 
 
 test('test automatic date + total insulin + time fill', async () => {
@@ -86,8 +85,8 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '',
         sports_correction_insulin: '',
         total_insulin: '4'
-      },
-      {
+    },
+    {
         date: '',
         time: '',
         meal_type: 'Breakfast',
@@ -98,7 +97,7 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: ''
-      },{
+    },{
         date: '08/05/21',
         time: '08:00',
         meal_type: '',
@@ -109,9 +108,9 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: '3'
-      }]
+    }];
 
-      const preprocessedFoodData = [{
+    const preprocessedFoodData = [{
         date: '08/05/21',
         time: '13:12',
         meal_type: '',
@@ -122,8 +121,8 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '',
         sports_correction_insulin: '',
         total_insulin: '4'
-      },
-      {
+    },
+    {
         date: '08/05/21',
         time: '08:00',
         meal_type: 'Breakfast',
@@ -134,7 +133,7 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: '3'
-      }, {
+    }, {
         date: '08/05/21',
         time: '08:00',
         meal_type: '',
@@ -145,16 +144,16 @@ test('test automatic date + total insulin + time fill', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: '3'
-      }]
+    }];
 
-      const mealTypeMap = new Map<string, string>();
-      mealTypeMap.set("Breakfast", "08:00");
-      expect(
+    const mealTypeMap = new Map<string, string>();
+    mealTypeMap.set('Breakfast', '08:00');
+    expect(
         (
-           await FoodDiaryParser.preprocess(rawFoodData, mealTypeMap) 
+            await FoodDiaryParser.preprocess(rawFoodData, mealTypeMap) 
         )
     ).toStrictEqual(preprocessedFoodData);
-})
+});
 
 
 test('test missing first date', async () => {
@@ -169,8 +168,8 @@ test('test missing first date', async () => {
         high_correction_insulin: '',
         sports_correction_insulin: '',
         total_insulin: '4'
-      },
-      {
+    },
+    {
         date: '',
         time: '00:00',
         meal_type: 'Snack',
@@ -181,12 +180,12 @@ test('test missing first date', async () => {
         high_correction_insulin: '1',
         sports_correction_insulin: '',
         total_insulin: ''
-      }]
+    }];
 
-      expect(
+    expect(
         ( async () => {
-            await FoodDiaryParser.preprocess(rawFoodData) 
+            await FoodDiaryParser.preprocess(rawFoodData); 
         }
         )
     ).rejects.toThrow('First date needs to be filled in!');
-})
+});

@@ -75,7 +75,7 @@ export abstract class DataParser {
      * Allows the program to define the path after the object has been created
      * @param path string representation of the path to the file
      */
-    setFilePath(path: string) {
+    setFilePath(path: string): void {
         this.filePath = path;
     }
 

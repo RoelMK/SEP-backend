@@ -8,9 +8,8 @@ import { getKeys } from '../utils/interfaceKeys';
  * Default class for parsing .xlsx files from a OneDrive
  */
 export default class OneDriveExcelParser {
-
     // on which page the mapping tables reside
-    private static mappingTableSheet = "Sheet2";
+    private static mappingTableSheet = 'Sheet2';
 
     /**
      * Asynchronous function that parses Excel data on a onedrive
@@ -28,76 +27,70 @@ export default class OneDriveExcelParser {
     ): Promise<Record<string, string>[]> {
         // Initiate oneDrive read
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve) => {
-            let result;
-            if (sampleInput === undefined) {
+        let result;
 
-                // create oneDrive client
-                const odClient = new OneDriveClient(
-                    oneDriveToken,
-                    getFileName(filePath),
-                    getFileDirectory(filePath)
-                );
-                result = this.assignKeys(
-                    await odClient.getTableValues(tableName),
-                    getKeys(dataSource)
-                );
-            } else {
-                result = this.assignKeys(sampleInput, getKeys(dataSource));
-            }
-            result = convertExcelDateTimes(result);
-            resolve(result);
-        });
+        // if not a test
+        if (sampleInput === undefined) {
+            // create oneDrive client
+            const odClient = new OneDriveClient(
+                oneDriveToken,
+                getFileName(filePath),
+                getFileDirectory(filePath)
+            );
+            result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+        }
+        // if a test is being executed
+        else {
+            result = this.assignKeys(sampleInput, getKeys(dataSource));
+        }
+
+        result = convertExcelDateTimes(result);
+        return result;
     }
 
     /**
      * Converts an excel table with two columns into a mapping with keys in the first column
      * and values in the second
      * @param filePath Path of the file in which the table is stored
-     * @param oneDriveToken token to access the OneDrive 
+     * @param oneDriveToken token to access the OneDrive
      * @param tableName Name of the mapping table
      * @returns A map containing the values of the excel table
      */
-     static async getMappingTableValues(
+    static async getMappingTableValues(
         filePath: string,
         oneDriveToken: string,
-        tableName: string,
-    ): Promise<Map<string, string>>{
-        return new Promise(async (resolve) => {
-            // create onedrive client
-            const odClient = new OneDriveClient(
-                oneDriveToken,
-                getFileName(filePath),
-                getFileDirectory(filePath),
-                this.mappingTableSheet
-            ); 
-            let rawTableData = await odClient.getTableValues(tableName);
-            
-            // check for empty table
-            if (rawTableData === undefined) {
-                resolve(new Map<string, string>());
-                return;
-            }
+        tableName: string
+    ): Promise<Map<string, string>> {
+        // create onedrive client
+        const odClient = new OneDriveClient(
+            oneDriveToken,
+            getFileName(filePath),
+            getFileDirectory(filePath),
+            this.mappingTableSheet
+        );
+        const rawTableData = await odClient.getTableValues(tableName);
 
-            // check if there are results
-            if (rawTableData.length == 0) {
-                resolve(new Map<string, string>());
-                return;
-            }
+        // check for empty table
+        if (rawTableData === undefined) {
+            return new Map<string, string>();
+        }
 
-            // check if the mapping contains more or less than two columns
-            if (rawTableData[0].length != 2) {
-                resolve(new Map<string, string>());
-                return;
-            }
+        // check if there are results
+        if (rawTableData.length == 0) {
+            return new Map<string, string>();
+        }
 
-            // turn raw table data into a mapping
-            let resultMap = new Map<string, string>();
-            rawTableData.forEach(function(entry: any[]){
-                resultMap.set(entry[0], entry[1]);
-            })
-            resolve(resultMap);
+        // check if the mapping contains more or less than two columns
+        if (rawTableData[0].length != 2) {
+            return new Map<string, string>();
+        }
+
+        // turn raw table data into a mapping
+        const resultMap = new Map<string, string>();
+        rawTableData.forEach(function (entry: any[]) {
+            resultMap.set(entry[0], entry[1]);
         });
+        return resultMap;
     }
 
     /**
@@ -107,7 +100,6 @@ export default class OneDriveExcelParser {
      * @returns An array of objects with key-value pairs
      */
     assignKeys(array2D: string[][], keys: string[]): Record<string, string>[] {
-
         // amount of values in an object-array must be equal to the amount of passed keys
         if (array2D[0].length != keys.length) {
             throw Error(
@@ -134,4 +126,3 @@ export default class OneDriveExcelParser {
         return result;
     }
 }
-

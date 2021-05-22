@@ -105,19 +105,19 @@ export default class FoodDiaryParser extends DataParser {
             );
         });
 
-        let lastDate: string = '',
-            lastTime: string = '';
+        let lastDate = '',
+            lastTime = '';
         // loop over raw data
         for (let index = 0; index < rawData.length; index++) {
             let element = rawData[index];
 
             // fill in the dates
-            let fillDate = FoodDiaryParser.fillDate(element, lastDate);
+            const fillDate = FoodDiaryParser.fillDate(element, lastDate);
             element = fillDate[0];
             lastDate = fillDate[1];
 
             // fill in the time
-            let fillTime = FoodDiaryParser.fillTime(element, lastTime, mealTimeMap);
+            const fillTime = FoodDiaryParser.fillTime(element, lastTime, mealTimeMap);
             element = fillTime[0];
             lastTime = fillTime[1];
 

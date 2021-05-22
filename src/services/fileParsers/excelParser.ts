@@ -1,4 +1,3 @@
-import { reject } from 'lodash';
 import XLSX from 'xlsx';
 import { DataSource } from '../dataParsers/dataParser';
 import { convertExcelDateTimes } from '../utils/dates';
@@ -11,7 +10,7 @@ import { getKeys } from '../utils/interfaceKeys';
 export default class ExcelParser {
     constructor(private readonly config: ExcelConfig = defaultExcelConfig) {}
 
-    async parse(filePath: string, dataSource: DataSource): Promise<Record<string, string>[]> {
+    parse(filePath: string, dataSource: DataSource): Promise<Record<string, string>[]> {
         const workbook = XLSX.read(filePath, { type: 'file' });
         const [firstSheetName] = workbook.SheetNames;
         const worksheet = workbook.Sheets[firstSheetName];
@@ -22,7 +21,7 @@ export default class ExcelParser {
                 header: getKeys(dataSource) // use keys of interface
             });
             resultData = convertExcelDateTimes(resultData);
-            console.log(resultData)
+            console.log(resultData);
             resolve(resultData);
         });
     }
@@ -34,16 +33,16 @@ export default class ExcelParser {
      * @param tableName Name of the mapping table
      * @returns A map containing the values of the excel table
      */
-    static async getMappingTableValues(filePath: string): Promise<Map<string, string>> {
-        return new Promise(async (resolve) => {
+    static getMappingTableValues(filePath: string): Promise<Map<string, string>> {
+        return new Promise((resolve) => {
             const workbook = XLSX.read(filePath, { type: 'file' });
-            const [firstSheetName, secondSheetName] = workbook.SheetNames;
+            const secondSheetName = workbook.SheetNames[1];
             const worksheet = workbook.Sheets[secondSheetName];
-            let rawTableData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
+            const rawTableData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
                 ...defaultExcelConfig,
                 header: 1
             });
-            console.log(rawTableData + " " + secondSheetName)
+            console.log(rawTableData + ' ' + secondSheetName);
             
             // check for empty table
             if (rawTableData === undefined) {
@@ -64,7 +63,7 @@ export default class ExcelParser {
             }
 
             // turn raw table data into a mapping
-            let resultMap = new Map<string, string>();
+            const resultMap = new Map<string, string>();
             rawTableData.forEach(function (entry: any[]) {
                 resultMap.set(entry[0], entry[1]);
             });

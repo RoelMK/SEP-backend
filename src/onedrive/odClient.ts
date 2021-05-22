@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+const util = require('util')
 
 export class OneDriveClient {
     // Axios client
@@ -47,6 +48,8 @@ export class OneDriveClient {
                 data: {}
             };
             const response = await this.client.request(config);
+            console.log("getTable response: " + config.url)
+            console.log(util.inspect(response.data, false, null, true /* enable colors */))
             return response;
         } catch (error) {
             console.log(error);
@@ -199,7 +202,10 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: {}
         };
+        
         const response = await this.client.request(config);
+        console.log("getRange response: " + config.url)
+        console.log(util.inspect(response.data, false, null, true /* enable colors */))
         return response;
     }
 
@@ -223,6 +229,8 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: body
         });
+        console.log("getSession response: " + `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/createSession`)
+        console.log(util.inspect(response.data, false, null, true /* enable colors */))
         return response;
     }
 
@@ -237,7 +245,7 @@ export class OneDriveClient {
     private async getFile(token: string, fileName: string, folderPath?: string) {
         const requestHeaders = {
             'content-type': 'Application/Json',
-            authorization: `Bearer ${token}`
+            'authorization': `Bearer ${token}`
         };
         const body = {};
         let subUrl = '';
@@ -253,7 +261,33 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: body
         });
+        console.log("getFile response: " + `https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`)
+        console.log(util.inspect(response.data, false, null, true /* enable colors */))
         const file = response.data.value.find((element) => element.name === fileName);
         return file;
+    }
+
+    //TODO, correctly implement for errors
+    private handleError(error:any) {
+        if (error.response) {
+            /*
+             * The request was made and the server responded with a
+             * status code that falls out of the range of 2xx
+             */
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            /*
+             * The request was made but no response was received, `error.request`
+             * is an instance of XMLHttpRequest in the browser and an instance
+             * of http.ClientRequest in Node.js
+             */
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request and triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error);
     }
 }

@@ -320,5 +320,29 @@ async function execute3() {
     console.log(result);
 }
 
-execute3();
+async function execute4() {
+    const sheetName = 'Sheet1';
+    //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
+    //let fileName = "Book1.xlsx";
+    //let folderPath = undefined;
+    const fileName = 'diary.xlsx';
+    const folderPath = 'Documents/DeepFolder';
+    const excelToken = oneDriveToken; //token is obtained from http://localhost:8080/onedrive/login
+    const tableName = 'fooddiary';
+
+    const odClient: OneDriveClient = new OneDriveClient(
+        excelToken,
+        fileName,
+        folderPath,
+        sheetName
+    );
+    // @ts-ignore
+    const result = await odClient.getRangeValues("A2","J9");
+    console.log()
+    console.log()
+    console.log(result)
+    console.log('Done');
+}
+
+execute4();
 //http://localhost:8080/onedrive/login

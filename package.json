@@ -52,7 +52,8 @@
         "ts-xor": "^1.0.8",
         "winston": "^3.3.3",
         "xlsx": "^0.16.9",
-        "xml2js": "^0.4.23"
+        "xml2js": "^0.4.23",
+        "yarn": "^1.22.10"
     },
     "devDependencies": {
         "@types/better-sqlite3": "^5.4.1",

@@ -118,7 +118,7 @@ export class OneDriveClient {
             sessionID,
             this.sheetName
         );
-        return rangeResult;
+        return rangeResult?.data.value;
     }
 
     private async getTableListDetailed(
@@ -140,6 +140,8 @@ export class OneDriveClient {
                 data: {}
             };
             const response = await this.client.request(config);
+            this.printBool("getTableList response: " + config.url)
+            this.printBool(response.data)
             return response;
         } catch (error) {
             this.printBool(error);
@@ -225,7 +227,7 @@ export class OneDriveClient {
         
         const response = await this.client.request(config);
         this.printBool("getRange response: " + config.url)
-        this.printBool(util.inspect(response.data, false, null, true /* enable colors */))
+        this.printBool(response.data)
         return response;
     }
 
@@ -250,7 +252,7 @@ export class OneDriveClient {
             data: body
         });
         this.printBool("getSession response: " + `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/createSession`)
-        this.printBool(util.inspect(response.data, false, null, true /* enable colors */))
+        this.printBool(response.data)
         return response;
     }
 
@@ -282,7 +284,7 @@ export class OneDriveClient {
             data: body
         });
         this.printBool("getFile response: " + `https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`)
-        this.printBool(util.inspect(response.data, false, null, true /* enable colors */))
+        this.printBool(response.data)
         const file = response.data.value.find((element) => element.name === fileName);
         return file;
     }

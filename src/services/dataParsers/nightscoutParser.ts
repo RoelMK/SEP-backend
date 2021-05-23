@@ -1,0 +1,49 @@
+import { NightScoutClient } from '../../nightscout/nsClient';
+import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
+import { DataParser, DataSource } from './dataParser';
+
+/**
+ * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
+ */
+export default class NightscoutParser extends DataParser {
+    private nightScoutData: NightScoutEntry[] = [];
+
+    /**
+     * DataParser construction with DataSource set
+     * @param abbottFile file path of Abbott file
+     */
+    constructor(private secret: string, private nightScoutHost: string, private token?: string) {
+        super(DataSource.NIGHTSCOUT, '');
+    }
+
+    /**
+     * Obtain all nightscoutentries from the nightscout instance
+     * @returns all NightScoutEntries that can be fetched from the nightscout instance
+     */
+    protected async parse(): Promise<NightScoutEntry[]> {
+        const nsClient = new NightScoutClient(this.secret, this.nightScoutHost, this.token);
+        const entries: NightScoutEntry[] = await nsClient.getEntries();
+        return entries;
+    }
+
+    /**
+     * Function that is called (async) that creates the parsers and filters the data to the correct parsers
+     */
+    async process() {
+        // specify the type of parsed data
+        this.nightScoutData = await this.parse();
+        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat);
+    }
+}
+
+export type NightScoutEntry = {
+    type: string;
+    dateString?: string;
+    date: number;
+    sgv: number;
+    direction?: string;
+    noise?: number;
+    filtered?: number;
+    unfiltered?: number;
+    rssi?: number;
+};

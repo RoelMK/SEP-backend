@@ -42,7 +42,7 @@ export abstract class DataParser {
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
-    protected async parse(): Promise<Record<string, string>[] | undefined> {
+    protected async parse(): Promise<Record<string, string| number>[] | undefined> {
         if (!this.filePath) {
             throw Error('File path is not set!');
         }
@@ -103,7 +103,8 @@ export abstract class DataParser {
 export enum DataSource {
     ABBOTT = 0,
     FOOD_DIARY = 1,
-    EETMETER = 2
+    EETMETER = 2,
+    NIGHTSCOUT = 3
 }
 
 export enum OutputDataType {

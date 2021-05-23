@@ -99,7 +99,7 @@ export default class GlucoseMapper {
             : convertMG_DLtoMMOL_L(entry.sgv);
         return {
             timestamp: entry.date,
-            glucoseLevel: entry.sgv
+            glucoseLevel: glucose_level_mmol
         } as GlucoseModel;         
     }
 }

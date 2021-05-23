@@ -21,7 +21,6 @@ export default class ExcelParser {
                 header: getKeys(dataSource) // use keys of interface
             });
             resultData = convertExcelDateTimes(resultData);
-            console.log(resultData);
             resolve(resultData);
         });
     }
@@ -42,7 +41,6 @@ export default class ExcelParser {
                 ...defaultExcelConfig,
                 header: 1
             });
-            console.log(rawTableData + ' ' + secondSheetName);
             
             // check for empty table
             if (rawTableData === undefined) {

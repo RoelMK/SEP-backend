@@ -10,19 +10,17 @@ import { getKeys } from '../utils/interfaceKeys';
 export default class ExcelParser {
     constructor(private readonly config: ExcelConfig = defaultExcelConfig) {}
 
-    parse(filePath: string, dataSource: DataSource): Promise<Record<string, string>[]> {
+    parse(filePath: string, dataSource: DataSource): Record<string, string>[] {
         const workbook = XLSX.read(filePath, { type: 'file' });
         const [firstSheetName] = workbook.SheetNames;
         const worksheet = workbook.Sheets[firstSheetName];
 
-        return new Promise((resolve) => {
-            let resultData: Record<string, string>[] = XLSX.utils.sheet_to_json(worksheet, {
-                ...this.config,
-                header: getKeys(dataSource) // use keys of interface
-            });
-            resultData = convertExcelDateTimes(resultData);
-            resolve(resultData);
+        let resultData: Record<string, string>[] = XLSX.utils.sheet_to_json(worksheet, {
+            ...this.config,
+            header: getKeys(dataSource) // use keys of interface
         });
+        resultData = convertExcelDateTimes(resultData);
+        return resultData;
     }
 
     /**
@@ -32,41 +30,36 @@ export default class ExcelParser {
      * @param tableName Name of the mapping table
      * @returns A map containing the values of the excel table
      */
-    static getMappingTableValues(filePath: string): Promise<Map<string, string>> {
-        return new Promise((resolve) => {
-            const workbook = XLSX.read(filePath, { type: 'file' });
-            const secondSheetName = workbook.SheetNames[1];
-            const worksheet = workbook.Sheets[secondSheetName];
-            const rawTableData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
-                ...defaultExcelConfig,
-                header: 1
-            });
-            
-            // check for empty table
-            if (rawTableData === undefined) {
-                resolve(new Map<string, string>());
-                return;
-            }
-
-            // check if there are results
-            if (rawTableData.length == 0) {
-                resolve(new Map<string, string>());
-                return;
-            }
-
-            // check if the mapping contains more or less than two columns
-            if (rawTableData[0].length != 2) {
-                resolve(new Map<string, string>());
-                return;
-            }
-
-            // turn raw table data into a mapping
-            const resultMap = new Map<string, string>();
-            rawTableData.forEach(function (entry: any[]) {
-                resultMap.set(entry[0], entry[1]);
-            });
-            resolve(resultMap);
+    static getMappingTableValues(filePath: string): Map<string, string> {
+        const workbook = XLSX.read(filePath, { type: 'file' });
+        const secondSheetName = workbook.SheetNames[1];
+        const worksheet = workbook.Sheets[secondSheetName];
+        const rawTableData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
+            ...defaultExcelConfig,
+            header: 1
         });
+
+        // check for empty table
+        if (rawTableData === undefined) {
+            return new Map<string, string>();
+        }
+
+        // check if there are results
+        if (rawTableData.length == 0) {
+            return new Map<string, string>();
+        }
+
+        // check if the mapping contains more or less than two columns
+        if (rawTableData[0].length != 2) {
+            return new Map<string, string>();
+        }
+
+        // turn raw table data into a mapping
+        const resultMap = new Map<string, string>();
+        rawTableData.forEach(function (entry: any[]) {
+            resultMap.set(entry[0], entry[1]);
+        });
+        return resultMap;
     }
 }
 

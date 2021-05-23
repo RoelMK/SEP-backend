@@ -19,8 +19,8 @@ export default class FoodParser {
 
     /**
      * Create foodparser with list of food datapoints that can stem from several sources
-     * @param glucoseInput array of food inputs
-     * @param glucoseSource specifies where the food input comes from
+     * @param foodInput array of food inputs
+     * @param foodSource specifies where the food input comes from
      * @param dateFormat specifies the format in which dates are represented
      */
     constructor(

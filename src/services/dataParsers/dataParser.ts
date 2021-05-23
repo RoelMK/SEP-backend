@@ -54,16 +54,16 @@ export abstract class DataParser {
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
                 return await this.csvParser.parse(this.filePath, skipLine);
             case 'xlsx':
-                if (this.oneDriveToken === undefined) {
+                if (this.oneDriveToken === undefined)
                     return await this.excelParser.parse(this.filePath, this.dataSource);
-                } else {
-                    return await this.oneDriveExcelParser.parse(
-                        this.filePath,
-                        this.dataSource,
-                        this.oneDriveToken,
-                        this.tableName as string
-                    );
-                }
+
+                return await this.oneDriveExcelParser.parse(
+                    this.filePath,
+                    this.dataSource,
+                    this.oneDriveToken,
+                    this.tableName as string
+                );
+
             case 'xml':
                 if (this.dataSource == DataSource.EETMETER) {
                     return await this.xmlParser.parse(this.filePath);

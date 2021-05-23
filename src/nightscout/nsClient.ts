@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { NightScoutEntry } from '../services/dataParsers/nightscoutParser';
 import crypto from "crypto";
+import { GlucoseUnit } from '../gb/models/glucoseModel';
 
 export class NightScoutClient {
     // Axios client
@@ -79,5 +80,25 @@ export class NightScoutClient {
             console.log(error);
             return null;
         }
+    }
+    
+    async getGlucoseUnit(): Promise<GlucoseUnit> {
+        const requestHeaders = {
+            "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
+        };
+        try {
+            const config: AxiosRequestConfig = {
+                method: 'GET',
+                url: `${this.nightScoutHost}/api/v1/profile`,
+                headers: requestHeaders,
+                data: {}
+            };
+            const response = await this.client.request(config);
+            return GlucoseUnit.MMOL_L;
+        } catch (error) {
+            console.log(error);
+            return GlucoseUnit.MMOL_L;
+        }
+        
     }
 }

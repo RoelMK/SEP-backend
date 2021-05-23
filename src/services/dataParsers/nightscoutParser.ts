@@ -1,3 +1,4 @@
+import { GlucoseUnit } from '../../gb/models/glucoseModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import { DataParser, DataSource } from './dataParser';
@@ -32,7 +33,7 @@ export default class NightscoutParser extends DataParser {
     async process() {
         // specify the type of parsed data
         this.nightScoutData = await this.parse();
-        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat);
+        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat, GlucoseUnit.MMOL_L);
     }
 }
 

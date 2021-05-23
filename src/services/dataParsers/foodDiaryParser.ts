@@ -5,6 +5,7 @@ import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
 import { oneDriveToken } from '../../gb/usersExport';
+import { MEAL_TYPE } from '../../gb/models/foodModel';
 
 /**
  * Default class for parsing food diaries
@@ -163,7 +164,7 @@ export default class FoodDiaryParser extends DataParser {
         // if the time is not specified, but the meal type is, fill in a default time
         if (
             entry.time == '' &&
-            entry.meal_type != '' &&
+            entry.meal_type != MEAL_TYPE.UNDEFINED &&
             mealTimeMap !== undefined &&
             mealTimeMap.get(entry.meal_type) != undefined
         ) {

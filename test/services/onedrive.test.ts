@@ -1,3 +1,4 @@
+import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { parseOneDriveFoodDiary } from './parseUtils';
 
 test('import standardized food diary with missing values from a onedrive', async () => {
@@ -5,7 +6,7 @@ test('import standardized food diary with missing values from a onedrive', async
     const expectedResult: Record<string, any> = {
         date: '',
         time: '23:12',
-        meal_type: 'Breakfast',
+        meal_type: MEAL_TYPE.BREAKFAST,
         description: 'Cheese',
         glycemic_index: 40,
         carbohydrates: 5,

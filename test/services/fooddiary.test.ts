@@ -1,3 +1,4 @@
+import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
@@ -19,7 +20,7 @@ test('test automatic date + total insulin fill', async () => {
     const rawFoodData: FoodDiaryData[] = [{
         date: '08/05/21',
         time: '13:12',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
@@ -31,7 +32,7 @@ test('test automatic date + total insulin fill', async () => {
     {
         date: '',
         time: '00:00',
-        meal_type: 'Snack',
+        meal_type: MEAL_TYPE.SNACK,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -44,8 +45,8 @@ test('test automatic date + total insulin fill', async () => {
     const preprocessedFoodData = [{
         date: '08/05/21',
         time: '13:12',
-        meal_type: '',
-        description: 'Pizza',
+        meal_type: MEAL_TYPE.UNDEFINED,
+        description: "Pizza",
         carbohydrates: '3',
         glycemic_index: '2',
         base_insulin: '4',
@@ -56,7 +57,7 @@ test('test automatic date + total insulin fill', async () => {
     {
         date: '08/05/21',
         time: '00:00',
-        meal_type: 'Snack',
+        meal_type: MEAL_TYPE.SNACK,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -77,7 +78,7 @@ test('test automatic date + total insulin + time fill', async () => {
     const rawFoodData: FoodDiaryData[] = [{
         date: '08/05/21',
         time: '13:12',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
@@ -89,7 +90,7 @@ test('test automatic date + total insulin + time fill', async () => {
     {
         date: '',
         time: '',
-        meal_type: 'Breakfast',
+        meal_type: MEAL_TYPE.BREAKFAST,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -100,7 +101,7 @@ test('test automatic date + total insulin + time fill', async () => {
     },{
         date: '08/05/21',
         time: '08:00',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -113,7 +114,7 @@ test('test automatic date + total insulin + time fill', async () => {
     const preprocessedFoodData = [{
         date: '08/05/21',
         time: '13:12',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
@@ -125,7 +126,7 @@ test('test automatic date + total insulin + time fill', async () => {
     {
         date: '08/05/21',
         time: '08:00',
-        meal_type: 'Breakfast',
+        meal_type: MEAL_TYPE.BREAKFAST,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -136,7 +137,7 @@ test('test automatic date + total insulin + time fill', async () => {
     }, {
         date: '08/05/21',
         time: '08:00',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',
@@ -160,7 +161,7 @@ test('test missing first date', async () => {
     const rawFoodData: FoodDiaryData[] = [{
         date: '',
         time: '13:12',
-        meal_type: '',
+        meal_type: MEAL_TYPE.UNDEFINED,
         description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
@@ -172,7 +173,7 @@ test('test missing first date', async () => {
     {
         date: '',
         time: '00:00',
-        meal_type: 'Snack',
+        meal_type: MEAL_TYPE.SNACK,
         description: '',
         carbohydrates: '5',
         glycemic_index: '3',

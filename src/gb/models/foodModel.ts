@@ -6,7 +6,7 @@ export default interface FoodModel {
     timestamp: number;
     carbohydrates: number;
     calories?: number;
-    meal_type?: meal_type; // indicates breakfast, lunch, snack etc.
+    meal_type?: MEAL_TYPE; // indicates breakfast, lunch, snack etc.
     glycemic_index?: number;
     fat?: number;
     saturatedFat?: number;
@@ -18,9 +18,10 @@ export default interface FoodModel {
     description?: string;
 }
 
-export enum meal_type {
-    breakfast = 'Breakfast',
-    lunch = 'Lunch',
-    dinner = 'Dinner',
-    snack = 'Snack'
+export enum MEAL_TYPE {
+    BREAKFAST = 'Breakfast',
+    LUNCH = 'Lunch',
+    DINNER = 'Dinner',
+    SNACK = 'Snack',
+    UNDEFINED = ''
 }

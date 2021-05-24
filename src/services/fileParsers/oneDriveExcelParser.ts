@@ -33,10 +33,11 @@ export default class OneDriveExcelParser {
                 const odClient = new OneDriveClient(
                     oneDriveToken,
                     getFileName(filePath),
-                    getFileDirectory(filePath)
+                    getFileDirectory(filePath),
+                    tableName
                 );
                 result = this.assignKeys(
-                    await odClient.getTableValues(tableName),
+                    await odClient.getTableValues(),
                     getKeys(dataSource)
                 );
             } else {

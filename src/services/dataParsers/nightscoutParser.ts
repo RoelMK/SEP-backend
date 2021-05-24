@@ -9,11 +9,13 @@ import { DataParser, DataSource } from './dataParser';
 export default class NightscoutParser extends DataParser {
     private nightScoutData: NightScoutEntry[] = [];
 
+    private glucoseUnit: GlucoseUnit = GlucoseUnit.UNDEFINED;
+
     /**
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private secret: string, private nightScoutHost: string, private token?: string) {
+    constructor(private nightScoutHost: string, private token?: string) {
         super(DataSource.NIGHTSCOUT, '');
     }
 
@@ -21,8 +23,9 @@ export default class NightscoutParser extends DataParser {
      * Obtain all nightscoutentries from the nightscout instance
      * @returns all NightScoutEntries that can be fetched from the nightscout instance
      */
-    protected async parse(): Promise<NightScoutEntry[]> {
-        const nsClient = new NightScoutClient(this.secret, this.nightScoutHost, this.token);
+    protected async parse(blabla?): Promise<NightScoutEntry[]> {
+        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
+        this.glucoseUnit = await nsClient.getGlucoseUnit();
         const entries: NightScoutEntry[] = await nsClient.getEntries();
         return entries;
     }
@@ -33,7 +36,7 @@ export default class NightscoutParser extends DataParser {
     async process() {
         // specify the type of parsed data
         this.nightScoutData = await this.parse();
-        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat, GlucoseUnit.MMOL_L);
+        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat, this.glucoseUnit);
     }
 }
 

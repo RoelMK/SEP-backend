@@ -7,7 +7,7 @@ export class NightScoutClient {
     // Axios client
     private readonly client: AxiosInstance;
 
-    constructor(private secret: string, private nightScoutHost: string, private token?: string) {
+    constructor(private nightScoutHost: string, private token?: string) {
         this.client = axios.create();
     }
 
@@ -18,18 +18,18 @@ export class NightScoutClient {
      * @returns the query response
      */
     async postEntry(entry: NightScoutEntry) {
-        const requestHeaders = {
-            "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
-        };
+
+        // probably not needed
+        // const requestHeaders = {
+        //     "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
+        // };
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
                 url: `${this.nightScoutHost}/api/v1/entries?token=${this.token}`,
-                headers: requestHeaders,
                 data: entry
             };
             const response = await this.client.request(config);
-            console.log(response);
         } catch (error) {
             console.log(error);
             throw new Error("Server request failed"); //TODO make clear
@@ -42,14 +42,11 @@ export class NightScoutClient {
      * @throws error, when request failed
      */
     async getEntries(): Promise<NightScoutEntry[]> {
-        const requestHeaders = {
-            "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
-        };
+
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
                 url: `${this.nightScoutHost}/api/v1/entries/sgv.json`,
-                headers: requestHeaders,
                 data: {}
             };
             const response = await this.client.request(config);
@@ -64,14 +61,10 @@ export class NightScoutClient {
      * Get treatments (containing food and/or insulin data) from the nightscout API
      */
     async getTreatments() {
-        const requestHeaders = {
-            "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
-        };
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/treatments/`,
-                headers: requestHeaders,
+                url: `${this.nightScoutHost}/api/v1/treatments?token=${this.token}`,
                 data: {}
             };
             const response = await this.client.request(config);
@@ -83,18 +76,14 @@ export class NightScoutClient {
     }
     
     async getGlucoseUnit(): Promise<GlucoseUnit> {
-        const requestHeaders = {
-            "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
-        };
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/profile`,
-                headers: requestHeaders,
+                url: `${this.nightScoutHost}/api/v1/profile?token=${this.token}`,
                 data: {}
             };
             const response = await this.client.request(config);
-            return GlucoseUnit.MMOL_L;
+            return response.data[0].units == "mg/dl" ? GlucoseUnit.MG_DL : GlucoseUnit.MG_DL; //TODO why 2 profiles
         } catch (error) {
             console.log(error);
             return GlucoseUnit.MMOL_L;

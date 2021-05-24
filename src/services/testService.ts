@@ -59,16 +59,16 @@ async function testNightScout() {
         rssi: 0
     };
 
-    //const nsClient = new NightScoutClient("123456789012", "https://nightscout-sep.herokuapp.com", "rink-27f591f2e4730a68");
-    //console.log(await nsClient.postEntry(testEntry))
-    //console.log(await nsClient.getEntries())
+    const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); // 
+    await nsClient.postEntry(testEntry);
+    //console.log(await nsClient.getEntries());
+    console.log(await nsClient.getGlucoseUnit());
 
     const nsParser: NightscoutParser = new NightscoutParser(
-        '123456789012',
         'https://nightscout-sep.herokuapp.com',
-        'rink-27f591f2e4730a68'
+        '' // TODO why don't you need a token to get entry data??
     );
-    await nsParser.process()
+    await nsParser.process();
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 

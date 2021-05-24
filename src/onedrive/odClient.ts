@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { config } from 'winston';
-const util = require('util')
+import util from 'util';
 
 export class OneDriveClient {
     // Axios client
@@ -16,7 +15,15 @@ export class OneDriveClient {
     private printDeep: boolean;
 
     // Create Axios instance, can add options if needed
-    constructor(token: string, fileName: string, folderPath?: string, tableName?: string, sheetName?: string, doPrint?: boolean, printDeep?: boolean) {
+    constructor(
+        token: string,
+        fileName: string,
+        folderPath?: string,
+        tableName?: string,
+        sheetName?: string,
+        doPrint?: boolean,
+        printDeep?: boolean
+    ) {
         this.client = axios.create();
         this.token = token;
         this.fileName = fileName;
@@ -27,24 +34,23 @@ export class OneDriveClient {
         this.printDeep = printDeep ?? false;
     }
 
-    setPrintValues(setDoValue: boolean, setDeepValue? : boolean) {
+    setPrintValues(setDoValue: boolean, setDeepValue?: boolean): void {
         this.doPrint = setDoValue;
         this.printDeep = setDeepValue ?? this.printDeep;
     }
 
-    printBool(value:any) {
-        if(!this.doPrint) {
+    printBool(value: any): void {
+        if (!this.doPrint) {
             return;
         }
-        if(this.printDeep) {
-            console.log(util.inspect(value, false, null, true /* enable colors */))
+        if (this.printDeep) {
+            console.log(util.inspect(value, false, null, true /* enable colors */));
         } else {
-            console.log(value)
+            console.log(value);
         }
-        
     }
 
-    async getTableValues() {
+    async getTableValues(): Promise<any[][]> {
         const result = await this.getTableResult(this.tableName);
         const returnArray: any[][] = [];
         for (const entry of result?.data.value) {
@@ -73,8 +79,8 @@ export class OneDriveClient {
                 data: {}
             };
             const response = await this.client.request(config);
-            this.printBool("getTable response: " + config.url)
-            this.printBool(response.data)
+            this.printBool('getTable response: ' + config.url);
+            this.printBool(response.data);
             return response;
         } catch (error) {
             this.printBool(error);
@@ -102,7 +108,7 @@ export class OneDriveClient {
         return rangeResult;
     }
 
-    async getTableList() {
+    async getTableList(): Promise<any> {
         this.printBool('Get fileID');
         const fileResult = await this.getFile(this.token, this.fileName, this.folderPath);
         const workbookID = fileResult.id;
@@ -140,8 +146,8 @@ export class OneDriveClient {
                 data: {}
             };
             const response = await this.client.request(config);
-            this.printBool("getTableList response: " + config.url)
-            this.printBool(response.data)
+            this.printBool('getTableList response: ' + config.url);
+            this.printBool(response.data);
             return response;
         } catch (error) {
             this.printBool(error);
@@ -155,7 +161,7 @@ export class OneDriveClient {
      * @param bottomRight Bottomright cell of the to be retrieved range
      * @returns 2D array of text with topLeft as [0][0]
      */
-    async getRangeText(topLeft: string, bottomRight: string) {
+    async getRangeText(topLeft: string, bottomRight: string): Promise<any> {
         const result = await this.getRangeResult(topLeft, bottomRight);
         return result.data.text;
     }
@@ -166,7 +172,7 @@ export class OneDriveClient {
      * @param bottomRight Bottomright cell of the to be retrieved range
      * @returns 2D array of values with topLeft as [0][0]
      */
-    async getRangeValues(topLeft: string, bottomRight: string) {
+    async getRangeValues(topLeft: string, bottomRight: string): Promise<any> {
         const result = await this.getRangeResult(topLeft, bottomRight);
         return result.data.values;
     }
@@ -178,15 +184,15 @@ export class OneDriveClient {
      * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getRangeResult(topLeft: string, bottomRight: string) {
-        this.printBool("Get fileID");
+        this.printBool('Get fileID');
         const fileResult = await this.getFile(this.token, this.fileName, this.folderPath);
         const workbookID = fileResult.id;
 
-        this.printBool("Get session");
+        this.printBool('Get session');
         const sessionResult = await this.getExcelSession(workbookID, this.token);
         const sessionID = sessionResult.data.id;
 
-        this.printBool("Get range");
+        this.printBool('Get range');
         const rangeResult = await this.getRangeDetailed(
             workbookID,
             this.token,
@@ -224,10 +230,10 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: {}
         };
-        
+
         const response = await this.client.request(config);
-        this.printBool("getRange response: " + config.url)
-        this.printBool(response.data)
+        this.printBool('getRange response: ' + config.url);
+        this.printBool(response.data);
         return response;
     }
 
@@ -251,8 +257,11 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: body
         });
-        this.printBool("getSession response: " + `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/createSession`)
-        this.printBool(response.data)
+        this.printBool(
+            'getSession response: ' +
+                `https://graph.microsoft.com/v1.0/me/drive/items/${workbookID}/workbook/createSession`
+        );
+        this.printBool(response.data);
         return response;
     }
 
@@ -267,7 +276,7 @@ export class OneDriveClient {
     private async getFile(token: string, fileName: string, folderPath?: string) {
         const requestHeaders = {
             'content-type': 'Application/Json',
-            'authorization': `Bearer ${token}`
+            authorization: `Bearer ${token}`
         };
         const body = {};
         let subUrl = '';
@@ -283,13 +292,15 @@ export class OneDriveClient {
             headers: requestHeaders,
             data: body
         });
-        this.printBool("getFile response: " + `https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`)
-        this.printBool(response.data)
+        this.printBool(
+            'getFile response: ' +
+                `https://graph.microsoft.com/v1.0/me/drive/root${subUrl}/children`
+        );
+        this.printBool(response.data);
         const file = response.data.value.find((element) => element.name === fileName);
         return file;
     }
 
-    
     // //TODO, correctly implement for errors
     // private handleError(error:any) {
     //     if (error.response) {
@@ -313,5 +324,4 @@ export class OneDriveClient {
     //     }
     //     console.log(error);
     // }
-    
 }

@@ -325,8 +325,8 @@ async function execute3() {
 async function execute4() {
     const sheetName = 'Sheet1';
     //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
-    let fileName = "Book1.xlsx";
-    let folderPath = undefined;
+    const fileName = 'Book1.xlsx';
+    const folderPath = undefined;
     //const fileName = 'diary.xlsx';
     //const folderPath = 'Documents/DeepFolder';
     const excelToken = oneDriveToken; //token is obtained from http://localhost:8080/onedrive/login
@@ -339,12 +339,13 @@ async function execute4() {
         tableName,
         sheetName
     );
-    odClient.setPrintValues(true,true)
+    odClient.setPrintValues(true, true);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await odClient.getRangeText("A1","B2");
-    console.log()
-    console.log()
-    console.log(result)
+    const result = await odClient.getRangeText('A1', 'B2');
+    console.log();
+    console.log();
+    console.log(result);
     console.log('Done');
 }
 

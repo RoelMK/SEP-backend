@@ -18,6 +18,8 @@ import InsulinParser, {
     InsulinSource
 } from '../../src/services/insulin/insulinParser';
 import { DateFormat } from '../../src/services/utils/dates';
+import { MoodModel } from '../../src/gb/models/moodModel';
+import MoodParser from '../../src/services/mood/moodParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data
@@ -112,8 +114,8 @@ export async function postFoodData(
 
 /**
  * Helper function that creates a GlucoseParser from the input and POSTs the data
- * @param foodInput Glucose data
- * @param foodSource Source of glucose data
+ * @param glucoseInput Glucose data
+ * @param glucoseSource Source of glucose data
  * @param dateFormat Date format used in glucose data
  * @returns Response of POST
  */
@@ -128,8 +130,8 @@ export async function postGlucoseData(
 
 /**
  * Helper function that creates an InsulinParser from the input and POSTs the data
- * @param foodInput Insulin data
- * @param foodSource Source of insulin data
+ * @param insulinInput Insulin data
+ * @param insulinSource Source of insulin data
  * @param dateFormat Date format used in insulin data
  * @returns Response of POST
  */
@@ -140,4 +142,14 @@ export async function postInsulinData(
 ): Promise<void> {
     const insulinParser = new InsulinParser(insulinInput, insulinSource, dateFormat);
     return await insulinParser.post();
+}
+
+/**
+ * Helper function that creates a MoodParser from the input and POSTs the data
+ * @param moodInput Mood data
+ * @returns Response of POST
+ */
+export async function postMoodData(moodInput: MoodModel): Promise<void> {
+    const moodParser = new MoodParser(moodInput);
+    return await moodParser.post();
 }

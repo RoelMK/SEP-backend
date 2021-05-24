@@ -98,6 +98,24 @@ export abstract class DataParser {
                 return [];
         }
     }
+
+    /**
+     * To be called after processing, for retrieving processed data for a specific timeframe.
+     * @param outputType Glucose, Insulin or Food
+     * @param startTime Start of timeframe, as Unix timestamp
+     * @param endTime End of timeframe, as Unix timestamp
+     * @returns Glucose, Insulin or FoodModel object
+     */
+    getDataForTimeframe(outputType: OutputDataType, startTime: number, endTime: number): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
+        let data = this.getData(outputType) as [];
+        if (data) {
+            return data.filter((entry: InsulinModel | FoodModel | GlucoseModel) => {
+                return entry.timestamp >= startTime && entry.timestamp <= endTime;
+            });
+        } else {
+            return [];
+        }
+    }
 }
 
 export enum DataSource {

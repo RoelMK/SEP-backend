@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { MoodModel } from '../../gb/models/moodModel';
 
 export default class MoodParser {

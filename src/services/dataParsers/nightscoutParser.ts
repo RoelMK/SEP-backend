@@ -23,7 +23,7 @@ export default class NightscoutParser extends DataParser {
      * Obtain all nightscoutentries from the nightscout instance
      * @returns all NightScoutEntries that can be fetched from the nightscout instance
      */
-    protected async parse(blabla?): Promise<NightScoutEntry[]> {
+    protected async parse(): Promise<NightScoutEntry[]> {
         const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
         this.glucoseUnit = await nsClient.getGlucoseUnit();
         const entries: NightScoutEntry[] = await nsClient.getEntries();

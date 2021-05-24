@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { NightScoutEntry } from '../services/dataParsers/nightscoutParser';
-import crypto from "crypto";
 import { GlucoseUnit } from '../gb/models/glucoseModel';
 
 export class NightScoutClient {
@@ -29,7 +28,8 @@ export class NightScoutClient {
                 url: `${this.nightScoutHost}/api/v1/entries?token=${this.token}`,
                 data: entry
             };
-            const response = await this.client.request(config);
+            await this.client.request(config); //const response = 
+            
         } catch (error) {
             console.log(error);
             throw new Error("Server request failed"); //TODO make clear

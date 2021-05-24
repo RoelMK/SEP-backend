@@ -1,4 +1,4 @@
-import FoodModel from '../../gb/models/foodModel';
+import { FoodModel } from '../../gb/models/foodModel';
 import { Consumptie } from '../dataParsers/eetmeterParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
@@ -13,7 +13,10 @@ export default class FoodMapper {
      * @param dateFormat DateFormat of data source
      * @returns Mapping function that maps an entry from the source to a foodModel
      */
-    public static mapFood(foodSource: FoodSource, dateFormat: DateFormat) {
+    public static mapFood(
+        foodSource: FoodSource,
+        dateFormat: DateFormat
+    ): (entry: any) => FoodModel {
         switch (foodSource) {
             case FoodSource.ABBOTT:
                 // Abbott depends on date format (US/EU)

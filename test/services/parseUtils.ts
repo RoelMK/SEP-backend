@@ -5,7 +5,7 @@ import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
 import OneDriveExcelParser from '../../src/services/fileParsers/oneDriveExcelParser';
 import { EetMeterParser } from '../../src/services/dataParsers/eetmeterParser';
-import FoodModel from '../../src/gb/models/foodModel';
+import { FoodModel } from '../../src/gb/models/foodModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
 import FoodParser, { FoodInput, FoodSource } from '../../src/services/food/foodParser';

@@ -39,7 +39,7 @@ export default class InsulinParser {
     /**
      * Posts the imported insulin data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the insulinData to GameBus
     }
 }

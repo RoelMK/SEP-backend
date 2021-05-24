@@ -56,7 +56,7 @@ export default class GlucoseParser {
     /**
      * Posts the imported glucose data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the glucoseData to GameBus
     }
 }

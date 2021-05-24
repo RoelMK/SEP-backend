@@ -19,7 +19,7 @@ export default class GlucoseMapper {
         glucoseSource: GlucoseSource,
         dateFormat: DateFormat,
         glucoseUnit: GlucoseUnit
-    ) {
+    ): (entry: any) => GlucoseModel {
         switch (glucoseSource) {
             case GlucoseSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument

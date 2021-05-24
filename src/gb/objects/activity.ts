@@ -56,8 +56,14 @@ export class Activity {
      * @param activityId ID (Type) of activity (i.e. ID of "step" activity)
      * @returns All activities of given type
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getAllActivitiesWithId(activityId: number, headers?: Headers, query?: Query) {
+    async getAllActivitiesWithId(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        activityId: number,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        headers?: Headers,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        query?: Query
+    ): Promise<void> {
         // TODO: get all activities that belong to the same "activity" (i.e.) all "step" activities
         // TODO: expand with date queries
         return;

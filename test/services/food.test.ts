@@ -1,4 +1,4 @@
-import FoodModel from '../../src/gb/models/foodModel';
+import { FoodModel } from '../../src/gb/models/foodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseFoodDiary, parseEetmeter, postFoodData } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';

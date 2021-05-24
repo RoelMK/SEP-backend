@@ -79,11 +79,11 @@ export class NightScoutClient {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/profile?token=${this.token}`,
+                url: `${this.nightScoutHost}/api/v1/status?token=${this.token}`,
                 data: {}
             };
             const response = await this.client.request(config);
-            return response.data[0].units == "mg/dl" ? GlucoseUnit.MG_DL : GlucoseUnit.MG_DL; //TODO why 2 profiles
+            return response.data.settings.units == "mg/dl" ? GlucoseUnit.MG_DL : GlucoseUnit.MMOL_L;
         } catch (error) {
             console.log(error);
             return GlucoseUnit.MMOL_L;

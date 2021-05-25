@@ -8,7 +8,8 @@ import { getKeys } from '../utils/interfaceKeys';
  * Default class for parsing .xlsx files from a OneDrive
  */
 export default class OneDriveExcelParser {
-    private tempTest: string[][] = [['5/9/2021', '20:43', 'Meeting', '10', '5', '2', '', '7']];
+    // on which page the mapping tables reside
+    private static mappingTableSheet = 'Sheet2';
 
     /**
      * Asynchronous function that parses Excel data on a onedrive
@@ -26,26 +27,70 @@ export default class OneDriveExcelParser {
     ): Promise<Record<string, string>[]> {
         // Initiate oneDrive read
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve) => {
-            let result;
-            if (sampleInput === undefined) {
-                console.log(sampleInput);
-                const odClient = new OneDriveClient(
-                    oneDriveToken,
-                    getFileName(filePath),
-                    getFileDirectory(filePath),
-                    tableName
-                );
-                result = this.assignKeys(
-                    await odClient.getTableValues(),
-                    getKeys(dataSource)
-                );
-            } else {
-                result = this.assignKeys(sampleInput, getKeys(dataSource));
-            }
-            result = convertExcelDateTimes(result);
-            resolve(result);
+        let result;
+
+        // if not a test
+        if (sampleInput === undefined) {
+            // create oneDrive client
+            const odClient = new OneDriveClient(
+                oneDriveToken,
+                getFileName(filePath),
+                getFileDirectory(filePath)
+            );
+            result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+        }
+        // if a test is being executed
+        else {
+            result = this.assignKeys(sampleInput, getKeys(dataSource));
+        }
+
+        result = convertExcelDateTimes(result);
+        return result;
+    }
+
+    /**
+     * Converts an excel table with two columns into a mapping with keys in the first column
+     * and values in the second
+     * @param filePath Path of the file in which the table is stored
+     * @param oneDriveToken token to access the OneDrive
+     * @param tableName Name of the mapping table
+     * @returns A map containing the values of the excel table
+     */
+    static async getMappingTableValues(
+        filePath: string,
+        oneDriveToken: string,
+        tableName: string
+    ): Promise<Map<string, string>> {
+        // create onedrive client
+        const odClient = new OneDriveClient(
+            oneDriveToken,
+            getFileName(filePath),
+            getFileDirectory(filePath),
+            this.mappingTableSheet
+        );
+        const rawTableData = await odClient.getTableValues(tableName);
+
+        // check for empty table
+        if (rawTableData === undefined) {
+            return new Map<string, string>();
+        }
+
+        // check if there are results
+        if (rawTableData.length == 0) {
+            return new Map<string, string>();
+        }
+
+        // check if the mapping contains more or less than two columns
+        if (rawTableData[0].length != 2) {
+            return new Map<string, string>();
+        }
+
+        // turn raw table data into a mapping
+        const resultMap = new Map<string, string>();
+        rawTableData.forEach(function (entry: any[]) {
+            resultMap.set(entry[0], entry[1]);
         });
+        return resultMap;
     }
 
     /**

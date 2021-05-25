@@ -107,7 +107,7 @@ export abstract class DataParser {
      * @returns Glucose, Insulin or FoodModel object
      */
     getDataForTimeframe(outputType: OutputDataType, startTime: number, endTime: number): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
-        let data = this.getData(outputType) as [];
+        const data = this.getData(outputType) as [];
         if (data) {
             return data.filter((entry: InsulinModel | FoodModel | GlucoseModel) => {
                 return entry.timestamp >= startTime && entry.timestamp <= endTime;

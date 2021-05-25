@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const errorhandler = require('errorhandler');
+const cors = require('cors');
 import winston from 'winston';
 import expressWinston from 'express-winston';
 import { DBClient } from './db/dbClient';
@@ -26,6 +27,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cors());
 
 // ---- Do not add routes above this line! ----
 app.use(require('./routes'));

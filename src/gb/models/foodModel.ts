@@ -6,6 +6,8 @@ export default interface FoodModel {
     timestamp: number;
     carbohydrates: number;
     calories?: number;
+    meal_type?: MEAL_TYPE; // indicates breakfast, lunch, snack etc.
+    glycemic_index?: number;
     fat?: number;
     saturatedFat?: number;
     proteins?: number;
@@ -14,4 +16,12 @@ export default interface FoodModel {
     water?: number;
     sugars?: number;
     description?: string;
+}
+
+export enum MEAL_TYPE {
+    BREAKFAST = 'Breakfast',
+    LUNCH = 'Lunch',
+    DINNER = 'Dinner',
+    SNACK = 'Snack',
+    UNDEFINED = ''
 }

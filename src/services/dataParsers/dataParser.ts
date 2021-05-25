@@ -36,7 +36,7 @@ export abstract class DataParser {
         protected readonly dataSource: DataSource,
         protected filePath?: string,
         protected oneDriveToken?: string,
-        protected tableName?: string
+        protected tableName?: string // for excel parsing
     ) {}
 
     /**
@@ -54,15 +54,16 @@ export abstract class DataParser {
                 const skipLine: boolean = this.dataSource == DataSource.ABBOTT;
                 return await this.csvParser.parse(this.filePath, skipLine);
             case 'xlsx':
-                if (!this.oneDriveToken)
+                if (this.oneDriveToken === undefined)
                     return await this.excelParser.parse(this.filePath, this.dataSource);
-                else
-                    return await this.oneDriveExcelParser.parse(
-                        this.filePath,
-                        this.dataSource,
-                        this.oneDriveToken,
-                        this.tableName as string
-                    );
+
+                return await this.oneDriveExcelParser.parse(
+                    this.filePath,
+                    this.dataSource,
+                    this.oneDriveToken,
+                    this.tableName as string
+                );
+
             case 'xml':
                 if (this.dataSource == DataSource.EETMETER) {
                     return await this.xmlParser.parse(this.filePath);
@@ -74,7 +75,7 @@ export abstract class DataParser {
      * Allows the program to define the path after the object has been created
      * @param path string representation of the path to the file
      */
-    setFilePath(path: string) {
+    setFilePath(path: string): void {
         this.filePath = path;
     }
 

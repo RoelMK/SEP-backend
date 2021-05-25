@@ -15,11 +15,11 @@ export default class GlucoseMapper {
      * @param glucoseUnit GlucoseUnit in which the glucose level is measured
      * @returns Mapping function that maps an entry from the source to a glucoseModel
      */
-    public static mapGlucose(
+    public static mapGlucose   (
         glucoseSource: GlucoseSource,
         dateFormat: DateFormat,
         glucoseUnit: GlucoseUnit
-    ) {
+    ): (entry: any) => GlucoseModel {
         switch (glucoseSource) {
             case GlucoseSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument

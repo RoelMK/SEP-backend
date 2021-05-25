@@ -1,4 +1,4 @@
-import FoodModel from '../../src/gb/models/foodModel';
+import FoodModel, { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseFoodDiary, parseEetmeter } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
@@ -33,7 +33,9 @@ test('import Abbott US food', async () => {
 test('import standardized food diary full', async () => {
     const expectedResult: FoodModel = {
         carbohydrates: 10,
-        description: 'Meeting',
+        description: 'Chicken',
+        meal_type: MEAL_TYPE.BREAKFAST,
+        glycemic_index: 30,
         timestamp: parseDate('09/05/21 20:43', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
@@ -48,17 +50,19 @@ test('import standardized food diary full', async () => {
 
 test('import standardized food diary with missing values', async () => {
     const expectedResult: FoodModel = {
-        carbohydrates: 5,
-        description: '',
-        timestamp: parseDate('08/05/21 23:12', DateFormat.FOOD_DIARY, new Date(), true) as number
+        carbohydrates: 3,
+        description: 'Pizza',
+        meal_type: MEAL_TYPE.UNDEFINED,
+        glycemic_index: 2,
+        timestamp: parseDate('08/05/21 13:12', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (
             (await parseFoodDiary(
-                'test/services/data/foodDiary_standard_missing.xlsx',
+                'test/services/data/foodDiary_standard_missing_table.xlsx',
                 OutputDataType.FOOD
             )) as FoodModel[]
-        )[2]
+        )[1]
     ).toStrictEqual(expectedResult);
 });
 

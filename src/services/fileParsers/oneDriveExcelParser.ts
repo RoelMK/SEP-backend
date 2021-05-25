@@ -35,9 +35,10 @@ export default class OneDriveExcelParser {
             const odClient = new OneDriveClient(
                 oneDriveToken,
                 getFileName(filePath),
-                getFileDirectory(filePath)
+                getFileDirectory(filePath),
+                tableName
             );
-            result = this.assignKeys(await odClient.getTableValues(tableName), getKeys(dataSource));
+            result = this.assignKeys(await odClient.getTableValues(), getKeys(dataSource));
         }
         // if a test is being executed
         else {
@@ -66,9 +67,10 @@ export default class OneDriveExcelParser {
             oneDriveToken,
             getFileName(filePath),
             getFileDirectory(filePath),
+            tableName,
             this.mappingTableSheet
         );
-        const rawTableData = await odClient.getTableValues(tableName);
+        const rawTableData = await odClient.getTableValues();
 
         // check for empty table
         if (rawTableData === undefined) {

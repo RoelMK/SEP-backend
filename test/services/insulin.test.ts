@@ -1,3 +1,4 @@
+import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
@@ -72,7 +73,9 @@ test('POSTing insulinmodels', async () => {
             date: '01/01/2020',
             time: '00:00',
             description: '',
+            meal_type: MEAL_TYPE.UNDEFINED,
             carbohydrates: '',
+            glycemic_index: '',
             base_insulin: '',
             high_correction_insulin: '',
             sports_correction_insulin: '',

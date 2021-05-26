@@ -13,7 +13,8 @@ export default class NightscoutParser extends DataParser {
 
     /**
      * DataParser construction with DataSource set
-     * @param abbottFile file path of Abbott file
+     * @param nightScoutHost the url which points to the host of the nightscout instance
+     * @param token the private token generated for Diabetter
      */
     constructor(private nightScoutHost: string, private token?: string) {
         super(DataSource.NIGHTSCOUT, '');

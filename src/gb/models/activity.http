@@ -1,0 +1,37 @@
+# Using: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = https://api3.gamebus.eu/v2
+
+# Fill in these variables first
+@token = INSERT_TOKEN
+@playerId = 000
+
+### Example of activity POST with customizable date using translation keys
+POST {{baseUrl}}/activities
+    ?dryrun=false
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    activity:
+    {
+        "gameDescriptorTK": "WALK",
+        "dataProvider": "DAILY_RUN",
+        "date": 1621936800000,
+        "propertyInstances": [ {
+            "propertyTK": "STEPS",
+            "value": 420
+        } ],
+        "players": [ {{playerId}} ]
+    }
+}
+
+### Example of activity GET with some queries
+GET {{baseUrl}}/players/{{playerId}}/activities
+    ?start=25-05-2021
+    &end=27-05-2021
+    &limit=30
+    &sort=-date
+    &excludeGds=
+content-type: application/json
+Authorization: Bearer {{token}}

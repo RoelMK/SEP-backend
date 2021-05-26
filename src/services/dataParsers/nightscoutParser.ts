@@ -52,3 +52,17 @@ export type NightScoutEntry = {
     unfiltered?: number;
     rssi?: number;
 };
+
+export type NightScoutTreatment = {
+    eventType: string;
+    created_at?: string;
+    glucose: string;
+    glucoseType: string;
+    carbs?: number;
+    protein?: number;
+    fat?: number;
+    insulin?: number;
+    units?: string;
+    notes?: string;
+    enteredBy?: string;
+};

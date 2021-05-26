@@ -10,14 +10,12 @@ export class NightScoutClient {
         this.client = axios.create();
     }
 
-
     /**
      * Posts a night scout entry to the nightscout instance
      * @param entry NightScoutEntry: a nightscout entry
      * @returns the query response
      */
     async postEntry(entry: NightScoutEntry) {
-
         // probably not needed
         // const requestHeaders = {
         //     "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
@@ -42,7 +40,6 @@ export class NightScoutClient {
      * @throws error, when request failed
      */
     async getEntries(): Promise<NightScoutEntry[]> {
-
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
@@ -88,6 +85,5 @@ export class NightScoutClient {
             console.log(error);
             return GlucoseUnit.MMOL_L;
         }
-        
     }
 }

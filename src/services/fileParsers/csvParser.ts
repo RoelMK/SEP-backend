@@ -1,11 +1,12 @@
 import Papa, { ParseConfig } from 'papaparse';
 import { readFileSync } from 'fs';
+import { FileParser } from './fileParser';
 
 /**
  * Generic CSV reader and parser to be used for all CSV files
  */
-export default class CSVParser {
-    constructor(private readonly config: ParseConfig = defaultConfig) {}
+export default class CSVParser extends FileParser {
+    constructor(private readonly config: ParseConfig = defaultConfig) {super();}
 
     /**
      * Async function that parses the given .csv file's path

@@ -3,8 +3,8 @@
 @baseUrl = https://api3.gamebus.eu/v2
 
 # Fill in these variables first
-@token = c90998f8-c883-4e7c-ac1c-c0d473d27ba1
-@playerId = 526
+@token = TOKEN_HERE
+@playerId = 000
 
 # The POST requests use the content-type of multipart/form-data, the boundary can be whatever you want as long as you keep it consistent!
 

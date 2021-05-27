@@ -1,7 +1,5 @@
-import { query } from 'express';
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { CircleGETData } from '../../src/gb/models/gamebusModel';
 import { mockGameBusRequest } from './gbUtils';
 import { Circle } from '../../src/gb/objects/circle';
 
@@ -57,9 +55,9 @@ describe('with mocked activities get call', () => {
 
 test('array of player IDs in a circle', async () => {
     const expectedResult: number[] = [] ;
-    let handler = new TokenHandler('testToken', 'refreshToken', '0')
-    let gamebus = new GameBusClient(handler, true);
-    let circ = new Circle(gamebus, true);
+    const handler = new TokenHandler('testToken', 'refreshToken', '0')
+    const gamebus = new GameBusClient(handler, true);
+    const circ = new Circle(gamebus, true);
     expect(
      await circ.getPlayersForAGivenCircle(100800) as number[]
     ).toEqual(expectedResult);
@@ -67,9 +65,9 @@ test('array of player IDs in a circle', async () => {
 
 test('circles where the player is a Leader and the circle names have Diabetter in it', async () => {
     const expectedResult: number[] = [] ;
-    let handler = new TokenHandler('testToken', 'refreshToken', '0')
-    let gamebus = new GameBusClient(handler, true);
-    let circ = new Circle(gamebus, true);
+    const handler = new TokenHandler('testToken', 'refreshToken', '0')
+    const gamebus = new GameBusClient(handler, true);
+    const circ = new Circle(gamebus, true);
     expect(
      await circ.getAllCirclesLeaderDiabetter(0)
     ).toEqual(expectedResult);

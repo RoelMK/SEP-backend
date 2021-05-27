@@ -1,6 +1,5 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ExerciseActivity } from '../../src/gb/objects/exercise';
 import { mockGameBusRequest } from './gbUtils';
 
 jest.mock('axios');

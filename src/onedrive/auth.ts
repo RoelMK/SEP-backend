@@ -80,13 +80,13 @@ export async function getAccessToken(
             return {
                 homeAccountId: response.account.homeAccountId,
                 accessToken: response.accessToken,
-                expiresOn: response.expiresOn ?? undefined //TODO: null coalescing is used, because response.expiresOn can return null, which it didn't in previous builds
+                expiresOn: response.expiresOn?.getTime() ?? (new Date()).getTime()
             };
         } else {
             return undefined;
         }
     } catch (e) {
-        console.log(JSON.stringify(e));
+        console.warn(JSON.stringify(e));
         return undefined;
     }
 }
@@ -113,13 +113,13 @@ export async function getAccessTokenSilent(
                 return {
                     homeAccountId: homeAccountId,
                     accessToken: response.accessToken,
-                    expiresOn: response.expiresOn ?? undefined //TODO: null coalescing is used, because response.expiresOn can return null, which it didn't in previous builds
+                    expiresOn: response.expiresOn?.getTime() ?? (new Date()).getTime() 
                 };
             }
         }
         return undefined;
     } catch (e) {
-        console.log(JSON.stringify(e));
+        console.warn(JSON.stringify(e));
         return undefined;
     }
 }

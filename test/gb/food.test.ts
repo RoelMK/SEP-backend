@@ -21,7 +21,7 @@ describe('with mocked food get call', () => {
     test('GET activities on date', async () => {
         // Get exercises from a date (as Date object)
         // TODO: implement this
-        const food = await client.food().getAllFoodActivities();
+        const food = await client.food().getAllFoodActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         // expect(request).toHaveBeenCalledTimes(1);
@@ -34,6 +34,6 @@ describe('with mocked food get call', () => {
         //     })
         // );
         //expect(exercises).toEqual([]);
-        expect(food).toEqual(undefined);
+        expect(food).toEqual([]);
     });
 });

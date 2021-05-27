@@ -61,7 +61,7 @@ export interface DataProviderReference {
 
 export interface PropertyInstanceReference {
     id: number;
-    value: number; //TODO, check this!!
+    value: any; //TODO, check this!!
     property: PropertyInstanceProperty;
 }
 
@@ -78,6 +78,35 @@ export interface SupportReference {
     id: number;
     date: number;
     supporter: UserReference;
+}
+
+export interface CircleGETData {
+    id: number;
+    name: string;
+    image: string | null ;
+    type: string;
+    description: string;
+    isPrivate: boolean;
+    removed: boolean;
+    leadersCanLogActivities: boolean;
+    leadersCanSignUpPlayers: boolean;
+    autoAcceptMembershipRequests: boolean;
+    displayPersonalPointsToCircleMembersInMutualChallenges: boolean;
+    displayPersonalPointsToCircleMembers: boolean;
+    withNudging: boolean;
+    creator: UserReference;
+    memberships: MembershipReference[]; 
+    participations: any[];
+    showChallengeRights: any[];
+    chats: any[];
+}
+
+export interface MembershipReference {
+    id: number;
+    state: string;
+    player: UserReference;
+    initiatorOfMembership: UserReference;
+    initiatorOfLeadership: UserReference| null; //not sure
 }
 
 //TODO add output interfaces for getPlayer and getUser

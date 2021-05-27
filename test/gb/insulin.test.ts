@@ -21,7 +21,7 @@ describe('with mocked insulin get call', () => {
     test('GET activities on date', async () => {
         // Get exercises from a date (as Date object)
         // TODO: implement this
-        const insulin = await client.insulin().getAllInsulinActivities();
+        const insulin = await client.insulin().getAllInsulinActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         // expect(request).toHaveBeenCalledTimes(1);
@@ -34,6 +34,6 @@ describe('with mocked insulin get call', () => {
         //     })
         // );
         //expect(exercises).toEqual([]);
-        expect(insulin).toEqual(undefined);
+        expect(insulin).toEqual([]);
     });
 });

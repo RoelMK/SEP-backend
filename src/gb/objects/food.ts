@@ -6,15 +6,15 @@ import { GameBusObject } from './base';
  * Class for food-specific functions
  */
 export class Food extends GameBusObject {
-    private foodId = 0; // TODO: assign to GameBus-given activity ID
+    private foodId = ""; // TODO: assign to GameBus-given activity ID
 
     /**
      * Example function that retrieves all activities with pre-set ID
      * @returns All food activities (provided ID is correct)
      */
-    async getAllFoodActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
+    async getAllFoodActivities(playerId: number, headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const food = await this.activity.getAllActivitiesWithId(this.foodId, headers, query);
+        const food = await this.activity.getAllActivitiesWithId(this.foodId, playerId, headers, query);
         return food as unknown as ActivityGETData[];
     }
 }

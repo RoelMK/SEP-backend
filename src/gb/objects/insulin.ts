@@ -6,15 +6,15 @@ import { GameBusObject } from './base';
  * Class for insulin-specific functions
  */
 export class Insulin extends GameBusObject {
-    private insulinId = 0; // TODO: assign to GameBus-given activity ID
+    private insulinId = ""; // TODO: assign to GameBus-given activity ID
 
     /**
      * Example function that retrieves all activities with pre-set ID
      * @returns All insulin activities (provided ID is correct)
      */
-    async getAllInsulinActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
+    async getAllInsulinActivities(playerId: number, headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const insulin = await this.activity.getAllActivitiesWithId(this.insulinId, headers, query);
+        const insulin = await this.activity.getAllActivitiesWithId(this.insulinId,playerId, headers, query);
         return insulin as unknown as ActivityGETData[];
     }
 }

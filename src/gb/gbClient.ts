@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
+import { Circle } from './objects/circle';
 import { Exercise } from './objects/exercise';
 import { Food } from './objects/food';
 import { Glucose } from './objects/glucose';
@@ -16,6 +17,7 @@ export class GameBusClient {
     private gamebusFood: Food;
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
+    private gamebusCircle: Circle;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
@@ -27,6 +29,7 @@ export class GameBusClient {
         this.gamebusFood = new Food(this.gamebusActivity, true);
         this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
+        this.gamebusCircle = new Circle(this,true);
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -48,6 +51,10 @@ export class GameBusClient {
 
     insulin() {
         return this.gamebusInsulin;
+    }
+
+    circle(){
+        return this.gamebusCircle;
     }
 
     /**

@@ -22,7 +22,7 @@ describe('with mocked exercises get call', () => {
     test('GET activities on date', async () => {
         // Get exercises from a date (as Date object)
         // TODO: implement this
-        const exercises = await client.exercise().getExerciseActivity(ExerciseActivity.STEPS);
+        const exercises = await client.exercise().getExerciseActivity(0,"STEPS");
 
         // Check that URL matches expected URL and mockToken is used in authorization
         // expect(request).toHaveBeenCalledTimes(1);
@@ -35,6 +35,6 @@ describe('with mocked exercises get call', () => {
         //     })
         // );
         //expect(exercises).toEqual([]);
-        expect(exercises).toEqual(undefined);
+        expect(exercises).toEqual([]);
     });
 });

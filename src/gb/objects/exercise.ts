@@ -13,12 +13,13 @@ export class Exercise extends GameBusObject {
      * @returns All exercise activities belonging to the given Type
      */
     async getExerciseActivity(
-        activityType: ExerciseActivity,
+        playerId: number,
+        activityType: string,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const exercise = await this.activity.getAllActivitiesWithId(activityType, headers, query);
+        const exercise = await this.activity.getAllActivitiesWithId(activityType,playerId, headers, query);
         // TODO: fix the return type, this is just a hack to get TypeScript to not complain
         return exercise as unknown as ActivityGETData[];
     }

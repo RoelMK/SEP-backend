@@ -4,6 +4,7 @@ import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 
+
 /**
  * Class that is used to GET/POST to GameBus activities
  * This is a general class that can be used for all activity types
@@ -50,17 +51,31 @@ export class Activity {
         );
         return activity;
     }
-
+    
     /**
-     * Should get all activities (with possible queries) of the given activity ID/type
-     * @param activityId ID (Type) of activity (i.e. ID of "step" activity)
+     * Get all activities of the given activity type
+     * @param activityType Type of activity 
+     * @param playerId Id of the player
      * @returns All activities of given type
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getAllActivitiesWithId(activityId: number, headers?: Headers, query?: Query) {
-        // TODO: get all activities that belong to the same "activity" (i.e.) all "step" activities
-        // TODO: expand with date queries
-        return;
+    async getAllActivitiesWithId(
+        activityType: string,
+        playerId: number,
+        headers?: Headers,
+        query?: Query):Promise<ActivityGETData[]> {
+            // TODO: include more activity types into "types" when you encounter them
+            const types = ["BIKE","WALK","DAY_AGGREGATE","SOCCER","TRANSPORT", "CHALLENGE_FEEDBACK"];
+            const index = types.indexOf(activityType, 0);
+            if (index > -1) {
+               types.splice(index, 1);
+            }
+            const activities: ActivityGETData[] = await this.gamebus.get(
+                `players/${playerId}/activities?excludedGds=${types.toString()}`,
+                headers,
+                query,
+                this.authRequired
+            );
+            return activities;
     }
 
     /**
@@ -230,3 +245,5 @@ export enum QueryOrder {
     ASC = '+',
     DESC = '-'
 }
+
+

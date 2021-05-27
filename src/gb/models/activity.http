@@ -3,28 +3,54 @@
 @baseUrl = https://api3.gamebus.eu/v2
 
 # Fill in these variables first
-@token = INSERT_TOKEN
+@token = TOKEN_HERE
 @playerId = 000
+
+# The POST requests use the content-type of multipart/form-data, the boundary can be whatever you want as long as you keep it consistent!
 
 ### Example of activity POST with customizable date using translation keys
 POST {{baseUrl}}/activities
     ?dryrun=false
-content-type: application/json
+content-type: multipart/form-data; boundary=----XXX
 Authorization: Bearer {{token}}
 
+------XXX
+Content-Disposition: form-data; name="activity"
+
 {
-    activity:
-    {
-        "gameDescriptorTK": "WALK",
-        "dataProvider": "DAILY_RUN",
-        "date": 1621936800000,
-        "propertyInstances": [ {
-            "propertyTK": "STEPS",
-            "value": 420
-        } ],
-        "players": [ {{playerId}} ]
-    }
+    "gameDescriptorTK":"WALK",
+    "dataProviderName":"Daily_run",
+    "date":1622111106000,
+    "propertyInstances":[
+        {"propertyTK":"STEPS","value":420}
+    ],
+    "players":[{{playerId}}]
 }
+------XXX--
+
+### Example of activity POST with IDs instead of names
+
+POST {{baseUrl}}/activities
+    ?dryrun=false
+content-type: multipart/form-data; boundary=----XXX
+Authorization: Bearer {{token}}
+
+------XXX
+Content-Disposition: form-data; name="activity"
+
+{
+    "gameDescriptor":1,
+    "dataProvider":1,
+    "date":1622111105223,
+    "propertyInstances":[
+        {"property":1,"value":null},
+        {"property":2,"value":600},
+        {"property":3,"value":600},
+        {"property":66,"value":null}
+    ],
+    "players":[{{playerId}}]
+}
+------XXX--
 
 ### Example of activity GET with some queries
 GET {{baseUrl}}/players/{{playerId}}/activities

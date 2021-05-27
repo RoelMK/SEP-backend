@@ -50,7 +50,12 @@ onedriveRouter.get('/displayTokens', async (req: any, res: any) => { // Dummy en
  * @returns URL to redirect to
  */
 function generateRedirectUrl(account: OneDriveTokenModel): string {
-    return process.env.ONEDRIVE_FRONTEND_REDIRECT + '?homeAccountId=' + encodeURIComponent(account.homeAccountId) + '&accessToken=' + 
+    let redirectUri = process.env.ONEDRIVE_FRONTEND_REDIRECT;
+    if (!redirectUri) {
+        redirectUri = '/onedrive/displayTokens'; // Set a default uri if none is specified in env
+    } 
+
+    return redirectUri + '?homeAccountId=' + encodeURIComponent(account.homeAccountId) + '&accessToken=' + 
         encodeURIComponent(account.accessToken) + '&expiresOn=' + account.expiresOn.toString();
 }
 

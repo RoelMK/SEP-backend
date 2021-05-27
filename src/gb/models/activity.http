@@ -3,40 +3,34 @@
 @baseUrl = https://api3.gamebus.eu/v2
 
 # Fill in these variables first
-@token = TOKEN_HERE
-@playerId = 000
+@token = c90998f8-c883-4e7c-ac1c-c0d473d27ba1
+@playerId = 526
 
 # The POST requests use the content-type of multipart/form-data, the boundary can be whatever you want as long as you keep it consistent!
 
+# If you are posting Google Fit data, you must be connected to Google Fit first!
 ### Example of activity POST with customizable date using translation keys
-POST {{baseUrl}}/activities
+POST {{baseUrl}}/me/activities
     ?dryrun=false
-content-type: multipart/form-data; boundary=----XXX
+content-type: application/json
 Authorization: Bearer {{token}}
-
-------XXX
-Content-Disposition: form-data; name="activity"
 
 {
     "gameDescriptorTK":"WALK",
-    "dataProviderName":"Daily_run",
+    "dataProviderName":"Google Fit",
     "date":1622111106000,
     "propertyInstances":[
         {"propertyTK":"STEPS","value":420}
     ],
     "players":[{{playerId}}]
 }
-------XXX--
 
 ### Example of activity POST with IDs instead of names
 
-POST {{baseUrl}}/activities
+POST {{baseUrl}}/me/activities
     ?dryrun=false
-content-type: multipart/form-data; boundary=----XXX
+content-type: application/json
 Authorization: Bearer {{token}}
-
-------XXX
-Content-Disposition: form-data; name="activity"
 
 {
     "gameDescriptor":1,
@@ -50,7 +44,6 @@ Content-Disposition: form-data; name="activity"
     ],
     "players":[{{playerId}}]
 }
-------XXX--
 
 ### Example of activity GET with some queries
 GET {{baseUrl}}/players/{{playerId}}/activities

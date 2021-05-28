@@ -1,7 +1,6 @@
 import FoodModel from '../../gb/models/foodModel';
-import { GlucoseUnit } from '../../gb/models/glucoseModel';
 import { Consumptie } from '../dataParsers/eetmeterParser';
-import { NightScoutEntryModel, NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
 

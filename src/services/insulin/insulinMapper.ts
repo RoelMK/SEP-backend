@@ -1,7 +1,7 @@
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { InsulinSource } from './insulinParser';
 import { DateFormat, parseDate } from '../utils/dates';
-import { NightScoutEntryModel, NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel

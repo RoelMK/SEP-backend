@@ -1,11 +1,10 @@
 import FoodModel from '../../gb/models/foodModel';
-import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
+import { GlucoseUnit } from '../../gb/models/glucoseModel';
+import { InsulinModel } from '../../gb/models/insulinModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
-import { DateFormat } from '../utils/dates';
 import { DataParser, DataSource } from './dataParser';
 
 /**

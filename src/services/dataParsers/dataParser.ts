@@ -10,6 +10,7 @@ import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension } from '../utils/files';
+import { NightScoutEntryModel } from './nightscoutParser';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
@@ -85,7 +86,7 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
+    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] |undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;

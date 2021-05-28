@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { NightScoutEntry } from '../services/dataParsers/nightscoutParser';
+import { NightScoutEntryModel, NightScoutTreatmentModel } from '../services/dataParsers/nightscoutParser';
 import { GlucoseUnit } from '../gb/models/glucoseModel';
 
 export class NightScoutClient {
@@ -15,7 +15,7 @@ export class NightScoutClient {
      * @param entry NightScoutEntry: a nightscout entry
      * @returns the query response
      */
-    async postEntry(entry: NightScoutEntry) {
+    async postEntry(entry: NightScoutEntryModel) {
         // probably not needed
         // const requestHeaders = {
         //     "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
@@ -39,7 +39,7 @@ export class NightScoutClient {
      * @returns resulting NightScoutEntry objects in an array 
      * @throws error, when request failed
      */
-    async getEntries(): Promise<NightScoutEntry[]> {
+    async getEntries(): Promise<NightScoutEntryModel[]> {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
@@ -47,17 +47,17 @@ export class NightScoutClient {
                 data: {}
             };
             const response = await this.client.request(config);
-            return response.data as NightScoutEntry[];
+            return response.data as NightScoutEntryModel[];
         } catch (error) {
             console.log(error);
-            throw new Error("Server request failed"); //TODO make clear
+            throw new Error("Server request for nightscout entries failed: " + error);
         }
     }
 
     /**
      * Get treatments (containing food and/or insulin data) from the nightscout API
      */
-    async getTreatments() {
+    async getTreatments(): Promise<NightScoutTreatmentModel[]> {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
@@ -65,10 +65,10 @@ export class NightScoutClient {
                 data: {}
             };
             const response = await this.client.request(config);
-            return response;
-        } catch (error) {
+            return response.data as NightScoutTreatmentModel[];
+        } catch (error) {3
             console.log(error);
-            return null;
+            throw new Error("Server request for nightscout treatments failed: " + error);
         }
     }
     

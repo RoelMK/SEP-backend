@@ -1,13 +1,20 @@
-import { GlucoseUnit } from '../../gb/models/glucoseModel';
+import FoodModel from '../../gb/models/foodModel';
+import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
+import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
+import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
+import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { DateFormat } from '../utils/dates';
 import { DataParser, DataSource } from './dataParser';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
 export default class NightscoutParser extends DataParser {
-    private nightScoutData: NightScoutEntry[] = [];
+    private nightScoutEntries: NightScoutEntryModel[] = [];
+    
+    private nightScoutTreatments: NightScoutTreatmentModel[] = [];
 
     private glucoseUnit: GlucoseUnit = GlucoseUnit.UNDEFINED;
 
@@ -15,6 +22,7 @@ export default class NightscoutParser extends DataParser {
      * DataParser construction with DataSource set
      * @param nightScoutHost the url which points to the host of the nightscout instance
      * @param token the private token generated for Diabetter
+     *
      */
     constructor(private nightScoutHost: string, private token?: string) {
         super(DataSource.NIGHTSCOUT, '');
@@ -24,11 +32,30 @@ export default class NightscoutParser extends DataParser {
      * Obtain all nightscoutentries from the nightscout instance
      * @returns all NightScoutEntries that can be fetched from the nightscout instance
      */
-    protected async parse(): Promise<NightScoutEntry[]> {
+    protected async parseEntry(): Promise<NightScoutEntryModel[]> {
         const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
-        this.glucoseUnit = await nsClient.getGlucoseUnit();
-        const entries: NightScoutEntry[] = await nsClient.getEntries();
+        const entries: NightScoutEntryModel[] = await nsClient.getEntries();
         return entries;
+    }
+
+    /**
+     * Obtain all NightScoutTreatments from the nightscout instance
+     * @returns all NightScoutTreatments that can be fetched from the nightscout instance
+     */
+    protected async parseTreatment(): Promise<NightScoutTreatmentModel[]> {
+        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
+        const treatments: NightScoutTreatmentModel[] = await nsClient.getTreatments();
+        return treatments;
+    }
+
+    /**
+     * Obtain GlucoseUnit from the nightscout instance
+     * @returns GlucoseUnit from the nightscout instance
+     */
+    protected async parseGlucose(): Promise<GlucoseUnit> {
+        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
+        const glucose: GlucoseUnit = await nsClient.getGlucoseUnit();
+        return glucose;
     }
 
     /**
@@ -36,12 +63,40 @@ export default class NightscoutParser extends DataParser {
      */
     async process() {
         // specify the type of parsed data
-        this.nightScoutData = await this.parse();
-        this.glucoseParser = new GlucoseParser(this.nightScoutData, GlucoseSource.NIGHTSCOUT, this.dateFormat, this.glucoseUnit);
+        // have to parse nightscout treatment to foot model
+        this.nightScoutEntries = await this.parseEntry();
+        this.nightScoutTreatments = await this.parseTreatment();
+
+        this.foodParser = new FoodParser(
+            this.nightScoutTreatments,
+            FoodSource.NIGHTSCOUT,
+            this.dateFormat,
+        );
+
+        this.glucoseParser = new GlucoseParser(
+            this.nightScoutEntries,
+            GlucoseSource.NIGHTSCOUT,
+            this.dateFormat,
+            this.glucoseUnit
+        );
+
+        this.insulinParser = new InsulinParser(
+            this.nightScoutTreatments,
+            InsulinSource.NIGHTSCOUT,
+            this.dateFormat
+        );
+    }
+
+    getData(): FoodModel[] | undefined {
+        return this.foodParser?.foodData;
+    }
+
+    getInsulinData(): InsulinModel[] | undefined {
+        return this.insulinParser?.insulinData;
     }
 }
 
-export type NightScoutEntry = {
+export type NightScoutEntryModel = {
     type: string;
     dateString?: string;
     date: number;
@@ -53,11 +108,11 @@ export type NightScoutEntry = {
     rssi?: number;
 };
 
-export type NightScoutTreatment = {
+export type NightScoutTreatmentModel = {
     eventType: string;
-    created_at?: string;
-    glucose: string;
-    glucoseType: string;
+    created_at: string;
+    glucose?: string;
+    glucoseType?: string;
     carbs?: number;
     protein?: number;
     fat?: number;

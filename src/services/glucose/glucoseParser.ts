@@ -1,7 +1,7 @@
 import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
-import { NightScoutEntry } from '../dataParsers/nightscoutParser';
+import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 
@@ -81,4 +81,4 @@ export enum GlucoseSource {
 /**
  * All possible input types for glucose data
  */
-type GlucoseInput = XOR<AbbottData[], NightScoutEntry[]>;
+type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;

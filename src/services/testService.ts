@@ -3,7 +3,7 @@ import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
-import NightscoutParser, { NightScoutEntry } from './dataParsers/nightscoutParser';
+import NightscoutParser, { NightScoutEntryModel } from './dataParsers/nightscoutParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -49,7 +49,7 @@ async function testOneDrive() {
 }
 
 async function testNightScout() {
-    const testEntry: NightScoutEntry = {
+    const testEntry: NightScoutEntryModel = {
         type: 'sgv',
         date: 1621708895000,
         sgv: 100,
@@ -69,7 +69,7 @@ async function testNightScout() {
         '' // TODO why don't you need a token to get entry data??
     );
     await nsParser.process();
-    console.log(nsParser.getData(OutputDataType.GLUCOSE));
+    console.log(nsParser.getData());
 }
 
 export const testToken = '';

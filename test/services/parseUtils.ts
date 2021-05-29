@@ -55,5 +55,5 @@ export async function parseXml(filePath: string) {
 export async function parseNightScoutEntry() {
     const nsParser: NightscoutParser = new NightscoutParser('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68')
     await nsParser.process();
-    return nsParser.getData();
+    return nsParser.getData(OutputDataType.FOOD);
 }

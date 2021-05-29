@@ -13,17 +13,32 @@ export class NightScoutClient {
     /**
      * Posts a night scout entry to the nightscout instance
      * @param entry NightScoutEntry: a nightscout entry
-     * @returns the query response
      */
     async postEntry(entry: NightScoutEntryModel) {
-        // probably not needed
-        // const requestHeaders = {
-        //     "API-SECRET": crypto.createHash("sha1").update(this.secret).digest("hex")
-        // };
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
                 url: `${this.nightScoutHost}/api/v1/entries?token=${this.token}`,
+                data: entry
+            };
+            await this.client.request(config); //const response = 
+            
+        } catch (error) {
+            console.log(error);
+            throw new Error("Server request failed"); //TODO make clear
+        }
+    }
+
+
+    /**
+     * Posts a night scout treatment to the nightscout instance
+     * @param entry NightScoutTreatment: a nightscout treatment
+     */
+     async postTreatment(entry: NightScoutTreatmentModel) {
+        try {
+            const config: AxiosRequestConfig = {
+                method: 'POST',
+                url: `${this.nightScoutHost}/api/v1/treatments?token=${this.token}`,
                 data: entry
             };
             await this.client.request(config); //const response = 

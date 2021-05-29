@@ -3,7 +3,7 @@ import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
-import NightscoutParser, { NightScoutEntryModel } from './dataParsers/nightscoutParser';
+import NightscoutParser, { NightScoutEntryModel, NightScoutTreatmentModel } from './dataParsers/nightscoutParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -59,17 +59,39 @@ async function testNightScout() {
         rssi: 0
     };
 
-    const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); // 
+    const testTreatmentInsulin: NightScoutTreatmentModel = {
+        eventType: "Correction Bolus",
+        created_at: "2021-05-29",
+        insulin: 4,
+        notes: "BlablaTest",
+        enteredBy: "Frans"
+    }
+
+    const testTreatmentFood: NightScoutTreatmentModel = {
+        eventType: "Carb correction",
+        created_at: "2021-05-29",
+        carbs: 20,
+        protein: 20,
+        fat: 20,
+        notes: "BlablaTestFood",
+        enteredBy: "Jan"
+    }
+
+    const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); 
     await nsClient.postEntry(testEntry);
+    await nsClient.postTreatment(testTreatmentFood);
+    
     //console.log(await nsClient.getEntries());
-    console.log(await nsClient.getGlucoseUnit());
+    console.log(await nsClient.getTreatments());
+    console.log("Glucose in the unit: " + await nsClient.getGlucoseUnit());
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
         '' // TODO why don't you need a token to get entry data??
     );
     await nsParser.process();
-    console.log(nsParser.getData());
+    console.log(nsParser.getData(OutputDataType.FOOD));
+    console.log(nsParser.getData(OutputDataType.INSULIN));
 }
 
 export const testToken = '';

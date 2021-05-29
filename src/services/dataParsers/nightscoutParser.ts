@@ -1,7 +1,5 @@
 import { XOR } from 'ts-xor';
-import FoodModel from '../../gb/models/foodModel';
 import { GlucoseUnit } from '../../gb/models/glucoseModel';
-import { InsulinModel } from '../../gb/models/insulinModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';

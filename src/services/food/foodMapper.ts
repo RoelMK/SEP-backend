@@ -108,7 +108,8 @@ export default class FoodMapper {
             proteins: entry.protein,
             calories: entry.carbs,
             carbohydrates: entry.carbs,
-            fat: entry.fat
+            fat: entry.fat,
+            description: entry.notes ? entry.notes: ''
         } as FoodModel;
 
         return meal;

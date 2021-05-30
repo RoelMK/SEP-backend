@@ -58,7 +58,7 @@ export class NightScoutClient {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/entries/sgv.json`,
+                url: `${this.nightScoutHost}/api/v1/entries/sgv.json?token=${this.token}`,
                 data: {}
             };
             const response = await this.client.request(config);

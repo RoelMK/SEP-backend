@@ -2,7 +2,7 @@ import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary, parseNightScout } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseNightScout } from '../testUtils/parseUtils';
 
 test('import Abbott EU insulin', async () => {
     const expectedResult: InsulinModel = {

@@ -1,6 +1,6 @@
 import FoodModel from '../../src/gb/models/foodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary, parseEetmeter, parseNightScout } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseEetmeter, parseNightScout } from '../testUtils/parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 

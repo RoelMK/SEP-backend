@@ -3,7 +3,7 @@ import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutEntryModel } from '../../src/services/dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
-import { parseAbbott, parseNightScout } from './parseUtils';
+import { parseAbbott, parseNightScout } from '../testUtils/parseUtils';
 
 test('import Abbott EU glucose', async () => {
     const expectedResult: GlucoseModel = {

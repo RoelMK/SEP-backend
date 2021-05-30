@@ -1,6 +1,6 @@
 import { InsulinModel } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { parseFoodDiary } from './parseUtils';
+import { parseFoodDiary } from '../testUtils/parseUtils';
 
 test('test robustness of food diary data parser', async () => {
     expect(async () => {

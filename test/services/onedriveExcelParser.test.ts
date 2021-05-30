@@ -1,4 +1,4 @@
-import { parseOneDriveFoodDiary } from './parseUtils';
+import { parseOneDriveFoodDiary } from '../testUtils/parseUtils';
 
 test('import standardized food diary with missing values from a onedrive', async () => {
     const sampleODInput = [['', 0.966666666666667, '', 5, 2, 1, '', '']];

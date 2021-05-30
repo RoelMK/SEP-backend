@@ -1,5 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { NightScoutEntryModel, NightScoutTreatmentModel } from '../services/dataParsers/nightscoutParser';
+import {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from '../services/dataParsers/nightscoutParser';
 import { GlucoseUnit } from '../gb/models/glucoseModel';
 
 export class NightScoutClient {
@@ -21,37 +24,54 @@ export class NightScoutClient {
                 url: `${this.nightScoutHost}/api/v1/entries?token=${this.token}`,
                 data: entry
             };
-            await this.client.request(config); //const response = 
-            
+            await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
-            throw new Error("Server request failed"); //TODO make clear
+            switch (error.response.data.status) {
+                case 401:
+                    throw new Error(
+                        'Not authenticated to post entries! Check if the provided Nightscout token is correct.'
+                    );
+                case 405:
+                    throw new Error('Invalid entry input!');
+                    
+                default:
+                    throw new Error('Posting entries has failed.');
+            }
         }
     }
-
 
     /**
      * Posts a night scout treatment to the nightscout instance
      * @param entry NightScoutTreatment: a nightscout treatment
      */
-     async postTreatment(entry: NightScoutTreatmentModel) {
+    async postTreatment(entry: NightScoutTreatmentModel) {
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
                 url: `${this.nightScoutHost}/api/v1/treatments?token=${this.token}`,
                 data: entry
             };
-            await this.client.request(config); //const response = 
-            
+            await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
-            throw new Error("Server request failed"); //TODO make clear
+            switch (error.response.data.status) {
+                case 401:
+                    throw new Error(
+                        'Not authenticated to post treatments! Check if the provided token is correct.'
+                    );
+                case 405:
+                    throw new Error('Invalid treatment input!');
+                    
+                default:
+                    throw new Error('Posting treatments has failed.');
+            }
         }
     }
 
     /**
      * Get glucose entries via the nightscout API
-     * @returns resulting NightScoutEntry objects in an array 
+     * @returns resulting NightScoutEntry objects in an array
      * @throws error, when request failed
      */
     async getEntries(): Promise<NightScoutEntryModel[]> {
@@ -65,7 +85,7 @@ export class NightScoutClient {
             return response.data as NightScoutEntryModel[];
         } catch (error) {
             console.log(error);
-            throw new Error("Server request for nightscout entries failed: " + error);
+            throw new Error('Server request for nightscout entries failed: ' + error);
         }
     }
 
@@ -81,12 +101,17 @@ export class NightScoutClient {
             };
             const response = await this.client.request(config);
             return response.data as NightScoutTreatmentModel[];
-        } catch (error) {3
+        } catch (error) {
+            3;
             console.log(error);
-            throw new Error("Server request for nightscout treatments failed: " + error);
+            throw new Error('Server request for nightscout treatments failed: ' + error);
         }
     }
-    
+
+    /**
+     * Retrieve the measurement unit for glucose entries on the Nightscout host
+     * @returns GlucoseUnit that is set up for the Nightscout system
+     */
     async getGlucoseUnit(): Promise<GlucoseUnit> {
         try {
             const config: AxiosRequestConfig = {
@@ -95,7 +120,7 @@ export class NightScoutClient {
                 data: {}
             };
             const response = await this.client.request(config);
-            return response.data.settings.units == "mg/dl" ? GlucoseUnit.MG_DL : GlucoseUnit.MMOL_L;
+            return response.data.settings.units == 'mg/dl' ? GlucoseUnit.MG_DL : GlucoseUnit.MMOL_L;
         } catch (error) {
             console.log(error);
             return GlucoseUnit.MMOL_L;

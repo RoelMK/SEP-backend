@@ -79,7 +79,7 @@ async function testNightScout() {
 
     const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); 
     await nsClient.postEntry(testEntry);
-    //await nsClient.postTreatment(testTreatmentFood);
+    await nsClient.postTreatment(testTreatmentFood);
     
     console.log(await nsClient.getEntries());
     //console.log(await nsClient.getTreatments());

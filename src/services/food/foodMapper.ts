@@ -105,13 +105,12 @@ export default class FoodMapper {
     private static mapNightScout(entry: NightScoutTreatmentModel): FoodModel {
         const meal = {
             timestamp: new Date(entry.created_at).getTime(),
-            proteins: entry.protein,
-            calories: entry.carbs,
             carbohydrates: entry.carbs,
-            fat: entry.fat,
-            description: entry.notes ? entry.notes: ''
+            description: entry.notes ? entry.notes: '',
+            ...(entry.fat && { fat: entry.fat}),
+            ...(entry.protein && {proteins: entry.protein})
         } as FoodModel;
-
+        
         return meal;
     }
 

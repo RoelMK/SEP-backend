@@ -3,7 +3,6 @@ import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseFoodDiary, parseEetmeter, parseNightScout } from './parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
 
 test('import Abbott EU food', async () => {
     const expectedResult: FoodModel = {

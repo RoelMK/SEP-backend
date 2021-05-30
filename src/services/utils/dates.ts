@@ -69,7 +69,7 @@ const parseExcelDate = (daysSince1900: number): string => {
     if (daysSince1900 < 0) throw Error('Invalid amount of days since 1900!');
     const start = parse('01/01/1900', 'dd/MM/yyyy', new Date());
 
-    // duration as date-fns duration objects
+    // duration as date-fns duration object
     // https://www.epochconverter.com/seconds-days-since-y0#:~:text=Days%20Since%201900%2D01%2D01,the%20number%20on%20this%20page.
     // the excel format has two extra days as specified by the article above
     const offset = {

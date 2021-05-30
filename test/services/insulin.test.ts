@@ -66,7 +66,7 @@ test('import standardized food diary insulin values with missing values', async 
 });
 
 
-test('nightscout insulin with mocked response data', async () => {
+test('import mocked Nightscout response data with insulin', async () => {
     const testNSInsulin: NightScoutTreatmentModel = {
         _id: '60b26f9e6e6598317390a04a',
         eventType: 'Correction Bolus',

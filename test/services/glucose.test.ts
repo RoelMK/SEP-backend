@@ -30,7 +30,7 @@ test('import Abbott US glucose', async () => {
     ).toStrictEqual([expectedResult]);
 });
 
-test('nightscout glucose with mocked response data', async () => {
+test('import mocked Nightscout response with glucose', async () => {
     const testNSGlucose: NightScoutEntryModel = {
         _id: '60b39a3a6e65983173dc66f4',
         type: 'sgv',

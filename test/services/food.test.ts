@@ -112,7 +112,7 @@ test('import many Eetmeter entries', async () => {
     expect(result).toStrictEqual(expectedResult);
 });
 
-test('nightscout food with mocked response data', async () => {
+test('import mocked Nightscout response data with carbs', async () => {
     const testNSFood: NightScoutTreatmentModel = {
         _id: '60b2727f6e65983173940135',
         eventType: 'Carb correction',
@@ -133,7 +133,7 @@ test('nightscout food with mocked response data', async () => {
     ).toStrictEqual(expectedResult);
 });
 
-test('nightscout elaborate food with mocked response data', async () => {
+test('import mocked Nightscout response data with several food properties', async () => {
     const testNSFood: NightScoutTreatmentModel = {
         _id: '60b2727f6e65983173940135',
         eventType: 'Carb correction',

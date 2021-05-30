@@ -35,6 +35,7 @@ export class Activity {
 
     /**
      * Gets all activities for given player
+     * @param playerId ID of player
      * @returns All activities of player
      */
     async getAllActivities(
@@ -52,22 +53,37 @@ export class Activity {
     }
 
     /**
-     * Should get all activities (with possible queries) of the given activity ID/type
-     * @param activityId ID (Type) of activity (i.e. ID of "step" activity)
-     * @returns All activities of given type
+     * Gets the activities from given game descriptor translation keys
+     * @param playerId ID of player
+     * @param gameDescriptors List of game descriptor translation keys of activities to return
+     * @returns List of activities that match the given game descriptor translation keys
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getAllActivitiesWithId(activityId: number, headers?: Headers, query?: Query) {
-        // TODO: get all activities that belong to the same "activity" (i.e.) all "step" activities
-        // TODO: expand with date queries
-        return;
+    async getAllActivitiesWithGd(
+        playerId: number,
+        gameDescriptors: string[],
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        const activities = await this.gamebus.get(
+            `players/${playerId}/activities`,
+            headers,
+            {
+                gds: gameDescriptors.join(','),
+                ...query
+            },
+            this.authRequired
+        );
+        return activities;
     }
 
     /**
      * Get all activities on a specified date range
+     * @param playerId ID of player
      * @param startDate Start date (inclusive)
      * @param endDate End date (exclusive)
+     * @param order Order of activities (date ascending/descending)
      * @param limit Amount of activities (default 30)
+     * @param page Page number of activities
      * @returns List of activities
      */
     async getAllAcitivitiesBetweenDate(
@@ -76,6 +92,7 @@ export class Activity {
         endDate: Date,
         order?: QueryOrder,
         limit?: number,
+        page?: number,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -87,6 +104,8 @@ export class Activity {
             end: format(endDate, queryDateFormat),
             // Either use the given limit or use 30 as default
             limit: (limit ? limit : 30).toString(),
+            // Page number, default 1
+            page: (page ? page : 1).toString(),
             // Use given order as order or use descending as default
             sort: `${order ? order : QueryOrder.DESC}date`,
             // Add rest of query
@@ -105,7 +124,9 @@ export class Activity {
      * @param playerId Player ID
      * @param startDate Start date (inclusive) as millisecond UNIX (13-digit)
      * @param endDate End date (exclusive) as millisecond UNIX (13-digit)
+     * @param order Order of activities (date ascending/descending)
      * @param limit Amount of activities (default 30)
+     * @param page Page number of activities
      * @returns List of activities
      */
     async getAllActivitiesBetweenUnix(
@@ -114,6 +135,7 @@ export class Activity {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
+        page?: number,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -125,8 +147,46 @@ export class Activity {
             endDateAsDate,
             order,
             limit,
+            page,
             headers,
             query
+        );
+    }
+
+    /**
+     * Combination of getting certain activities between given unix dates
+     * @param playerId ID of player
+     * @param startDate Starting date (including, unix)
+     * @param endDate Ending date (excluding, unix)
+     * @param gameDescriptors List of game descriptor translation keys
+     * @param order Order of date, ascending or descending
+     * @param limit Amount of activites to get, default 30
+     * @param page Page number, default 1
+     * @returns Activities of given types between given dates
+     */
+    async getAllActivitiesBetweenUnixWithGd(
+        playerId: number,
+        startDate: number,
+        endDate: number,
+        gameDescriptors: string[],
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.getAllActivitiesBetweenUnix(
+            playerId,
+            startDate,
+            endDate,
+            order,
+            limit,
+            page,
+            headers,
+            {
+                gds: gameDescriptors.join(','),
+                ...query
+            }
         );
     }
 
@@ -136,12 +196,14 @@ export class Activity {
      * @param date Date on which you want to get all activities
      * @param order Order of activity by date (descending is default)
      * @param limit Amount of activities to retrieve (default 30)
+     * @param page Page number, default 1
      */
     async getActivitiesOnDate(
         playerId: number,
         date: Date,
         order?: QueryOrder,
         limit?: number,
+        page?: number,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -153,6 +215,7 @@ export class Activity {
             tomorrowAsDate,
             order,
             limit,
+            page,
             headers,
             query
         );
@@ -165,12 +228,14 @@ export class Activity {
      * @param date Date on which you want to get all activities (as millisecond UNIX (13-digit))
      * @param order Order of activity by date (descending is default)
      * @param limit Amount of activities to retrieve (default 30)
+     * @param page Page number, default 1
      */
     async getActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
         limit?: number,
+        page?: number,
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -186,11 +251,39 @@ export class Activity {
             tomorrowUnix,
             order,
             limit,
+            page,
             headers,
             query
         );
         return activities;
     }
+
+    /**
+     * Shortcut function to get all activities of given user on a specific date with given game descriptors
+     * @param playerId Player ID
+     * @param date Date on which you want to get all activities (as millisecond UNIX (13-digit))
+     * @param gameDescriptors List of game descriptor translation keys
+     * @param order Order of activity by date (descending is default)
+     * @param limit Amount of activities to retrieve (default 30)
+     * @param page Page number, default 1
+     */
+    async getActivitiesOnUnixDateWithGd(
+        playerId: number,
+        date: number,
+        gameDescriptors: string[],
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.getActivitiesOnUnixDate(playerId, date, order, limit, page, headers, {
+            gds: gameDescriptors.join(','),
+            ...query
+        });
+    }
+
+    // TODO: recursive query to get all activities since there's only 30 per page
 
     // TODO: query for specific timestamp on a given date to start filtering time periods
     // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[] (see below)

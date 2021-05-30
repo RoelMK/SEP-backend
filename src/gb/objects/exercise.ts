@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityGETData } from '../models/gamebusModel';
+import { QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 /**
@@ -17,10 +19,79 @@ export class Exercise extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        return await this.activity.getAllActivities(playerId, headers, {
-            gds: gameDescriptors.join(','),
-            ...query
-        });
+        return await this.activity.getAllActivitiesWithGd(
+            playerId,
+            gameDescriptors,
+            headers,
+            query
+        );
+    }
+
+    /**
+     * Function that returns all activities of given types between given dates (as unix)
+     * @param playerId ID of player
+     * @param gameDescriptors List of activity types (see below)
+     * @param startDate Starting date (including, unix)
+     * @param endDate Ending date (excluding, unix)
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit Amount of activities to retrieve, default is 30
+     * @param page Page number, default 1
+     * @returns All activities of given types between given dates (excluding end)
+     */
+    async getExerciseActivityFromGdBetweenUnix(
+        playerId: number,
+        gameDescriptors: ExerciseGameDescriptorNames[],
+        startDate: number,
+        endDate: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.activity.getAllActivitiesBetweenUnixWithGd(
+            playerId,
+            startDate,
+            endDate,
+            gameDescriptors,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
+    }
+
+    /**
+     * Function that returns all activities of given types on given date (as unix)
+     * @param playerId ID of player
+     * @param gameDescriptors List of activity types (see below)
+     * @param date Date as unix
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit Amount of activities to retrieve, default is 30
+     * @param page Page number, default 1
+     * @returns All activities of given types on given date
+     */
+    async getExerciseActivityFromGdOnUnixDate(
+        playerId: number,
+        gameDescriptors: ExerciseGameDescriptorNames[],
+        date: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.activity.getActivitiesOnUnixDateWithGd(
+            playerId,
+            date,
+            gameDescriptors,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
     }
 
     // Not sure if this one is possible

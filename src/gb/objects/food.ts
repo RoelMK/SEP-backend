@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityGETData } from '../models/gamebusModel';
 import { GameBusObject } from './base';
@@ -14,7 +15,7 @@ export class Food extends GameBusObject {
      */
     async getAllFoodActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const food = await this.activity.getAllActivitiesWithId(this.foodId, headers, query);
-        return food as unknown as ActivityGETData[];
+        //const food = await this.activity.getAllActivitiesWithId(this.foodId, headers, query);
+        return undefined as unknown as ActivityGETData[];
     }
 }

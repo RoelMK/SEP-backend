@@ -97,7 +97,6 @@ export default class NightscoutParser extends DataParser {
             this.nightScoutTreatments = this.testTreatments;
         }
         
-
         this.glucoseParser = new GlucoseParser(
             this.nightScoutEntries,
             GlucoseSource.NIGHTSCOUT,
@@ -150,11 +149,14 @@ export type NightScoutEntryModel = {
     dateString?: string;
     date: number;
     sgv: number;
+    _id?: string;
     direction?: string;
     noise?: number;
     filtered?: number;
     unfiltered?: number;
     rssi?: number;
+    utcOffset?: number;
+    sysTime?: string;
 };
 
 export type NightScoutTreatmentModel = {

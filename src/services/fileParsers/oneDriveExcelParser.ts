@@ -8,8 +8,6 @@ import { getKeys } from '../utils/interfaceKeys';
  * Default class for parsing .xlsx files from a OneDrive
  */
 export default class OneDriveExcelParser {
-    private tempTest: string[][] = [['5/9/2021', '20:43', 'Meeting', '10', '5', '2', '', '7']];
-
     /**
      * Asynchronous function that parses Excel data on a onedrive
      * @param filePath path to the file on the OneDrive

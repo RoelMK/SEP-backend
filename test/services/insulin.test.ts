@@ -1,7 +1,8 @@
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseNightScout } from './parseUtils';
 
 test('import Abbott EU insulin', async () => {
     const expectedResult: InsulinModel = {
@@ -61,5 +62,27 @@ test('import standardized food diary insulin values with missing values', async 
                 OutputDataType.INSULIN
             )) as InsulinModel[]
         )[1]
+    ).toStrictEqual(expectedResult);
+});
+
+
+test('nightscout insulin with mocked response data', async () => {
+    const testNSInsulin: NightScoutTreatmentModel = {
+        _id: '60b26f9e6e6598317390a04a',
+        eventType: 'Correction Bolus',
+        created_at: '2021-05-29T00:00:00.000Z',
+        insulin: 5,
+        notes: 'BlablaTest',
+        enteredBy: 'Frans',
+        utcOffset: 0,
+    }
+
+    const expectedResult = [{
+        insulinAmount: 5,
+        insulinType: InsulinType.RAPID,
+        timestamp: new Date('2021-05-29T00:00:00.000Z').getTime()
+    }]
+    expect(
+       await parseNightScout([], [testNSInsulin], OutputDataType.INSULIN)
     ).toStrictEqual(expectedResult);
 });

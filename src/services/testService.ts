@@ -51,8 +51,8 @@ async function testOneDrive() {
 async function testNightScout() {
     const testEntry: NightScoutEntryModel = {
         type: 'sgv',
-        date: 1621708895000,
-        sgv: 100,
+        date: 1622383144021,
+        sgv: 79,
         noise: 0,
         filtered: 0,
         unfiltered: 0,
@@ -79,10 +79,10 @@ async function testNightScout() {
 
     const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); 
     await nsClient.postEntry(testEntry);
-    await nsClient.postTreatment(testTreatmentFood);
+    //await nsClient.postTreatment(testTreatmentFood);
     
-    //console.log(await nsClient.getEntries());
-    console.log(await nsClient.getTreatments());
+    console.log(await nsClient.getEntries());
+    //console.log(await nsClient.getTreatments());
     console.log("Glucose in the unit: " + await nsClient.getGlucoseUnit());
 
     const nsParser: NightscoutParser = new NightscoutParser(
@@ -92,6 +92,7 @@ async function testNightScout() {
     await nsParser.process();
     console.log(nsParser.getData(OutputDataType.FOOD));
     console.log(nsParser.getData(OutputDataType.INSULIN));
+    console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
 export const testToken = '';

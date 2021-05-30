@@ -5,7 +5,10 @@ import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
 import OneDriveExcelParser from '../../src/services/fileParsers/oneDriveExcelParser';
 import { EetMeterParser } from '../../src/services/dataParsers/eetmeterParser';
-import NightscoutParser from '../../src/services/dataParsers/nightscoutParser';
+import NightscoutParser, {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from '../../src/services/dataParsers/nightscoutParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data
@@ -52,8 +55,17 @@ export async function parseXml(filePath: string) {
     return await xmlParser.parse(filePath);
 }
 
-export async function parseNightScoutEntry() {
-    const nsParser: NightscoutParser = new NightscoutParser('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68')
+export async function parseNightScout(
+    testEntries: NightScoutEntryModel[],
+    testTreatments: NightScoutTreatmentModel[],
+    outputDataType: OutputDataType
+) {
+    const nsParser: NightscoutParser = new NightscoutParser(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68',
+        testEntries,
+        testTreatments
+    );
     await nsParser.process();
-    return nsParser.getData(OutputDataType.FOOD);
+    return nsParser.getData(outputDataType);
 }

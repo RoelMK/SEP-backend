@@ -22,7 +22,12 @@ export default class NightscoutParser extends DataParser {
      * @param token the private token generated for Diabetter
      *
      */
-    constructor(private nightScoutHost: string, private token?: string) {
+    constructor(
+        private nightScoutHost: string,
+        private token?: string,
+        private testEntries?: NightScoutEntryModel[],
+        private testTreatments?: NightScoutTreatmentModel[]
+    ) {
         super(DataSource.NIGHTSCOUT, '');
     }
 
@@ -31,7 +36,9 @@ export default class NightscoutParser extends DataParser {
      * @param type type of data to be parsed
      * @returns Nightscout entries or nightscout treatments
      */
-    protected async parse(type?: NightScoutDatatype): Promise<XOR<NightScoutTreatmentModel[], NightScoutEntryModel[]>> {
+    protected async parse(
+        type?: NightScoutDatatype
+    ): Promise<XOR<NightScoutTreatmentModel[], NightScoutEntryModel[]>> {
         if (type === undefined) {
             throw new Error('NightScoutDataType is not defined, unknown which data to retrieve.');
         }
@@ -76,16 +83,20 @@ export default class NightscoutParser extends DataParser {
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
-        // specify the type of parsed data
-        // have to parse nightscout treatment to foot model
-
-        // TODO note to self use parse with parameter or just individual funtions as below
-        // does not matter for result and below needs less overhead
-        this.nightScoutEntries = await this.parseEntry();
-        this.nightScoutTreatments = await this.parseTreatment();
-
-        // retrieve glucose unit
-        this.glucoseUnit = await this.parseGlucoseUnit();
+       
+        if (this.testEntries === undefined || this.testTreatments === undefined) {
+            // TODO note to self use parse with parameter or just individual funtions as below
+            // does not matter for result and below needs less overhead
+            this.nightScoutEntries = await this.parseEntry();
+            this.nightScoutTreatments = await this.parseTreatment();
+            // retrieve glucose unit
+            this.glucoseUnit = await this.parseGlucoseUnit();
+        }else{
+            // use test input
+            this.nightScoutEntries = this.testEntries;
+            this.nightScoutTreatments = this.testTreatments;
+        }
+        
 
         this.glucoseParser = new GlucoseParser(
             this.nightScoutEntries,
@@ -94,15 +105,9 @@ export default class NightscoutParser extends DataParser {
             this.glucoseUnit
         );
 
-
         const foodTreatments: NightScoutTreatmentModel[] = this.filterFood();
-        this.foodParser = new FoodParser(
-            foodTreatments,
-            FoodSource.NIGHTSCOUT,
-            this.dateFormat
-        );
+        this.foodParser = new FoodParser(foodTreatments, FoodSource.NIGHTSCOUT, this.dateFormat);
 
-        
         const insulinTreatments: NightScoutTreatmentModel[] = this.filterInsulin();
         this.insulinParser = new InsulinParser(
             insulinTreatments,
@@ -115,11 +120,9 @@ export default class NightscoutParser extends DataParser {
      * Filters the food entries from the raw data
      * @returns All food entries
      */
-     private filterFood(): NightScoutTreatmentModel[] {
+    private filterFood(): NightScoutTreatmentModel[] {
         const food = this.nightScoutTreatments?.filter((entry: NightScoutTreatmentModel) => {
-            return (
-                entry.carbs && entry.created_at
-            );
+            return entry.carbs && entry.created_at;
         });
         if (food?.length === 0) {
             return [];
@@ -131,11 +134,9 @@ export default class NightscoutParser extends DataParser {
      * Filters the insulin entries from the raw data
      * @returns All insulin entries
      */
-     private filterInsulin(): NightScoutTreatmentModel[] {
+    private filterInsulin(): NightScoutTreatmentModel[] {
         const insulin = this.nightScoutTreatments?.filter((entry: NightScoutTreatmentModel) => {
-            return (
-                entry.insulin && entry.created_at
-            );
+            return entry.insulin && entry.created_at;
         });
         if (insulin?.length === 0) {
             return [];
@@ -159,6 +160,7 @@ export type NightScoutEntryModel = {
 export type NightScoutTreatmentModel = {
     eventType: string;
     created_at: string;
+    _id?: string;
     glucose?: string;
     glucoseType?: string; // Finger or sensor
     carbs?: number;
@@ -168,6 +170,7 @@ export type NightScoutTreatmentModel = {
     units?: string; // glucose units
     notes?: string;
     enteredBy?: string;
+    utcOffset?: number;
 };
 
 // Enum that contains all retrievable data from Nightscout

@@ -51,6 +51,6 @@ GET {{baseUrl}}/players/{{playerId}}/activities
     &end=27-05-2021
     &limit=30
     &sort=-date
-    &excludeGds=
+    &gds=WALK,RUN
 content-type: application/json
 Authorization: Bearer {{token}}

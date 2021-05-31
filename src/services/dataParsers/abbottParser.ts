@@ -21,7 +21,7 @@ export default class AbbottParser extends DataParser {
     /**
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
-    async process() {
+    async process(): Promise<void> {
         // specify the type of parsed data
         this.abbottData = (await this.parse()) as AbbottData[];
 

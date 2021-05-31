@@ -21,7 +21,7 @@ export class EetMeterParser extends DataParser {
     /**
      * Function that is called (async) that creates the parsers and filers the data to the correct parsers
      */
-    async process() {
+    async process(): Promise<void> {
         const eetmeterData: EetmeterData = (await this.parse()) as unknown as EetmeterData;
         this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as Consumptie[];
         // Not sure why it does not always map it to an array (even with a single element)

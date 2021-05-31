@@ -3,7 +3,10 @@ import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
-import NightscoutParser, { NightScoutEntryModel, NightScoutTreatmentModel } from './dataParsers/nightscoutParser';
+import NightscoutParser, {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from './dataParsers/nightscoutParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -18,7 +21,7 @@ async function testAbbott() {
 }
 
 async function testExcel() {
-    const testPath = 'test/services/data/foodDiary_standard_missing.xlsx';
+    const testPath = 'test/services/data/foodDiary_standard_missing_table.xlsx';
     const wrongTestPath = 'test/services/data/abbott_eu.csv';
 
     try {
@@ -28,11 +31,12 @@ async function testExcel() {
         console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     } catch (e) {
         console.log(e.message);
-        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
-        await foodDiaryParser.process();
-        console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
-        console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     }
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
+    await foodDiaryParser.process();
+
+    console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
+    console.log(foodDiaryParser.getData(OutputDataType.FOOD));
 }
 
 async function testOneDrive() {
@@ -60,30 +64,33 @@ async function testNightScout() {
     };
 
     const testTreatmentInsulin: NightScoutTreatmentModel = {
-        eventType: "Correction Bolus",
-        created_at: "2021-05-29",
+        eventType: 'Correction Bolus',
+        created_at: '2021-05-29',
         insulin: 4,
-        notes: "BlablaTest",
-        enteredBy: "Frans"
-    }
+        notes: 'BlablaTest',
+        enteredBy: 'Frans'
+    };
 
     const testTreatmentFood: NightScoutTreatmentModel = {
-        eventType: "Carb correction",
-        created_at: "2021-05-29",
+        eventType: 'Carb correction',
+        created_at: '2021-05-29',
         carbs: 20,
         protein: 20,
         fat: 20,
-        notes: "BlablaTestFood",
-        enteredBy: "Jan"
-    }
+        notes: 'BlablaTestFood',
+        enteredBy: 'Jan'
+    };
 
-    const nsClient = new NightScoutClient('https://nightscout-sep.herokuapp.com', 'rink-27f591f2e4730a68'); 
+    const nsClient = new NightScoutClient(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68'
+    );
     await nsClient.postEntry(testEntry);
     await nsClient.postTreatment(testTreatmentFood);
-    
+
     console.log(await nsClient.getEntries());
     //console.log(await nsClient.getTreatments());
-    console.log("Glucose in the unit: " + await nsClient.getGlucoseUnit());
+    console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
@@ -97,6 +104,6 @@ async function testNightScout() {
 
 export const testToken = '';
 //testAbbott();
-//testExcel();
+testExcel();
 //testOneDrive();
-testNightScout();
+//testNightScout();

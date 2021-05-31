@@ -53,12 +53,12 @@ test('import standardized food diary insulin values with missing values', async 
     const expectedResult: InsulinModel = {
         insulinAmount: 4,
         insulinType: InsulinType.RAPID,
-        timestamp: parseDate('08/05/21 12:01', DateFormat.FOOD_DIARY, new Date(), true) as number
+        timestamp: parseDate('08/05/21 13:12', DateFormat.FOOD_DIARY, new Date(), true) as number
     };
     expect(
         (
             (await parseFoodDiary(
-                'test/services/data/foodDiary_standard_missing.xlsx',
+                'test/services/data/foodDiary_standard_missing_table.xlsx',
                 OutputDataType.INSULIN
             )) as InsulinModel[]
         )[1]

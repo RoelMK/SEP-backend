@@ -13,7 +13,7 @@ export default class InsulinMapper {
      * @param dateFormat DateFormat of the insulin measurement timestamps
      * @returns Mapping function that maps an entry from the source to a insulinModel
      */
-    public static mapInsulin(insulinSource: InsulinSource, dateFormat: DateFormat) {
+    public static mapInsulin(insulinSource: InsulinSource, dateFormat: DateFormat): (entry: any) => InsulinModel {
         switch (insulinSource) {
             case InsulinSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument

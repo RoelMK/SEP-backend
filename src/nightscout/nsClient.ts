@@ -45,12 +45,12 @@ export class NightScoutClient {
      * Posts a night scout treatment to the nightscout instance
      * @param entry NightScoutTreatment: a nightscout treatment
      */
-    async postTreatment(entry: NightScoutTreatmentModel) {
+    async postTreatment(treatment: NightScoutTreatmentModel) {
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
                 url: `${this.nightScoutHost}/api/v1/treatments?token=${this.token}`,
-                data: entry
+                data: treatment
             };
             await this.client.request(config); //const response =
         } catch (error) {

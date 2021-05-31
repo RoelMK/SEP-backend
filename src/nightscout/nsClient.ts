@@ -34,7 +34,7 @@ export class NightScoutClient {
                     );
                 case 405:
                     throw new Error('Invalid entry input!');
-                    
+
                 default:
                     throw new Error('Posting entries has failed.');
             }
@@ -62,7 +62,7 @@ export class NightScoutClient {
                     );
                 case 405:
                     throw new Error('Invalid treatment input!');
-                    
+
                 default:
                     throw new Error('Posting treatments has failed.');
             }
@@ -85,7 +85,7 @@ export class NightScoutClient {
             return response.data as NightScoutEntryModel[];
         } catch (error) {
             console.log(error);
-            throw new Error('Server request for nightscout entries failed: ' + error);
+            return []; // return empty data array
         }
     }
 
@@ -104,7 +104,7 @@ export class NightScoutClient {
         } catch (error) {
             3;
             console.log(error);
-            throw new Error('Server request for nightscout treatments failed: ' + error);
+            return []; // return empty data array
         }
     }
 
@@ -122,8 +122,7 @@ export class NightScoutClient {
             const response = await this.client.request(config);
             return response.data.settings.units == 'mg/dl' ? GlucoseUnit.MG_DL : GlucoseUnit.MMOL_L;
         } catch (error) {
-            console.log(error);
-            return GlucoseUnit.MMOL_L;
+            throw new Error('Could not read glucose unit from the Nightscout website!');
         }
     }
 }

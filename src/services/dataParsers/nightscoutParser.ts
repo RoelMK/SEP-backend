@@ -16,6 +16,8 @@ export default class NightscoutParser extends DataParser {
 
     private glucoseUnit: GlucoseUnit = GlucoseUnit.UNDEFINED;
 
+    private nsClient: NightScoutClient;
+
     /**
      * DataParser construction with DataSource set
      * @param nightScoutHost the url which points to the host of the nightscout instance
@@ -23,12 +25,13 @@ export default class NightscoutParser extends DataParser {
      *
      */
     constructor(
-        private nightScoutHost: string,
-        private token?: string,
+        nightScoutHost: string,
+        token?: string,
         private testEntries?: NightScoutEntryModel[],
         private testTreatments?: NightScoutTreatmentModel[]
     ) {
         super(DataSource.NIGHTSCOUT, '');
+        this.nsClient = new NightScoutClient(nightScoutHost, token);
     }
 
     /**
@@ -54,8 +57,7 @@ export default class NightscoutParser extends DataParser {
      * @returns all NightScoutEntries that can be fetched from the nightscout instance
      */
     protected async parseEntry(): Promise<NightScoutEntryModel[]> {
-        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
-        const entries: NightScoutEntryModel[] = await nsClient.getEntries();
+        const entries: NightScoutEntryModel[] = await this.nsClient.getEntries();
         return entries;
     }
 
@@ -64,8 +66,7 @@ export default class NightscoutParser extends DataParser {
      * @returns all NightScoutTreatments that can be fetched from the nightscout instance
      */
     private async parseTreatment(): Promise<NightScoutTreatmentModel[]> {
-        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
-        const treatments: NightScoutTreatmentModel[] = await nsClient.getTreatments();
+        const treatments: NightScoutTreatmentModel[] = await this.nsClient.getTreatments();
         return treatments;
     }
 
@@ -74,16 +75,18 @@ export default class NightscoutParser extends DataParser {
      * @returns GlucoseUnit from the nightscout instance
      */
     private async parseGlucoseUnit(): Promise<GlucoseUnit> {
-        const nsClient = new NightScoutClient(this.nightScoutHost, this.token);
-        const glucose: GlucoseUnit = await nsClient.getGlucoseUnit();
-        return glucose;
+        try {
+            return await this.nsClient.getGlucoseUnit();
+        } catch (e) {
+            // TODO can we just assume this? Maybe based on the average value this can be determined more accurately
+            return GlucoseUnit.MMOL_L;
+        }
     }
 
     /**
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
-       
         if (this.testEntries === undefined || this.testTreatments === undefined) {
             // TODO note to self use parse with parameter or just individual funtions as below
             // does not matter for result and below needs less overhead
@@ -91,12 +94,12 @@ export default class NightscoutParser extends DataParser {
             this.nightScoutTreatments = await this.parseTreatment();
             // retrieve glucose unit
             this.glucoseUnit = await this.parseGlucoseUnit();
-        }else{
+        } else {
             // use test input
             this.nightScoutEntries = this.testEntries;
             this.nightScoutTreatments = this.testTreatments;
         }
-        
+
         this.glucoseParser = new GlucoseParser(
             this.nightScoutEntries,
             GlucoseSource.NIGHTSCOUT,

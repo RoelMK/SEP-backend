@@ -82,8 +82,8 @@ export class Activity {
      * @param startDate Start date (inclusive)
      * @param endDate End date (exclusive)
      * @param order Order of activities (date ascending/descending)
-     * @param limit Amount of activities (default 30)
-     * @param page Page number of activities
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns List of activities
      */
     async getAllAcitivitiesBetweenDate(
@@ -97,20 +97,30 @@ export class Activity {
         query?: Query
     ): Promise<ActivityGETData[]> {
         // Make a query for the given start and end date
-        const dateQuery: Query = {
+        let dateQuery: Query = {
             // Given date formatted in ISO format
             start: format(startDate, queryDateFormat),
             // Date of next day (end is exclusive) formatted in ISO
             end: format(endDate, queryDateFormat),
-            // Either use the given limit or use 30 as default
-            limit: (limit ? limit : 30).toString(),
-            // Page number, default 1
-            page: (page ? page : 1).toString(),
             // Use given order as order or use descending as default
             sort: `${order ? order : QueryOrder.DESC}date`,
             // Add rest of query
             ...query
         };
+        if (limit) {
+            dateQuery = {
+                // Use the given limit only if specified
+                limit: limit.toString(),
+                ...dateQuery
+            };
+        }
+        if (page) {
+            dateQuery = {
+                // Use page number only if specified
+                page: page.toString(),
+                ...dateQuery
+            };
+        }
         const activities: ActivityGETData[] = await this.getAllActivities(
             playerId,
             headers,
@@ -125,8 +135,8 @@ export class Activity {
      * @param startDate Start date (inclusive) as millisecond UNIX (13-digit)
      * @param endDate End date (exclusive) as millisecond UNIX (13-digit)
      * @param order Order of activities (date ascending/descending)
-     * @param limit Amount of activities (default 30)
-     * @param page Page number of activities
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns List of activities
      */
     async getAllActivitiesBetweenUnix(
@@ -160,8 +170,8 @@ export class Activity {
      * @param endDate Ending date (excluding, unix)
      * @param gameDescriptors List of game descriptor translation keys
      * @param order Order of date, ascending or descending
-     * @param limit Amount of activites to get, default 30
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns Activities of given types between given dates
      */
     async getAllActivitiesBetweenUnixWithGd(
@@ -195,8 +205,8 @@ export class Activity {
      * @param playerId Player ID
      * @param date Date on which you want to get all activities
      * @param order Order of activity by date (descending is default)
-     * @param limit Amount of activities to retrieve (default 30)
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      */
     async getActivitiesOnDate(
         playerId: number,
@@ -227,8 +237,8 @@ export class Activity {
      * @param playerId Player ID
      * @param date Date on which you want to get all activities (as millisecond UNIX (13-digit))
      * @param order Order of activity by date (descending is default)
-     * @param limit Amount of activities to retrieve (default 30)
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      */
     async getActivitiesOnUnixDate(
         playerId: number,
@@ -264,8 +274,8 @@ export class Activity {
      * @param date Date on which you want to get all activities (as millisecond UNIX (13-digit))
      * @param gameDescriptors List of game descriptor translation keys
      * @param order Order of activity by date (descending is default)
-     * @param limit Amount of activities to retrieve (default 30)
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      */
     async getActivitiesOnUnixDateWithGd(
         playerId: number,

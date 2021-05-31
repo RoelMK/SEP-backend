@@ -28,7 +28,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&limit=30&page=1&sort=-date',
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 })
@@ -46,7 +46,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&limit=30&page=1&sort=-date',
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 })
@@ -63,7 +63,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&limit=30&page=1&sort=-date',
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 })
@@ -83,7 +83,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&limit=30&page=1&sort=-date',
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 })

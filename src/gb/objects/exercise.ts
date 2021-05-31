@@ -34,8 +34,8 @@ export class Exercise extends GameBusObject {
      * @param startDate Starting date (including, unix)
      * @param endDate Ending date (excluding, unix)
      * @param order Optional, ascending (+) or descending (-)
-     * @param limit Amount of activities to retrieve, default is 30
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types between given dates (excluding end)
      */
     async getExerciseActivityFromGdBetweenUnix(
@@ -68,8 +68,8 @@ export class Exercise extends GameBusObject {
      * @param gameDescriptors List of activity types (see below)
      * @param date Date as unix
      * @param order Optional, ascending (+) or descending (-)
-     * @param limit Amount of activities to retrieve, default is 30
-     * @param page Page number, default 1
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types on given date
      */
     async getExerciseActivityFromGdOnUnixDate(

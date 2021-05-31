@@ -55,7 +55,7 @@ describe('with mocked exercises get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&limit=30&page=1&sort=-date&gds=WALK'
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK'
             })
         );
         expect(exercises).toEqual([]);
@@ -76,7 +76,7 @@ describe('with mocked exercises get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&limit=30&page=1&sort=-date&gds=WALK'
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK'
             })
         );
         expect(exercises).toEqual([]);

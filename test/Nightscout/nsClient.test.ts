@@ -40,7 +40,7 @@ describe('GameBusClient requests', () => {
     }
 
     test('Posting an entry', async () => {
-        const response = await client.postEntry(testEntry);
+        await client.postEntry(testEntry);
         // Full response means data is given separately
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -51,7 +51,7 @@ describe('GameBusClient requests', () => {
     });
 
     test('Posting a treatment', async () => {
-        const response = await client.postTreatment(testTreatment);
+        await client.postTreatment(testTreatment);
         // Full response means data is given separately
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(

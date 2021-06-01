@@ -8,7 +8,7 @@ import { GameBusObject } from './base';
  */
 export class Glucose extends GameBusObject {
     private glucoseId = 0; // TODO: assign to GameBus-given activity ID
-    private glucoseGameDescriptor = "LOG_GLUCOSE";
+    private glucoseGameDescriptor = "BLOOD_GLUCOSE_MSMT";
 
     /**
      * Example function that retrieves all activities with pre-set ID
@@ -32,7 +32,7 @@ export class Glucose extends GameBusObject {
             image: "", //TODO add image?
             date: model.timestamp,
             propertyInstances: [{
-                propertyTK : "GLUCOSE_VALUE_MMOLL",
+                propertyTK : "eAG_MMOLL",
                 value : model.glucoseLevel
             }],
             players: [playerID]

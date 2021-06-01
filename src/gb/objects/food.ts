@@ -8,7 +8,7 @@ import { GameBusObject } from './base';
  */
 export class Food extends GameBusObject {
     private foodId = 0; // TODO: assign to GameBus-given activity ID
-    private foodGameDescriptor = "LOG_FOOD";
+    private foodGameDescriptor = "Nutrion_Diary";
 
     /**
      * Example function that retrieves all activities with pre-set ID
@@ -37,17 +37,17 @@ export class Food extends GameBusObject {
             }] as PropertyInstancePOST[],
             players: [playerID]
         }
-        if(model.calories !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_CALORIES_KCAL", value : model.calories})}
+        if(model.calories !== undefined) {obj.propertyInstances.push({propertyTK : "KCAL_CARB", value : model.calories})}
         if(model.meal_type !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_MEAL_TYPE", value : model.meal_type})}
         if(model.glycemic_index !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_GLYCEMIC_INDEX", value : model.glycemic_index})}
         if(model.fat !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_FAT_GRAMS", value : model.fat})}
         if(model.saturatedFat !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SATURATED_FAT_GRAMS", value : model.saturatedFat})}
         if(model.proteins !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_PROTEINS_GRAMS", value : model.proteins})}
-        if(model.fibers !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_FIBERS_GRAMS", value : model.fibers})}
+        if(model.fibers !== undefined) {obj.propertyInstances.push({propertyTK : "FIBERS_WEIGHT", value : model.fibers})}
         if(model.salt !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SALT_GRAMS", value : model.salt})}
         if(model.water !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_WATER_GRAMS", value : model.water})}
         if(model.sugars !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SUGAR_GRAMS", value : model.sugars})}
-        if(model.description !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_DESCRIPTION", value : model.description})}
+        if(model.description !== undefined) {obj.propertyInstances.push({propertyTK : "DESCRIPTION", value : model.description})}
         return obj;
     }
 }

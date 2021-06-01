@@ -1,5 +1,6 @@
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData } from '../models/gamebusModel';
+import { GlucoseModel } from '../models/glucoseModel';
 import { GameBusObject } from './base';
 
 /**
@@ -7,6 +8,7 @@ import { GameBusObject } from './base';
  */
 export class Glucose extends GameBusObject {
     private glucoseId = 0; // TODO: assign to GameBus-given activity ID
+    private glucoseGameDescriptor = "LOG_GLUCOSE";
 
     /**
      * Example function that retrieves all activities with pre-set ID
@@ -16,5 +18,24 @@ export class Glucose extends GameBusObject {
         // TODO: implement getAllActivitiesWithId()
         const glucose = await this.activity.getAllActivitiesWithId(this.glucoseId, headers, query);
         return glucose as unknown as ActivityGETData[];
+    }
+
+    async postSingleInsulinActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {
+        let data = this.toPOSTData(model,playerID);
+        this.activity.postActivity(data,headers,query)
+    }
+
+    private toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
+        return {
+            gameDescriptorTK: this.glucoseGameDescriptor,
+            dataProviderName: this.activity.dataProviderName,
+            image: "", //TODO add image?
+            date: model.timestamp,
+            propertyInstances: [{
+                propertyTK : "GLUCOSE_VALUE_MMOLL",
+                value : model.glucoseLevel
+            }],
+            players: [playerID]
+        };
     }
 }

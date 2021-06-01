@@ -1,7 +1,7 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { format, addDays } from 'date-fns';
 import { ActivityProperty, ActivityModel } from '../models/activityModel';
-import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, PropertyInstanceReference } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 
 /**
@@ -11,6 +11,25 @@ import { fromUnixMsTime } from '../../services/utils/dates';
  */
 export class Activity {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
+    public dataProviderName = "daily_run";
+
+    /**
+     * Gets all activities for given player
+     * @returns All activities of player
+     */
+    async postActivity(
+        data: ActivityPOSTData,
+        headers?: Headers,
+        query?: Query
+    ) {
+        this.gamebus.post(
+            "me/activities",
+            data,
+            {"Content-Type": "application/json",...headers},
+            {"dryrun":"false",...query},
+            true,
+            false);
+    }
 
     /**
      * Gets activity from activity ID

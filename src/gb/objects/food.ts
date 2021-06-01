@@ -8,7 +8,7 @@ import { GameBusObject } from './base';
  */
 export class Food extends GameBusObject {
     private foodId = 0; // TODO: assign to GameBus-given activity ID
-    private foodGameDescriptor = "LOG_GLUCOSE";
+    private foodGameDescriptor = "LOG_FOOD";
 
     /**
      * Example function that retrieves all activities with pre-set ID

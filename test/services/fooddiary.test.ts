@@ -46,7 +46,7 @@ test('test automatic date + total insulin fill', async () => {
         date: '08/05/21',
         time: '13:12',
         meal_type: MEAL_TYPE.UNDEFINED,
-        description: "Pizza",
+        description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
         base_insulin: '4',

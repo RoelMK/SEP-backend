@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityGETData } from '../models/gamebusModel';
 import { GameBusObject } from './base';
@@ -14,7 +15,7 @@ export class Insulin extends GameBusObject {
      */
     async getAllInsulinActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const insulin = await this.activity.getAllActivitiesWithId(this.insulinId, headers, query);
-        return insulin as unknown as ActivityGETData[];
+        //const insulin = await this.activity.getAllActivitiesWithId(this.insulinId, headers, query);
+        return undefined as unknown as ActivityGETData[];
     }
 }

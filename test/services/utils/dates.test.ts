@@ -5,7 +5,8 @@ import {
     getDateFormat,
     parseDate,
     parseExcelDate,
-    parseExcelTime
+    parseExcelTime,
+    validUnixTimestamp
 } from '../../../src/services/utils/dates';
 
 describe('getting date format from string', () => {
@@ -134,4 +135,18 @@ test('test robustness of excel date parser', async () => {
     expect(() => {
         parseExcelDate(daysSince1900);
     }).toThrow('Invalid amount of days since 1900!');
+});
+
+describe('Checking valid unix timestamps', () => {
+    test('valid timestamp validity', () => {
+        const timestamp = 1618876800000;
+        expect(validUnixTimestamp(timestamp)).toBe(true);
+    });
+
+    test('invalid timestamp validity', () => {
+        const timestamp = 1618876800;
+        expect(() => {
+            validUnixTimestamp(timestamp);
+        }).toThrow('unixDate is not correctly formatted (should be 13 digits)');
+    });
 });

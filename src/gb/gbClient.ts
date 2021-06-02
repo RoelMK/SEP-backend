@@ -30,23 +30,23 @@ export class GameBusClient {
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
-    activity() {
+    activity(): Activity {
         return this.gamebusActivity;
     }
 
-    exercise() {
+    exercise(): Exercise {
         return this.gamebusExercise;
     }
 
-    food() {
+    food(): Food {
         return this.gamebusFood;
     }
 
-    glucose() {
+    glucose(): Glucose {
         return this.gamebusGlucose;
     }
 
-    insulin() {
+    insulin(): Insulin {
         return this.gamebusInsulin;
     }
 

@@ -1,4 +1,4 @@
-import { parseXml } from './parseUtils';
+import { parseXml } from '../testUtils/parseUtils';
 
 test('importing xml file', async () => {
     const expectedResult = {

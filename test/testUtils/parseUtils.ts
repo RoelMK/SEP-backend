@@ -20,6 +20,10 @@ import InsulinParser, {
 import { DateFormat } from '../../src/services/utils/dates';
 import { MoodModel } from '../../src/gb/models/moodModel';
 import MoodParser from '../../src/services/mood/moodParser';
+import NightscoutParser, {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from '../../src/services/dataParsers/nightscoutParser';
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data
@@ -30,7 +34,7 @@ import MoodParser from '../../src/services/mood/moodParser';
 export async function parseAbbott(
     filePath: string,
     type: OutputDataType
-): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined> {
+): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined> {
     const abbottEUParser: AbbottParser = new AbbottParser(filePath);
     await abbottEUParser.process();
     return abbottEUParser.getData(type);
@@ -45,7 +49,7 @@ export async function parseAbbott(
 export async function parseFoodDiary(
     filePath: string,
     type: OutputDataType
-): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined> {
+): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined> {
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath);
     await foodDiaryParser.process();
     return foodDiaryParser.getData(type);
@@ -152,4 +156,19 @@ export async function postInsulinData(
 export async function postMoodData(moodInput: MoodModel): Promise<void> {
     const moodParser = new MoodParser(moodInput);
     return await moodParser.post();
+}
+
+export async function parseNightScout(
+    testEntries: NightScoutEntryModel[],
+    testTreatments: NightScoutTreatmentModel[],
+    outputDataType: OutputDataType
+): Promise<NightScoutEntryModel[] | InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined> {
+    const nsParser: NightscoutParser = new NightscoutParser(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68',
+        testEntries,
+        testTreatments
+    );
+    await nsParser.process();
+    return nsParser.getData(outputDataType);
 }

@@ -69,7 +69,7 @@ const parseExcelDate = (daysSince1900: number): string => {
     if (daysSince1900 < 0) throw Error('Invalid amount of days since 1900!');
     const start = parse('01/01/1900', 'dd/MM/yyyy', new Date());
 
-    // duration as date-fns duration objects
+    // duration as date-fns duration object
     // https://www.epochconverter.com/seconds-days-since-y0#:~:text=Days%20Since%201900%2D01%2D01,the%20number%20on%20this%20page.
     // the excel format has two extra days as specified by the article above
     const offset = {
@@ -85,9 +85,11 @@ const parseExcelDate = (daysSince1900: number): string => {
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {
-    if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction +': Invalid day fraction!');
+    if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction + ': Invalid day fraction!');
     // to prevent math errors in the modulo
-    if (dayFraction == 0) {return '00:00';}
+    if (dayFraction == 0) {
+        return '00:00';
+    }
 
     // calculate total amount of minutes into the day
     const totalMinutes: number = Math.round(dayFraction * 24 * 60);
@@ -135,6 +137,15 @@ const fromUnixMsTime = (unixDate: number): Date => {
 };
 
 /**
+ * Function that checks whether a given unix timestamp results in a valid date
+ * @param unixDate 13-digit (milliseconds) unix timestamp
+ * @returns Whether the timestamp corresponds to a valid date
+ */
+const validUnixTimestamp = (unixDate: number): boolean => {
+    return isValid(fromUnixMsTime(unixDate));
+};
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -142,6 +153,7 @@ enum DateFormat {
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
     FOOD_DIARY = 'dd/MM/yy HH:mm',
     EETMETER = 'd/M/yyyy H:m',
+    
     NONE = ''
 }
 
@@ -152,5 +164,6 @@ export {
     parseExcelDate,
     parseExcelTime,
     convertExcelDateTimes,
-    DateFormat
+    DateFormat,
+    validUnixTimestamp
 };

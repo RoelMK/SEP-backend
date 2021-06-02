@@ -1,6 +1,6 @@
 import { InsulinModel } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { parseAbbott } from './parseUtils';
+import { parseAbbott } from '../testUtils/parseUtils';
 
 test('test robustness of Abbott data parser', async () => {
     expect(async () => {

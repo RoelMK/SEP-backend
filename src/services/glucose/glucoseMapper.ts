@@ -26,6 +26,11 @@ export default class GlucoseMapper {
                 return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapAbbott(entry, dateFormat, glucoseUnit);
                 };
+            case GlucoseSource.NIGHTSCOUT:
+                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                return function (entry: any): GlucoseModel {
+                    return GlucoseMapper.mapNightScout(entry, glucoseUnit);
+                };
         }
     }
 
@@ -85,7 +90,22 @@ export default class GlucoseMapper {
         // For now return empty model with only zeros
         return emptyGlucoseModel();
     }
+
+    private static mapNightScout(entry: any, glucoseUnit: GlucoseUnit){
+        // Convert to mmol/L
+        const glucose_level_mmol =
+        glucoseUnit == GlucoseUnit.MMOL_L
+            ? entry.sgv
+            : convertMG_DLtoMMOL_L(entry.sgv);
+        return {
+            timestamp: entry.date,
+            glucoseLevel: glucose_level_mmol
+        } as GlucoseModel;         
+    }
 }
+
+
+
 
 /**
  * Function that can return an empty GlucoseModel entry that might be needed for easy returns

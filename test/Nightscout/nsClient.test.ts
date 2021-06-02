@@ -32,12 +32,12 @@ describe('GameBusClient requests', () => {
     };
 
     const testTreatment: NightScoutTreatmentModel = {
-        eventType: "Correction Bolus",
-        created_at: "2021-05-29",
+        eventType: 'Correction Bolus',
+        created_at: '2021-05-29',
         insulin: 4,
-        notes: "BlablaTest",
-        enteredBy: "Frans"
-    }
+        notes: 'BlablaTest',
+        enteredBy: 'Frans'
+    };
 
     test('Posting an entry', async () => {
         await client.postEntry(testEntry);
@@ -89,7 +89,7 @@ describe('GameBusClient requests', () => {
 
     test('Getting glucose unit', async () => {
         // Full response means data is given separately
-        expect(async () => {await client.getGlucoseUnit()}).rejects.toThrow('Could not read glucose unit from the Nightscout website!');
+        expect(async () => {await client.getGlucoseUnit();}).rejects.toThrow('Could not read glucose unit from the Nightscout website!');
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({

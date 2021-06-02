@@ -26,7 +26,7 @@ export default class InsulinMapper {
             case InsulinSource.FOOD_DIARY_EXCEL:
                 return this.mapFoodDiaryInsulin;
             case InsulinSource.NIGHTSCOUT:
-                return this.mapNightScout
+                return this.mapNightScout;
             default:
                 // TODO this should not happen
                 return this.mapFoodDiaryInsulin;

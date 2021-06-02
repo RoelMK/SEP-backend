@@ -1,5 +1,5 @@
 import { MoodModel } from '../../src/gb/models/moodModel';
-import { postMoodData } from './parseUtils';
+import { postMoodData } from '../testUtils/parseUtils';
 
 test('mood data processing', async () => {
     const moodInput: MoodModel = {

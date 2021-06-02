@@ -61,7 +61,7 @@ export interface DataProviderReference {
 
 export interface PropertyInstanceReference {
     id: number;
-    value: number; //TODO, check this!!
+    value: string; // still not sure about this one
     property: PropertyInstanceProperty;
 }
 
@@ -71,7 +71,7 @@ export interface PropertyInstanceProperty {
     baseUnit: string;
     inputType: string;
     aggregationStrategy: string;
-    properyPermissions: any[]; // Probably not needed
+    propertyPermissions: any[]; // Probably not needed
 }
 
 export interface SupportReference {

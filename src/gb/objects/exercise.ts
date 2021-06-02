@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData } from '../models/gamebusModel';
-import { QueryOrder } from './activity';
+import { ActivityModel } from '../models/activityModel';
+import { ExerciseModel } from '../models/exerciseModel';
+import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
+import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 /**
@@ -94,19 +96,45 @@ export class Exercise extends GameBusObject {
         );
     }
 
-    // Not sure if this one is possible
-    async getExerciseActivityFromDp(
-        dataProvider: ExerciseDataProviderNames,
-        headers?: Headers,
-        query?: Query
-    ): Promise<void> {
-        // TODO: we only want to get activities from the given data provider (name)
+    /**
+     * Converts a response of ActivityGETData to an ExerciseModel
+     * @param response single ActivityGETData to convert
+     * @returns ExerciseModel with correct properties filled in
+     */
+    private static convertExerciseResponseToModel(response: ActivityGETData): ExerciseModel {
+        // We have to convert a single activity response to a single model
+        // First convert the response to a list of ActivityModels
+        const activities = Activity.getActivityInfoFromActivity(response);
+        // We already know the date
+        const exercise: ExerciseModel = {
+            timestamp: response.date
+        };
+        // Now we have to map the translationKey to the right key in the ExerciseModel
+        activities.forEach((activity: ActivityModel) => {
+            // For each of the separate activities (properties), we have to check them against known translation keys
+            for (const key in ExercisePropertyKeys) {
+                if (ExercisePropertyKeys[key] === activity.property.translationKey) {
+                    exercise[key] = activity.value;
+                }
+            }
+        });
+        return exercise;
+    }
+
+    /**
+     * Converts an entire response to ExerciseModels
+     * @param response Array of ActivityGETData (response)
+     * @returns Array of ExerciseModels
+     */
+    static convertResponseToExerciseModels(response: ActivityGETData[]): ExerciseModel[] {
+        return response.map((response: ActivityGETData) => {
+            return this.convertExerciseResponseToModel(response);
+        });
     }
 }
 
 /**
  * Data provider names for known exercise data sources
- * TODO: might be missing some?
  */
 export enum ExerciseDataProviderNames {
     GAMEBUS = 'GameBus',
@@ -163,4 +191,19 @@ export enum ExerciseGameDescriptorNames {
     WALK_DETAIL = 'WALK(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
     RUN_DETAIL = 'RUN(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
     BIKE_DETAIL = 'BIKE(DETAIL)' // Nothing
+}
+
+/**
+ * Relevant properties to map properties of activities to the exerciseModel
+ * [key in exerciseModel] = [translationKey in GameBus]
+ * TODO: add heartbeat data from FitBit
+ */
+export enum ExercisePropertyKeys {
+    duration = 'DURATION', // in seconds as string
+    steps = 'STEPS', // in amount as string
+    distance = 'DISTANCE', // in meters as string
+    calories = 'KCALORIES', // in kcal as string
+    groupSize = 'GROUP_SIZE', // in amount as string
+    penalty = 'PENALTY', // in amount [0 - 100] as string
+    score = 'SCORE' // in amount [-inf, inf] as string
 }

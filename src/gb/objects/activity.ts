@@ -319,7 +319,8 @@ export class Activity {
             const activityModel: ActivityModel = {
                 timestamp: activity.date,
                 id: value.id,
-                value: value.value,
+                // Make sure value is always a number
+                value: parseFloat(value.value),
                 property: valueProperty
             };
             // Add model to array

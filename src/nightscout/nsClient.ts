@@ -102,7 +102,6 @@ export class NightScoutClient {
             const response = await this.client.request(config);
             return response.data as NightScoutTreatmentModel[];
         } catch (error) {
-            3;
             console.log(error);
             return []; // return empty data array
         }

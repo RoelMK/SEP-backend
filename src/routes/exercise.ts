@@ -8,6 +8,8 @@ import { validUnixTimestamp } from '../services/utils/dates';
 const exerciseRouter = Router();
 
 exerciseRouter.get('/exercise:gds:start:end', checkJwt, async (req: Request, res: Response) => {
+    // TODO: unused
+
     // Check if authorized
     if (!req.user) {
         // Unauthorized

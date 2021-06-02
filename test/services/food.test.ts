@@ -1,7 +1,8 @@
 import FoodModel, { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { parseAbbott, parseFoodDiary, parseEetmeter } from './parseUtils';
+import { parseAbbott, parseFoodDiary, parseEetmeter, parseNightScout } from '../testUtils/parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 
 test('import Abbott EU food', async () => {
     const expectedResult: FoodModel = {
@@ -113,4 +114,50 @@ test('import many Eetmeter entries', async () => {
 
     const result = await parseEetmeter('test/services/data/eetmeterMany.xml');
     expect(result).toStrictEqual(expectedResult);
+});
+
+test('import mocked Nightscout response data with carbs', async () => {
+    const testNSFood: NightScoutTreatmentModel = {
+        _id: '60b2727f6e65983173940135',
+        eventType: 'Carb correction',
+        created_at: '2021-05-29T00:00:00.000Z',
+        carbs: 20,
+        notes: 'BlablaTestFood',
+        enteredBy: 'Jan',
+        utcOffset: 0,
+      }
+
+    const expectedResult: FoodModel[] = [{
+        timestamp: new Date('2021-05-29T00:00:00.000Z').getTime(),
+        carbohydrates: 20,
+        description: 'BlablaTestFood'
+    }]
+    expect(
+       await parseNightScout([], [testNSFood], OutputDataType.FOOD)
+    ).toStrictEqual(expectedResult);
+});
+
+test('import mocked Nightscout response data with several food properties', async () => {
+    const testNSFood: NightScoutTreatmentModel = {
+        _id: '60b2727f6e65983173940135',
+        eventType: 'Carb correction',
+        created_at: '2021-05-29T00:00:00.000Z',
+        carbs: 20,
+        protein: 20,
+        fat: 20,
+        notes: 'BlablaTestFood',
+        enteredBy: 'Jan',
+        utcOffset: 0,
+      }
+
+      const expectedResult: FoodModel[] = [{
+        timestamp: new Date('2021-05-29T00:00:00.000Z').getTime(),
+        carbohydrates: 20,
+        proteins: 20,
+        fat: 20,
+        description: 'BlablaTestFood'
+    }]
+    expect(
+       await parseNightScout([], [testNSFood], OutputDataType.FOOD)
+    ).toStrictEqual(expectedResult);
 });

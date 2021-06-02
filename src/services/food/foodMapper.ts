@@ -1,5 +1,6 @@
 import FoodModel from '../../gb/models/foodModel';
 import { Consumptie } from '../dataParsers/eetmeterParser';
+import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../utils/dates';
 import { FoodSource } from './foodParser';
 
@@ -26,6 +27,8 @@ export default class FoodMapper {
                 return this.mapFoodDiary;
             case FoodSource.EETMETER:
                 return this.mapEetmeter;
+            case FoodSource.NIGHTSCOUT:
+                return this.mapNightScout;
             default:
                 return this.mapFoodDiary;
         }
@@ -93,6 +96,23 @@ export default class FoodMapper {
             description: consumption.Product.Naam
         } as FoodModel;
 
+        return meal;
+    }
+
+    /**
+     * Abbott mapping function for different timestamps
+     * @param entry NightScoutEntryModel entry
+     * @returns FoodModel with information
+     */
+    private static mapNightScout(entry: NightScoutTreatmentModel): FoodModel {
+        const meal = {
+            timestamp: new Date(entry.created_at).getTime(),
+            carbohydrates: entry.carbs,
+            description: entry.notes ? entry.notes: '',
+            ...(entry.fat && { fat: entry.fat}),
+            ...(entry.protein && {proteins: entry.protein})
+        } as FoodModel;
+        
         return meal;
     }
 

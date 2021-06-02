@@ -1,5 +1,7 @@
+import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
+import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 
@@ -21,7 +23,10 @@ export default class GlucoseParser {
     constructor(
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
-        private readonly dateFormat: DateFormat
+        private readonly dateFormat: DateFormat,
+
+        // indicates in which unit the glucose levels are measured
+        private glucoseUnit?: GlucoseUnit
     ) {
         // Process incoming glucoseInput data
         this.process();
@@ -31,26 +36,31 @@ export default class GlucoseParser {
      * Processes the data (if necessary) and maps it to the GlucoseModel
      */
     private process() {
-        // indicates in which unit the glucose levels are measured
-        let glucoseUnit: GlucoseUnit;
-
-        // We assume that the dateFormat also defines which unit to use
-        switch (this.dateFormat) {
-            case DateFormat.ABBOTT_EU:
-                glucoseUnit = GlucoseUnit.MMOL_L;
-                break;
-            case DateFormat.ABBOTT_US:
-                glucoseUnit = GlucoseUnit.MG_DL;
-                break;
-            default:
-                // TODO this should not happen, but should also be caught earlier (see Abbottparser)
-                glucoseUnit = GlucoseUnit.UNDEFINED;
-                break;
+        
+        // if no glucose unit is specified, assume it based on the date format
+        if(this.glucoseUnit === undefined){
+            this.glucoseUnit = this.assumeUnit(this.dateFormat);
         }
 
         this.glucoseData = this.glucoseInput.map(
-            GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, glucoseUnit)
+            GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, this.glucoseUnit)
         );
+    }
+
+    /**
+     * Determines the glucoseUnit of the glucose input based on the date format
+     */
+    private assumeUnit(dateFormat: DateFormat): GlucoseUnit{
+        // We assume that the dateFormat also defines which unit to use
+        switch (dateFormat) {
+            case DateFormat.ABBOTT_EU:
+                return GlucoseUnit.MMOL_L;
+            case DateFormat.ABBOTT_US:
+                return GlucoseUnit.MG_DL;
+            default:
+                // TODO this should not happen, but should also be caught earlier (see Abbottparser)
+                return GlucoseUnit.UNDEFINED;
+        }
     }
 
     /**
@@ -64,10 +74,11 @@ export default class GlucoseParser {
  * Current glucose sources available //TODO ? Add more
  */
 export enum GlucoseSource {
-    ABBOTT = 1
+    ABBOTT = 1,
+    NIGHTSCOUT = 2
 }
 
 /**
  * All possible input types for glucose data
  */
-type GlucoseInput = AbbottData[];
+type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;

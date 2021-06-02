@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
-import OneDriveExcelParser from './fileParsers/oneDriveExcelParser';
+import NightscoutParser, {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from './dataParsers/nightscoutParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -30,7 +34,7 @@ async function testExcel() {
     }
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
     await foodDiaryParser.process();
-        
+
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
     console.log(foodDiaryParser.getData(OutputDataType.FOOD));
 }
@@ -46,10 +50,60 @@ async function testOneDrive() {
     await foodDiaryParser.process();
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
     console.log(foodDiaryParser.getData(OutputDataType.FOOD));
+}
 
+async function testNightScout() {
+    const testEntry: NightScoutEntryModel = {
+        type: 'sgv',
+        date: 1622383144021,
+        sgv: 79,
+        noise: 0,
+        filtered: 0,
+        unfiltered: 0,
+        rssi: 0
+    };
+
+    const testTreatmentInsulin: NightScoutTreatmentModel = {
+        eventType: 'Correction Bolus',
+        created_at: '2021-05-29',
+        insulin: 4,
+        notes: 'BlablaTest',
+        enteredBy: 'Frans'
+    };
+
+    const testTreatmentFood: NightScoutTreatmentModel = {
+        eventType: 'Carb correction',
+        created_at: '2021-05-29',
+        carbs: 20,
+        protein: 20,
+        fat: 20,
+        notes: 'BlablaTestFood',
+        enteredBy: 'Jan'
+    };
+
+    const nsClient = new NightScoutClient(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68'
+    );
+    await nsClient.postEntry(testEntry);
+    await nsClient.postTreatment(testTreatmentFood);
+
+    console.log(await nsClient.getEntries());
+    //console.log(await nsClient.getTreatments());
+    console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
+
+    const nsParser: NightscoutParser = new NightscoutParser(
+        'https://nightscout-sep.herokuapp.com',
+        '' // TODO why don't you need a token to get entry data??
+    );
+    await nsParser.process();
+    console.log(nsParser.getData(OutputDataType.FOOD));
+    console.log(nsParser.getData(OutputDataType.INSULIN));
+    console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
 export const testToken = '';
 //testAbbott();
 testExcel();
 //testOneDrive();
+//testNightScout();

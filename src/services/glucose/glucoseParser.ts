@@ -36,9 +36,8 @@ export default class GlucoseParser {
      * Processes the data (if necessary) and maps it to the GlucoseModel
      */
     private process() {
-        
         // if no glucose unit is specified, assume it based on the date format
-        if(this.glucoseUnit === undefined){
+        if (this.glucoseUnit === undefined) {
             this.glucoseUnit = this.assumeUnit(this.dateFormat);
         }
 
@@ -50,7 +49,7 @@ export default class GlucoseParser {
     /**
      * Determines the glucoseUnit of the glucose input based on the date format
      */
-    private assumeUnit(dateFormat: DateFormat): GlucoseUnit{
+    private assumeUnit(dateFormat: DateFormat): GlucoseUnit {
         // We assume that the dateFormat also defines which unit to use
         switch (dateFormat) {
             case DateFormat.ABBOTT_EU:
@@ -66,7 +65,7 @@ export default class GlucoseParser {
     /**
      * Posts the imported glucose data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the glucoseData to GameBus
     }
 }
@@ -81,4 +80,4 @@ export enum GlucoseSource {
 /**
  * All possible input types for glucose data
  */
-type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;
+export type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;

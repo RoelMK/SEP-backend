@@ -40,7 +40,7 @@ export default class InsulinParser {
     /**
      * Posts the imported insulin data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the insulinData to GameBus
     }
 }
@@ -56,4 +56,4 @@ export enum InsulinSource {
 /**
  * All possible input types for insulin data
  */
-type InsulinInput = XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[] >>;
+export type InsulinInput = XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>;

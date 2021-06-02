@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { table } from 'console';
 import { oneDriveToken } from '../gb/usersExport';
 import { OneDriveClient } from './odClient';
 
@@ -313,12 +314,40 @@ async function execute3() {
         excelToken,
         fileName,
         folderPath,
+        tableName,
         sheetName
     );
-    const result = await odClient.getTableValues(tableName);
+    const result = await odClient.getTableValues();
     console.log('Done');
     console.log(result);
 }
 
-execute3();
+async function execute4() {
+    const sheetName = 'Sheet1';
+    //let workbookID = "7B38536F62C21674!106";//TODO: obtain this in a viable way instead of stealing it.
+    const fileName = 'Book1.xlsx';
+    const folderPath = undefined;
+    //const fileName = 'diary.xlsx';
+    //const folderPath = 'Documents/DeepFolder';
+    const excelToken = oneDriveToken; //token is obtained from http://localhost:8080/onedrive/login
+    const tableName = 'fooddiary';
+
+    const odClient: OneDriveClient = new OneDriveClient(
+        excelToken,
+        fileName,
+        folderPath,
+        tableName,
+        sheetName
+    );
+    odClient.setPrintValues(true, true);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = await odClient.getRangeText('A1', 'B2');
+    console.log();
+    console.log();
+    console.log(result);
+    console.log('Done');
+}
+
+execute4();
 //http://localhost:8080/onedrive/login

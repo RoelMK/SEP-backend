@@ -1,4 +1,4 @@
-import FoodModel from '../../gb/models/foodModel';
+import { FoodModel } from '../../gb/models/foodModel';
 import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
@@ -43,7 +43,7 @@ export default class FoodParser {
     /**
      * Posts the imported food data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the foodData (correctly formatted) to GameBus
     }
 }

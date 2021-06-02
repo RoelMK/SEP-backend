@@ -85,9 +85,11 @@ const parseExcelDate = (daysSince1900: number): string => {
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {
-    if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction +': Invalid day fraction!');
+    if (dayFraction < 0 || dayFraction >= 1) throw Error(dayFraction + ': Invalid day fraction!');
     // to prevent math errors in the modulo
-    if (dayFraction == 0) {return '00:00';}
+    if (dayFraction == 0) {
+        return '00:00';
+    }
 
     // calculate total amount of minutes into the day
     const totalMinutes: number = Math.round(dayFraction * 24 * 60);
@@ -135,6 +137,15 @@ const fromUnixMsTime = (unixDate: number): Date => {
 };
 
 /**
+ * Function that checks whether a given unix timestamp results in a valid date
+ * @param unixDate 13-digit (milliseconds) unix timestamp
+ * @returns Whether the timestamp corresponds to a valid date
+ */
+const validUnixTimestamp = (unixDate: number): boolean => {
+    return isValid(fromUnixMsTime(unixDate));
+};
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -152,5 +163,6 @@ export {
     parseExcelDate,
     parseExcelTime,
     convertExcelDateTimes,
-    DateFormat
+    DateFormat,
+    validUnixTimestamp
 };

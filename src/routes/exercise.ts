@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { ExerciseGameDescriptorNames } from '../gb/objects/exercise';
@@ -7,7 +7,7 @@ import { validUnixTimestamp } from '../services/utils/dates';
 
 const exerciseRouter = Router();
 
-exerciseRouter.get('/exercise:gds:start:end', checkJwt, async (req: Request, res: Response) => {
+exerciseRouter.get('/exercise:gds:start:end', checkJwt, async (req: any, res: Response) => {
     // TODO: unused
 
     // Check if authorized

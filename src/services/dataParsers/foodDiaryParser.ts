@@ -91,7 +91,6 @@ export default class FoodDiaryParser extends DataParser {
         rawData: FoodDiaryData[],
         mealTimeMap?: Map<string, string>
     ): FoodDiaryData[] {
-        //TODO for excel uploads this can be included during read, but not for onedrive excels
         // filter out empty rows
         rawData = rawData.filter((entry: FoodDiaryData) => {
             return (

@@ -6,7 +6,6 @@ import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 export class Mood extends GameBusObject {
-
     /**
      * Converts an entire response to MoodModels
      * @param response Array of ActivityGETData (response)
@@ -23,19 +22,19 @@ export class Mood extends GameBusObject {
      * @param gameDescriptors Game descriptor(s) you want to get activities from
      * @returns All mood activities belonging to the given Type(s)
      */
-         async getMoodActivityFromGd(
-            playerId: number,
-            gameDescriptors: MoodGameDescriptorNames[],
-            headers?: Headers,
-            query?: Query
-        ): Promise<ActivityGETData[]> {
-            return await this.activity.getAllActivitiesWithGd(
-                playerId,
-                gameDescriptors,
-                headers,
-                query
-            );
-        }
+    async getMoodActivityFromGd(
+        playerId: number,
+        gameDescriptors: MoodGameDescriptorNames[],
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.activity.getAllActivitiesWithGd(
+            playerId,
+            gameDescriptors,
+            headers,
+            query
+        );
+    }
 
     /**
      * Converts a response of ActivityGETData to an MoodModel
@@ -51,7 +50,7 @@ export class Mood extends GameBusObject {
         const mood: MoodModel = {
             timestamp: response.date
         };
-        
+
         // Now we have to map the translationKey to the right key in the MoodModels
         activities.forEach((activity: ActivityModel) => {
             // For each of the separate activities (properties), we have to check them against known translation keys
@@ -64,7 +63,39 @@ export class Mood extends GameBusObject {
         return mood;
     }
 
-        /**
+    /**
+     * Function that returns all activities of given types on given date (as unix)
+     * @param playerId ID of player
+     * @param gameDescriptors List of activity types (see below)
+     * @param date Date as unix
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
+     * @returns All activities of given types on given date
+     */
+    async getMoodActivityFromGdOnUnixDate(
+        playerId: number,
+        gameDescriptors: MoodGameDescriptorNames[],
+        date: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.activity.getActivitiesOnUnixDateWithGd(
+            playerId,
+            date,
+            gameDescriptors,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
+    }
+
+    /**
      * Function that returns all activities of given types between given dates (as unix)
      * @param playerId ID of player
      * @param gameDescriptors List of activity types (see below)
@@ -75,29 +106,29 @@ export class Mood extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types between given dates (excluding end)
      */
-         async getMoodFromGdBetweenUnix(
-            playerId: number,
-            gameDescriptors: MoodGameDescriptorNames[],
-            startDate: number,
-            endDate: number,
-            order?: QueryOrder,
-            limit?: number,
-            page?: number,
-            headers?: Headers,
-            query?: Query
-        ): Promise<ActivityGETData[]> {
-            return await this.activity.getAllActivitiesBetweenUnixWithGd(
-                playerId,
-                startDate,
-                endDate,
-                gameDescriptors,
-                order,
-                limit,
-                page,
-                headers,
-                query
-            );
-        }
+    async getMoodFromGdBetweenUnix(
+        playerId: number,
+        gameDescriptors: MoodGameDescriptorNames[],
+        startDate: number,
+        endDate: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        return await this.activity.getAllActivitiesBetweenUnixWithGd(
+            playerId,
+            startDate,
+            endDate,
+            gameDescriptors,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
+    }
 }
 
 /**
@@ -109,15 +140,15 @@ export enum MoodDataProviderNames {
 
 /**
  * Data property names for known mood data properties
-*/
- export enum MoodGameDescriptorNames {
-    logMood = 'LOG_MOOD', // Mood descriptor
+ */
+export enum MoodGameDescriptorNames {
+    logMood = 'LOG_MOOD' // Mood descriptor
 }
 
 /**
  * Relevant properties to map properties of activities to the mood model
  */
- export enum MoodPropertyKeys {
+export enum MoodPropertyKeys {
     moodArousal = 'MOOD_AROUSAL', // number in range [1,3]
-    moodValence = 'MOOD_VALENCE', // number in range [1,3]
+    moodValence = 'MOOD_VALENCE' // number in range [1,3]
 }

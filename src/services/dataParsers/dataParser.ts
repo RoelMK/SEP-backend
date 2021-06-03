@@ -147,7 +147,7 @@ export abstract class DataParser {
     getLastPostedModel(): number {
         let newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
-        newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0);
+        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
         newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
         newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
         return Math.max.apply(Math, newestModels);

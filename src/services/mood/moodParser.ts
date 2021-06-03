@@ -20,9 +20,6 @@ export default class MoodParser extends ModelParser{
      */
     private process(): void {
         // TODO: process if needed
-        // retrieve the last time stamp in the glucoseData and set it as a threshold
-        // to prevent double parsing in the future
-        this.setNewestEntry([this.mood]);
     }
 
     /**

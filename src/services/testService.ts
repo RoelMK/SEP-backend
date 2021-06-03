@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { DBClient } from '../db/dbClient';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -7,6 +8,7 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
+import ExcelParser from './fileParsers/excelParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -102,8 +104,24 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
+function testParseNewest(){
+    const client = new DBClient();
+    client.initialize();
+    const xlsxParser = new ExcelParser();
+    xlsxParser.setLastParsedAt("testPath.xlsx", 1000000000000);
+    xlsxParser.setLastParsedAt("testPath2.xlsx", 1000000000000);
+    xlsxParser.setLastParsedAt("testPath.xlsx", 1000000000500);
+    xlsxParser.retrieveLastParsedAt("testPath.xlsx");
+    xlsxParser.retrieveLastParsedAt("testPath2.xlsx");
+    client.close();
+
+}
+
 export const testToken = '';
 //testAbbott();
-testExcel();
+//testExcel();
 //testOneDrive();
 //testNightScout();
+testParseNewest();
+
+

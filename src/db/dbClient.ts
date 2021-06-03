@@ -24,6 +24,10 @@ export class DBClient {
         this.db.exec(
             'CREATE TABLE IF NOT EXISTS login_attempts (player_id TEXT PRIMARY KEY, login_token TEXT NOT NULL, expire_time DATETIME NOT NULL, access_token TEXT, refresh_token TEXT);'
         );
+
+        this.db.exec(
+            'CREATE TABLE IF NOT EXISTS file_parse_events (player_id TEXT, file_name TEXT NOT NULL, time_stamp bigint NOT NULL, primary key (player_id, file_name));'
+        );
     }
 
     /**
@@ -135,6 +139,53 @@ export class DBClient {
             return this.db.prepare('SELECT * FROM login_attempts WHERE player_id=?').get(playerId);
         } catch (e) {
             return undefined;
+        }
+    }
+
+    /**
+    
+     */
+
+    /**
+     * Every time a file is parsed, its file path or unique indicator (e.g. 'nightscout') and Unix timestamp
+     * are added to the database. This data is used when the file is re-uploaded to prevent duplication of data.
+     *
+     * The funtion below adds an entry to the database stating the last parse time (time_stamp) for a certain file (file_name)
+     * of a certain player (playerId)
+     * @param playerId Id of player
+     * @param file_name Name of file that is parsed
+     * @param time_stamp time of last parsed entry
+     * @returns
+     */
+    registerFileParse(playerId: string, file_name: string, time_stamp: number) {
+        try {
+            const insrt = this.db.prepare(
+                `INSERT INTO file_parse_events (player_id, file_name, time_stamp) 
+                                    VALUES(?, ?, ?) ON CONFLICT(player_id, file_name) DO UPDATE SET time_stamp=?`
+            );
+            insrt.run(playerId, file_name, time_stamp, time_stamp);
+        } catch (e) {
+            throw e;
+
+            return undefined;
+        }
+    }
+    /**
+     * Every time a file is parsed, its file path or unique indicator (e.g. 'nightscout') and Unix timestamp
+     * are added to the database. This data is used when the file is re-uploaded to prevent duplication of data.
+     * @param playerId ID of player
+     * @param file_name Name of file that is parsed
+     * @returns Timestamp of last parse
+     */
+    getFileParseTime(playerId: string, file_name: string): number {
+        try {
+            return this.db
+                .prepare(
+                    'SELECT time_stamp FROM file_parse_events WHERE player_id=? AND file_name=?'
+                )
+                .get(playerId, file_name).time_stamp;
+        } catch (e) {
+            throw e;
         }
     }
 

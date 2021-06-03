@@ -6,7 +6,9 @@ import { FileParser } from './fileParser';
  * Generic CSV reader and parser to be used for all CSV files
  */
 export default class CSVParser extends FileParser {
-    constructor(private readonly config: ParseConfig = defaultConfig) {super();}
+    constructor( private readonly config: ParseConfig = defaultConfig) {
+        super();
+    }
 
     /**
      * Async function that parses the given .csv file's path
@@ -15,6 +17,10 @@ export default class CSVParser extends FileParser {
      * @returns Array of csv entries as objects
      */
     async parse(filePath: string, skipLine = false): Promise<Record<string, string>[]> {
+
+        // retrieve when this file has been parsed for the last time
+        this.retrieveLastParsedAt(filePath);
+
         // TODO: change path to uploaded .csv?
         // Open file from given filePath
         // TODO: Papa.parse should be able to open URLs as well

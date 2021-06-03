@@ -16,10 +16,6 @@ export default class XMLParser extends FileParser {
      * @returns xml converted to json
      */
     async parse(filePath: string): Promise<any> {
-
-        // retrieve when this file has been parsed for the last time
-        this.retrieveLastParsedAt(filePath);
-
         // Open file from given filePath
         const xmlFile = readFileSync(filePath);
 

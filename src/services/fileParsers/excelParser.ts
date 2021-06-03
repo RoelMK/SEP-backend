@@ -14,10 +14,6 @@ export default class ExcelParser extends FileParser {
     }
 
     parse(filePath: string, dataSource: DataSource): Record<string, string>[] {
-
-        // retrieve when this file has been parsed for the last time
-        this.retrieveLastParsedAt(filePath);
-        
         const workbook = XLSX.read(filePath, { type: 'file' });
         const [firstSheetName] = workbook.SheetNames;
         const worksheet = workbook.Sheets[firstSheetName];

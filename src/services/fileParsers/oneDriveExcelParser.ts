@@ -29,10 +29,6 @@ export default class OneDriveExcelParser extends FileParser {
         tableName: string,
         sampleInput?: any[]
     ): Promise<Record<string, string>[]> {
-
-        // retrieve when this file has been parsed for the last time
-        this.retrieveLastParsedAt(filePath);
-        
         // Initiate oneDrive read
         // eslint-disable-next-line no-async-promise-executor
         let result;

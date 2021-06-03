@@ -157,16 +157,14 @@ export class DBClient {
      * @param time_stamp time of last parsed entry
      * @returns
      */
-    registerFileParse(playerId: string, file_name: string, time_stamp: number) {
+    registerFileParse(playerId: string, file_name: string, timestamp: number) {
         try {
             const insrt = this.db.prepare(
                 `INSERT INTO file_parse_events (player_id, file_name, time_stamp) 
                                     VALUES(?, ?, ?) ON CONFLICT(player_id, file_name) DO UPDATE SET time_stamp=?`
             );
-            insrt.run(playerId, file_name, time_stamp, time_stamp);
+            insrt.run(playerId, file_name, timestamp, timestamp);
         } catch (e) {
-            throw e;
-
             return undefined;
         }
     }
@@ -177,13 +175,12 @@ export class DBClient {
      * @param file_name Name of file that is parsed
      * @returns Timestamp of last parse
      */
-    getFileParseTime(playerId: string, file_name: string): number {
+    getLastParsed(playerId: string, file_name: string): number {
         try {
-            return this.db
-                .prepare(
-                    'SELECT time_stamp FROM file_parse_events WHERE player_id=? AND file_name=?'
-                )
-                .get(playerId, file_name).time_stamp;
+            const getLastParsed = this.db
+                .prepare('SELECT * FROM file_parse_events WHERE player_id=? AND file_name=?')
+                .get(playerId, file_name);
+            return getLastParsed ? getLastParsed.time_stamp : 0;
         } catch (e) {
             throw e;
         }

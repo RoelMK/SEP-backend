@@ -30,13 +30,16 @@ uploadRouter.get('/upload-fooddiary', function (req, res) {
 uploadRouter.post('/upload-eetmeter', upload.single('file'), function (req, res) {
     uploadFile(req, res, new EetMeterParser());
 });
+uploadRouter.get('/upload-eetmeter', function (req, res) {
+    res.sendFile(__dirname + '/testHTMLeetmeter.html');
+});
 
 async function uploadFile(req, res, dataParser: DataParser) {
     // prepare file path with extension
     const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; // filename is not transferred automatically
     dataParser.setFilePath(filePath);
 
-    console.log("HIER" + filePath + '   ' + req.file.path);
+    console.log('HIER' + filePath + '   ' + req.file.path);
 
     //rename file path to include extension
     fs.rename(req.file.path, filePath, async function (err) {
@@ -65,7 +68,7 @@ function removeUploadedFile(filePath: string) {
     // remove the temporary file
     fs.unlink(filePath, function (err) {
         if (err) {
-            console.log(`Cannot delete file ${filePath}!`)
+            console.log(`Cannot delete file ${filePath}!`);
             return; //TODO cannot remove, probably not best to send an error and just leave it
         }
     });
@@ -77,16 +80,31 @@ async function parseUploadedfile(dataParser: DataParser, res) {
 
     // TODO just for testing, get some insulin data and send it back
     const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
+    const foodData: any = dataParser.getData(OutputDataType.FOOD);
 
-    res.send(
-        'Success, read ' +
-            insulinData.length +
-            ' entries.' +
-            '\nFirst entry: ' +
-            insulinData[0].timestamp +
-            ', ' +
-            insulinData[0].insulinAmount
-    );
+    // only for testing
+    if (insulinData.length < 0) { // TODO EETMETER error -> is parsed with insulin undefined
+        res.send(
+            'Success, read ' +
+                insulinData.length +
+                ' entries.' +
+                '\nFirst entry: ' +
+                insulinData[0].timestamp +
+                ', ' +
+                insulinData[0].insulinAmount
+        );
+    } else {
+        console.log(foodData);
+        res.send(
+            'Success, read ' +
+                insulinData.length +
+                ' entries.' +
+                '\nFirst entry: ' +
+                foodData[0].timestamp +
+                ', ' +
+                foodData[0].carbohydrates
+        );
+    }
     return res;
 }
 

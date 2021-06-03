@@ -293,11 +293,6 @@ export class Activity {
         });
     }
 
-    // TODO: recursive query to get all activities since there's only 30 per page
-
-    // TODO: query for specific timestamp on a given date to start filtering time periods
-    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[] (see below)
-
     /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels
      * @param activity Response from GET activity request

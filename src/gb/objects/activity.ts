@@ -319,6 +319,7 @@ export class Activity {
             const activityModel: ActivityModel = {
                 timestamp: activity.date,
                 id: value.id,
+                translationKey: activity.gameDescriptor.translationKey,
                 // Make sure value is always a number
                 value: parseFloat(value.value),
                 property: valueProperty

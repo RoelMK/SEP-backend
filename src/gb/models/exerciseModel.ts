@@ -1,6 +1,7 @@
 // TODO: add models for fitness activities (steps, heart beat, calories burnt), this depends on GameBus
 export interface ExerciseModel {
     timestamp: number;
+    type: string; // activity type
     duration?: number; // in seconds
     steps?: number; // in amount
     distance?: number; // in meters

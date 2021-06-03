@@ -6,6 +6,7 @@ import FoodMapper from './foodMapper';
 import { XOR } from 'ts-xor';
 import { Consumptie } from '../dataParsers/eetmeterParser';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { ModelParser } from '../modelParser';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -14,9 +15,11 @@ import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
  * TODO: automatically detect food source based on column names
  * TODO: use dynamic format where user is able to pick what column represents what
  */
-export default class FoodParser {
+export default class FoodParser extends ModelParser {
     // Food data to be exported
     foodData?: FoodModel[];
+
+
 
     /**
      * Create foodparser with list of food datapoints that can stem from several sources
@@ -27,8 +30,10 @@ export default class FoodParser {
     constructor(
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
-        private readonly dateFormat: DateFormat
+        private readonly dateFormat: DateFormat,
+        private readonly lastParsed: number
     ) {
+        super();
         // Process incoming foodInput data
         this.process();
     }
@@ -38,6 +43,9 @@ export default class FoodParser {
      */
     private process() {
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
+        // retrieve the last time stamp in the glucoseData and set it as a threshold
+        // to prevent double parsing in the future
+        this.setNewestEntry(this.foodData);
     }
 
     /**

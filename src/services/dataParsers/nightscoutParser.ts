@@ -4,6 +4,7 @@ import { NightScoutClient } from '../../nightscout/nsClient';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { getFileName } from '../utils/files';
 import { DataParser, DataSource } from './dataParser';
 
 /**
@@ -87,6 +88,9 @@ export default class NightscoutParser extends DataParser {
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
+        // retrieve when the file was parsed for the last time
+        this.lastParsed = this.retrieveLastParsed(this.nsClient.getNightscoutHost());
+
         if (this.testEntries === undefined || this.testTreatments === undefined) {
             // TODO note to self use parse with parameter or just individual funtions as below
             // does not matter for result and below needs less overhead
@@ -108,7 +112,12 @@ export default class NightscoutParser extends DataParser {
         );
 
         const foodTreatments: NightScoutTreatmentModel[] = this.filterFood();
-        this.foodParser = new FoodParser(foodTreatments, FoodSource.NIGHTSCOUT, this.dateFormat);
+        this.foodParser = new FoodParser(
+            foodTreatments,
+            FoodSource.NIGHTSCOUT,
+            this.dateFormat,
+            this.lastParsed
+        );
 
         const insulinTreatments: NightScoutTreatmentModel[] = this.filterInsulin();
         this.insulinParser = new InsulinParser(
@@ -116,6 +125,8 @@ export default class NightscoutParser extends DataParser {
             InsulinSource.NIGHTSCOUT,
             this.dateFormat
         );
+        // update the timestamp of newest parsed entry to this file
+        this.setLastParsed(this.nsClient.getNightscoutHost(), this.getLastPostedModel());        
     }
 
     /**

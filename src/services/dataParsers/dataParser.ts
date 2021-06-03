@@ -1,6 +1,8 @@
+import { DBClient } from '../../db/dbClient';
 import { FoodModel } from '../../gb/models/foodModel';
 import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
+import { MoodModel } from '../../gb/models/moodModel';
 import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
@@ -8,8 +10,9 @@ import XMLParser from '../fileParsers/xmlParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
+import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
-import { getFileExtension } from '../utils/files';
+import { getFileExtension, getFileName } from '../utils/files';
 import { NightScoutEntryModel } from './nightscoutParser';
 
 /**
@@ -27,6 +30,10 @@ export abstract class DataParser {
     protected foodParser?: FoodParser;
     protected glucoseParser?: GlucoseParser;
     protected insulinParser?: InsulinParser;
+    protected moodParser?: MoodParser;
+
+    // UNIX timestamp in ms that indicates when it was last parsed
+    protected lastParsed: number = 0;
 
     /**
      * Constructor with file path and data source (provided by children)
@@ -43,10 +50,14 @@ export abstract class DataParser {
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
-    protected async parse(): Promise<Record<string, string| number>[] | undefined> {
+    protected async parse(): Promise<Record<string, string | number>[] | undefined> {
         if (!this.filePath) {
             throw Error('File path is not set!');
         }
+
+        // retrieve when the file was parsed for the last time
+        this.lastParsed = this.retrieveLastParsed(getFileName(this.filePath));
+
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
         switch (extension) {
@@ -87,7 +98,15 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] |undefined {
+    getData(
+        outputType: OutputDataType
+    ):
+        | InsulinModel[]
+        | FoodModel[]
+        | GlucoseModel[]
+        | NightScoutEntryModel[]
+        | MoodModel[]
+        | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -95,10 +114,43 @@ export abstract class DataParser {
                 return this.insulinParser?.insulinData;
             case OutputDataType.FOOD:
                 return this.foodParser?.foodData;
+
+            case OutputDataType.MOOD:
+                return [this.moodParser?.mood as MoodModel];
+
             default:
                 // TODO this should not happen
                 return [];
         }
+    }
+
+    /**
+     * Returns the last timestamp when the file was parsed
+     */
+    retrieveLastParsed(filePath: string): number {
+        const dbClient: DBClient = new DBClient(false);
+        const lastParsedAt: number = dbClient.getLastParsed('1', filePath);
+        dbClient.close();
+        return lastParsedAt;
+    }
+
+    /**
+     * Returns the last timestamp when the file was parsed, including the file name and
+     * playerId
+     */
+    setLastParsed(fileName: string, timestamp: number) {
+        const dbClient: DBClient = new DBClient(false);
+        dbClient.registerFileParse('1', fileName, timestamp);
+        dbClient.close();
+    }
+
+    getLastPostedModel(): number {
+        let newestModels: number[] = [];
+        newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
+        newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0);
+        newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
+        newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
+        return Math.max.apply(Math, newestModels);
     }
 }
 
@@ -112,5 +164,6 @@ export enum DataSource {
 export enum OutputDataType {
     GLUCOSE = 0,
     INSULIN = 1,
-    FOOD = 2
+    FOOD = 2,
+    MOOD = 3
 }

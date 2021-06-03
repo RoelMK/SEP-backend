@@ -3,6 +3,7 @@ import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
 import { getDateFormat } from '../utils/dates';
+import { getFileName } from '../utils/files';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -34,13 +35,21 @@ export default class AbbottParser extends DataParser {
 
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData: AbbottData[] = this.filterFood();
-        this.foodParser = new FoodParser(foodData, FoodSource.ABBOTT, this.dateFormat);
+        this.foodParser = new FoodParser(
+            foodData,
+            FoodSource.ABBOTT,
+            this.dateFormat,
+            this.lastParsed
+        );
 
         const glucoseData: AbbottData[] = this.filterGlucose();
         this.glucoseParser = new GlucoseParser(glucoseData, GlucoseSource.ABBOTT, this.dateFormat);
 
         const insulinData: AbbottData[] = this.filterInsulin();
         this.insulinParser = new InsulinParser(insulinData, InsulinSource.ABBOTT, this.dateFormat);
+
+        // update the timestamp of newest parsed entry to this file
+        this.setLastParsed(getFileName(this.filePath as string), this.getLastPostedModel());
     }
 
     /**

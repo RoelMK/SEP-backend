@@ -6,6 +6,7 @@ import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
 import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
+import { getFileName } from '../utils/files';
 
 /**
  * Default class for parsing food diaries
@@ -37,13 +38,16 @@ export default class FoodDiaryParser extends DataParser {
         this.foodParser = new FoodParser(
             preprocessedFoodDiaryData,
             FoodSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            DateFormat.FOOD_DIARY,
+            this.lastParsed
         );
         this.insulinParser = new InsulinParser(
             preprocessedFoodDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY
         );
+        // update the timestamp of newest parsed entry to this file
+        this.setLastParsed(getFileName(this.filePath as string), this.getLastPostedModel());
     }
 
     /**

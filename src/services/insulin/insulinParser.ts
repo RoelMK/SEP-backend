@@ -5,12 +5,13 @@ import InsulinMapper from './insulinMapper';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { XOR } from 'ts-xor';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { ModelParser } from '../modelParser';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
  * - Abbott
  */
-export default class InsulinParser {
+export default class InsulinParser extends ModelParser {
     insulinData?: InsulinModel[];
 
     /**
@@ -22,9 +23,10 @@ export default class InsulinParser {
     constructor(
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
-        private readonly dateFormat: DateFormat
+        private readonly dateFormat: DateFormat,
     ) {
         // Process incoming insulinInput data
+        super();
         this.process();
     }
 
@@ -35,6 +37,9 @@ export default class InsulinParser {
         this.insulinData = this.insulinInput.map(
             InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat)
         );
+        // retrieve the last time stamp in the glucoseData and set it as a threshold
+        // to prevent double parsing in the future
+        this.setNewestEntry(this.insulinData);
     }
 
     /**

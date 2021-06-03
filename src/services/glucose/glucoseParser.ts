@@ -2,6 +2,7 @@ import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
 import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
+import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
 
@@ -10,7 +11,7 @@ import GlucoseMapper from './glucoseMapper';
  * Currently supported glucose sources:
  * - Abbott
  */
-export default class GlucoseParser {
+export default class GlucoseParser extends ModelParser {
     // Glucose data to be exported
     glucoseData?: GlucoseModel[];
 
@@ -28,6 +29,7 @@ export default class GlucoseParser {
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
+        super();
         // Process incoming glucoseInput data
         this.process();
     }
@@ -44,6 +46,10 @@ export default class GlucoseParser {
         this.glucoseData = this.glucoseInput.map(
             GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, this.glucoseUnit)
         );
+
+        // retrieve the last time stamp in the glucoseData and set it as a threshold
+        // to prevent double parsing in the future
+        this.setNewestEntry(this.glucoseData);
     }
 
     /**

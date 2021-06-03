@@ -1,5 +1,6 @@
 import { FoodModel } from '../../gb/models/foodModel';
 import FoodParser, { FoodSource } from '../food/foodParser';
+import { getFileName } from '../utils/files';
 import { DataParser, DataSource } from './dataParser';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -31,8 +32,12 @@ export class EetMeterParser extends DataParser {
         this.foodParser = new FoodParser(
             this.eetmeterConsumptionData,
             FoodSource.EETMETER,
-            this.dateFormat
+            this.dateFormat,
+            this.lastParsed
         );
+
+        // update the timestamp of newest parsed entry to this file
+        this.setLastParsed(getFileName(this.filePath as string), this.getLastPostedModel()); 
     }
 
     getData(): FoodModel[] | undefined {

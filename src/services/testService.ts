@@ -104,17 +104,13 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
-function testParseNewest(){
+async function testParseNewest() {
     const client = new DBClient();
     client.initialize();
-    const xlsxParser = new ExcelParser();
-    xlsxParser.setLastParsedAt("testPath.xlsx", 1000000000000);
-    xlsxParser.setLastParsedAt("testPath2.xlsx", 1000000000000);
-    xlsxParser.setLastParsedAt("testPath.xlsx", 1000000000500);
-    xlsxParser.retrieveLastParsedAt("testPath.xlsx");
-    xlsxParser.retrieveLastParsedAt("testPath2.xlsx");
-    client.close();
+    const fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard.xlsx');
+    await fdParser.process()
 
+    client.close();
 }
 
 export const testToken = '';
@@ -123,5 +119,3 @@ export const testToken = '';
 //testOneDrive();
 //testNightScout();
 testParseNewest();
-
-

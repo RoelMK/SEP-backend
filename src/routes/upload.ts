@@ -7,7 +7,7 @@ import { getFileDirectory, getFileExtension } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 
-const upload = multer({ dest: 'uploads/abbott/' });
+const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
 
 // for uploading Abbott glucose logs, which may also contain insulin and more
@@ -33,10 +33,10 @@ uploadRouter.post('/upload-eetmeter', upload.single('file'), function (req, res)
 
 async function uploadFile(req, res, dataParser: DataParser) {
     // prepare file path with extension
-    const filePath: string = getFileDirectory(req.file.path) + req.file.originalname; // filename is not transferred automatically
+    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; // filename is not transferred automatically
     dataParser.setFilePath(filePath);
 
-    console.log(filePath);
+    console.log("HIER" + filePath + '   ' + req.file.path);
 
     //rename file path to include extension
     fs.rename(req.file.path, filePath, async function (err) {
@@ -48,7 +48,7 @@ async function uploadFile(req, res, dataParser: DataParser) {
         }
 
         // parse the uploaded file and update response
-        res = parseUploadedfile(dataParser, res);
+        res = await parseUploadedfile(dataParser, res);
 
         // remove file and update respons if something fails
         removeUploadedFile(filePath);
@@ -65,6 +65,7 @@ function removeUploadedFile(filePath: string) {
     // remove the temporary file
     fs.unlink(filePath, function (err) {
         if (err) {
+            console.log(`Cannot delete file ${filePath}!`)
             return; //TODO cannot remove, probably not best to send an error and just leave it
         }
     });

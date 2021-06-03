@@ -107,7 +107,9 @@ export class Exercise extends GameBusObject {
         const activities = Activity.getActivityInfoFromActivity(response);
         // We already know the date
         const exercise: ExerciseModel = {
-            timestamp: response.date
+            timestamp: response.date,
+            // Since the response is a single activity, the translation key (opf the game descriptor) will be the same for all properties
+            type: activities[0].translationKey
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
         activities.forEach((activity: ActivityModel) => {

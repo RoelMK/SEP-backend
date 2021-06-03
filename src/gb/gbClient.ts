@@ -53,6 +53,10 @@ export class GameBusClient {
         return this.gamebusInsulin;
     }
 
+    mood(): Mood {
+        return this.gamebusMood;
+    }
+
     /**
      * PUT request
      * @param path Endpoint URL (without base in {endpoint})

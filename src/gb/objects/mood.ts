@@ -1,71 +1,114 @@
-import { Query } from '../gbClient';
+import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { ActivityGETData } from '../models/gamebusModel';
 import { MoodModel } from '../models/moodModel';
-import { Activity } from './activity';
+import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 export class Mood extends GameBusObject {
-    private insulinId = 0; // TODO: assign to GameBus-given activity ID
 
     /**
-     * Example function that retrieves all activities with pre-set ID
-     * @returns All insulin activities (provided ID is correct)
-     */
-    async getAllInsulinActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
-        // TODO: implement getAllActivitiesWithId()
-        //const insulin = await this.activity.getAllActivitiesWithId(this.insulinId, headers, query);
-        return undefined as unknown as ActivityGETData[];
-    }
-
-    /**
-     * Converts an entire response to ExerciseModels
+     * Converts an entire response to MoodModels
      * @param response Array of ActivityGETData (response)
-     * @returns Array of ExerciseModels
+     * @returns Array of MoodModels
      */
-    static convertResponseToExerciseModels(response: ActivityGETData[]): MoodModel[] {
+    static convertResponseToMoodModels(response: ActivityGETData[]): MoodModel[] {
         return response.map((response: ActivityGETData) => {
-            return this.convertExerciseResponseToModel(response);
+            return this.convertMoodResponseToModel(response);
         });
     }
 
     /**
-     * Converts a response of ActivityGETData to an ExerciseModel
-     * @param response single ActivityGETData to convert
-     * @returns ExerciseModel with correct properties filled in
+     * Function that returns all moods from the given mood type (game descriptors)
+     * @param gameDescriptors Game descriptor(s) you want to get activities from
+     * @returns All mood activities belonging to the given Type(s)
      */
-    private static convertExerciseResponseToModel(response: ActivityGETData): MoodModel {
+         async getMoodActivityFromGd(
+            playerId: number,
+            gameDescriptors: MoodGameDescriptorNames[],
+            headers?: Headers,
+            query?: Query
+        ): Promise<ActivityGETData[]> {
+            return await this.activity.getAllActivitiesWithGd(
+                playerId,
+                gameDescriptors,
+                headers,
+                query
+            );
+        }
+
+    /**
+     * Converts a response of ActivityGETData to an MoodModel
+     * @param response single ActivityGETData to convert
+     * @returns MoodModel with correct properties filled in
+     */
+    private static convertMoodResponseToModel(response: ActivityGETData): MoodModel {
         // We have to convert a single activity response to a single model
         // First convert the response to a list of ActivityModels
         const activities = Activity.getActivityInfoFromActivity(response);
 
         // We already know the date
-        const exercise: MoodModel = {
+        const mood: MoodModel = {
             timestamp: response.date
         };
         
-        // Now we have to map the translationKey to the right key in the ExerciseModel
+        // Now we have to map the translationKey to the right key in the MoodModels
         activities.forEach((activity: ActivityModel) => {
             // For each of the separate activities (properties), we have to check them against known translation keys
             for (const key in MoodPropertyKeys) {
                 if (MoodPropertyKeys[key] === activity.property.translationKey) {
-                    exercise[key] = activity.value;
+                    mood[key] = activity.value;
                 }
             }
         });
-        return exercise;
+        return mood;
     }
+
+        /**
+     * Function that returns all activities of given types between given dates (as unix)
+     * @param playerId ID of player
+     * @param gameDescriptors List of activity types (see below)
+     * @param startDate Starting date (including, unix)
+     * @param endDate Ending date (excluding, unix)
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
+     * @returns All activities of given types between given dates (excluding end)
+     */
+         async getMoodFromGdBetweenUnix(
+            playerId: number,
+            gameDescriptors: MoodGameDescriptorNames[],
+            startDate: number,
+            endDate: number,
+            order?: QueryOrder,
+            limit?: number,
+            page?: number,
+            headers?: Headers,
+            query?: Query
+        ): Promise<ActivityGETData[]> {
+            return await this.activity.getAllActivitiesBetweenUnixWithGd(
+                playerId,
+                startDate,
+                endDate,
+                gameDescriptors,
+                order,
+                limit,
+                page,
+                headers,
+                query
+            );
+        }
 }
 
 /**
- * Data provider names for known exercise data sources
+ * Data provider names for known mood data sources
  */
 export enum MoodDataProviderNames {
     DAILY_RUN = 'Daily_run'
 }
 
 /**
- * Data property names for known exercise data properties
+ * Data property names for known mood data properties
 */
  export enum MoodGameDescriptorNames {
     logMood = 'LOG_MOOD', // Mood descriptor

@@ -14,7 +14,7 @@ export class EetMeterParser extends DataParser {
      * DataParser construction with DataSource set
      * @param xmlFile file path of Eetmeter file
      */
-    constructor(private readonly xmlFile: string) {
+    constructor(private readonly xmlFile?: string) {
         super(DataSource.EETMETER, xmlFile);
     }
 

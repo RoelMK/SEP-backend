@@ -35,5 +35,5 @@ if (!isProduction) {
 
 // Launch
 export const server = app.listen(port, () => {
-    console.log('Listening on port ' + port);
+    console.log('Listening on port ' + port + ' http://localhost:8080');
 });

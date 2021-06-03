@@ -34,7 +34,7 @@ import NightscoutParser, {
 export async function parseAbbott(
     filePath: string,
     type: OutputDataType
-): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined> {
+): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined> {
     const abbottEUParser: AbbottParser = new AbbottParser(filePath);
     await abbottEUParser.process();
     return abbottEUParser.getData(type);
@@ -49,7 +49,7 @@ export async function parseAbbott(
 export async function parseFoodDiary(
     filePath: string,
     type: OutputDataType
-): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined> {
+): Promise<InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined> {
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath);
     await foodDiaryParser.process();
     return foodDiaryParser.getData(type);
@@ -112,7 +112,7 @@ export async function postFoodData(
     foodSource: FoodSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const foodParser = new FoodParser(foodInput, foodSource, dateFormat);
+    const foodParser = new FoodParser(foodInput, foodSource, dateFormat, 0);
     return await foodParser.post();
 }
 
@@ -162,7 +162,7 @@ export async function parseNightScout(
     testEntries: NightScoutEntryModel[],
     testTreatments: NightScoutTreatmentModel[],
     outputDataType: OutputDataType
-): Promise<NightScoutEntryModel[] | InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined> {
+): Promise<NightScoutEntryModel[] | InsulinModel[] | FoodModel[] | GlucoseModel[] | MoodModel[] | undefined> {
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
         'rink-27f591f2e4730a68',

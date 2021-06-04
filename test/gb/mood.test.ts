@@ -1,9 +1,7 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
-import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { MoodModel } from '../../src/gb/models/moodModel';
-import { InsulinPropertyKeys } from '../../src/gb/objects/insulin';
 import { MoodPropertyKeys } from '../../src/gb/objects/mood';
 import { mockRequest } from '../testUtils/requestUtils';
 

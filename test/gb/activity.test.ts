@@ -18,7 +18,8 @@ describe('with mocked activities get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('GET activities on date', async () => {
         // Get activities from a date (as Date object)
@@ -30,7 +31,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 })
             })
         );
@@ -48,7 +49,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 })
             })
         );
@@ -65,7 +66,7 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 })
             })
         );
@@ -85,7 +86,62 @@ describe('with mocked activities get call', () => {
             expect.objectContaining({
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(activities).toEqual([]);
+    });
+
+    test('GET activities with game descriptor keys', async () => {
+        const gds = ['WALK'];
+        const activities = await client.activity().getAllActivitiesWithGd(0, gds);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=WALK',
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(activities).toEqual([]);
+    });
+
+    test('GET activities with game descriptor keys between Unix dates', async () => {
+        const unixTimestampBefore = new Date('2021-04-19').getTime();
+        const unixTimestampAfter = new Date('2021-04-21').getTime();
+        const gds = ['WALK'];
+        const activities = await client
+            .activity()
+            .getAllActivitiesBetweenUnixWithGd(0, unixTimestampBefore, unixTimestampAfter, gds);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK',
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(activities).toEqual([]);
+    });
+
+    test('GET activities with game descriptor keys on Unix date', async () => {
+        const unixTimestamp = new Date('2021-04-19').getTime();
+        const gds = ['WALK'];
+        const activities = await client
+            .activity()
+            .getActivitiesOnUnixDateWithGd(0, unixTimestamp, gds);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK',
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
                 })
             })
         );

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { ExerciseModel } from '../models/exerciseModel';

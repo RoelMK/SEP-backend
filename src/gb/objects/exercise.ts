@@ -111,7 +111,7 @@ export class Exercise extends GameBusObject {
             timestamp: response.date,
             // Name is simply the translation key but correctly capitalized and removed underscores
             name: startCase(toLower(activities[0].translationKey)),
-            // Since the response is a single activity, the translation key (opf the game descriptor) will be the same for all properties
+            // Since the response is a single activity, the translation key (of the game descriptor) will be the same for all properties
             type: activities[0].translationKey
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
@@ -201,7 +201,6 @@ export enum ExerciseGameDescriptorNames {
 /**
  * Relevant properties to map properties of activities to the exerciseModel
  * [key in exerciseModel] = [translationKey in GameBus]
- * TODO: add heartbeat data from FitBit
  */
 export enum ExercisePropertyKeys {
     duration = 'DURATION', // in seconds as string
@@ -210,5 +209,10 @@ export enum ExercisePropertyKeys {
     calories = 'KCALORIES', // in kcal as string
     groupSize = 'GROUP_SIZE', // in amount as string
     penalty = 'PENALTY', // in amount [0 - 100] as string
-    score = 'SCORE' // in amount [-inf, inf] as string
+    score = 'SCORE', // in amount [-inf, inf] as string
+    maxSpeed = 'SPEED.MAX', // maximum speed reached in m/s
+    avgSpeed = 'SPEED.AVG', // average speed reached in m/s
+    maxHeartrate = 'MAX_HEART_RATE', // maximum heart rate reached (in bpm)
+    avgHeartrate = 'AVG_HEART_RATE', // average heart rate reached (in bpm)
+    minHeartrate = 'MIN_HEART_RATE' // minimum heart rate reached (in bpm)
 }

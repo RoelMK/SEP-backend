@@ -289,6 +289,7 @@ describe('convert response to models', () => {
         };
         const expectedResult: ExerciseModel = {
             timestamp: 1622652468000,
+            name: 'Walk',
             type: 'WALK',
             steps: 20
         };

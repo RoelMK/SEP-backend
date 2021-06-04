@@ -180,3 +180,12 @@ test('Register and update multple file parse events and retrieve it', () => {
 
     dbClient.close();
 });
+
+
+test('Retrieve non existing parse event', () => {
+    const playerId = '-1';
+    const fileName = 'nonsense.xlsx';
+    let dbClient = new DBClient();
+    expect(dbClient.getLastUpdate(playerId, fileName)).toStrictEqual(0);
+    dbClient.close();
+});

@@ -5,6 +5,7 @@ import { ExerciseModel } from '../models/exerciseModel';
 import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+import { startCase, toLower } from 'lodash';
 
 /**
  * Class for exercise-specific functions
@@ -108,6 +109,8 @@ export class Exercise extends GameBusObject {
         // We already know the date
         const exercise: ExerciseModel = {
             timestamp: response.date,
+            // Name is simply the translation key but correctly capitalized and removed underscores
+            name: startCase(toLower(activities[0].translationKey)),
             // Since the response is a single activity, the translation key (opf the game descriptor) will be the same for all properties
             type: activities[0].translationKey
         };

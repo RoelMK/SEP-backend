@@ -1,4 +1,4 @@
-import { parseCsv } from './parseUtils';
+import { parseCsv } from '../testUtils/parseUtils';
 
 test('importing csv file', async () => {
     const expectedResult = [

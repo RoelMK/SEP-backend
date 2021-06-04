@@ -1,10 +1,11 @@
-import FoodModel from '../../gb/models/foodModel';
+import { FoodModel } from '../../gb/models/foodModel';
 import { AbbottData } from '../dataParsers/abbottParser';
 import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
 import { XOR } from 'ts-xor';
 import { Consumptie } from '../dataParsers/eetmeterParser';
+import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -42,7 +43,7 @@ export default class FoodParser {
     /**
      * Posts the imported food data to GameBus
      */
-    async post() {
+    async post(): Promise<void> {
         // TODO: post the foodData (correctly formatted) to GameBus
     }
 }
@@ -53,10 +54,11 @@ export default class FoodParser {
 export enum FoodSource {
     ABBOTT = 0,
     FOOD_DIARY_EXCEL = 1,
-    EETMETER = 2
+    EETMETER = 2,
+    NIGHTSCOUT = 3
 }
 
 /**
  * All possible input types for food data,
  */
-export type FoodInput = XOR<Consumptie[], XOR<AbbottData[], FoodDiaryData[]>>;
+export type FoodInput = XOR<Consumptie[], XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>>;

@@ -1,12 +1,12 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient, RequestMethod } from '../../src/gb/gbClient';
-import { mockGameBusRequest } from './gbUtils';
+import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
 describe('GameBusClient requests', () => {
     // Request handler that simply returns empty data for every request
-    const request = mockGameBusRequest(() => {
+    const request = mockRequest(() => {
         return Promise.resolve({
             data: []
         });

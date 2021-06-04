@@ -1,6 +1,7 @@
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
 import { InsulinSource } from './insulinParser';
 import { DateFormat, parseDate } from '../utils/dates';
+import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
@@ -12,7 +13,10 @@ export default class InsulinMapper {
      * @param dateFormat DateFormat of the insulin measurement timestamps
      * @returns Mapping function that maps an entry from the source to a insulinModel
      */
-    public static mapInsulin(insulinSource: InsulinSource, dateFormat: DateFormat): (entry: any) => InsulinModel {
+    public static mapInsulin(
+        insulinSource: InsulinSource,
+        dateFormat: DateFormat
+    ): (entry: any) => InsulinModel {
         switch (insulinSource) {
             case InsulinSource.ABBOTT:
                 // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
@@ -21,6 +25,8 @@ export default class InsulinMapper {
                 };
             case InsulinSource.FOOD_DIARY_EXCEL:
                 return this.mapFoodDiaryInsulin;
+            case InsulinSource.NIGHTSCOUT:
+                return this.mapNightScout;
             default:
                 // TODO this should not happen
                 return this.mapFoodDiaryInsulin;
@@ -75,6 +81,14 @@ export default class InsulinMapper {
                 true
             ),
             insulinAmount: parseFloat(entry.total_insulin),
+            insulinType: InsulinType.RAPID
+        } as InsulinModel;
+    }
+
+    private static mapNightScout(entry: NightScoutTreatmentModel): InsulinModel {
+        return {
+            timestamp: new Date(entry.created_at).getTime(),
+            insulinAmount: entry.insulin,
             insulinType: InsulinType.RAPID
         } as InsulinModel;
     }

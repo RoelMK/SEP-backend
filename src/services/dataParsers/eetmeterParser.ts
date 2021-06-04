@@ -1,4 +1,4 @@
-import FoodModel from '../../gb/models/foodModel';
+import { FoodModel } from '../../gb/models/foodModel';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import { DataParser, DataSource } from './dataParser';
 /**

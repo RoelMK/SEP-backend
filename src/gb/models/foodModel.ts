@@ -2,7 +2,7 @@
  * A meal has 3 basic properties; time of meal (unix), calories of meal, description of meal (optional)
  * Additionally, more properties can be included (in grams)
  */
-export default interface FoodModel {
+export interface FoodModel {
     timestamp: number;
     carbohydrates: number;
     calories?: number;

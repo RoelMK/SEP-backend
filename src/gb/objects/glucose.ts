@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityGETData, ActivityPOSTData } from '../models/gamebusModel';
 import { GlucoseModel } from '../models/glucoseModel';
@@ -16,8 +17,8 @@ export class Glucose extends GameBusObject {
      */
     async getAllGlucoseActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
         // TODO: implement getAllActivitiesWithId()
-        const glucose = await this.activity.getAllActivitiesWithId(this.glucoseId, headers, query);
-        return glucose as unknown as ActivityGETData[];
+        //const glucose = await this.activity.getAllActivitiesWithId(this.glucoseId, headers, query);
+        return undefined as unknown as ActivityGETData[];
     }
 
     async postSingleInsulinActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {

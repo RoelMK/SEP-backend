@@ -1,10 +1,10 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { parseFoodDiary } from '../testUtils/parseUtils';
 import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
-import { parseFoodDiary } from './parseUtils';
 
-test('test robustness of Food diary data parser', async () => {
+test('test robustness of food diary data parser', async () => {
     expect(async () => {
         (
             (await parseFoodDiary(
@@ -46,7 +46,7 @@ test('test automatic date + total insulin fill', async () => {
         date: '08/05/21',
         time: '13:12',
         meal_type: MEAL_TYPE.UNDEFINED,
-        description: "Pizza",
+        description: 'Pizza',
         carbohydrates: '3',
         glycemic_index: '2',
         base_insulin: '4',

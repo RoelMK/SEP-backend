@@ -11,25 +11,32 @@ const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
 
 // for uploading Abbott glucose logs, which may also contain insulin and more
-uploadRouter.post('/upload/abbott', upload.single('file'), function (req, res) {
-    uploadFile(req, res, new AbbottParser());
+uploadRouter.post('/upload', upload.single('file'), function (req, res) {
+    switch(req.query.format){
+        case 'eetmeter':
+            uploadFile(req, res, new EetMeterParser());
+            break;
+        case 'abbott':
+            uploadFile(req, res, new AbbottParser());
+            break;
+        case 'fooddiary':  
+            uploadFile(req, res, new FoodDiaryParser());
+            break;
+        default:
+            res.status(400).send('This data format is not supported');
+    }
+    
 });
+
 uploadRouter.get('/upload/abbott', function (req, res) {
     res.sendFile(__dirname + '/testHTMLabbott.html');
 });
 
-// for uploading food diaries in which a user can manually track the food
-uploadRouter.post('/upload/fooddiary', upload.single('file'), function (req, res) {
-    uploadFile(req, res, new FoodDiaryParser());
-});
+
 uploadRouter.get('/upload/fooddiary', function (req, res) {
     res.sendFile(__dirname + '/testHTMLfooddiary.html');
 });
 
-// for uploading an Eetmeter food tracking application export
-uploadRouter.post('/upload/eetmeter', upload.single('file'), function (req, res) {
-    uploadFile(req, res, new EetMeterParser());
-});
 uploadRouter.get('/upload/eetmeter', function (req, res) {
     res.sendFile(__dirname + '/testHTMLeetmeter.html');
 });

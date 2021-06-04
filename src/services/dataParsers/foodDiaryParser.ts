@@ -13,7 +13,7 @@ import { MEAL_TYPE } from '../../gb/models/foodModel';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private foodDiaryFile?: string, protected oneDriveToken?: string) {
+    constructor(private foodDiaryFile: string, protected oneDriveToken?: string) {
         super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken, 'fooddiary');
     }
 
@@ -225,6 +225,9 @@ export type FoodDiaryData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function FoodDiaryDataGuard(object: any): object is FoodDiaryData {
+    if (object === undefined){
+        return false;
+    }
     return (
         'date' in object &&
         'time' in object &&

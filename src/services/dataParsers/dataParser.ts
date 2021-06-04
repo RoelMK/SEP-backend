@@ -35,7 +35,7 @@ export abstract class DataParser {
      */
     constructor(
         protected readonly dataSource: DataSource,
-        protected filePath?: string,
+        protected filePath: string,
         protected oneDriveToken?: string,
         protected tableName?: string // for excel parsing
     ) {}
@@ -66,12 +66,9 @@ export abstract class DataParser {
                 );
 
             case 'xml':
-                if (this.dataSource == DataSource.EETMETER) {
-                    return await this.xmlParser.parse(this.filePath);
-                }
-            default:
-                throw new InputError(`Unsupported file type ${extension}`);
+                return await this.xmlParser.parse(this.filePath);
         }
+        throw new InputError(`Unsupported file type ${extension}`);
     }
 
     /**
@@ -80,6 +77,9 @@ export abstract class DataParser {
      */
     setFilePath(path: string): void {
         this.filePath = path;
+    }
+    getFilePath(): string{
+        return this.filePath;
     }
 
     abstract process(): Promise<void>;

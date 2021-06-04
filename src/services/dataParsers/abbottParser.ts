@@ -14,7 +14,7 @@ export default class AbbottParser extends DataParser {
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private abbotFile?: string) {
+    constructor(private abbotFile: string) {
         super(DataSource.ABBOTT, abbotFile);
     }
 
@@ -175,6 +175,9 @@ export type AbbottData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function AbbottDataGuard(object: any): object is AbbottData {
+    if (object === undefined){
+        return false;
+    }
     return (
         object.device !== undefined &&
         object.serial_number !== undefined &&

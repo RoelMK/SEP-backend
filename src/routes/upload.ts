@@ -3,7 +3,7 @@ import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
 import { DataParser, OutputDataType } from '../services/dataParsers/dataParser';
 import fs from 'fs';
-import { getFileDirectory, getFileExtension } from '../services/utils/files';
+import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 
@@ -11,26 +11,26 @@ const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
 
 // for uploading Abbott glucose logs, which may also contain insulin and more
-uploadRouter.post('/upload-abbott', upload.single('file'), function (req, res) {
+uploadRouter.post('/upload/abbott', upload.single('file'), function (req, res) {
     uploadFile(req, res, new AbbottParser());
 });
-uploadRouter.get('/upload-abbott', function (req, res) {
+uploadRouter.get('/upload/abbott', function (req, res) {
     res.sendFile(__dirname + '/testHTMLabbott.html');
 });
 
 // for uploading food diaries in which a user can manually track the food
-uploadRouter.post('/upload-fooddiary', upload.single('file'), function (req, res) {
+uploadRouter.post('/upload/fooddiary', upload.single('file'), function (req, res) {
     uploadFile(req, res, new FoodDiaryParser());
 });
-uploadRouter.get('/upload-fooddiary', function (req, res) {
+uploadRouter.get('/upload/fooddiary', function (req, res) {
     res.sendFile(__dirname + '/testHTMLfooddiary.html');
 });
 
 // for uploading an Eetmeter food tracking application export
-uploadRouter.post('/upload-eetmeter', upload.single('file'), function (req, res) {
+uploadRouter.post('/upload/eetmeter', upload.single('file'), function (req, res) {
     uploadFile(req, res, new EetMeterParser());
 });
-uploadRouter.get('/upload-eetmeter', function (req, res) {
+uploadRouter.get('/upload/eetmeter', function (req, res) {
     res.sendFile(__dirname + '/testHTMLeetmeter.html');
 });
 
@@ -80,31 +80,27 @@ async function parseUploadedfile(dataParser: DataParser, res) {
 
     // TODO just for testing, get some insulin data and send it back
     const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
-    const foodData: any = dataParser.getData(OutputDataType.FOOD);
+    //const foodData: any = dataParser.getData(OutputDataType.FOOD);
 
     // only for testing
-    if (insulinData.length < 0) { // TODO EETMETER error -> is parsed with insulin undefined
-        res.send(
-            'Success, read ' +
+    res.send(
+        'Success, read ' +
                 insulinData.length +
                 ' entries.' +
                 '\nFirst entry: ' +
                 insulinData[0].timestamp +
                 ', ' +
                 insulinData[0].insulinAmount
-        );
-    } else {
-        console.log(foodData);
-        res.send(
-            'Success, read ' +
-                insulinData.length +
-                ' entries.' +
-                '\nFirst entry: ' +
-                foodData[0].timestamp +
-                ', ' +
-                foodData[0].carbohydrates
-        );
-    }
+    );
+    // res.send(
+    //     'Success, read ' +
+    //         insulinData.length +
+    //         ' entries.' +
+    //         '\nFirst entry: ' +
+    //         foodData[0].timestamp +
+    //         ', ' +
+    //         foodData[0].carbohydrates
+    // );
     return res;
 }
 

@@ -30,14 +30,21 @@ describe('test routes from test.ts', () => {
 });
 
 describe('GET files', () => {
+
+    //TODO remove these / redescribe, the gets are just for testing
     test('GET Abbott file', async () => {
-        const response = await request(server).get('/upload-abbott');
+        const response = await request(server).get('/upload/abbott');
         expect(response.statusCode).toBe(200);
         // TODO: more?
     });
 
     test('GET FoodDiary file', async () => {
-        const response = await request(server).get('/upload-fooddiary');
+        const response = await request(server).get('/upload/fooddiary');
+        expect(response.statusCode).toBe(200);
+    });
+
+    test('GET Eetmeter file', async () => {
+        const response = await request(server).get('/upload/eetmeter');
         expect(response.statusCode).toBe(200);
     });
 });
@@ -45,12 +52,12 @@ describe('GET files', () => {
 describe('POST files', () => {
     // TODO: not sure how to post an entire file
     test('POST Abbott file', async () => {
-        // const response = await request(server).post('/upload-abbott');
+        // const response = await request(server).post('/upload/abbott');
         // expect(response.statusCode).toBe(201);
     });
 
     test('POST FoodDiary file', async () => {
-        // const response = await request(server).post('/upload-fooddiary');
+        // const response = await request(server).post('/upload/fooddiary');
         // expect(response.statusCode).toBe(201);
     });
 });

@@ -10,11 +10,19 @@ import { GameBusObject } from './base';
 export class Mood extends GameBusObject {
     public moodGameDescriptor = "LOG_MOOD";
 
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
     async postSingleMoodActivity(model: MoodModel, playerID: number, headers?: Headers, query?:Query) {
         const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
+    /**
+     * Function that creates a POSTData from a model and playerID
+     */
     public toPOSTData(model: MoodModel, playerID: number) : ActivityPOSTData{
         const obj = {
             gameDescriptorTK: this.moodGameDescriptor,

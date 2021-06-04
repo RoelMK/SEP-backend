@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { response } from 'express';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { FoodModel } from '../models/foodModel';
 import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+
+const util = require('util')
 
 /**
  * Class for food-specific functions
@@ -15,20 +16,18 @@ export class Food extends GameBusObject {
     public foodGameDescriptor = "Nutrition_Diary";
 
     /**
-     * Example function that retrieves all activities with pre-set ID
-     * @returns All food activities (provided ID is correct)
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
      */
-    async getAllFoodActivities(headers?: Headers, query?: Query): Promise<ActivityGETData[]> {
-        // TODO: implement getAllActivitiesWithId()
-        //const food = await this.activity.getAllActivitiesWithId(this.foodId, headers, query);
-        return undefined as unknown as ActivityGETData[];
-    }
-
     async postSingleFoodActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
         const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
+    /**
+     * Function that creates a POSTData from a model and playerID
+     */
     public toPOSTData(model: FoodModel, playerID: number) : ActivityPOSTData{
         const obj = {
             gameDescriptorTK: this.foodGameDescriptor,
@@ -48,10 +47,9 @@ export class Food extends GameBusObject {
 
     /**
      * Function that returns all exercises from the given exercise type (game descriptors)
-     * @param gameDescriptors Game descriptor(s) you want to get activities from
      * @returns All exercise activities belonging to the given Type(s)
      */
-     async getExerciseActivityFromGd(
+    async getAllFoodActivities(
         playerId: number,
         headers?: Headers,
         query?: Query
@@ -62,13 +60,13 @@ export class Food extends GameBusObject {
             headers,
             query
         );
+        //console.log(util.inspect(result, false, null, true /* enable colors */))
         return Food.convertResponseToFoodModels(result);
     }
 
     /**
      * Function that returns all activities of given types between given dates (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
      * @param startDate Starting date (including, unix)
      * @param endDate Ending date (excluding, unix)
      * @param order Optional, ascending (+) or descending (-)
@@ -76,7 +74,7 @@ export class Food extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types between given dates (excluding end)
      */
-    async getExerciseActivityFromGdBetweenUnix(
+    async getExerciseActivityBetweenUnix(
         playerId: number,
         startDate: number,
         endDate: number,
@@ -103,14 +101,13 @@ export class Food extends GameBusObject {
     /**
      * Function that returns all activities of given types on given date (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
      * @param date Date as unix
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types on given date
      */
-    async getExerciseActivityFromGdOnUnixDate(
+    async getExerciseActivityOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
@@ -147,11 +144,11 @@ export class Food extends GameBusObject {
             timestamp: activities[0].timestamp,
             carbohydrates: -1 //impossible temp value
         };
-        console.log(response)
-        console.log(activities)
+        //console.log(response)
+        //console.log(activities)
         activities.forEach((activity: ActivityModel) => {
             let key = Object.keys(FoodPropertyKeys).find(key => FoodPropertyKeys[key] === activity.property.translationKey) ?? activity.property.translationKey //used the online key if no translation is found
-            model[key] = activity.value as any;
+            model[key] = activity.value;
         });
         if(model.carbohydrates === -1) {
             throw 'carbohydrates were not found in the response see: ' + response

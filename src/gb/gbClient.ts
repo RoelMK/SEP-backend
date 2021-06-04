@@ -10,7 +10,7 @@ const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
-    public readonly client: AxiosInstance;
+    private readonly client: AxiosInstance;
 
     private gamebusActivity: Activity;
     private gamebusExercise: Exercise;

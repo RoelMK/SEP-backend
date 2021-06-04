@@ -111,10 +111,12 @@ export class Glucose extends GameBusObject {
                     switch (GlucosePropertyKeys[key]) {
                         case GlucosePropertyKeys.glucoseLevel:
                             // Already in MMOL/L so just use that
+                            //@ts-ignore
                             glucose.glucoseLevel = activity.value;
                             break;
                         case GlucosePropertyKeys.glucoseLevelMgdl:
                             // First convert to MMOL/L and then use it
+                            //@ts-ignore
                             glucose.glucoseLevel = convertMG_DLtoMMOL_L(activity.value);
                             break;
                     }

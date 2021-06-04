@@ -150,11 +150,19 @@ export class Insulin extends GameBusObject {
         });
     }
 
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
     async postSingleInsulinActivity(model: InsulinModel, playerID: number, headers?: Headers, query?:Query) {
         const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
+    /**
+     * Function that creates a POSTData from a model and playerID
+     */
     public toPOSTData(model: InsulinModel, playerID: number) : ActivityPOSTData{
         const obj = {
             gameDescriptorTK: this.insulinTranslationKey,

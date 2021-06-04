@@ -1,4 +1,3 @@
-// TODO: add models for fitness activities (steps, heart beat, calories burnt), this depends on GameBus
 export interface ExerciseModel {
     timestamp: number;
     name: string; // sensible name of activity (regex of type)
@@ -10,4 +9,9 @@ export interface ExerciseModel {
     groupSize?: number; // in amount (0 - inf)
     penalty?: number; // in amount (0 - 100), only relevant for air hockey
     score?: number; // in amount, only relevant for air hockey
+    maxSpeed?: number; // in m/s, only relevant for (detail) activities
+    avgSpeed?: number; // in m/s, only relevant for (detail) activities
+    maxHeartrate?: number; // in bpm, only relevant for (detail) activities
+    avgHeartrate?: number; // in bpm, only relevant for (detail) activities
+    minHeartrate?: number; // in bpm, only relevant for (detail) activities
 }

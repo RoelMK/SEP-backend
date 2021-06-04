@@ -11,12 +11,12 @@ export class Mood extends GameBusObject {
     public moodGameDescriptor = "LOG_MOOD";
 
     async postSingleMoodActivity(model: MoodModel, playerID: number, headers?: Headers, query?:Query) {
-        let data = this.toPOSTData(model,playerID);
+        const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
     public toPOSTData(model: MoodModel, playerID: number) : ActivityPOSTData{
-        let obj = {
+        const obj = {
             gameDescriptorTK: this.moodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?

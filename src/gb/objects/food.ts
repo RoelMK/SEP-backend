@@ -22,12 +22,12 @@ export class Food extends GameBusObject {
     }
 
     async postSingleFoodActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
-        let data = this.toPOSTData(model,playerID);
+        const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
     public toPOSTData(model: FoodModel, playerID: number) : ActivityPOSTData{
-        let obj = {
+        const obj = {
             gameDescriptorTK: this.foodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?

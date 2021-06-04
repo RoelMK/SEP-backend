@@ -22,12 +22,12 @@ export class Glucose extends GameBusObject {
     }
 
     async postSingleGlucoseActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {
-        let data = this.toPOSTData(model,playerID);
+        const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
     public toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
-        let obj = {
+        const obj = {
             gameDescriptorTK: this.glucoseGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?

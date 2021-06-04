@@ -7,7 +7,7 @@ export interface ActivityModel {
     timestamp: number;
     id: number;
     translationKey: string;
-    value: any;
+    value: number | string;
     property: ActivityProperty;
 }
 

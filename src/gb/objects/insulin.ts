@@ -32,7 +32,7 @@ export class Insulin extends GameBusObject {
             image: "", //TODO add image?
             date: model.timestamp,
             propertyInstances: [{
-                propertyTK : "INSULIN_VALUE_UNITS",
+                propertyTK : "INSULIN_DOSE",
                 value : model.insulinAmount
             },
             {

@@ -13,19 +13,24 @@ const uploadRouter = Router();
 // for uploading Abbott glucose logs, which may also contain insulin and more
 uploadRouter.post('/upload', upload.single('file'), function (req: any, res) {
     const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; // filename is not transferred automatically
+    let promise: Promise<void>;
     switch (req.query.format) {
         case 'eetmeter':
-            uploadFile(req, res, new EetMeterParser(filePath));
+            promise = uploadFile(req, res, new EetMeterParser(filePath));
             break;
         case 'abbott':
-            uploadFile(req, res, new AbbottParser(filePath));
+            promise = uploadFile(req, res, new AbbottParser(filePath));
             break;
         case 'fooddiary':
-            uploadFile(req, res, new FoodDiaryParser(filePath));
+            promise = uploadFile(req, res, new FoodDiaryParser(filePath));
             break;
         default:
             res.status(400).send('This data format is not supported');
+            try{fs.unlinkSync(req.file.path)}catch(e){};
+            return;
     }
+    // at the end of each upload, remove the file
+    promise.then(() => {try{fs.unlinkSync(filePath);}catch(e){};})
 });
 
 uploadRouter.get('/upload/abbott', function (req, res) {
@@ -42,61 +47,43 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
 
 async function uploadFile(req, res, dataParser: DataParser) {
     //rename auto-generated file path to original name
-    fs.rename(req.file.path, dataParser.getFilePath(), async function (err) {
-        // if renaming fails for some reason, send error
-        if (err) {
-            console.log('ERROR: ' + err);
-            res.status(500).send('Could not store file!');
-            return;
-        }
+    try{
+        fs.renameSync(req.file.path, dataParser.getFilePath());
+    }catch (e){
+        console.log(e);
+        try{fs.unlinkSync(req.file.path)}catch(e){};
+        res.status(500).send('Could not rename file!');
+        return;
+    }
 
-        // parse the uploaded file and update response on failure
-        try {
-            await parseUploadedfile(dataParser);
-        } catch (e) {
-            console.log('ERROR' + e);
-            if (e.name == 'InputError') {
+    // parse the uploaded file and update response on failure
+    try {
+        await parseFile(dataParser);
+    } catch (e) {
+        console.log(e);
+        switch(e.name){
+            case 'InputError':
                 res.status(400).send(
                     `An erroneous file was uploaded for the selected format, check if you have selected the correct file! Reason: ${e.message}`
                 );
-                return;
-            }
-            res.status(500).send('Something went wrong :(');
-            return;
+                break;
+            default:
+                res.status(500).send('Something went wrong :(');
         }
+        return;
+    }
 
-        // remove file and update response if something fails
-        try {
-            removeUploadedFile(dataParser.getFilePath());
-        } catch (e) {
-            res.status(500).send(`Cannot delete file ${dataParser.getFilePath()}!`);
-            return;
-        }
-
-        res.status(200).send('File has been parsed.');
-        console.log('upload succesful');
-    });
-}
-
-/**
- * Removes a file from the server
- * @param filePath Path of the file on the server
- */
-function removeUploadedFile(filePath: string): void {
-    // remove the temporary file
-    fs.unlink(filePath, function (err) {
-        if (err) {
-            console.log(`Cannot delete file ${filePath}!`);
-            throw err;
-        }
-    });
+    console.log(dataParser.getFilePath())
+    // process has been completed
+    res.status(200).send('File has been parsed.');
+    console.log('upload succesful');
 }
 
 /**
  * Makes sure the uploaded file is parsed and processed correctly
  * @param dataParser DataParser child that handles the parsing of the file
  */
-async function parseUploadedfile(dataParser: DataParser): Promise<void> {
+async function parseFile(dataParser: DataParser): Promise<void> {
     await dataParser.process();
 
     // TODO just for testing, get some insulin data and send it back

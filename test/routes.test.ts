@@ -49,7 +49,6 @@ describe('GET files', () => {
 });
 
 describe('POST files', () => {
-    // TODO: not sure how to post an entire file
     test('POST Abbott file', async () => {
         const response = await request(server)
             .post('/upload?format=abbott')
@@ -92,7 +91,7 @@ describe('POST files', () => {
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(400);
     });
-});
+ });
 
 describe('mood endpoint', () => {
     test('POST mood data', async () => {

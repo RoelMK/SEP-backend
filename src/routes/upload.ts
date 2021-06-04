@@ -11,16 +11,17 @@ const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
 
 // for uploading Abbott glucose logs, which may also contain insulin and more
-uploadRouter.post('/upload', upload.single('file'), function (req, res) {
+uploadRouter.post('/upload', upload.single('file'), function (req: any, res) {
+    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; // filename is not transferred automatically
     switch (req.query.format) {
         case 'eetmeter':
-            uploadFile(req, res, new EetMeterParser());
+            uploadFile(req, res, new EetMeterParser(filePath));
             break;
         case 'abbott':
-            uploadFile(req, res, new AbbottParser());
+            uploadFile(req, res, new AbbottParser(filePath));
             break;
         case 'fooddiary':
-            uploadFile(req, res, new FoodDiaryParser());
+            uploadFile(req, res, new FoodDiaryParser(filePath));
             break;
         default:
             res.status(400).send('This data format is not supported');
@@ -40,27 +41,39 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
 });
 
 async function uploadFile(req, res, dataParser: DataParser) {
-    // prepare file path with extension
-    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; // filename is not transferred automatically
-    dataParser.setFilePath(filePath);
-
-    console.log('HIER' + filePath + '   ' + req.file.path);
-
-    //rename file path to include extension
-    fs.rename(req.file.path, filePath, async function (err) {
-        // if renaming fails for some reason, send error // TODO
+    //rename auto-generated file path to original name
+    fs.rename(req.file.path, dataParser.getFilePath(), async function (err) {
+        // if renaming fails for some reason, send error
         if (err) {
             console.log('ERROR: ' + err);
-            res.status(500).send('Could not store file!'); // TODO
+            res.status(500).send('Could not store file!');
             return;
         }
 
-        // parse the uploaded file and update response
-        res = await parseUploadedfile(dataParser, res);
+        // parse the uploaded file and update response on failure
+        try {
+            await parseUploadedfile(dataParser);
+        } catch (e) {
+            console.log('ERROR' + e);
+            if (e.name == 'InputError') {
+                res.status(400).send(
+                    `An erroneous file was uploaded for the selected format, check if you have selected the correct file! Reason: ${e.message}`
+                );
+                return;
+            }
+            res.status(500).send('Something went wrong :(');
+            return;
+        }
 
-        // remove file and update respons if something fails
-        removeUploadedFile(filePath);
+        // remove file and update response if something fails
+        try {
+            removeUploadedFile(dataParser.getFilePath());
+        } catch (e) {
+            res.status(500).send(`Cannot delete file ${dataParser.getFilePath()}!`);
+            return;
+        }
 
+        res.status(200).send('File has been parsed.');
         console.log('upload succesful');
     });
 }
@@ -69,44 +82,37 @@ async function uploadFile(req, res, dataParser: DataParser) {
  * Removes a file from the server
  * @param filePath Path of the file on the server
  */
-function removeUploadedFile(filePath: string) {
+function removeUploadedFile(filePath: string): void {
     // remove the temporary file
     fs.unlink(filePath, function (err) {
         if (err) {
             console.log(`Cannot delete file ${filePath}!`);
-            return; //TODO cannot remove, probably not best to send an error and just leave it
+            throw err;
         }
     });
 }
 
-async function parseUploadedfile(dataParser: DataParser, res) {
-    // rest of the function is included in this function to synchronize the control flow
-    try {
-        await dataParser.process();
-    } catch (e) {
-        if (e instanceof InputError)
-            res.status(400).send(
-                'An erroneous file was uploaded for the selected format, check if you have selected the correct file!'
-            );
-        else {
-            res.status(500).send('Something went wrong :(');
-        }
-    }
+/**
+ * Makes sure the uploaded file is parsed and processed correctly
+ * @param dataParser DataParser child that handles the parsing of the file
+ */
+async function parseUploadedfile(dataParser: DataParser): Promise<void> {
+    await dataParser.process();
 
     // TODO just for testing, get some insulin data and send it back
     const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
     //const foodData: any = dataParser.getData(OutputDataType.FOOD);
 
     // only for testing
-    res.send(
-        'Success, read ' +
-            insulinData.length +
-            ' entries.' +
-            '\nFirst entry: ' +
-            insulinData[0].timestamp +
-            ', ' +
-            insulinData[0].insulinAmount
-    );
+    // res.send(
+    //     'Success, read ' +
+    //         insulinData.length +
+    //         ' entries.' +
+    //         '\nFirst entry: ' +
+    //         insulinData[0].timestamp +
+    //         ', ' +
+    //         insulinData[0].insulinAmount
+    // );
     // res.send(
     //     'Success, read ' +
     //         insulinData.length +
@@ -116,7 +122,6 @@ async function parseUploadedfile(dataParser: DataParser, res) {
     //         ', ' +
     //         foodData[0].carbohydrates
     // );
-    return res;
 }
 
 module.exports = uploadRouter;

@@ -81,8 +81,8 @@ describe('POST files', () => {
     test('POST supported format, with unsupported file extension', async () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')
-            .attach('file', 'test/services/data/eetmeter.txt');
-        expect(response.statusCode).toBe(500);
+            .attach('file', 'test/services/data/text.txt');
+        expect(response.statusCode).toBe(400);
     });
 
 
@@ -90,7 +90,7 @@ describe('POST files', () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')
             .attach('file', 'test/services/data/eetmeter.xml');
-        expect(response.statusCode).toBe(500);
+        expect(response.statusCode).toBe(400);
     });
 });
 

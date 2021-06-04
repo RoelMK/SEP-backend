@@ -12,26 +12,24 @@ const uploadRouter = Router();
 
 // for uploading Abbott glucose logs, which may also contain insulin and more
 uploadRouter.post('/upload', upload.single('file'), function (req, res) {
-    switch(req.query.format){
+    switch (req.query.format) {
         case 'eetmeter':
             uploadFile(req, res, new EetMeterParser());
             break;
         case 'abbott':
             uploadFile(req, res, new AbbottParser());
             break;
-        case 'fooddiary':  
+        case 'fooddiary':
             uploadFile(req, res, new FoodDiaryParser());
             break;
         default:
             res.status(400).send('This data format is not supported');
     }
-    
 });
 
 uploadRouter.get('/upload/abbott', function (req, res) {
     res.sendFile(__dirname + '/testHTMLabbott.html');
 });
-
 
 uploadRouter.get('/upload/fooddiary', function (req, res) {
     res.sendFile(__dirname + '/testHTMLfooddiary.html');
@@ -83,7 +81,11 @@ function removeUploadedFile(filePath: string) {
 
 async function parseUploadedfile(dataParser: DataParser, res) {
     // rest of the function is included in this function to synchronize the control flow
-    await dataParser.process();
+    try{
+        await dataParser.process();
+    } catch(e){
+        res.status(500).send('Something went wrong');
+    }
 
     // TODO just for testing, get some insulin data and send it back
     const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
@@ -92,12 +94,12 @@ async function parseUploadedfile(dataParser: DataParser, res) {
     // only for testing
     res.send(
         'Success, read ' +
-                insulinData.length +
-                ' entries.' +
-                '\nFirst entry: ' +
-                insulinData[0].timestamp +
-                ', ' +
-                insulinData[0].insulinAmount
+            insulinData.length +
+            ' entries.' +
+            '\nFirst entry: ' +
+            insulinData[0].timestamp +
+            ', ' +
+            insulinData[0].insulinAmount
     );
     // res.send(
     //     'Success, read ' +

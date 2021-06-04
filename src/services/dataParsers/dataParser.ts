@@ -69,6 +69,8 @@ export abstract class DataParser {
                 if (this.dataSource == DataSource.EETMETER) {
                     return await this.xmlParser.parse(this.filePath);
                 }
+            default:
+                throw new Error(`Unsupported file type ${extension}`);
         }
     }
 

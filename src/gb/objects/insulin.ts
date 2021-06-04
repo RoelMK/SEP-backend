@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData, ActivityPOSTData } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
 import { InsulinModel } from '../models/insulinModel';
 import { GameBusObject } from './base';
 
@@ -26,21 +26,32 @@ export class Insulin extends GameBusObject {
         this.activity.postActivity(data,headers,query)
     }
 
-    private toPOSTData(model: InsulinModel, playerID: number) : ActivityPOSTData{
-        return {
+    public toPOSTData(model: InsulinModel, playerID: number) : ActivityPOSTData{
+        let obj = {
             gameDescriptorTK: this.insulinGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?
             date: model.timestamp,
-            propertyInstances: [{
-                propertyTK : "INSULIN_DOSE",
-                value : model.insulinAmount
-            },
-            {
-                propertyTK : "INSULIN_TYPE",
-                value : model.insulinType ? "long" : "rapid"
-            }],
+            propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        };
+        }
+        for (const key in InsulinPropertyKeys) {
+            if (model[key] !== undefined) {
+                if(key === 'insulinType') {
+                    obj.propertyInstances.push({propertyTK : `${InsulinPropertyKeys[key]}`, value : model[key] ? "long" : "rapid"})
+                } else {
+                    obj.propertyInstances.push({propertyTK : `${InsulinPropertyKeys[key]}`, value : model[key]})
+                }
+                
+            }
+        }
+        
+        return obj;
     }
+}
+
+export enum InsulinPropertyKeys {
+    insulinType = 'INSULIN_TYPE',
+    insulinAmount = 'INSULIN_DOSE',
+    //TODO: add this? It is in the descriptors.md 'INSULIN_SPEED' 
 }

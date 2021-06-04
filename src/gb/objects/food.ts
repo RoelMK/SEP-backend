@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import FoodModel from '../models/foodModel';
+import { FoodModel } from '../models/foodModel';
 import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
 import { GameBusObject } from './base';
 
@@ -21,34 +21,40 @@ export class Food extends GameBusObject {
         return undefined as unknown as ActivityGETData[];
     }
 
-    async postSingleInsulinActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
+    async postSingleFoodActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
         let data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
-    private toPOSTData(model: FoodModel, playerID: number) : ActivityPOSTData{
+    public toPOSTData(model: FoodModel, playerID: number) : ActivityPOSTData{
         let obj = {
             gameDescriptorTK: this.foodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?
             date: model.timestamp,
-            propertyInstances: [{
-                propertyTK : "FOOD_CARBOHYDRATES_GRAMS",
-                value : model.carbohydrates
-            }] as PropertyInstancePOST[],
+            propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         }
-        if(model.calories !== undefined) {obj.propertyInstances.push({propertyTK : "KCAL_CARB", value : model.calories})}
-        if(model.meal_type !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_MEAL_TYPE", value : model.meal_type})}
-        if(model.glycemic_index !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_GLYCEMIC_INDEX", value : model.glycemic_index})}
-        if(model.fat !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_FAT_GRAMS", value : model.fat})}
-        if(model.saturatedFat !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SATURATED_FAT_GRAMS", value : model.saturatedFat})}
-        if(model.proteins !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_PROTEINS_GRAMS", value : model.proteins})}
-        if(model.fibers !== undefined) {obj.propertyInstances.push({propertyTK : "FIBERS_WEIGHT", value : model.fibers})}
-        if(model.salt !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SALT_GRAMS", value : model.salt})}
-        if(model.water !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_WATER_GRAMS", value : model.water})}
-        if(model.sugars !== undefined) {obj.propertyInstances.push({propertyTK : "FOOD_SUGAR_GRAMS", value : model.sugars})}
-        if(model.description !== undefined) {obj.propertyInstances.push({propertyTK : "DESCRIPTION", value : model.description})}
+        for (const key in FoodPropertyKeys) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({propertyTK : `${FoodPropertyKeys[key]}`, value : model[key]})
+            }
+        }
         return obj;
     }
+}
+
+export enum FoodPropertyKeys {
+    carbohydrates = 'FOOD_CARBOHYDRATES_GRAMS',
+    calories = 'KCAL_CARB',
+    meal_type = 'FOOD_MEAL_TYPE',
+    glycemic_index = 'FOOD_GLYCEMIC_INDEX',
+    fat = 'FOOD_FAT_GRAMS',
+    saturatedFat = 'FOOD_SATURATED_FAT_GRAMS',
+    proteins = 'FOOD_PROTEINS_GRAMS',
+    fiber = 'FIBERS_WEIGHT',
+    salt = 'FOOD_SALT_GRAMS',
+    water = 'FOOD_WATER_GRAMS',
+    sugars = 'FOOD_SUGAR_GRAMS',
+    description = 'DESCRIPTION',
 }

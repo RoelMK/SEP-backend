@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData, ActivityPOSTData } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
 import { GlucoseModel } from '../models/glucoseModel';
 import { GameBusObject } from './base';
 
@@ -21,22 +21,29 @@ export class Glucose extends GameBusObject {
         return undefined as unknown as ActivityGETData[];
     }
 
-    async postSingleInsulinActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {
+    async postSingleGlucoseActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {
         let data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
     }
 
-    private toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
-        return {
+    public toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
+        let obj = {
             gameDescriptorTK: this.glucoseGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
             image: "", //TODO add image?
             date: model.timestamp,
-            propertyInstances: [{
-                propertyTK : "eAG_MMOLL",
-                value : model.glucoseLevel
-            }],
+            propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        };
+        }
+        for (const key in GlucosePropertyKeys) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({propertyTK : `${GlucosePropertyKeys[key]}`, value : model[key]})
+            }
+        }
+        return obj;
     }
+}
+
+export enum GlucosePropertyKeys {
+    glucoseLevel = 'eAG_MMOLL',
 }

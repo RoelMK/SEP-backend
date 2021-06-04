@@ -1,4 +1,4 @@
-import { DataParser, DataSource } from './dataParser';
+import { DataParser, DataSource, InputError } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
@@ -26,7 +26,7 @@ export default class FoodDiaryParser extends DataParser {
 
         // check for erroneous input
         if (!FoodDiaryDataGuard(this.foodDiaryData[0])) {
-            throw Error('Wrong input data for processing food diary data!');
+            throw new InputError('Wrong input data for processing food diary data!');
         }
         //auto-fills empty cells in the Excel + other preprocessing
 

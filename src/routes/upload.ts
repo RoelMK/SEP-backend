@@ -1,7 +1,7 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser, InputError, OutputDataType } from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -81,10 +81,16 @@ function removeUploadedFile(filePath: string) {
 
 async function parseUploadedfile(dataParser: DataParser, res) {
     // rest of the function is included in this function to synchronize the control flow
-    try{
+    try {
         await dataParser.process();
-    } catch(e){
-        res.status(500).send('Something went wrong');
+    } catch (e) {
+        if (e instanceof InputError)
+            res.status(400).send(
+                'An erroneous file was uploaded for the selected format, check if you have selected the correct file!'
+            );
+        else {
+            res.status(500).send('Something went wrong :(');
+        }
     }
 
     // TODO just for testing, get some insulin data and send it back

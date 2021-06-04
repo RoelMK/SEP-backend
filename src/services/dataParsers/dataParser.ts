@@ -43,9 +43,9 @@ export abstract class DataParser {
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
-    protected async parse(): Promise<Record<string, string| number>[] | undefined> {
+    protected async parse(): Promise<Record<string, string | number>[] | undefined> {
         if (!this.filePath) {
-            throw Error('File path is not set!');
+            throw new DeveloperError('File path is not set!');
         }
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
@@ -70,7 +70,7 @@ export abstract class DataParser {
                     return await this.xmlParser.parse(this.filePath);
                 }
             default:
-                throw new Error(`Unsupported file type ${extension}`);
+                throw new InputError(`Unsupported file type ${extension}`);
         }
     }
 
@@ -89,7 +89,9 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] |undefined {
+    getData(
+        outputType: OutputDataType
+    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -116,3 +118,19 @@ export enum OutputDataType {
     INSULIN = 1,
     FOOD = 2
 }
+
+export class InputError extends Error {
+    constructor(message) {
+      super(message); 
+      this.name = "InputError"; 
+    }
+}
+
+class DeveloperError extends Error {
+    constructor(message) {
+      super(message); 
+      this.name = "DeveloperError"; 
+    }
+}
+
+

@@ -1,4 +1,4 @@
-import { DataParser, DataSource } from './dataParser';
+import { DataParser, DataSource, InputError } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
@@ -27,7 +27,7 @@ export default class AbbottParser extends DataParser {
 
         if (!AbbottDataGuard(this.abbottData[0])) {
             console.log(this.abbottData[0]);
-            throw Error('Wrong input data for processing Abbott data!');
+            throw new InputError('Wrong input data for processing Abbott data!');
         }
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();

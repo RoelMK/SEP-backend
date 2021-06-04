@@ -24,6 +24,9 @@ export class EetMeterParser extends DataParser {
     async process(): Promise<void> {
         const eetmeterData: EetmeterData = (await this.parse()) as unknown as EetmeterData;
         this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as Consumptie[];
+
+        // TODO check input and possibly throw input error 
+
         // Not sure why it does not always map it to an array (even with a single element)
         if (this.eetmeterConsumptionData.length == undefined) {
             this.eetmeterConsumptionData = [this.eetmeterConsumptionData as unknown as Consumptie];

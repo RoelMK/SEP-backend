@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
+import { ActivityModel } from '../models/activityModel';
 import { ActivityGETData } from '../models/gamebusModel';
-import {  QueryOrder } from './activity';
+import { InsulinModel } from '../models/insulinModel';
+import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 
@@ -98,6 +100,59 @@ export class Insulin extends GameBusObject {
             headers,
             query
         );
+    }
+
+    /**
+     * Converts a response of ActivityGETData to an InsulinModel
+     * @param response single ActivityGETData to convert
+     * @returns InsulinModel with correct properties filled in
+     */
+     private static convertInsulinResponseToModel(response: ActivityGETData): InsulinModel {
+            // We have to convert a single activity response to a single model
+            // First convert the response to a list of ActivityModels
+            const activities = Activity.getActivityInfoFromActivity(response);
+            // We already know the date
+            const insulin: InsulinModel = {
+                timestamp: response.date
+            };
+            // Now we have to map the translationKey to the right key in the InsulinModel
+            activities.forEach((activity: ActivityModel) => {
+                // For each of the separate activities (properties), we have to check them against known translation keys
+                for (const key in InsulinPropertyKeys) {
+                    if (InsulinPropertyKeys[key] === activity.property.translationKey) {
+
+                        switch (InsulinPropertyKeys[key]) {
+                        case InsulinPropertyKeys.insulinAmount:
+                            //No need of conversion
+                            if (typeof activity.value !== 'string') {
+                                insulin.insulinAmount =  activity.value;
+                            }
+                            break;
+                        case InsulinPropertyKeys.insulinType:
+                            if (typeof activity.value === 'string') {
+                                if (activity.value === 'rapid') {
+                                    insulin.insulinType = 0;
+                                } else {
+                                   insulin.insulinType = 1;
+                                 }
+                            break;
+                            }
+                    }
+                }
+            }
+            });
+            return insulin;
+        }
+
+    /**
+     * Converts an entire response to InsulinModels
+     * @param response Array of ActivityGETData (response)
+     * @returns Array of InsulinModels
+     */
+    static convertResponseToExerciseModels(response: ActivityGETData[]): InsulinModel[] {
+        return response.map((response: ActivityGETData) => {
+            return this.convertInsulinResponseToModel(response);
+        });
     }
 }
 

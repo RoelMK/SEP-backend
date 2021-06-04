@@ -24,6 +24,7 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
+        private readonly lastUpdated: number
     ) {
         // Process incoming insulinInput data
         super();

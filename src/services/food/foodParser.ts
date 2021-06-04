@@ -31,7 +31,7 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        private readonly lastParsed: number
+        private readonly lastUpdated: number
     ) {
         super();
         // Process incoming foodInput data

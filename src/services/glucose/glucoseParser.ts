@@ -25,7 +25,7 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
-
+        private readonly lastUpdated: number,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {

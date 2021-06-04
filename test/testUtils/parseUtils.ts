@@ -128,7 +128,7 @@ export async function postGlucoseData(
     glucoseSource: GlucoseSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const glucoseParser = new GlucoseParser(glucoseInput, glucoseSource, dateFormat);
+    const glucoseParser = new GlucoseParser(glucoseInput, glucoseSource, dateFormat, 0);
     return await glucoseParser.post();
 }
 
@@ -144,7 +144,7 @@ export async function postInsulinData(
     insulinSource: InsulinSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const insulinParser = new InsulinParser(insulinInput, insulinSource, dateFormat);
+    const insulinParser = new InsulinParser(insulinInput, insulinSource, dateFormat, 0);
     return await insulinParser.post();
 }
 

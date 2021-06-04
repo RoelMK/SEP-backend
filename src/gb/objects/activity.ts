@@ -293,11 +293,6 @@ export class Activity {
         });
     }
 
-    // TODO: recursive query to get all activities since there's only 30 per page
-
-    // TODO: query for specific timestamp on a given date to start filtering time periods
-    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[] (see below)
-
     /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels
      * @param activity Response from GET activity request
@@ -319,7 +314,9 @@ export class Activity {
             const activityModel: ActivityModel = {
                 timestamp: activity.date,
                 id: value.id,
-                value: value.value,
+                translationKey: activity.gameDescriptor.translationKey,
+                // Make sure value is always a number
+                value: parseFloat(value.value),
                 property: valueProperty
             };
             // Add model to array

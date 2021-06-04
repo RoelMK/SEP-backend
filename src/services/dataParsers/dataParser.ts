@@ -33,7 +33,7 @@ export abstract class DataParser {
     protected moodParser?: MoodParser;
 
     // UNIX timestamp in ms that indicates when it was last parsed
-    protected lastUpdated: number = 0;
+    protected lastUpdated = 0;
 
     // setting that indicates if only new entries in a file need to be updated
     protected ONLY_UPDATE_NEWEST = true;
@@ -134,7 +134,7 @@ export abstract class DataParser {
      */
     retrieveLastUpdate(filePath: string): number {
         const dbClient: DBClient = new DBClient(false);
-        const lastParsedAt: number = dbClient.getLastParsed('1', filePath);
+        const lastParsedAt: number = dbClient.getLastUpdate('1', filePath);
         dbClient.close();
         return lastParsedAt;
     }
@@ -155,12 +155,12 @@ export abstract class DataParser {
      * @returns the timestamp of the most recent entry that was parsed
      */
     getLastProcessedTimestamp(): number {
-        let newestModels: number[] = [];
+        const newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
         //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
         newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
         newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
-        return Math.max.apply(Math, newestModels);
+        return Math.max(...newestModels);
     }
 }
 

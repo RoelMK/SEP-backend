@@ -171,18 +171,19 @@ export class DBClient {
     /**
      * Every time a file is parsed, its file path or unique indicator (e.g. 'nightscout') and Unix timestamp
      * are added to the database. This data is used when the file is re-uploaded to prevent duplication of data.
+     * It fetches the last update of the file of the player.
      * @param playerId ID of player
      * @param file_name Name of file that is parsed
      * @returns Timestamp of last parse
      */
-    getLastParsed(playerId: string, file_name: string): number {
+    getLastUpdate(playerId: string, file_name: string): number {
         try {
             const getLastParsed = this.db
                 .prepare('SELECT * FROM file_parse_events WHERE player_id=? AND file_name=?')
                 .get(playerId, file_name);
             return getLastParsed ? getLastParsed.time_stamp : 0;
         } catch (e) {
-            throw e;
+            return 0; // if an error occurs, pick the oldest timestamp
         }
     }
 

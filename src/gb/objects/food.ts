@@ -9,7 +9,7 @@ import { GameBusObject } from './base';
  */
 export class Food extends GameBusObject {
     private foodId = 0; // TODO: assign to GameBus-given activity ID
-    private foodGameDescriptor = "Nutrion_Diary";
+    public foodGameDescriptor = "Nutrion_Diary";
 
     /**
      * Example function that retrieves all activities with pre-set ID
@@ -52,7 +52,7 @@ export enum FoodPropertyKeys {
     fat = 'FOOD_FAT_GRAMS',
     saturatedFat = 'FOOD_SATURATED_FAT_GRAMS',
     proteins = 'FOOD_PROTEINS_GRAMS',
-    fiber = 'FIBERS_WEIGHT',
+    fibers = 'FIBERS_WEIGHT',
     salt = 'FOOD_SALT_GRAMS',
     water = 'FOOD_WATER_GRAMS',
     sugars = 'FOOD_SUGAR_GRAMS',

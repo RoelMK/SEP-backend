@@ -8,7 +8,7 @@ import { GameBusObject } from './base';
  * Class for glucose-specific functions
  */
 export class Mood extends GameBusObject {
-    private moodGameDescriptor = "LOG_MOOD";
+    public moodGameDescriptor = "LOG_MOOD";
 
     async postSingleMoodActivity(model: MoodModel, playerID: number, headers?: Headers, query?:Query) {
         let data = this.toPOSTData(model,playerID);

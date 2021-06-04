@@ -8,7 +8,7 @@ import { GameBusObject } from './base';
  * Class for insulin-specific functions
  */
 export class Insulin extends GameBusObject {
-    private insulinGameDescriptor = "LOG_INSULIN";
+    public insulinGameDescriptor = "LOG_INSULIN";
     private insulinId = 0; // TODO: assign to GameBus-given activity ID
 
     /**

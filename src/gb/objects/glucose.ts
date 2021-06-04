@@ -9,7 +9,7 @@ import { GameBusObject } from './base';
  */
 export class Glucose extends GameBusObject {
     private glucoseId = 0; // TODO: assign to GameBus-given activity ID
-    private glucoseGameDescriptor = "BLOOD_GLUCOSE_MSMT";
+    public glucoseGameDescriptor = "BLOOD_GLUCOSE_MSMT";
 
     /**
      * Example function that retrieves all activities with pre-set ID

@@ -1,5 +1,8 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
+import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
+import { InsulinPropertyKeys } from '../../src/gb/objects/insulin';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -35,5 +38,40 @@ describe('with mocked insulin get call', () => {
         // );
         //expect(exercises).toEqual([]);
         expect(insulin).toEqual(undefined);
+    });
+
+    test('POST a single activity', async () => {
+        let model : InsulinModel = {
+            timestamp : 12,
+            insulinAmount: 34,
+            insulinType: InsulinType.RAPID
+        }
+        let POSTData : ActivityPOSTData= {
+            gameDescriptorTK: client.insulin().insulinGameDescriptor,
+            dataProviderName: client.activity().dataProviderName,
+            date: 12,
+            image: "",
+            propertyInstances: expect.arrayContaining([{
+                propertyTK: InsulinPropertyKeys.insulinAmount,
+                value : 34
+            },{
+                propertyTK: InsulinPropertyKeys.insulinType,
+                value: 'rapid'
+            }]),
+            players : [90]
+        }
+        
+        client.insulin().postSingleInsulinActivity(model,90,undefined,undefined);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                headers: expect.objectContaining({
+                    Authorization: 'Bearer testToken'
+                }),
+                data: POSTData
+            })
+        );
     });
 });

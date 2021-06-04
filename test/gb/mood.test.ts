@@ -1,13 +1,15 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
-import { FoodPropertyKeys } from '../../src/gb/objects/food';
+import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
+import { MoodModel } from '../../src/gb/models/moodModel';
+import { InsulinPropertyKeys } from '../../src/gb/objects/insulin';
+import { MoodPropertyKeys } from '../../src/gb/objects/mood';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
-describe('with mocked food get call', () => {
+describe('with mocked mood get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
         return Promise.resolve({
@@ -21,51 +23,28 @@ describe('with mocked food get call', () => {
     // GameBusClient using mockToken
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
 
-    test('GET activities on date', async () => {
-        // Get exercises from a date (as Date object)
-        // TODO: implement this
-        const food = await client.food().getAllFoodActivities();
-
-        // Check that URL matches expected URL and mockToken is used in authorization
-        // expect(request).toHaveBeenCalledTimes(1);
-        // TODO: add URL
-        // expect(request).toHaveBeenCalledWith(
-        //     expect.objectContaining({
-        //         headers: expect.objectContaining({
-        //             Authorization: `Bearer ${mockToken}`
-        //         })
-        //     })
-        // );
-        //expect(exercises).toEqual([]);
-        expect(food).toEqual(undefined);
-    });
-
     test('POST a single activity', async () => {
-        let model : FoodModel = {
+        let model : MoodModel = {
             timestamp : 12,
-            carbohydrates : 34,
-            fibers: 56,
-            meal_type: MEAL_TYPE.BREAKFAST
+            valence: 34,
+            arousal: 56
         }
         let POSTData : ActivityPOSTData= {
-            gameDescriptorTK: client.food().foodGameDescriptor,
+            gameDescriptorTK: client.mood().moodGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: "",
             propertyInstances: expect.arrayContaining([{
-                propertyTK: FoodPropertyKeys.carbohydrates,
+                propertyTK: MoodPropertyKeys.valence,
                 value : 34
             },{
-                propertyTK: FoodPropertyKeys.meal_type,
-                value: 'Breakfast'
-            },{
-                propertyTK: FoodPropertyKeys.fibers,
+                propertyTK: MoodPropertyKeys.arousal,
                 value: 56
             }]),
             players : [90]
         }
         
-        client.food().postSingleFoodActivity(model,90,undefined,undefined);
+        client.mood().postSingleMoodActivity(model,90,undefined,undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(

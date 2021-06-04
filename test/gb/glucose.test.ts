@@ -1,5 +1,8 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
+import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import { GlucoseModel } from '../../src/gb/models/glucoseModel';
+import { GlucosePropertyKeys } from '../../src/gb/objects/glucose';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -35,5 +38,36 @@ describe('with mocked glucose get call', () => {
         // );
         //expect(exercises).toEqual([]);
         expect(glucose).toEqual(undefined);
+    });
+
+    test('POST a single activity', async () => {
+        let model : GlucoseModel = {
+            timestamp : 12,
+            glucoseLevel: 34,
+        }
+        let POSTData : ActivityPOSTData= {
+            gameDescriptorTK: client.glucose().glucoseGameDescriptor,
+            dataProviderName: client.activity().dataProviderName,
+            date: 12,
+            image: "",
+            propertyInstances: expect.arrayContaining([{
+                propertyTK: GlucosePropertyKeys.glucoseLevel,
+                value: 34
+            }]),
+            players : [90]
+        }
+        
+        client.glucose().postSingleGlucoseActivity(model,90,undefined,undefined);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                headers: expect.objectContaining({
+                    Authorization: 'Bearer testToken'
+                }),
+                data: POSTData
+            })
+        );
     });
 });

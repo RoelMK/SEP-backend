@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
-const express = require('express');
+import express from 'express';
 const errorhandler = require('errorhandler');
 const cors = require('cors');
 import winston from 'winston';
@@ -36,6 +36,6 @@ if (!isProduction) {
 }
 
 // Launch
-const server = app.listen(port, () => {
-    console.log('Listening on port ' + server.address().port);
+export const server = app.listen(port, () => {
+    console.log('Listening on port ' + port);
 });

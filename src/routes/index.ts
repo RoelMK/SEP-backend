@@ -5,8 +5,6 @@ indexRouter.use('/', require('./test'));
 
 indexRouter.use('/onedrive', require('./onedrive'));
 indexRouter.use('/', require('./auth'));
-indexRouter.use('/', require('./uploadFiles'));
-indexRouter.use('/glucose', require('./glucose'));
-indexRouter.use('/', require('./data'));
+indexRouter.use('/', require('./upload'));
 
 module.exports = indexRouter;

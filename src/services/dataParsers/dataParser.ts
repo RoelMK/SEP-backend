@@ -1,4 +1,4 @@
-import FoodModel from '../../gb/models/foodModel';
+import { FoodModel } from '../../gb/models/foodModel';
 import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
 import CSVParser from '../fileParsers/csvParser';

@@ -157,15 +157,16 @@ export class DBClient {
      * @param time_stamp time of last parsed entry
      * @returns
      */
-    registerFileParse(playerId: string, file_name: string, timestamp: number) {
+    registerFileParse(playerId: string, file_name: string, timestamp: number): boolean {
         try {
             const insrt = this.db.prepare(
                 `INSERT INTO file_parse_events (player_id, file_name, time_stamp) 
                                     VALUES(?, ?, ?) ON CONFLICT(player_id, file_name) DO UPDATE SET time_stamp=?`
             );
             insrt.run(playerId, file_name, timestamp, timestamp);
+            return true;
         } catch (e) {
-            return undefined;
+            return false;
         }
     }
     /**

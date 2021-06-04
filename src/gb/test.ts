@@ -1,10 +1,12 @@
 import { bodyBlacklist } from "express-winston";
 import { TokenHandler } from "./auth/tokenHandler";
 import { GameBusClient } from "./gbClient";
+import { FoodModel } from "./models/foodModel";
 import { ActivityPOSTData } from "./models/gamebusModel";
+import { Food, FoodPropertyKeys } from "./objects/food";
 import { userKevin } from "./usersExport";
 
-let client : GameBusClient = new GameBusClient(new TokenHandler(String(userKevin.authToken),"",String(userKevin.playerID)));
+let client : GameBusClient = new GameBusClient(new TokenHandler(userKevin.authToken,"",String(userKevin.playerID)));
 
 let activity : ActivityPOSTData = {
     date : 1622818857000,
@@ -51,5 +53,18 @@ async function go() {
     }
    
 }
-go()
+//go()
+console.log(Object.keys(FoodPropertyKeys))
+let food : FoodModel= {
+    timestamp: 1622832285000,
+    carbohydrates: 400,
+    fibers: 34,
+    description: "desc"
+}
+//client.food().postSingleFoodActivity(food,userKevin.playerID,undefined,undefined)
+async function temp() {
+    let result = await client.food().getExerciseActivityFromGd(userKevin.playerID)
+    console.log(result)
+}
+temp()
 //TODO set Axios to private again!

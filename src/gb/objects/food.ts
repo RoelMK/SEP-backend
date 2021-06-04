@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { response } from 'express';
 import { Query, Headers } from '../gbClient';
+import { ActivityModel } from '../models/activityModel';
 import { FoodModel } from '../models/foodModel';
 import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
-import { QueryOrder } from './activity';
+import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 /**
@@ -10,7 +12,7 @@ import { GameBusObject } from './base';
  */
 export class Food extends GameBusObject {
     private foodId = 0; // TODO: assign to GameBus-given activity ID
-    public foodGameDescriptor = "Nutrion_Diary";
+    public foodGameDescriptor = "Nutrition_Diary";
 
     /**
      * Example function that retrieves all activities with pre-set ID
@@ -53,13 +55,14 @@ export class Food extends GameBusObject {
         playerId: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityGETData[]> {
-        return await this.activity.getAllActivitiesWithGd(
+    ): Promise<FoodModel[]> {
+        const result =  await this.activity.getAllActivitiesWithGd(
             playerId,
             [this.foodGameDescriptor],
             headers,
             query
         );
+        return Food.convertResponseToFoodModels(result);
     }
 
     /**
@@ -82,8 +85,8 @@ export class Food extends GameBusObject {
         page?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityGETData[]> {
-        return await this.activity.getAllActivitiesBetweenUnixWithGd(
+    ): Promise<FoodModel[]> {
+        const result = await this.activity.getAllActivitiesBetweenUnixWithGd(
             playerId,
             startDate,
             endDate,
@@ -94,6 +97,7 @@ export class Food extends GameBusObject {
             headers,
             query
         );
+        return Food.convertResponseToFoodModels(result);
     }
 
     /**
@@ -114,8 +118,8 @@ export class Food extends GameBusObject {
         page?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityGETData[]> {
-        return await this.activity.getActivitiesOnUnixDateWithGd(
+    ): Promise<FoodModel[]> {
+        const result = await this.activity.getActivitiesOnUnixDateWithGd(
             playerId,
             date,
             [this.foodGameDescriptor],
@@ -125,8 +129,46 @@ export class Food extends GameBusObject {
             headers,
             query
         );
+        return Food.convertResponseToFoodModels(result);
     }
 
+
+    /**
+     * Converts a response of ActivityGETData to a GlucoseModel
+     * @param response single ActivityGETData to convert
+     * @returns GlucoseModel with correct properties filled in
+     */
+     private static convertResponseToFoodModel(response: ActivityGETData): FoodModel {
+        // Get ActivityModels from response
+        const activities = Activity.getActivityInfoFromActivity(response);
+        //console.log(activities);
+        // We already know the date, glucose level will be 0 for now
+        const model: FoodModel = {
+            timestamp: activities[0].timestamp,
+            carbohydrates: -1 //impossible temp value
+        };
+        console.log(response)
+        console.log(activities)
+        activities.forEach((activity: ActivityModel) => {
+            let key = Object.keys(FoodPropertyKeys).find(key => FoodPropertyKeys[key] === activity.property.translationKey) ?? activity.property.translationKey //used the online key if no translation is found
+            model[key] = activity.value as any;
+        });
+        if(model.carbohydrates === -1) {
+            throw 'carbohydrates were not found in the response see: ' + response
+        }
+        return model;
+    }
+
+    /**
+     * Converts an entire response to GlucoseModels
+     * @param response Array of ActivityGETData (response)
+     * @returns Array of GlucoseModels
+     */
+    static convertResponseToFoodModels(response: ActivityGETData[]): FoodModel[] {
+        return response.map((response: ActivityGETData) => {
+            return this.convertResponseToFoodModel(response);
+        });
+    }
 }
 
 export enum FoodPropertyKeys {

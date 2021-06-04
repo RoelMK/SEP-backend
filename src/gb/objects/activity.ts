@@ -28,7 +28,7 @@ export class Activity {
             {"Content-Type": "application/json",...headers},
             {"dryrun":"false",...query},
             true,
-            false);
+            true);
     }
 
     /**

@@ -24,12 +24,12 @@ describe('with mocked mood get call', () => {
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
 
     test('POST a single activity', async () => {
-        let model : MoodModel = {
+        const model : MoodModel = {
             timestamp : 12,
             valence: 34,
             arousal: 56
         }
-        let POSTData : ActivityPOSTData= {
+        const POSTData : ActivityPOSTData= {
             gameDescriptorTK: client.mood().moodGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,

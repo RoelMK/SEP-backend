@@ -41,13 +41,13 @@ describe('with mocked food get call', () => {
     });
 
     test('POST a single activity', async () => {
-        let model : FoodModel = {
+        const model : FoodModel = {
             timestamp : 12,
             carbohydrates : 34,
             fibers: 56,
             meal_type: MEAL_TYPE.BREAKFAST
         }
-        let POSTData : ActivityPOSTData= {
+        const POSTData : ActivityPOSTData= {
             gameDescriptorTK: client.food().foodGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,

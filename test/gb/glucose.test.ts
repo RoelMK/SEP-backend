@@ -41,11 +41,11 @@ describe('with mocked glucose get call', () => {
     });
 
     test('POST a single activity', async () => {
-        let model : GlucoseModel = {
+        const model : GlucoseModel = {
             timestamp : 12,
             glucoseLevel: 34,
         }
-        let POSTData : ActivityPOSTData= {
+        const POSTData : ActivityPOSTData= {
             gameDescriptorTK: client.glucose().glucoseGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,

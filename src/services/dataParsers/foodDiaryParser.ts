@@ -39,15 +39,16 @@ export default class FoodDiaryParser extends DataParser {
             preprocessedFoodDiaryData,
             FoodSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY,
-            this.lastParsed
+            this.lastUpdated
         );
         this.insulinParser = new InsulinParser(
             preprocessedFoodDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            DateFormat.FOOD_DIARY,
+            this.lastUpdated
         );
         // update the timestamp of newest parsed entry to this file
-        this.setLastParsed(getFileName(this.filePath as string), this.getLastPostedModel());
+        this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 
     /**

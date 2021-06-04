@@ -33,7 +33,10 @@ export abstract class DataParser {
     protected moodParser?: MoodParser;
 
     // UNIX timestamp in ms that indicates when it was last parsed
-    protected lastParsed: number = 0;
+    protected lastUpdated: number = 0;
+
+    // setting that indicates if only new entries in a file need to be updated
+    protected ONLY_UPDATE_NEWEST = true;
 
     /**
      * Constructor with file path and data source (provided by children)
@@ -56,7 +59,9 @@ export abstract class DataParser {
         }
 
         // retrieve when the file was parsed for the last time
-        this.lastParsed = this.retrieveLastParsed(getFileName(this.filePath));
+        this.lastUpdated = this.ONLY_UPDATE_NEWEST
+            ? this.retrieveLastUpdate(getFileName(this.filePath))
+            : 0;
 
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
@@ -127,7 +132,7 @@ export abstract class DataParser {
     /**
      * Returns the last timestamp when the file was parsed
      */
-    retrieveLastParsed(filePath: string): number {
+    retrieveLastUpdate(filePath: string): number {
         const dbClient: DBClient = new DBClient(false);
         const lastParsedAt: number = dbClient.getLastParsed('1', filePath);
         dbClient.close();
@@ -138,13 +143,18 @@ export abstract class DataParser {
      * Returns the last timestamp when the file was parsed, including the file name and
      * playerId
      */
-    setLastParsed(fileName: string, timestamp: number) {
+    setLastUpdate(fileName: string, timestamp: number) {
         const dbClient: DBClient = new DBClient(false);
         dbClient.registerFileParse('1', fileName, timestamp);
         dbClient.close();
     }
 
-    getLastPostedModel(): number {
+    /**
+     * Looks over all parsers and returns the timestamp of the newest datapoint 
+     * that was parsed and processed
+     * @returns the timestamp of the most recent entry that was parsed
+     */
+    getLastProcessedTimestamp(): number {
         let newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
         //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
@@ -154,6 +164,9 @@ export abstract class DataParser {
     }
 }
 
+/**
+ * A list of possible data sources
+ */
 export enum DataSource {
     ABBOTT = 0,
     FOOD_DIARY = 1,
@@ -161,6 +174,9 @@ export enum DataSource {
     NIGHTSCOUT = 3
 }
 
+/**
+ * A list of possible output models
+ */
 export enum OutputDataType {
     GLUCOSE = 0,
     INSULIN = 1,

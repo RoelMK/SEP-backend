@@ -321,7 +321,9 @@ export class Activity {
                 id: value.id,
                 translationKey: activity.gameDescriptor.translationKey,
                 // Make sure value is always a number
-                value: parseFloat(value.value),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                value: isNaN((value.value * 1)) ? value.value : (value.value * 1),
                 property: valueProperty
             };
             // Add model to array

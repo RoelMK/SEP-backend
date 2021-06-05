@@ -173,14 +173,15 @@ export default class FoodDiaryParser extends DataParser {
             mealTimeMap.get(entry.meal_type) != undefined
         ) {
             entry.time = mealTimeMap.get(entry.meal_type) as string;
-        } else if (entry.time == '') {
+            return [entry, lastTime];
+        }
+        if (entry.time == '') {
             // if no mapping can be done, use last known time or midnight
             entry.time = lastTime == '' ? '00:00' : lastTime;
-        } else {
-            // update last known time
-            lastTime = entry.time;
+            return [entry, lastTime];
         }
-        return [entry, lastTime];
+        // update last known time
+        return [entry, entry.time];
     }
 
     /**

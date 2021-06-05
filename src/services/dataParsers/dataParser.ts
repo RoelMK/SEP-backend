@@ -35,9 +35,6 @@ export abstract class DataParser {
     // UNIX timestamp in ms that indicates when it was last parsed
     protected lastUpdated = 0;
 
-    // setting that indicates if only new entries in a file need to be updated
-    protected ONLY_UPDATE_NEWEST = true;
-
     /**
      * Constructor with file path and data source (provided by children)
      * @param filePath Path to .csv file
@@ -59,9 +56,7 @@ export abstract class DataParser {
         }
 
         // retrieve when the file was parsed for the last time
-        this.lastUpdated = this.ONLY_UPDATE_NEWEST
-            ? this.retrieveLastUpdate(getFileName(this.filePath))
-            : 0;
+        this.retrieveLastUpdate(getFileName(this.filePath))
 
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);

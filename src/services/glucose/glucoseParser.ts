@@ -25,11 +25,11 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
-        private readonly lastUpdated: number,
+        lastUpdated: number,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
-        super();
+        super(lastUpdated);
         // Process incoming glucoseInput data
         this.process();
     }
@@ -46,6 +46,9 @@ export default class GlucoseParser extends ModelParser {
         this.glucoseData = this.glucoseInput.map(
             GlucoseMapper.mapGlucose(this.glucoseSource, this.dateFormat, this.glucoseUnit)
         );
+
+        // filter on entries after the last update with this file for this person
+        this.glucoseData = this.filterAfterLastUpdate(this.glucoseData);
 
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future

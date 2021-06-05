@@ -1,7 +1,7 @@
 import { MoodModel } from '../../gb/models/moodModel';
 import { ModelParser } from '../modelParser';
 
-export default class MoodParser extends ModelParser{
+export default class MoodParser { // TODO should it extend ModelParser? It does not really make use of its functions
     // Mood data to be exported
     mood?: MoodModel;
 
@@ -10,7 +10,6 @@ export default class MoodParser extends ModelParser{
      * @param moodInput mood input from front end
      */
     constructor(private readonly moodInput: MoodModel) {
-        super();
         // Maybe process if needed in the future
         this.process();
     }

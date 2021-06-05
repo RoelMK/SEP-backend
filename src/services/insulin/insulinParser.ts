@@ -24,10 +24,10 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
-        private readonly lastUpdated: number
+        lastUpdated: number
     ) {
         // Process incoming insulinInput data
-        super();
+        super(lastUpdated);
         this.process();
     }
 
@@ -38,6 +38,10 @@ export default class InsulinParser extends ModelParser {
         this.insulinData = this.insulinInput.map(
             InsulinMapper.mapInsulin(this.insulinSource, this.dateFormat)
         );
+
+        // filter on entries after the last update with this file for this person
+        this.insulinData = this.filterAfterLastUpdate(this.insulinData);
+        
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future
         this.setNewestEntry(this.insulinData);

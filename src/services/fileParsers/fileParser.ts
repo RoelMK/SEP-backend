@@ -1,4 +1,4 @@
-export abstract class FileParser { // can be removed possibly
+export abstract class FileParser { //TODO can be removed possibly
 
     /**
      * Reads raw data of a file and returns it

@@ -31,9 +31,10 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        lastUpdated: number
+        lastUpdated: number,
+        only_process_newest = false,
     ) {
-        super(lastUpdated);
+        super(lastUpdated, only_process_newest);
         // Process incoming foodInput data
         this.process();
     }
@@ -47,7 +48,7 @@ export default class FoodParser extends ModelParser {
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future
         this.setNewestEntry(this.foodData);
-        
+
         // filter on entries after the last update with this file for this person
         this.foodData = this.filterAfterLastUpdate(this.foodData);
         

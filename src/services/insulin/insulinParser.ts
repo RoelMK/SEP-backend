@@ -24,10 +24,11 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
-        lastUpdated: number
+        lastUpdated: number,
+        only_process_newest = false
     ) {
         // Process incoming insulinInput data
-        super(lastUpdated);
+        super(lastUpdated, only_process_newest);
         this.process();
     }
 

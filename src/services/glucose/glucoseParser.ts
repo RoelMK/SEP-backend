@@ -26,10 +26,11 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
         lastUpdated: number,
+        only_process_newest = false,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
-        super(lastUpdated);
+        super(lastUpdated, only_process_newest);
         // Process incoming glucoseInput data
         this.process();
     }
@@ -50,7 +51,7 @@ export default class GlucoseParser extends ModelParser {
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future
         this.setNewestEntry(this.glucoseData);
-        
+
         // filter on entries after the last update with this file for this person
         this.glucoseData = this.filterAfterLastUpdate(this.glucoseData);
     }

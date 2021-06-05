@@ -44,7 +44,8 @@ export abstract class DataParser {
         protected readonly dataSource: DataSource,
         protected filePath?: string,
         protected oneDriveToken?: string,
-        protected tableName?: string // for excel parsing
+        protected tableName?: string, // for excel parsing
+        protected only_parse_newest = false
     ) {}
 
     /**
@@ -159,16 +160,11 @@ export abstract class DataParser {
 
     /**
      * Configures whether to upload all incoming data or only data after the last known update
-     * @param only_update_newest true = only process data after last update, false = process all
+     * @param only_parse_newest true = only process data after last update, false = process all
      */
-    parseOnlyNewest(only_update_newest: boolean): void {
-        if(this.foodParser) this.foodParser.parseOnlyNewest(only_update_newest);
-        if(this.glucoseParser) this.glucoseParser.parseOnlyNewest(only_update_newest);
-        if(this.insulinParser) this.insulinParser.parseOnlyNewest(only_update_newest);
-        //if(this.moodParser) this.moodParser.setParseBeforeLastUpdate(only_update_newest);
+    parseOnlyNewest(only_parse_newest: boolean): void {
+        this.only_parse_newest = only_parse_newest;
     }
-
-    
 }
 
 /**

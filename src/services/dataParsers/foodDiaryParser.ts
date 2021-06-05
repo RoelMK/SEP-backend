@@ -13,7 +13,7 @@ import { MEAL_TYPE } from '../../gb/models/foodModel';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private foodDiaryFile: string, protected oneDriveToken?: string) {
+    constructor(foodDiaryFile: string, protected oneDriveToken?: string) {
         super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken, 'fooddiary');
     }
 

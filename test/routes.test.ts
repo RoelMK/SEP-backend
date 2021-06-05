@@ -91,7 +91,7 @@ describe('POST files', () => {
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(400);
     });
- });
+});
 
 describe('mood endpoint', () => {
     test('POST mood data', async () => {

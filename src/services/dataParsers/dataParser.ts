@@ -121,15 +121,15 @@ export enum OutputDataType {
 
 export class InputError extends Error {
     constructor(message) {
-      super(message); 
-      this.name = "InputError"; 
+        super(message); 
+        this.name = 'InputError'; 
     }
 }
 
 class DeveloperError extends Error {
     constructor(message) {
-      super(message); 
-      this.name = "DeveloperError"; 
+        super(message); 
+        this.name = 'DeveloperError'; 
     }
 }
 

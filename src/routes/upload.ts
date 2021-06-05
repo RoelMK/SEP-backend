@@ -1,7 +1,7 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, InputError, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser } from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -26,11 +26,11 @@ uploadRouter.post('/upload', upload.single('file'), function (req: any, res) {
             break;
         default:
             res.status(400).send('This data format is not supported');
-            try{fs.unlinkSync(req.file.path)}catch(e){};
+            try{fs.unlinkSync(req.file.path);}catch(e){console.log(e.message);}
             return;
     }
     // at the end of each upload, remove the file
-    promise.then(() => {try{fs.unlinkSync(filePath);}catch(e){};})
+    promise.then(() => {try{fs.unlinkSync(filePath);}catch(e){console.log(e.message);}});
 });
 
 uploadRouter.get('/upload/abbott', function (req, res) {
@@ -51,7 +51,7 @@ async function uploadFile(req, res, dataParser: DataParser) {
         fs.renameSync(req.file.path, dataParser.getFilePath());
     }catch (e){
         console.log(e);
-        try{fs.unlinkSync(req.file.path)}catch(e){};
+        try{fs.unlinkSync(req.file.path);}catch(e){console.log(e.message);}
         res.status(500).send('Could not rename file!');
         return;
     }
@@ -73,7 +73,7 @@ async function uploadFile(req, res, dataParser: DataParser) {
         return;
     }
 
-    console.log(dataParser.getFilePath())
+    console.log(dataParser.getFilePath());
     // process has been completed
     res.status(200).send('File has been parsed.');
     console.log('upload succesful');
@@ -87,7 +87,7 @@ async function parseFile(dataParser: DataParser): Promise<void> {
     await dataParser.process();
 
     // TODO just for testing, get some insulin data and send it back
-    const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
+    //const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
     //const foodData: any = dataParser.getData(OutputDataType.FOOD);
 
     // only for testing

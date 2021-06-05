@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import exp from 'constants';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { FoodModel } from '../models/foodModel';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
@@ -14,6 +15,7 @@ const util = require('util')
 export class Food extends GameBusObject {
     private foodId = 0; // TODO: assign to GameBus-given activity ID
     public foodGameDescriptor = "Nutrition_Diary";
+    public foodGameDescriptorID = 58;
 
     /**
      * Function that post a single model for a given player
@@ -23,6 +25,19 @@ export class Food extends GameBusObject {
     async postSingleFoodActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
         const data = this.toPOSTData(model,playerID);
         this.activity.postActivity(data,headers,query)
+    }
+
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
+     async postMultipleFoodActivities(models: FoodModel[], playerID: number, headers?: Headers, query?:Query) {
+        const data : IDActivityPOSTData[]= [];
+        models.forEach((item) => {
+            data.push(this.toIDPOSTData(item,playerID))
+        })
+        this.activity.postActivities(data,headers,query)
     }
 
     /**
@@ -40,6 +55,26 @@ export class Food extends GameBusObject {
         for (const key in FoodPropertyKeys) {
             if (model[key] !== undefined) {
                 obj.propertyInstances.push({propertyTK : `${FoodPropertyKeys[key]}`, value : model[key]})
+            }
+        }
+        return obj;
+    }
+
+    /**
+     * Function that creates a POSTData from a model and playerID with ID's instead of TK's
+     */
+    public toIDPOSTData(model: FoodModel, playerID: number) : IDActivityPOSTData{
+        const obj = {
+            gameDescriptor: this.foodGameDescriptorID,
+            dataProvider: this.activity.dataProviderID,
+            image: "", //TODO add image?
+            date: model.timestamp,
+            propertyInstances: [] as IDPropertyInstancePOST[],
+            players: [playerID]
+        }
+        for (const key in FoodIDs) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({property : FoodIDs[key], value : model[key]})
             }
         }
         return obj;
@@ -182,3 +217,20 @@ export enum FoodPropertyKeys {
     sugars = 'FOOD_SUGAR_GRAMS',
     description = 'DESCRIPTION',
 }
+
+let FoodIDs =  Object.freeze( {
+    description : 12,
+    calories : 77,
+    fibers : 79,
+    carbohydrates : 1176,
+    meal_type : 1177,
+    glycemic_index : 1178,
+    fat : 1179,
+    saturatedFat : 1180,
+    proteins : 1181,
+    salt : 1182,
+    water : 1183,
+    sugars : 1184 
+})
+
+export {FoodIDs}

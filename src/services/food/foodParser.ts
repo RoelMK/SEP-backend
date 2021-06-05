@@ -43,11 +43,14 @@ export default class FoodParser extends ModelParser {
      */
     private process() {
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
-        // filter on entries after the last update with this file for this person
-        this.foodData = this.filterAfterLastUpdate(this.foodData);
+
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future
         this.setNewestEntry(this.foodData);
+        
+        // filter on entries after the last update with this file for this person
+        this.foodData = this.filterAfterLastUpdate(this.foodData);
+        
     }
 
     /**

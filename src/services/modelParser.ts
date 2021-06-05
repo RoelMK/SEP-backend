@@ -2,7 +2,7 @@ export abstract class ModelParser {
     protected newestEntry = 0;
 
     // whether to upload all input data, or only data after the last update
-    protected ONLY_UPDATE_NEWEST = true;
+    protected ONLY_PROCESS_NEWEST = false;
 
     constructor(protected lastUpdated: number) {}
 
@@ -19,7 +19,7 @@ export abstract class ModelParser {
     }
 
     /**
-     * This function retrieces the timestamp of the newest entry that is parsed by its timestamp
+     * This function retrieces the timestamp of the newest entry that is processed w.r.t. its timestamp
      * (so not the time of processing!)
      * @returns the most recent timestamp of all parsed entries
      */
@@ -29,21 +29,23 @@ export abstract class ModelParser {
     /**
      * Filters a list of items with a timestamp to only include items after class variable
      * 'this.lastUpdated', i.e. only return entries that took place after last update
-     * @param entries 
-     * @returns 
+     * @param entries
+     * @returns
      */
     protected filterAfterLastUpdate(entries: any[]) {
-        if(!this.ONLY_UPDATE_NEWEST) return entries;
-        return entries.filter((entry: any) => entry.timestamp > this.lastUpdated);
+        if (!this.ONLY_PROCESS_NEWEST) return entries;
+        return entries.filter((entry: any) => {
+            return entry.timestamp > this.lastUpdated;
+        });
     }
 
     /**
      * Turns off/on the functionality to filter out entries before last update
-     * @param only_update_newest whether only entries after last update should be included
-     * true = yes, false = no 
+     * @param only_process_newest whether only entries after last update should be included
+     * true = yes, false = no
      */
-    setParseBeforeLastUpdate(only_update_newest: boolean){
-        this.ONLY_UPDATE_NEWEST = only_update_newest;
+    parseOnlyNewest(only_process_newest: boolean) {
+        this.ONLY_PROCESS_NEWEST = only_process_newest;
     }
 
     //process(): void;

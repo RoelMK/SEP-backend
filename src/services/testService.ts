@@ -107,10 +107,22 @@ async function testNightScout() {
 async function testParseNewest() {
     const client = new DBClient();
     client.initialize();
-    const fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard.xlsx');
-    await fdParser.process()
-
+    client.emptyFileParseEvents(); 
     client.close();
+
+    // first run, so updated
+    console.log("Should be filled");
+    let fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));
+
+    // second run with same file, no data should show up
+    console.log("Should be empty");
+    fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));    
 }
 
 export const testToken = '';

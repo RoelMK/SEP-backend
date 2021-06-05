@@ -56,7 +56,7 @@ export abstract class DataParser {
         }
 
         // retrieve when the file was parsed for the last time
-        this.retrieveLastUpdate(getFileName(this.filePath))
+        this.retrieveLastUpdate(getFileName(this.filePath));
 
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
@@ -125,18 +125,17 @@ export abstract class DataParser {
     }
 
     /**
-     * Returns the last timestamp when the file was parsed
+     * Returns the last timestamp when the file was parsed or the client was called for updates
      */
-    retrieveLastUpdate(filePath: string): number {
+    retrieveLastUpdate(fileName: string): void {
         const dbClient: DBClient = new DBClient(false);
-        const lastParsedAt: number = dbClient.getLastUpdate('1', filePath);
+        this.lastUpdated = dbClient.getLastUpdate('1', fileName);
         dbClient.close();
-        return lastParsedAt;
     }
 
     /**
-     * Returns the last timestamp when the file was parsed, including the file name and
-     * playerId
+     * Returns the last timestamp when the file was parsed or the client was called for updates
+     * including the file name and playerId
      */
     setLastUpdate(fileName: string, timestamp: number) {
         const dbClient: DBClient = new DBClient(false);
@@ -145,7 +144,7 @@ export abstract class DataParser {
     }
 
     /**
-     * Looks over all parsers and returns the timestamp of the newest datapoint 
+     * Looks over all parsers and returns the timestamp of the newest datapoint
      * that was parsed and processed
      * @returns the timestamp of the most recent entry that was parsed
      */
@@ -157,6 +156,19 @@ export abstract class DataParser {
         newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
         return Math.max(...newestModels);
     }
+
+    /**
+     * Configures whether to upload all incoming data or only data after the last known update
+     * @param only_update_newest true = only process data after last update, false = process all
+     */
+    parseOnlyNewest(only_update_newest: boolean): void {
+        if(this.foodParser) this.foodParser.parseOnlyNewest(only_update_newest);
+        if(this.glucoseParser) this.glucoseParser.parseOnlyNewest(only_update_newest);
+        if(this.insulinParser) this.insulinParser.parseOnlyNewest(only_update_newest);
+        //if(this.moodParser) this.moodParser.setParseBeforeLastUpdate(only_update_newest);
+    }
+
+    
 }
 
 /**

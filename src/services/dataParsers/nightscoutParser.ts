@@ -88,9 +88,7 @@ export default class NightscoutParser extends DataParser {
      */
     async process() {
         // retrieve when the file was parsed for the last time
-        this.lastUpdated = this.ONLY_UPDATE_NEWEST
-            ? this.retrieveLastUpdate(this.nsClient.getNightscoutHost())
-            : 0;
+        this.retrieveLastUpdate(this.nsClient.getNightscoutHost())
 
         if (this.testEntries === undefined || this.testTreatments === undefined) {
             // TODO note to self use parse with parameter or just individual funtions as below

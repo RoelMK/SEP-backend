@@ -1,5 +1,5 @@
 export interface MoodModel {
     timestamp: number;
-    moodDescription: string;
-    moodValue?: number;
+    arousal: number;
+    valence: number;
 }

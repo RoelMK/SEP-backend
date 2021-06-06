@@ -1,4 +1,3 @@
-import { values } from 'lodash';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { ActivityGETData } from '../models/gamebusModel';

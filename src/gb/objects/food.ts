@@ -214,12 +214,7 @@ export class Food extends GameBusObject {
      */
     static convertResponseToFoodModels(response: ActivityGETData[]): FoodModel[] {
         return response.map((response: ActivityGETData) => {
-            try {
-                return this.convertResponseToFoodModel(response);
-            } catch (error) {
-                throw error
-            }
-            
+            return this.convertResponseToFoodModel(response);
         });
     }
 }

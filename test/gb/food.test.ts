@@ -7,6 +7,8 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
+const endpoint: string = process.env.ENDPOINT!;
+
 describe('with mocked food get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
@@ -19,24 +21,24 @@ describe('with mocked food get call', () => {
                     group: null,
                     image: null,
                     creator: {
-                        id: 524,
-                        user: { id: 516, firstName: 'kevin', lastName: 'dirksen', image: null }
+                        id: 0,
+                        user: { id: 0, firstName: 'First', lastName: 'Last', image: null }
                     },
                     player: {
-                        id: 524,
-                        user: { id: 516, firstName: 'kevin', lastName: 'dirksen', image: null }
+                        id: 0,
+                        user: { id: 0, firstName: 'First', lastName: 'Last', image: null }
                     },
                     gameDescriptor: {
                         id: 58,
                         translationKey: 'Nutrition_Diary',
-                        image: 'https://api3.gamebus.eu/v2/uploads/public/MTU1NDIxODc0MjkwOUJ2ZWlXZFJv.jpeg',
+                        image: '',
                         type: 'PHYSICAL',
                         isAggregate: false
                     },
                     dataProvider: {
                         id: 18,
                         name: 'Daily_run',
-                        image: 'https://api3.gamebus.eu/v2/uploads/public/MTYxOTI2MjY3ODQ3MVFQa0UwcHJt.jpg',
+                        image: '',
                         isConnected: false
                     },
                     propertyInstances: [
@@ -49,24 +51,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'grams',
                                 inputType: 'DOUBLE',
                                 aggregationStrategy: 'AVERAGE',
-                                propertyPermissions: [
-                                    {
-                                        id: 1344,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1353,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         },
                         {
@@ -78,32 +63,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'grams',
                                 inputType: 'DOUBLE',
                                 aggregationStrategy: 'AVERAGE',
-                                propertyPermissions: [
-                                    {
-                                        id: 577,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 586,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1360,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         },
                         {
@@ -115,88 +75,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'String text',
                                 inputType: 'STRING',
                                 aggregationStrategy: 'SUM',
-                                propertyPermissions: [
-                                    {
-                                        id: 74,
-                                        index: 1,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 77,
-                                        index: 1,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 451,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 455,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 461,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 637,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 638,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1184,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1189,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1364,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         }
                     ],
@@ -211,24 +90,24 @@ describe('with mocked food get call', () => {
                     group: null,
                     image: null,
                     creator: {
-                        id: 524,
-                        user: { id: 516, firstName: 'kevin', lastName: 'dirksen', image: null }
+                        id: 0,
+                        user: { id: 0, firstName: 'First', lastName: 'Last', image: null }
                     },
                     player: {
-                        id: 524,
-                        user: { id: 516, firstName: 'kevin', lastName: 'dirksen', image: null }
+                        id: 0,
+                        user: { id: 0, firstName: 'First', lastName: 'Last', image: null }
                     },
                     gameDescriptor: {
                         id: 58,
                         translationKey: 'Nutrition_Diary',
-                        image: 'https://api3.gamebus.eu/v2/uploads/public/MTU1NDIxODc0MjkwOUJ2ZWlXZFJv.jpeg',
+                        image: '',
                         type: 'PHYSICAL',
                         isAggregate: false
                     },
                     dataProvider: {
                         id: 18,
                         name: 'Daily_run',
-                        image: 'https://api3.gamebus.eu/v2/uploads/public/MTYxOTI2MjY3ODQ3MVFQa0UwcHJt.jpg',
+                        image: '',
                         isConnected: false
                     },
                     propertyInstances: [
@@ -241,24 +120,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'grams',
                                 inputType: 'DOUBLE',
                                 aggregationStrategy: 'AVERAGE',
-                                propertyPermissions: [
-                                    {
-                                        id: 1344,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1353,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         },
                         {
@@ -270,32 +132,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'grams',
                                 inputType: 'DOUBLE',
                                 aggregationStrategy: 'AVERAGE',
-                                propertyPermissions: [
-                                    {
-                                        id: 577,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 586,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1360,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         },
                         {
@@ -307,88 +144,7 @@ describe('with mocked food get call', () => {
                                 baseUnit: 'String text',
                                 inputType: 'STRING',
                                 aggregationStrategy: 'SUM',
-                                propertyPermissions: [
-                                    {
-                                        id: 74,
-                                        index: 1,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 77,
-                                        index: 1,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 451,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 455,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 461,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 637,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 638,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1184,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1189,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    },
-                                    {
-                                        id: 1364,
-                                        index: 0,
-                                        lastUpdate: null,
-                                        decisionNote: null,
-                                        state: 'PUBLIC_APPROVED',
-                                        allowedValues: []
-                                    }
-                                ]
+                                propertyPermissions: []
                             }
                         }
                     ],
@@ -404,10 +160,11 @@ describe('with mocked food get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '524'));
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '524'));
 
     test('GET all food activities', async () => {
-        const food = await client.food().getAllFoodActivities(524);
+        const food = await client.food().getAllFoodActivities(0);
         const result: FoodModel[] = [
             {
                 timestamp: 1622832265000,
@@ -428,8 +185,9 @@ describe('with mocked food get call', () => {
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
-                })
+                    Authorization: `Bearer ${mockToken}`
+                }),
+                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary`
             })
         );
         expect(food).toEqual(result);
@@ -440,7 +198,7 @@ describe('with mocked food get call', () => {
         const unixTimestampAfter = new Date('2021-04-21').getTime();
         const exercises = await client
             .food()
-            .getFoodActivitiesBetweenUnix(524, unixTimestampBefore, unixTimestampAfter);
+            .getFoodActivitiesBetweenUnix(0, unixTimestampBefore, unixTimestampAfter);
         const result: FoodModel[] = [
             {
                 timestamp: 1622832265000,
@@ -459,9 +217,9 @@ describe('with mocked food get call', () => {
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/524/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=Nutrition_Diary'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=Nutrition_Diary`
             })
         );
         expect(exercises).toEqual(result);
@@ -469,7 +227,7 @@ describe('with mocked food get call', () => {
 
     test('GET food activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
-        const food = await client.food().getFoodActivitiesOnUnixDate(524, unixTimestamp);
+        const food = await client.food().getFoodActivitiesOnUnixDate(0, unixTimestamp);
         const result: FoodModel[] = [
             {
                 timestamp: 1622832265000,
@@ -488,9 +246,9 @@ describe('with mocked food get call', () => {
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/524/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=Nutrition_Diary'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=Nutrition_Diary`
             })
         );
         expect(food).toEqual(result);
@@ -522,17 +280,17 @@ describe('with mocked food get call', () => {
                     value: 56
                 }
             ]),
-            players: [90]
+            players: [0]
         };
 
-        client.food().postSingleFoodActivity(model, 90, undefined, undefined);
+        client.food().postSingleFoodActivity(model, 0, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                url: `${endpoint}/me/activities?dryrun=false`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: POSTData
             })
@@ -690,9 +448,9 @@ describe('with mocked food get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+                url: `${endpoint}/me/activities?dryrun=false&bulk=true`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: [POSTData1, POSTData2]
             })

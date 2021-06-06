@@ -7,11 +7,12 @@ import {
 } from '../../src/gb/models/gamebusModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { GlucosePropertyKeys, Glucose } from '../../src/gb/objects/glucose';
-
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
+
+const endpoint: string = process.env.ENDPOINT!;
 
 describe('with mocked glucose POST call', () => {
     // Request handler that simply returns empty data for every request
@@ -44,17 +45,17 @@ describe('with mocked glucose POST call', () => {
                     value: 34
                 }
             ]),
-            players: [90]
+            players: [0]
         };
 
-        client.glucose().postSingleGlucoseActivity(model, 90, undefined, undefined);
+        client.glucose().postSingleGlucoseActivity(model, 0, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                url: `${endpoint}/me/activities?dryrun=false`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: POSTData
             })
@@ -102,9 +103,9 @@ describe('with mocked glucose POST call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+                url: `${endpoint}/me/activities?dryrun=false&bulk=true`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: [POSTData1, POSTData2]
             })
@@ -136,7 +137,7 @@ describe('with mocked glucose get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=BLOOD_GLUCOSE_MSMT'
+                url: `${endpoint}/players/0/activities?gds=BLOOD_GLUCOSE_MSMT`
             })
         );
         expect(glucose).toEqual([]);
@@ -155,7 +156,7 @@ describe('with mocked glucose get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=BLOOD_GLUCOSE_MSMT'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=BLOOD_GLUCOSE_MSMT`
             })
         );
         expect(glucose).toEqual([]);
@@ -191,14 +192,14 @@ describe('convert response to models', () => {
             gameDescriptor: {
                 id: 61,
                 translationKey: 'BLOOD_GLUCOSE_MSMT',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/MTU1NjI3OTk2MTMxMmd1V3dOTWV6.jpg',
+                image: '',
                 type: 'PHYSICAL',
                 isAggregate: false
             },
             dataProvider: {
                 id: 1,
                 name: 'GameBus',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                image: '',
                 isConnected: false
             },
             propertyInstances: [
@@ -254,14 +255,14 @@ describe('convert response to models', () => {
             gameDescriptor: {
                 id: 61,
                 translationKey: 'BLOOD_GLUCOSE_MSMT',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/MTU1NjI3OTk2MTMxMmd1V3dOTWV6.jpg',
+                image: '',
                 type: 'PHYSICAL',
                 isAggregate: false
             },
             dataProvider: {
                 id: 1,
                 name: 'GameBus',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                image: '',
                 isConnected: false
             },
             propertyInstances: [

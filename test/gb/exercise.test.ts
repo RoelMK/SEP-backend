@@ -22,6 +22,22 @@ describe('with mocked exercises get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    test('GET all exercise activities', async () => {
+        const exercises = await client.exercise().getAllExerciseActivities(0);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        // URL is quite long but nothing I can do about that
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                }),
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=WALK%2CRUN%2CBIKE%2CSOCCER%2CBASKETBALL%2CVOLLEYBALL%2CRUGBY%2CBASEBALL%2CHORSE_RIDING%2CATHLETICS%2CSWIMMING%2CWATER_POLO%2CSURFING%2CGOLF%2CLACROSSE%2CTENNIS%2CSQUASH%2CBADMINTON%2CTABLE_TENNIS%2CSKIING%2CICE_HOCKEY%2CFIELD_HOCKEY%2CICE_SKATING%2CROLLER_SKATING%2CFITNESS%2CYOGA%2CAEROBICS%2CMARTIAL_ARTS%2CDANCE%2CPOOL%2CDARTS%2CAIR_HOCKEY%2CBOWLING%2CCHESS%2CGYMNASTICS%2CHIKE%2CMOUNTAINBIKE%2CWALK%28DETAIL%29%2CRUN%28DETAIL%29%2CBIKE%28DETAIL%29'
+            })
+        );
+        expect(exercises).toEqual([]);
+    });
+
     test('GET activities from type', async () => {
         const exercises = await client
             .exercise()
@@ -51,6 +67,7 @@ describe('with mocked exercises get call', () => {
                 unixTimestampBefore,
                 unixTimestampAfter
             );
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -58,6 +75,25 @@ describe('with mocked exercises get call', () => {
                     Authorization: `Bearer ${mockToken}`
                 }),
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK'
+            })
+        );
+        expect(exercises).toEqual([]);
+    });
+
+    test('GET all exercise activities between dates', async () => {
+        const unixTimestampBefore = new Date('2021-04-19').getTime();
+        const unixTimestampAfter = new Date('2021-04-21').getTime();
+        const exercises = await client
+            .exercise()
+            .getAllExerciseActivitiesBetweenUnix(0, unixTimestampBefore, unixTimestampAfter);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                }),
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK%2CRUN%2CBIKE%2CSOCCER%2CBASKETBALL%2CVOLLEYBALL%2CRUGBY%2CBASEBALL%2CHORSE_RIDING%2CATHLETICS%2CSWIMMING%2CWATER_POLO%2CSURFING%2CGOLF%2CLACROSSE%2CTENNIS%2CSQUASH%2CBADMINTON%2CTABLE_TENNIS%2CSKIING%2CICE_HOCKEY%2CFIELD_HOCKEY%2CICE_SKATING%2CROLLER_SKATING%2CFITNESS%2CYOGA%2CAEROBICS%2CMARTIAL_ARTS%2CDANCE%2CPOOL%2CDARTS%2CAIR_HOCKEY%2CBOWLING%2CCHESS%2CGYMNASTICS%2CHIKE%2CMOUNTAINBIKE%2CWALK%28DETAIL%29%2CRUN%28DETAIL%29%2CBIKE%28DETAIL%29'
             })
         );
         expect(exercises).toEqual([]);
@@ -72,6 +108,7 @@ describe('with mocked exercises get call', () => {
                 [ExerciseGameDescriptorNames.WALK],
                 unixTimestamp
             );
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -79,6 +116,24 @@ describe('with mocked exercises get call', () => {
                     Authorization: `Bearer ${mockToken}`
                 }),
                 url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK'
+            })
+        );
+        expect(exercises).toEqual([]);
+    });
+
+    test('GET all exercise activities on date', async () => {
+        const unixTimestamp = new Date('2021-04-19').getTime();
+        const exercises = await client
+            .exercise()
+            .getAllExerciseActivitiesOnUnixDate(0, unixTimestamp);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                }),
+                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK%2CRUN%2CBIKE%2CSOCCER%2CBASKETBALL%2CVOLLEYBALL%2CRUGBY%2CBASEBALL%2CHORSE_RIDING%2CATHLETICS%2CSWIMMING%2CWATER_POLO%2CSURFING%2CGOLF%2CLACROSSE%2CTENNIS%2CSQUASH%2CBADMINTON%2CTABLE_TENNIS%2CSKIING%2CICE_HOCKEY%2CFIELD_HOCKEY%2CICE_SKATING%2CROLLER_SKATING%2CFITNESS%2CYOGA%2CAEROBICS%2CMARTIAL_ARTS%2CDANCE%2CPOOL%2CDARTS%2CAIR_HOCKEY%2CBOWLING%2CCHESS%2CGYMNASTICS%2CHIKE%2CMOUNTAINBIKE%2CWALK%28DETAIL%29%2CRUN%28DETAIL%29%2CBIKE%28DETAIL%29'
             })
         );
         expect(exercises).toEqual([]);

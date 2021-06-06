@@ -2,8 +2,8 @@
 
 export interface InsulinModel {
     timestamp: number;
-    insulinAmount?: number;
-    insulinType?: InsulinType;
+    insulinAmount: number;
+    insulinType: InsulinType;
 }
 
 export enum InsulinType {

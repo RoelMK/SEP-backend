@@ -7,7 +7,7 @@ import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstan
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
-const util = require('util')
+//const util = require('util')
 
 /**
  * Class for food-specific functions
@@ -182,7 +182,7 @@ export class Food extends GameBusObject {
         //console.log(response)
         //console.log(activities)
         activities.forEach((activity: ActivityModel) => {
-            let key = Object.keys(FoodPropertyKeys).find(key => FoodPropertyKeys[key] === activity.property.translationKey) ?? activity.property.translationKey //used the online key if no translation is found
+            const key = Object.keys(FoodPropertyKeys).find(key => FoodPropertyKeys[key] === activity.property.translationKey) ?? activity.property.translationKey //used the online key if no translation is found
             model[key] = activity.value;
         });
         if(model.carbohydrates === -1) {
@@ -218,7 +218,7 @@ export enum FoodPropertyKeys {
     description = 'DESCRIPTION',
 }
 
-let FoodIDs =  Object.freeze( {
+const FoodIDs =  Object.freeze( {
     description : 12,
     calories : 77,
     fibers : 79,

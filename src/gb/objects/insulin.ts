@@ -242,7 +242,7 @@ export enum InsulinPropertyKeys {
     insulinType = 'INSULIN_SPEED'
 }
 
-let InsulinIDs =  Object.freeze( {
+const InsulinIDs =  Object.freeze( {
     //INSULIN_TYPE : 1143,
     insulinAmount : 1144,
     insulinType : 1185

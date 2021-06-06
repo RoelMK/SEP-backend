@@ -210,7 +210,7 @@ export enum MoodPropertyKeys {
     valence = 'MOOD_VALENCE'  // number in range [1,3]
 }
 
-let MoodIDs =  Object.freeze( {
+const MoodIDs =  Object.freeze( {
     arousal : 1186,
     valence : 1187
 })

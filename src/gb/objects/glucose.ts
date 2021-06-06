@@ -183,7 +183,7 @@ export enum GlucosePropertyKeys {
     glucoseLevelMgdl = 'eAG_MGDL' // in mg/dL (we won't use this one)
 }
 
-let GlucoseIDs =  Object.freeze( {
+const GlucoseIDs =  Object.freeze( {
     glucoseLevel : 88
 })
 

@@ -23,7 +23,7 @@ describe('with mocked moods get call', () => {
     test('GET activities from type', async () => {
         const moods = await client
             .mood()
-            .getMoodActivityFromGd(0, [MoodGameDescriptorNames.logMood]);
+            .getAllMoodActivities(0, [MoodGameDescriptorNames.logMood]);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);

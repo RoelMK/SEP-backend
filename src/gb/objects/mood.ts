@@ -1,3 +1,4 @@
+import { values } from 'lodash';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { ActivityGETData } from '../models/gamebusModel';
@@ -22,7 +23,7 @@ export class Mood extends GameBusObject {
      * @param gameDescriptors Game descriptor(s) you want to get activities from
      * @returns All mood activities belonging to the given Type(s)
      */
-    async getMoodActivityFromGd(
+    async getAllMoodActivities(
         playerId: number,
         gameDescriptors: MoodGameDescriptorNames[],
         headers?: Headers,
@@ -46,9 +47,11 @@ export class Mood extends GameBusObject {
         // First convert the response to a list of ActivityModels
         const activities = Activity.getActivityInfoFromActivity(response);
 
-        // We already know the date
+        // We already know the date and assume arousal and valance
         const mood: MoodModel = {
-            timestamp: response.date
+            timestamp: response.date,
+            arousal: 0,
+            valence: 0
         };
 
         // Now we have to map the translationKey to the right key in the MoodModels

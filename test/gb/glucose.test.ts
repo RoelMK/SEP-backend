@@ -1,16 +1,17 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ActivityPOSTData, IDActivityPOSTData , ActivityGETData } from '../../src/gb/models/gamebusModel';
+import {
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    ActivityGETData
+} from '../../src/gb/models/gamebusModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { GlucosePropertyKeys , Glucose } from '../../src/gb/objects/glucose';
-
+import { GlucosePropertyKeys, Glucose } from '../../src/gb/objects/glucose';
 
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
-
-
 
 describe('with mocked glucose POST call', () => {
     // Request handler that simply returns empty data for every request
@@ -28,24 +29,26 @@ describe('with mocked glucose POST call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('POST a single activity', async () => {
-        const model : GlucoseModel = {
-            timestamp : 12,
-            glucoseLevel: 34,
+        const model: GlucoseModel = {
+            timestamp: 12,
+            glucoseLevel: 34
         };
-        const POSTData : ActivityPOSTData= {
+        const POSTData: ActivityPOSTData = {
             gameDescriptorTK: client.glucose().glucoseTranslationKey,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                propertyTK: GlucosePropertyKeys.glucoseLevel,
-                value: 34
-            }]),
-            players : [90]
+            propertyInstances: expect.arrayContaining([
+                {
+                    propertyTK: GlucosePropertyKeys.glucoseLevel,
+                    value: 34
+                }
+            ]),
+            players: [90]
         };
-        
-        client.glucose().postSingleGlucoseActivity(model,90,undefined,undefined);
-    
+
+        client.glucose().postSingleGlucoseActivity(model, 90, undefined, undefined);
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -59,39 +62,43 @@ describe('with mocked glucose POST call', () => {
     });
 
     test('POST a multiple activities', async () => {
-        const model1 : GlucoseModel = {
+        const model1: GlucoseModel = {
             timestamp: 1,
             glucoseLevel: 2
         };
-        const model2 : GlucoseModel = {
+        const model2: GlucoseModel = {
             timestamp: 11,
             glucoseLevel: 12
         };
-        const POSTData1 : IDActivityPOSTData= {
+        const POSTData1: IDActivityPOSTData = {
             gameDescriptor: client.glucose().glucoseGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                property: 88,
-                value : 2
-            }]),
-            players : [0]
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 88,
+                    value: 2
+                }
+            ]),
+            players: [0]
         };
-        const POSTData2 : IDActivityPOSTData= {
+        const POSTData2: IDActivityPOSTData = {
             gameDescriptor: client.glucose().glucoseGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                property: 88,
-                value : 12
-            }]),
-            players : [0]
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 88,
+                    value: 12
+                }
+            ]),
+            players: [0]
         };
-        
-        client.glucose().postMultipleGlucoseActivities([model1,model2],0,undefined,undefined);
-  
+
+        client.glucose().postMultipleGlucoseActivities([model1, model2], 0, undefined, undefined);
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -99,7 +106,7 @@ describe('with mocked glucose POST call', () => {
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 }),
-                data: [POSTData1,POSTData2]
+                data: [POSTData1, POSTData2]
             })
         );
     });

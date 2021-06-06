@@ -408,17 +408,20 @@ describe('with mocked food get call', () => {
 
     test('GET all food activities', async () => {
         const food = await client.food().getAllFoodActivities(524);
-        const result : FoodModel[] = [{
-            timestamp : 1622832265000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        },{
-            timestamp : 1622832285000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        }];
+        const result: FoodModel[] = [
+            {
+                timestamp: 1622832265000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            },
+            {
+                timestamp: 1622832285000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            }
+        ];
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
@@ -435,18 +438,23 @@ describe('with mocked food get call', () => {
     test('GET food activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
-        const exercises = await client.food().getFoodActivitiesBetweenUnix(524,unixTimestampBefore,unixTimestampAfter);
-        const result : FoodModel[] = [{
-            timestamp : 1622832265000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        },{
-            timestamp : 1622832285000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        }];
+        const exercises = await client
+            .food()
+            .getFoodActivitiesBetweenUnix(524, unixTimestampBefore, unixTimestampAfter);
+        const result: FoodModel[] = [
+            {
+                timestamp: 1622832265000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            },
+            {
+                timestamp: 1622832285000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            }
+        ];
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -461,18 +469,21 @@ describe('with mocked food get call', () => {
 
     test('GET food activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
-        const food = await client.food().getFoodActivitiesOnUnixDate(524,unixTimestamp);
-        const result : FoodModel[] = [{
-            timestamp : 1622832265000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        },{
-            timestamp : 1622832285000,
-            carbohydrates : 400,
-            fibers: 34,
-            description: 'desc'
-        }];
+        const food = await client.food().getFoodActivitiesOnUnixDate(524, unixTimestamp);
+        const result: FoodModel[] = [
+            {
+                timestamp: 1622832265000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            },
+            {
+                timestamp: 1622832285000,
+                carbohydrates: 400,
+                fibers: 34,
+                description: 'desc'
+            }
+        ];
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -486,31 +497,35 @@ describe('with mocked food get call', () => {
     });
 
     test('POST a single activity', async () => {
-        const model : FoodModel = {
-            timestamp : 12,
-            carbohydrates : 34,
+        const model: FoodModel = {
+            timestamp: 12,
+            carbohydrates: 34,
             fibers: 56,
             meal_type: MEAL_TYPE.BREAKFAST
         };
-        const POSTData : ActivityPOSTData= {
+        const POSTData: ActivityPOSTData = {
             gameDescriptorTK: client.food().foodGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                propertyTK: FoodPropertyKeys.carbohydrates,
-                value : 34
-            },{
-                propertyTK: FoodPropertyKeys.meal_type,
-                value: 'Breakfast'
-            },{
-                propertyTK: FoodPropertyKeys.fibers,
-                value: 56
-            }]),
-            players : [90]
+            propertyInstances: expect.arrayContaining([
+                {
+                    propertyTK: FoodPropertyKeys.carbohydrates,
+                    value: 34
+                },
+                {
+                    propertyTK: FoodPropertyKeys.meal_type,
+                    value: 'Breakfast'
+                },
+                {
+                    propertyTK: FoodPropertyKeys.fibers,
+                    value: 56
+                }
+            ]),
+            players: [90]
         };
-        
-        client.food().postSingleFoodActivity(model,90,undefined,undefined);
+
+        client.food().postSingleFoodActivity(model, 90, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -525,7 +540,7 @@ describe('with mocked food get call', () => {
     });
 
     test('POST a multiple activities', async () => {
-        const model1 : FoodModel = {
+        const model1: FoodModel = {
             timestamp: 1,
             carbohydrates: 2,
             calories: 3,
@@ -540,7 +555,7 @@ describe('with mocked food get call', () => {
             sugars: 11,
             description: 'desc1'
         };
-        const model2 : FoodModel = {
+        const model2: FoodModel = {
             timestamp: 11,
             carbohydrates: 12,
             calories: 13,
@@ -555,96 +570,122 @@ describe('with mocked food get call', () => {
             sugars: 111,
             description: 'desc2'
         };
-        const POSTData1 : IDActivityPOSTData= {
+        const POSTData1: IDActivityPOSTData = {
             gameDescriptor: client.food().foodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                property: 12,
-                value : 'desc1'
-            },{
-                property: 77,
-                value: 3
-            },{
-                property: 79,
-                value: 8
-            },{
-                property: 1176,
-                value: 2
-            },{
-                property: 1177,
-                value: 'Breakfast'
-            },{
-                property: 1178,
-                value: 4
-            },{
-                property: 1179,
-                value: 5
-            },{
-                property: 1180,
-                value: 6
-            },{
-                property: 1181,
-                value: 7
-            },{
-                property: 1182,
-                value: 9
-            },{
-                property: 1183,
-                value: 10
-            },{
-                property: 1184,
-                value: 11
-            }]),
-            players : [0]
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 12,
+                    value: 'desc1'
+                },
+                {
+                    property: 77,
+                    value: 3
+                },
+                {
+                    property: 79,
+                    value: 8
+                },
+                {
+                    property: 1176,
+                    value: 2
+                },
+                {
+                    property: 1177,
+                    value: 'Breakfast'
+                },
+                {
+                    property: 1178,
+                    value: 4
+                },
+                {
+                    property: 1179,
+                    value: 5
+                },
+                {
+                    property: 1180,
+                    value: 6
+                },
+                {
+                    property: 1181,
+                    value: 7
+                },
+                {
+                    property: 1182,
+                    value: 9
+                },
+                {
+                    property: 1183,
+                    value: 10
+                },
+                {
+                    property: 1184,
+                    value: 11
+                }
+            ]),
+            players: [0]
         };
-        const POSTData2 : IDActivityPOSTData= {
+        const POSTData2: IDActivityPOSTData = {
             gameDescriptor: client.food().foodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',
-            propertyInstances: expect.arrayContaining([{
-                property: 12,
-                value : 'desc2'
-            },{
-                property: 77,
-                value: 13
-            },{
-                property: 79,
-                value: 18
-            },{
-                property: 1176,
-                value: 12
-            },{
-                property: 1177,
-                value: 'Lunch'
-            },{
-                property: 1178,
-                value: 14
-            },{
-                property: 1179,
-                value: 15
-            },{
-                property: 1180,
-                value: 16
-            },{
-                property: 1181,
-                value: 17
-            },{
-                property: 1182,
-                value: 19
-            },{
-                property: 1183,
-                value: 110
-            },{
-                property: 1184,
-                value: 111
-            }]),
-            players : [0]
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 12,
+                    value: 'desc2'
+                },
+                {
+                    property: 77,
+                    value: 13
+                },
+                {
+                    property: 79,
+                    value: 18
+                },
+                {
+                    property: 1176,
+                    value: 12
+                },
+                {
+                    property: 1177,
+                    value: 'Lunch'
+                },
+                {
+                    property: 1178,
+                    value: 14
+                },
+                {
+                    property: 1179,
+                    value: 15
+                },
+                {
+                    property: 1180,
+                    value: 16
+                },
+                {
+                    property: 1181,
+                    value: 17
+                },
+                {
+                    property: 1182,
+                    value: 19
+                },
+                {
+                    property: 1183,
+                    value: 110
+                },
+                {
+                    property: 1184,
+                    value: 111
+                }
+            ]),
+            players: [0]
         };
-      
-        client.food().postMultipleFoodActivities([model1,model2],0,undefined,undefined);
+
+        client.food().postMultipleFoodActivities([model1, model2], 0, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -653,7 +694,7 @@ describe('with mocked food get call', () => {
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 }),
-                data: [POSTData1,POSTData2]
+                data: [POSTData1, POSTData2]
             })
         );
     });

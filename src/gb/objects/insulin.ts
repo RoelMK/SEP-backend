@@ -113,7 +113,9 @@ export class Insulin extends GameBusObject {
         const activities = Activity.getActivityInfoFromActivity(response);
         // We already know the date
         const insulin: InsulinModel = {
-            timestamp: response.date
+            timestamp: response.date,
+            insulinAmount: 0,
+            insulinType: 0
         };
         // Now we have to map the translationKey to the right key in the InsulinModel
         activities.forEach((activity: ActivityModel) => {

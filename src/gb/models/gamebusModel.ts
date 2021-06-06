@@ -18,6 +18,20 @@ export interface PropertyInstancePOST {
     value: any;
 }
 
+export interface IDActivityPOSTData {
+    gameDescriptor: number;
+    dataProvider: number;
+    image: string;
+    date: number;
+    propertyInstances: IDPropertyInstancePOST[];
+    players: number[];
+}
+
+export interface IDPropertyInstancePOST {
+    property: number;
+    value: any;
+}
+
 export interface ActivityGETData {
     id: number;
     date: number;

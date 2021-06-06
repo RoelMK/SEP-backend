@@ -1,6 +1,5 @@
 import { TokenHandler } from "../../src/gb/auth/tokenHandler";
 import { GameBusClient } from "../../src/gb/gbClient";
-import { MoodGameDescriptorNames } from "../../src/gb/objects/mood";
 import { mockRequest } from "../testUtils/requestUtils";
 
 jest.mock('axios');
@@ -23,7 +22,7 @@ describe('with mocked moods get call', () => {
     test('GET activities from type', async () => {
         const moods = await client
             .mood()
-            .getAllMoodActivities(0, [MoodGameDescriptorNames.logMood]);
+            .getAllMoodActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
@@ -45,7 +44,6 @@ describe('with mocked moods get call', () => {
             .mood()
             .getMoodFromGdBetweenUnix(
                 0,
-                [MoodGameDescriptorNames.logMood],
                 unixTimestampBefore,
                 unixTimestampAfter
             );
@@ -67,7 +65,6 @@ describe('with mocked moods get call', () => {
             .mood()
             .getMoodActivityFromGdOnUnixDate(
                 0,
-                [MoodGameDescriptorNames.logMood],
                 unixTimestamp
             );
         expect(request).toHaveBeenCalledTimes(1);

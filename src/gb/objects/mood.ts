@@ -6,6 +6,8 @@ import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
 export class Mood extends GameBusObject {
+    private moodTranslationKey = 'LOG_MOOD';
+
     /**
      * Converts an entire response to MoodModels
      * @param response Array of ActivityGETData (response)
@@ -24,13 +26,12 @@ export class Mood extends GameBusObject {
      */
     async getAllMoodActivities(
         playerId: number,
-        gameDescriptors: MoodGameDescriptorNames[],
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
         return await this.activity.getAllActivitiesWithGd(
             playerId,
-            gameDescriptors,
+            [this.moodTranslationKey],
             headers,
             query
         );
@@ -77,7 +78,6 @@ export class Mood extends GameBusObject {
      */
     async getMoodActivityFromGdOnUnixDate(
         playerId: number,
-        gameDescriptors: MoodGameDescriptorNames[],
         date: number,
         order?: QueryOrder,
         limit?: number,
@@ -88,7 +88,7 @@ export class Mood extends GameBusObject {
         return await this.activity.getActivitiesOnUnixDateWithGd(
             playerId,
             date,
-            gameDescriptors,
+            [this.moodTranslationKey],
             order,
             limit,
             page,
@@ -110,7 +110,6 @@ export class Mood extends GameBusObject {
      */
     async getMoodFromGdBetweenUnix(
         playerId: number,
-        gameDescriptors: MoodGameDescriptorNames[],
         startDate: number,
         endDate: number,
         order?: QueryOrder,
@@ -123,7 +122,7 @@ export class Mood extends GameBusObject {
             playerId,
             startDate,
             endDate,
-            gameDescriptors,
+            [this.moodTranslationKey],
             order,
             limit,
             page,

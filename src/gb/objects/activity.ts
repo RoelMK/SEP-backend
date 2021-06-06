@@ -20,20 +20,22 @@ export class Activity {
     public dataProviderID = 18;
 
     /**
-     * Gets all activities for given player
-     * @returns All activities of player
+     * Posts an activity using the given data
      */
     async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<void> {
         this.gamebus.post(
             'me/activities',
             data,
-            { 'Content-Type': 'application/json', ...headers },
+            headers,
             { dryrun: 'false', ...query },
             true,
             true
         );
     }
 
+    /**
+     * Posts all activities using the given data in a single POST
+     */
     async postActivities(
         data: IDActivityPOSTData[],
         headers?: Headers,
@@ -42,7 +44,7 @@ export class Activity {
         this.gamebus.post(
             'me/activities',
             data,
-            { 'Content-Type': 'application/json', ...headers },
+            headers,
             { dryrun: 'false', bulk: 'true', ...query },
             true,
             true

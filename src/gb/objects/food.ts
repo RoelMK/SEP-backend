@@ -98,8 +98,8 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that returns all exercises from the given exercise type (game descriptors)
-     * @returns All exercise activities belonging to the given Type(s)
+     * Function that returns all fooddata
+     * @returns All food activities 
      */
     async getAllFoodActivities(
         playerId: number,
@@ -182,18 +182,18 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Converts a response of ActivityGETData to a GlucoseModel
+     * Converts a response of ActivityGETData to a FoodModel
      * @param response single ActivityGETData to convert
-     * @returns GlucoseModel with correct properties filled in
+     * @returns FoodModel with correct properties filled in
      */
     private static convertResponseToFoodModel(response: ActivityGETData): FoodModel {
         // Get ActivityModels from response
         const activities = Activity.getActivityInfoFromActivity(response);
         //console.log(activities);
-        // We already know the date, glucose level will be 0 for now
+        // We already know the date, carbs level will be 0 for now
         const model: FoodModel = {
             timestamp: activities[0].timestamp,
-            carbohydrates: -1 //impossible temp value
+            carbohydrates: 0
         };
         //console.log(response)
         //console.log(activities)
@@ -204,9 +204,6 @@ export class Food extends GameBusObject {
                 ) ?? activity.property.translationKey; //used the online key if no translation is found
             model[key] = activity.value;
         });
-        if (model.carbohydrates === -1) {
-            throw 'carbohydrates were not found in the response see: ' + response;
-        }
         return model;
     }
 
@@ -217,7 +214,12 @@ export class Food extends GameBusObject {
      */
     static convertResponseToFoodModels(response: ActivityGETData[]): FoodModel[] {
         return response.map((response: ActivityGETData) => {
-            return this.convertResponseToFoodModel(response);
+            try {
+                return this.convertResponseToFoodModel(response);
+            } catch (error) {
+                throw error
+            }
+            
         });
     }
 }

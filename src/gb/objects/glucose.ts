@@ -39,6 +39,11 @@ export class Glucose extends GameBusObject {
         return Glucose.convertResponseToGlucoseModels(response);
     }
 
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
     async postSingleGlucoseActivity(
         model: GlucoseModel,
         playerID: number,
@@ -67,6 +72,9 @@ export class Glucose extends GameBusObject {
         this.activity.postActivities(data, headers, query);
     }
 
+    /**
+     * Function that creates a POSTData from a model and playerID
+     */
     public toPOSTData(model: GlucoseModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: this.glucoseTranslationKey,

@@ -14,8 +14,8 @@ moodRouter.post('/mood', (req: Request, res: Response) => {
 
     // Check if given timestamps are valid
     if (!validUnixTimestamp(moodTime) 
-    || (valence < 0 || valence > 3) 
-    || (arousal < 0 || valence > 3)) {
+    || (valence < 1 || valence > 3) 
+    || (arousal < 1 || valence > 3)) {
         // Bad request
         res.sendStatus(400);
         return;

@@ -176,7 +176,7 @@ describe('with mocked insuline get call', () => {
 });
 
 describe('convert response to models', () => {
-    test('convert single response to single model', () => {
+    test('convert single response to single model with insulin type 0', () => {
         const response: ActivityGETData = {
             id: 0,
             date: 1622736981000,
@@ -322,6 +322,156 @@ describe('convert response to models', () => {
             timestamp: 1622736981000,
             insulinAmount: 3,
             insulinType: 0
+        };
+        expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
+    });
+
+    test('convert single response to single model with insulin type 1', () => {
+        const response: ActivityGETData = {
+            id: 0,
+            date: 1622736981000,
+            isManual: true,
+            group: null,
+            image: null,
+            creator: {
+                id: 0,
+                user: {
+                    id: 0,
+                    firstName: 'First',
+                    lastName: 'Last',
+                    image: null
+                }
+            },
+            player: {
+                id: 0,
+                user: {
+                    id: 0,
+                    firstName: 'First',
+                    lastName: 'Last',
+                    image: null
+                }
+            },
+            gameDescriptor: {
+                id: 1075,
+                translationKey: 'LOG_INSULIN',
+                image: null,
+                type: 'PHYSICAL',
+                isAggregate: false
+            },
+            dataProvider: {
+                id: 1,
+                name: 'GameBus',
+                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                isConnected: false
+            },
+            propertyInstances: [
+                {
+                    id: 69397,
+                    value: '2',
+                    property: {
+                        id: 1143,
+                        translationKey: 'INSULIN_TYPE',
+                        baseUnit: 'String text',
+                        inputType: 'STRING',
+                        aggregationStrategy: 'SUM',
+                        propertyPermissions: [
+                            {
+                                id: 1268,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: []
+                            },
+                            {
+                                id: 1369,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: []
+                            }
+                        ]
+                    }
+                },
+                {
+                    id: 69398,
+                    value: '3',
+                    property: {
+                        id: 1144,
+                        translationKey: 'INSULIN_DOSE',
+                        baseUnit: 'IU',
+                        inputType: 'INT',
+                        aggregationStrategy: 'AVERAGE',
+                        propertyPermissions: [
+                            {
+                                id: 1269,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: []
+                            },
+                            {
+                                id: 1366,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: []
+                            }
+                        ]
+                    }
+                },
+                {
+                    id: 69399,
+                    value: 'long',
+                    property: {
+                        id: 1185,
+                        translationKey: 'INSULIN_SPEED',
+                        baseUnit: '[rapid,long]',
+                        inputType: 'STRING',
+                        aggregationStrategy: 'AVERAGE',
+                        propertyPermissions: [
+                            {
+                                id: 1367,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: []
+                            },
+                            {
+                                id: 1368,
+                                index: 0,
+                                lastUpdate: null,
+                                decisionNote: null,
+                                state: 'PUBLIC_APPROVED',
+                                allowedValues: [
+                                    {
+                                        index: 0,
+                                        translationKey: 'INSULIN_TYPE_RAPID',
+                                        enumValue: 'rapid'
+                                    },
+                                    {
+                                        index: 1,
+                                        translationKey: 'INSULIN_TYPE_LONG',
+                                        enumValue: 'long'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            personalPoints: [],
+            supports: [],
+            chats: []
+        };
+        const expectedResult: InsulinModel = {
+            timestamp: 1622736981000,
+            insulinAmount: 3,
+            insulinType: 1
         };
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });

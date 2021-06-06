@@ -59,8 +59,8 @@ describe('mood endpoint', () => {
     test('POST mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
-            moodDescription: 'happy',
-            moodValue: 1
+            valence: 1,
+            arousal: 1
         };
         // TODO: route not working
         const response = await request(server).post('/mood').send(moodData);

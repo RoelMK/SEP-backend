@@ -404,11 +404,9 @@ describe('with mocked food get call', () => {
     beforeEach(() => request.mockClear());
 
     // GameBusClient using mockToken
-    const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
+    const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '524'));
 
-    test('GET activities on date', async () => {
-        // Get exercises from a date (as Date object)
-        // TODO: implement this
+    test('GET all food activities', async () => {
         const food = await client.food().getAllFoodActivities(524);
         const result : FoodModel[] = [{
             timestamp : 1622832265000,
@@ -431,9 +429,61 @@ describe('with mocked food get call', () => {
                 })
             })
         );
-        //expect(exercises).toEqual([]);
         expect(food).toEqual(result);
     });
+
+    test('GET food activities between dates', async () => {
+      const unixTimestampBefore = new Date('2021-04-19').getTime();
+      const unixTimestampAfter = new Date('2021-04-21').getTime();
+      const exercises = await client.food().getFoodActivitiesBetweenUnix(524,unixTimestampBefore,unixTimestampAfter);
+      const result : FoodModel[] = [{
+          timestamp : 1622832265000,
+          carbohydrates : 400,
+          fibers: 34,
+          description: 'desc'
+      },{
+          timestamp : 1622832285000,
+          carbohydrates : 400,
+          fibers: 34,
+          description: 'desc'
+      }];
+      expect(request).toHaveBeenCalledTimes(1);
+      expect(request).toHaveBeenCalledWith(
+          expect.objectContaining({
+              headers: expect.objectContaining({
+                  Authorization: "Bearer testToken"
+              }),
+              url: 'https://api3.gamebus.eu/v2/players/524/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=Nutrition_Diary'
+          })
+      );
+      expect(exercises).toEqual(result);
+    });
+
+    test('GET food activities on date', async () => {
+      const unixTimestamp = new Date('2021-04-19').getTime();
+      const food = await client.food().getFoodActivitiesOnUnixDate(524,unixTimestamp);
+      const result : FoodModel[] = [{
+          timestamp : 1622832265000,
+          carbohydrates : 400,
+          fibers: 34,
+          description: 'desc'
+      },{
+          timestamp : 1622832285000,
+          carbohydrates : 400,
+          fibers: 34,
+          description: 'desc'
+      }];
+      expect(request).toHaveBeenCalledTimes(1);
+      expect(request).toHaveBeenCalledWith(
+          expect.objectContaining({
+              headers: expect.objectContaining({
+                  Authorization: `Bearer testToken`
+              }),
+              url: 'https://api3.gamebus.eu/v2/players/524/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=Nutrition_Diary'
+          })
+      );
+      expect(food).toEqual(result);
+  });
 
     test('POST a single activity', async () => {
         const model : FoodModel = {

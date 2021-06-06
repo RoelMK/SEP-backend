@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import exp from 'constants';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { FoodModel } from '../models/foodModel';

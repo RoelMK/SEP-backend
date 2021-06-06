@@ -1,6 +1,12 @@
 import { convertMG_DLtoMMOL_L } from '../../services/utils/units';
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    IDPropertyInstancePOST,
+    PropertyInstancePOST
+} from '../models/gamebusModel';
 import { GlucoseModel } from '../models/glucoseModel';
 import { ActivityModel } from '../models/activityModel';
 import { Activity, QueryOrder } from './activity';
@@ -33,9 +39,14 @@ export class Glucose extends GameBusObject {
         return Glucose.convertResponseToGlucoseModels(response);
     }
 
-    async postSingleGlucoseActivity(model: GlucoseModel, playerID: number, headers?: Headers, query?:Query) {
-        const data = this.toPOSTData(model,playerID);
-        this.activity.postActivity(data,headers,query)
+    async postSingleGlucoseActivity(
+        model: GlucoseModel,
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data = this.toPOSTData(model, playerID);
+        this.activity.postActivity(data, headers, query);
     }
 
     /**
@@ -43,26 +54,34 @@ export class Glucose extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-     async postMultipleGlucoseActivities(models: GlucoseModel[], playerID: number, headers?: Headers, query?:Query) {
-        const data : IDActivityPOSTData[]= [];
+    async postMultipleGlucoseActivities(
+        models: GlucoseModel[],
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
-            data.push(this.toIDPOSTData(item,playerID))
-        })
-        this.activity.postActivities(data,headers,query)
+            data.push(this.toIDPOSTData(item, playerID));
+        });
+        this.activity.postActivities(data, headers, query);
     }
 
-    public toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
+    public toPOSTData(model: GlucoseModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: this.glucoseTranslationKey,
             dataProviderName: this.activity.dataProviderName,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in GlucosePropertyKeys) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({propertyTK : `${GlucosePropertyKeys[key]}`, value : model[key]})
+                obj.propertyInstances.push({
+                    propertyTK: `${GlucosePropertyKeys[key]}`,
+                    value: model[key]
+                });
             }
         }
         return obj;
@@ -71,18 +90,18 @@ export class Glucose extends GameBusObject {
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
      */
-     public toIDPOSTData(model: GlucoseModel, playerID: number) : IDActivityPOSTData{
+    public toIDPOSTData(model: GlucoseModel, playerID: number): IDActivityPOSTData {
         const obj = {
             gameDescriptor: this.glucoseGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in GlucoseIDs) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({property : GlucoseIDs[key], value : model[key]})
+                obj.propertyInstances.push({ property: GlucoseIDs[key], value: model[key] });
             }
         }
         return obj;
@@ -149,7 +168,7 @@ export class Glucose extends GameBusObject {
                             if (typeof activity.value !== 'string') {
                                 glucose.glucoseLevel = activity.value;
                             }
-                            
+
                             break;
                         case GlucosePropertyKeys.glucoseLevelMgdl:
                             // First convert to MMOL/L and then use it
@@ -186,8 +205,8 @@ export enum GlucosePropertyKeys {
     glucoseLevelMgdl = 'eAG_MGDL' // in mg/dL (we won't use this one)
 }
 
-const GlucoseIDs =  Object.freeze( {
-    glucoseLevel : 88
-})
+const GlucoseIDs = Object.freeze({
+    glucoseLevel: 88
+});
 
-export {GlucoseIDs}
+export { GlucoseIDs };

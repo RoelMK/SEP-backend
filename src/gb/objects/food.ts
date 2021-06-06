@@ -3,7 +3,13 @@ import exp from 'constants';
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { FoodModel } from '../models/foodModel';
-import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    IDPropertyInstancePOST,
+    PropertyInstancePOST
+} from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 
@@ -13,8 +19,7 @@ import { GameBusObject } from './base';
  * Class for food-specific functions
  */
 export class Food extends GameBusObject {
-    private foodId = 0; // TODO: assign to GameBus-given activity ID
-    public foodGameDescriptor = "Nutrition_Diary";
+    public foodGameDescriptor = 'Nutrition_Diary';
     public foodGameDescriptorID = 58;
 
     /**
@@ -22,9 +27,14 @@ export class Food extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-    async postSingleFoodActivity(model: FoodModel, playerID: number, headers?: Headers, query?:Query) {
-        const data = this.toPOSTData(model,playerID);
-        this.activity.postActivity(data,headers,query)
+    async postSingleFoodActivity(
+        model: FoodModel,
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data = this.toPOSTData(model, playerID);
+        this.activity.postActivity(data, headers, query);
     }
 
     /**
@@ -32,29 +42,37 @@ export class Food extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-     async postMultipleFoodActivities(models: FoodModel[], playerID: number, headers?: Headers, query?:Query) {
-        const data : IDActivityPOSTData[]= [];
+    async postMultipleFoodActivities(
+        models: FoodModel[],
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
-            data.push(this.toIDPOSTData(item,playerID))
-        })
-        this.activity.postActivities(data,headers,query)
+            data.push(this.toIDPOSTData(item, playerID));
+        });
+        this.activity.postActivities(data, headers, query);
     }
 
     /**
      * Function that creates a POSTData from a model and playerID
      */
-    public toPOSTData(model: FoodModel, playerID: number) : ActivityPOSTData{
+    public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: this.foodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in FoodPropertyKeys) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({propertyTK : `${FoodPropertyKeys[key]}`, value : model[key]})
+                obj.propertyInstances.push({
+                    propertyTK: `${FoodPropertyKeys[key]}`,
+                    value: model[key]
+                });
             }
         }
         return obj;
@@ -63,18 +81,18 @@ export class Food extends GameBusObject {
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
      */
-    public toIDPOSTData(model: FoodModel, playerID: number) : IDActivityPOSTData{
+    public toIDPOSTData(model: FoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
             gameDescriptor: this.foodGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in FoodIDs) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({property : FoodIDs[key], value : model[key]})
+                obj.propertyInstances.push({ property: FoodIDs[key], value: model[key] });
             }
         }
         return obj;
@@ -89,7 +107,7 @@ export class Food extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<FoodModel[]> {
-        const result =  await this.activity.getAllActivitiesWithGd(
+        const result = await this.activity.getAllActivitiesWithGd(
             playerId,
             [this.foodGameDescriptor],
             headers,
@@ -109,7 +127,7 @@ export class Food extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types between given dates (excluding end)
      */
-    async getExerciseActivityBetweenUnix(
+    async getFoodActivitiesBetweenUnix(
         playerId: number,
         startDate: number,
         endDate: number,
@@ -142,7 +160,7 @@ export class Food extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types on given date
      */
-    async getExerciseActivityOnUnixDate(
+    async getFoodActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
@@ -164,13 +182,12 @@ export class Food extends GameBusObject {
         return Food.convertResponseToFoodModels(result);
     }
 
-
     /**
      * Converts a response of ActivityGETData to a GlucoseModel
      * @param response single ActivityGETData to convert
      * @returns GlucoseModel with correct properties filled in
      */
-     private static convertResponseToFoodModel(response: ActivityGETData): FoodModel {
+    private static convertResponseToFoodModel(response: ActivityGETData): FoodModel {
         // Get ActivityModels from response
         const activities = Activity.getActivityInfoFromActivity(response);
         //console.log(activities);
@@ -182,11 +199,14 @@ export class Food extends GameBusObject {
         //console.log(response)
         //console.log(activities)
         activities.forEach((activity: ActivityModel) => {
-            const key = Object.keys(FoodPropertyKeys).find(key => FoodPropertyKeys[key] === activity.property.translationKey) ?? activity.property.translationKey //used the online key if no translation is found
+            const key =
+                Object.keys(FoodPropertyKeys).find(
+                    (key) => FoodPropertyKeys[key] === activity.property.translationKey
+                ) ?? activity.property.translationKey; //used the online key if no translation is found
             model[key] = activity.value;
         });
-        if(model.carbohydrates === -1) {
-            throw 'carbohydrates were not found in the response see: ' + response
+        if (model.carbohydrates === -1) {
+            throw 'carbohydrates were not found in the response see: ' + response;
         }
         return model;
     }
@@ -215,22 +235,22 @@ export enum FoodPropertyKeys {
     salt = 'FOOD_SALT_GRAMS',
     water = 'FOOD_WATER_GRAMS',
     sugars = 'FOOD_SUGAR_GRAMS',
-    description = 'DESCRIPTION',
+    description = 'DESCRIPTION'
 }
 
-const FoodIDs =  Object.freeze( {
-    description : 12,
-    calories : 77,
-    fibers : 79,
-    carbohydrates : 1176,
-    meal_type : 1177,
-    glycemic_index : 1178,
-    fat : 1179,
-    saturatedFat : 1180,
-    proteins : 1181,
-    salt : 1182,
-    water : 1183,
-    sugars : 1184 
-})
+const FoodIDs = Object.freeze({
+    description: 12,
+    calories: 77,
+    fibers: 79,
+    carbohydrates: 1176,
+    meal_type: 1177,
+    glycemic_index: 1178,
+    fat: 1179,
+    saturatedFat: 1180,
+    proteins: 1181,
+    salt: 1182,
+    water: 1183,
+    sugars: 1184
+});
 
-export {FoodIDs}
+export { FoodIDs };

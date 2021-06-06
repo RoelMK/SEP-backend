@@ -1,10 +1,13 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import {
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    ActivityGETData
+} from '../../src/gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { InsulinPropertyKeys } from '../../src/gb/objects/insulin';
-import { ActivityGETData } from '../../src/gb/models/gamebusModel';
-import { Insulin } from '../../src/gb/objects/insulin';
+import { InsulinPropertyKeys, Insulin } from '../../src/gb/objects/insulin';
+
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -25,9 +28,7 @@ describe('with mocked insuline get call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('GET activities from type', async () => {
-        const insulin = await client
-            .insulin()
-            .getInsulinActivityFromGd(0);
+        const insulin = await client.insulin().getInsulinActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
@@ -47,11 +48,7 @@ describe('with mocked insuline get call', () => {
         const unixTimestampAfter = new Date('2021-04-21').getTime();
         const insulin = await client
             .insulin()
-            .getInsulinActivityFromGdBetweenUnix(
-                0,
-                unixTimestampBefore,
-                unixTimestampAfter
-            );
+            .getInsulinActivitiesBetweenUnix(0, unixTimestampBefore, unixTimestampAfter);
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -66,12 +63,7 @@ describe('with mocked insuline get call', () => {
 
     test('GET activities from type on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
-        const insulin = await client
-            .insulin()
-            .getInsulinActivityFromGdOnUnixDate(
-                0,
-                unixTimestamp
-            );
+        const insulin = await client.insulin().getInsulinActivitiesOnUnixDate(0, unixTimestamp);
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -85,27 +77,30 @@ describe('with mocked insuline get call', () => {
     });
 
     test('POST a single activity', async () => {
-        const model : InsulinModel = {
-            timestamp : 12,
+        const model: InsulinModel = {
+            timestamp: 12,
             insulinAmount: 34,
             insulinType: InsulinType.RAPID
-        }
-        const POSTData : ActivityPOSTData= {
+        };
+        const POSTData: ActivityPOSTData = {
             gameDescriptorTK: client.insulin().insulinTranslationKey,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
-            image: "",
-            propertyInstances: expect.arrayContaining([{
-                propertyTK: InsulinPropertyKeys.insulinAmount,
-                value : 34
-            },{
-                propertyTK: InsulinPropertyKeys.insulinType,
-                value: 'rapid'
-            }]),
-            players : [90]
-        }
-        
-        client.insulin().postSingleInsulinActivity(model,90,undefined,undefined);
+            image: '',
+            propertyInstances: expect.arrayContaining([
+                {
+                    propertyTK: InsulinPropertyKeys.insulinAmount,
+                    value: 34
+                },
+                {
+                    propertyTK: InsulinPropertyKeys.insulinType,
+                    value: 'rapid'
+                }
+            ]),
+            players: [90]
+        };
+
+        client.insulin().postSingleInsulinActivity(model, 90, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -120,47 +115,53 @@ describe('with mocked insuline get call', () => {
     });
 
     test('POST a multiple activities', async () => {
-        const model1 : InsulinModel = {
+        const model1: InsulinModel = {
             timestamp: 1,
             insulinAmount: 2,
             insulinType: InsulinType.LONG
-        }
-        const model2 : InsulinModel = {
+        };
+        const model2: InsulinModel = {
             timestamp: 11,
             insulinAmount: 12,
             insulinType: InsulinType.RAPID
-        }
-        const POSTData1 : IDActivityPOSTData= {
+        };
+        const POSTData1: IDActivityPOSTData = {
             gameDescriptor: client.insulin().insulinGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
-            image: "",
-            propertyInstances: expect.arrayContaining([{
-                property: 1144,
-                value : 2
-            },{
-                property: 1185,
-                value : "long"
-            }]),
-            players : [0]
-        }
-        const POSTData2 : IDActivityPOSTData= {
+            image: '',
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 1144,
+                    value: 2
+                },
+                {
+                    property: 1185,
+                    value: 'long'
+                }
+            ]),
+            players: [0]
+        };
+        const POSTData2: IDActivityPOSTData = {
             gameDescriptor: client.insulin().insulinGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
-            image: "",
-            propertyInstances: expect.arrayContaining([{
-                property: 1144,
-                value : 12
-            },{
-                property: 1185,
-                value : "rapid"
-            }]),
-            players : [0]
-        }
-        
-        client.insulin().postMultipleInsulinActivities([model1,model2],0,undefined,undefined);
-  
+            image: '',
+            propertyInstances: expect.arrayContaining([
+                {
+                    property: 1144,
+                    value: 12
+                },
+                {
+                    property: 1185,
+                    value: 'rapid'
+                }
+            ]),
+            players: [0]
+        };
+
+        client.insulin().postMultipleInsulinActivities([model1, model2], 0, undefined, undefined);
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -168,12 +169,11 @@ describe('with mocked insuline get call', () => {
                 headers: expect.objectContaining({
                     Authorization: 'Bearer testToken'
                 }),
-                data: [POSTData1,POSTData2]
+                data: [POSTData1, POSTData2]
             })
         );
     });
 });
-
 
 describe('convert response to models', () => {
     test('convert single response to single model', () => {
@@ -314,17 +314,15 @@ describe('convert response to models', () => {
                     }
                 }
             ],
-            'personalPoints': [],
-            'supports': [],
-            'chats': []
+            personalPoints: [],
+            supports: [],
+            chats: []
         };
         const expectedResult: InsulinModel = {
             timestamp: 1622736981000,
             insulinAmount: 3,
             insulinType: 0
         };
-        expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([
-            expectedResult
-        ]);
+        expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });
 });

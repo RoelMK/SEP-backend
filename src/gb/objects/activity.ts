@@ -1,7 +1,12 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { format, addDays } from 'date-fns';
 import { ActivityProperty, ActivityModel } from '../models/activityModel';
-import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, PropertyInstanceReference } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    PropertyInstanceReference
+} from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 
 /**
@@ -11,39 +16,37 @@ import { fromUnixMsTime } from '../../services/utils/dates';
  */
 export class Activity {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
-    public dataProviderName = "Daily_run";
+    public dataProviderName = 'Daily_run';
     public dataProviderID = 18;
 
     /**
      * Gets all activities for given player
      * @returns All activities of player
      */
-    async postActivity(
-        data: ActivityPOSTData,
-        headers?: Headers,
-        query?: Query
-    ) {
+    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<void> {
         this.gamebus.post(
-            "me/activities",
+            'me/activities',
             data,
-            {"Content-Type": "application/json",...headers},
-            {"dryrun":"false",...query},
+            { 'Content-Type': 'application/json', ...headers },
+            { dryrun: 'false', ...query },
             true,
-            true);
+            true
+        );
     }
 
     async postActivities(
         data: IDActivityPOSTData[],
         headers?: Headers,
         query?: Query
-    ) {
+    ): Promise<void> {
         this.gamebus.post(
-            "me/activities",
+            'me/activities',
             data,
-            {"Content-Type": "application/json",...headers},
-            {"dryrun":"false","bulk":"true",...query},
+            { 'Content-Type': 'application/json', ...headers },
+            { dryrun: 'false', bulk: 'true', ...query },
             true,
-            true);
+            true
+        );
     }
 
     /**
@@ -352,7 +355,7 @@ export class Activity {
                 // Make sure value is always a number
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                value: isNaN((value.value * 1)) ? value.value : (value.value * 1),
+                value: isNaN(value.value * 1) ? value.value : value.value * 1,
                 property: valueProperty
             };
             // Add model to array

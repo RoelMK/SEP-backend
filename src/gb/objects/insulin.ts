@@ -1,28 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
-import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    IDPropertyInstancePOST,
+    PropertyInstancePOST
+} from '../models/gamebusModel';
 import { InsulinModel } from '../models/insulinModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
-
 
 /**
  * Class for insulin-specific functions
  */
 export class Insulin extends GameBusObject {
-    public insulinTranslationKey = "LOG_INSULIN";
+    public insulinTranslationKey = 'LOG_INSULIN';
     public insulinGameDescriptorID = 1075;
-    private insulinId = 0; // TODO: assign to GameBus-given activity ID
 
     /**
-     * Function that returns all insulin activities 
+     * Function that returns all insulin activities
      * @param playerId ID of player
      * @param headers Any extra headers
      * @param query Any queries
-     * @returns All insulin activities 
+     * @returns All insulin activities
      */
-    async getInsulinActivityFromGd(
+    async getInsulinActivities(
         playerId: number,
         headers?: Headers,
         query?: Query
@@ -45,7 +49,7 @@ export class Insulin extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All insulin activities between given dates (excluding end)
      */
-    async getInsulinActivityFromGdBetweenUnix(
+    async getInsulinActivitiesBetweenUnix(
         playerId: number,
         startDate: number,
         endDate: number,
@@ -68,7 +72,6 @@ export class Insulin extends GameBusObject {
         );
     }
 
-
     /**
      * Function that returns all insulin activities on given date (as unix)
      * @param playerId ID of player
@@ -78,7 +81,7 @@ export class Insulin extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All  insulin activities on given date
      */
-    async getInsulinActivityFromGdOnUnixDate(
+    async getInsulinActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
@@ -121,7 +124,7 @@ export class Insulin extends GameBusObject {
                         case InsulinPropertyKeys.insulinAmount:
                             //No need of conversion
                             if (typeof activity.value !== 'string') {
-                                insulin.insulinAmount =  activity.value;
+                                insulin.insulinAmount = activity.value;
                             }
                             break;
                         case InsulinPropertyKeys.insulinType:
@@ -156,69 +159,86 @@ export class Insulin extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-    async postSingleInsulinActivity(model: InsulinModel, playerID: number, headers?: Headers, query?:Query) {
-        const data = this.toPOSTData(model,playerID);
-        this.activity.postActivity(data,headers,query)
+    async postSingleInsulinActivity(
+        model: InsulinModel,
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data = this.toPOSTData(model, playerID);
+        this.activity.postActivity(data, headers, query);
     }
-
 
     /**
      * Function that post a single model for a given player
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-     async postMultipleInsulinActivities(models: InsulinModel[], playerID: number, headers?: Headers, query?:Query) {
-        const data : IDActivityPOSTData[]= [];
+    async postMultipleInsulinActivities(
+        models: InsulinModel[],
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
-            data.push(this.toIDPOSTData(item,playerID))
-        })
-        this.activity.postActivities(data,headers,query)
+            data.push(this.toIDPOSTData(item, playerID));
+        });
+        this.activity.postActivities(data, headers, query);
     }
 
     /**
      * Function that creates a POSTData from a model and playerID
      */
-    public toPOSTData(model: InsulinModel, playerID: number) : ActivityPOSTData{
+    public toPOSTData(model: InsulinModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: this.insulinTranslationKey,
             dataProviderName: this.activity.dataProviderName,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in InsulinPropertyKeys) {
             if (model[key] !== undefined) {
-                if(key === 'insulinType') {
-                    obj.propertyInstances.push({propertyTK : `${InsulinPropertyKeys[key]}`, value : model[key] ? "long" : "rapid"})
+                if (key === 'insulinType') {
+                    obj.propertyInstances.push({
+                        propertyTK: `${InsulinPropertyKeys[key]}`,
+                        value: model[key] ? 'long' : 'rapid'
+                    });
                 } else {
-                    obj.propertyInstances.push({propertyTK : `${InsulinPropertyKeys[key]}`, value : model[key]})
+                    obj.propertyInstances.push({
+                        propertyTK: `${InsulinPropertyKeys[key]}`,
+                        value: model[key]
+                    });
                 }
-                
             }
         }
-        
+
         return obj;
     }
 
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
      */
-     public toIDPOSTData(model: InsulinModel, playerID: number) : IDActivityPOSTData{
+    public toIDPOSTData(model: InsulinModel, playerID: number): IDActivityPOSTData {
         const obj = {
             gameDescriptor: this.insulinGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in InsulinIDs) {
             if (model[key] !== undefined) {
-                if(key === 'insulinType') {
-                    obj.propertyInstances.push({property : InsulinIDs[key], value : model[key] ? "long" : "rapid"})
+                if (key === 'insulinType') {
+                    obj.propertyInstances.push({
+                        property: InsulinIDs[key],
+                        value: model[key] ? 'long' : 'rapid'
+                    });
                 } else {
-                    obj.propertyInstances.push({property : InsulinIDs[key], value : model[key]})
+                    obj.propertyInstances.push({ property: InsulinIDs[key], value: model[key] });
                 }
             }
         }
@@ -231,7 +251,7 @@ export class Insulin extends GameBusObject {
  */
 export enum InsulinDataProviderNames {
     GameBuS = 'GameBus',
-    Daily_run='Daily_run'
+    Daily_run = 'Daily_run'
 }
 
 /**
@@ -242,11 +262,10 @@ export enum InsulinPropertyKeys {
     insulinType = 'INSULIN_SPEED'
 }
 
-const InsulinIDs =  Object.freeze( {
+const InsulinIDs = Object.freeze({
     //INSULIN_TYPE : 1143,
-    insulinAmount : 1144,
-    insulinType : 1185
-})
+    insulinAmount: 1144,
+    insulinType: 1185
+});
 
-export {InsulinIDs}
-
+export { InsulinIDs };

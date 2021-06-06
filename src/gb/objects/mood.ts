@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    IDPropertyInstancePOST,
+    PropertyInstancePOST
+} from '../models/gamebusModel';
 import { MoodModel } from '../models/moodModel';
 import { GameBusObject } from './base';
 import { ActivityModel } from '../models/activityModel';
@@ -10,7 +16,7 @@ import { Activity, QueryOrder } from './activity';
  * Class for glucose-specific functions
  */
 export class Mood extends GameBusObject {
-    public moodGameDescriptor = "LOG_MOOD";
+    public moodGameDescriptor = 'LOG_MOOD';
     public moodGameDescriptorID = 1062;
 
     private moodTranslationKey = 'LOG_MOOD';
@@ -83,7 +89,7 @@ export class Mood extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types on given date
      */
-    async getMoodActivityFromGdOnUnixDate(
+    async getMoodActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
@@ -115,7 +121,7 @@ export class Mood extends GameBusObject {
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
      * @returns All activities of given types between given dates (excluding end)
      */
-    async getMoodFromGdBetweenUnix(
+    async getMoodActivitiesBetweenUnix(
         playerId: number,
         startDate: number,
         endDate: number,
@@ -143,9 +149,14 @@ export class Mood extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-    async postSingleMoodActivity(model: MoodModel, playerID: number, headers?: Headers, query?:Query) {
-        const data = this.toPOSTData(model,playerID);
-        this.activity.postActivity(data,headers,query)
+    async postSingleMoodActivity(
+        model: MoodModel,
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data = this.toPOSTData(model, playerID);
+        this.activity.postActivity(data, headers, query);
     }
 
     /**
@@ -153,29 +164,37 @@ export class Mood extends GameBusObject {
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
-     async postMultipleMoodActivities(models: MoodModel[], playerID: number, headers?: Headers, query?:Query) {
-        const data : IDActivityPOSTData[]= [];
+    async postMultipleMoodActivities(
+        models: MoodModel[],
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
-            data.push(this.toIDPOSTData(item,playerID))
-        })
-        this.activity.postActivities(data,headers,query)
+            data.push(this.toIDPOSTData(item, playerID));
+        });
+        this.activity.postActivities(data, headers, query);
     }
 
     /**
      * Function that creates a POSTData from a model and playerID
      */
-    public toPOSTData(model: MoodModel, playerID: number) : ActivityPOSTData{
+    public toPOSTData(model: MoodModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: this.moodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in MoodPropertyKeys) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({propertyTK : `${MoodPropertyKeys[key]}`, value : model[key]})
+                obj.propertyInstances.push({
+                    propertyTK: `${MoodPropertyKeys[key]}`,
+                    value: model[key]
+                });
             }
         }
         return obj;
@@ -184,18 +203,18 @@ export class Mood extends GameBusObject {
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
      */
-     public toIDPOSTData(model: MoodModel, playerID: number) : IDActivityPOSTData{
+    public toIDPOSTData(model: MoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
             gameDescriptor: this.moodGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
-            image: "", //TODO add image?
+            image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
-        }
+        };
         for (const key in MoodIDs) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({property : MoodIDs[key], value : model[key]})
+                obj.propertyInstances.push({ property: MoodIDs[key], value: model[key] });
             }
         }
         return obj;
@@ -207,15 +226,15 @@ export class Mood extends GameBusObject {
  */
 export enum MoodPropertyKeys {
     arousal = 'MOOD_AROUSAL', // number in range [1,3]
-    valence = 'MOOD_VALENCE'  // number in range [1,3]
+    valence = 'MOOD_VALENCE' // number in range [1,3]
 }
 
-const MoodIDs =  Object.freeze( {
-    arousal : 1186,
-    valence : 1187
-})
+const MoodIDs = Object.freeze({
+    arousal: 1186,
+    valence: 1187
+});
 
-export {MoodIDs}
+export { MoodIDs };
 
 /**
  * Data provider names for known mood data sources

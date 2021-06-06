@@ -11,6 +11,8 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
+const endpoint: string = process.env.ENDPOINT!;
+
 describe('with mocked moods get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
@@ -36,7 +38,7 @@ describe('with mocked moods get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=LOG_MOOD'
+                url: `${endpoint}/players/0/activities?gds=LOG_MOOD`
             })
         );
         expect(moods).toEqual([]);
@@ -55,7 +57,7 @@ describe('with mocked moods get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_MOOD'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_MOOD`
             })
         );
         expect(moods).toEqual([]);
@@ -71,7 +73,7 @@ describe('with mocked moods get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_MOOD'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_MOOD`
             })
         );
         expect(moods).toEqual([]);
@@ -106,9 +108,9 @@ describe('with mocked moods get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                url: `${endpoint}/me/activities?dryrun=false`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: POSTData
             })
@@ -166,9 +168,9 @@ describe('with mocked moods get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+                url: `${endpoint}/me/activities?dryrun=false&bulk=true`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: [POSTData1, POSTData2]
             })
@@ -205,14 +207,14 @@ describe('convert response to models', () => {
             gameDescriptor: {
                 id: 1062,
                 translationKey: 'LOG_MOOD',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/MTU3OTE3NDQxNDY3M1pmOFRpaUpj.png',
+                image: '',
                 type: 'COGNITIVE',
                 isAggregate: false
             },
             dataProvider: {
                 id: 1,
                 name: 'GameBus',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                image: '',
                 isConnected: false
             },
             propertyInstances: [

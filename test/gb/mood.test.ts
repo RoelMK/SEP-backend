@@ -1,8 +1,12 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData
+} from '../../src/gb/models/gamebusModel';
 import { MoodModel } from '../../src/gb/models/moodModel';
-import { MoodPropertyKeys } from '../../src/gb/objects/mood';
+import { Mood, MoodPropertyKeys } from '../../src/gb/objects/mood';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -169,5 +173,83 @@ describe('with mocked moods get call', () => {
                 data: [POSTData1, POSTData2]
             })
         );
+    });
+});
+
+describe('convert response to models', () => {
+    test('convert mood response to model', () => {
+        const response: ActivityGETData = {
+            id: 0,
+            date: 1622652468000,
+            isManual: true,
+            group: null,
+            image: null,
+            creator: {
+                id: 0,
+                user: {
+                    id: 0,
+                    firstName: 'First',
+                    lastName: 'Last',
+                    image: null
+                }
+            },
+            player: {
+                id: 0,
+                user: {
+                    id: 0,
+                    firstName: 'First',
+                    lastName: 'Last',
+                    image: null
+                }
+            },
+            gameDescriptor: {
+                id: 1062,
+                translationKey: 'LOG_MOOD',
+                image: 'https://api3.gamebus.eu/v2/uploads/public/MTU3OTE3NDQxNDY3M1pmOFRpaUpj.png',
+                type: 'COGNITIVE',
+                isAggregate: false
+            },
+            dataProvider: {
+                id: 1,
+                name: 'GameBus',
+                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                isConnected: false
+            },
+            propertyInstances: [
+                {
+                    id: 0,
+                    value: '2',
+                    property: {
+                        id: 1187,
+                        translationKey: 'MOOD_VALENCE',
+                        baseUnit: '[1,3]',
+                        inputType: 'INT',
+                        aggregationStrategy: 'AVERAGE',
+                        propertyPermissions: []
+                    }
+                },
+                {
+                    id: 0,
+                    value: '2',
+                    property: {
+                        id: 1186,
+                        translationKey: 'MOOD_AROUSAL',
+                        baseUnit: '[1,3]',
+                        inputType: 'INT',
+                        aggregationStrategy: 'AVERAGE',
+                        propertyPermissions: []
+                    }
+                }
+            ],
+            personalPoints: [],
+            supports: [],
+            chats: []
+        };
+        const expectedResult: MoodModel = {
+            timestamp: 1622652468000,
+            arousal: 2,
+            valence: 2
+        };
+        expect(Mood.convertResponseToMoodModels([response])).toStrictEqual([expectedResult]);
     });
 });

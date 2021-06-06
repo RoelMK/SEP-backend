@@ -1,6 +1,6 @@
 import { convertMG_DLtoMMOL_L } from '../../services/utils/units';
 import { Query, Headers } from '../gbClient';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
 import { GlucoseModel } from '../models/glucoseModel';
 import { ActivityModel } from '../models/activityModel';
 import { Activity, QueryOrder } from './activity';
@@ -12,6 +12,7 @@ import { GameBusObject } from './base';
 export class Glucose extends GameBusObject {
     // Translation key of GameBus game descriptor for glucose data
     public glucoseTranslationKey = 'BLOOD_GLUCOSE_MSMT';
+    public glucoseGameDescriptorID = 61;
 
     /**
      * Function that returns all glucose activities
@@ -37,6 +38,19 @@ export class Glucose extends GameBusObject {
         this.activity.postActivity(data,headers,query)
     }
 
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
+     async postMultipleGlucoseActivities(models: GlucoseModel[], playerID: number, headers?: Headers, query?:Query) {
+        const data : IDActivityPOSTData[]= [];
+        models.forEach((item) => {
+            data.push(this.toIDPOSTData(item,playerID))
+        })
+        this.activity.postActivities(data,headers,query)
+    }
+
     public toPOSTData(model: GlucoseModel, playerID: number) : ActivityPOSTData{
         const obj = {
             gameDescriptorTK: this.glucoseTranslationKey,
@@ -53,6 +67,27 @@ export class Glucose extends GameBusObject {
         }
         return obj;
     }
+
+    /**
+     * Function that creates a POSTData from a model and playerID with ID's instead of TK's
+     */
+     public toIDPOSTData(model: GlucoseModel, playerID: number) : IDActivityPOSTData{
+        const obj = {
+            gameDescriptor: this.glucoseGameDescriptorID,
+            dataProvider: this.activity.dataProviderID,
+            image: "", //TODO add image?
+            date: model.timestamp,
+            propertyInstances: [] as IDPropertyInstancePOST[],
+            players: [playerID]
+        }
+        for (const key in GlucoseIDs) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({property : GlucoseIDs[key], value : model[key]})
+            }
+        }
+        return obj;
+    }
+
     /**
      * Function that returns all glucose activities between given dates (as unix)
      * @param playerId ID of player
@@ -147,3 +182,9 @@ export enum GlucosePropertyKeys {
     glucoseLevel = 'eAG_MMOLL', // in mmol/L
     glucoseLevelMgdl = 'eAG_MGDL' // in mg/dL (we won't use this one)
 }
+
+let GlucoseIDs =  Object.freeze( {
+    glucoseLevel : 88
+})
+
+export {GlucoseIDs}

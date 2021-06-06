@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, IDActivityPOSTData, IDPropertyInstancePOST, PropertyInstancePOST } from '../models/gamebusModel';
 import { InsulinModel } from '../models/insulinModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
@@ -12,6 +12,7 @@ import { GameBusObject } from './base';
  */
 export class Insulin extends GameBusObject {
     public insulinTranslationKey = "LOG_INSULIN";
+    public insulinGameDescriptorID = 1075;
     private insulinId = 0; // TODO: assign to GameBus-given activity ID
 
     /**
@@ -160,6 +161,20 @@ export class Insulin extends GameBusObject {
         this.activity.postActivity(data,headers,query)
     }
 
+
+    /**
+     * Function that post a single model for a given player
+     * @param model model to be POSTed
+     * @param playerID playerID of player for who this is posted
+     */
+     async postMultipleInsulinActivities(models: InsulinModel[], playerID: number, headers?: Headers, query?:Query) {
+        const data : IDActivityPOSTData[]= [];
+        models.forEach((item) => {
+            data.push(this.toIDPOSTData(item,playerID))
+        })
+        this.activity.postActivities(data,headers,query)
+    }
+
     /**
      * Function that creates a POSTData from a model and playerID
      */
@@ -185,6 +200,26 @@ export class Insulin extends GameBusObject {
         
         return obj;
     }
+
+    /**
+     * Function that creates a POSTData from a model and playerID with ID's instead of TK's
+     */
+     public toIDPOSTData(model: InsulinModel, playerID: number) : IDActivityPOSTData{
+        const obj = {
+            gameDescriptor: this.insulinGameDescriptorID,
+            dataProvider: this.activity.dataProviderID,
+            image: "", //TODO add image?
+            date: model.timestamp,
+            propertyInstances: [] as IDPropertyInstancePOST[],
+            players: [playerID]
+        }
+        for (const key in InsulinIDs) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({property : InsulinIDs[key], value : model[key]})
+            }
+        }
+        return obj;
+    }
 }
 
 /**
@@ -202,4 +237,12 @@ export enum InsulinPropertyKeys {
     insulinAmount = 'INSULIN_DOSE',
     insulinType = 'INSULIN_SPEED'
 }
+
+let InsulinIDs =  Object.freeze( {
+    //INSULIN_TYPE : 1143,
+    insulinAmount : 1144,
+    insulinType : 1185
+})
+
+export {InsulinIDs}
 

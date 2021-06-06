@@ -17,7 +17,7 @@ export class GameBusClient {
     private gamebusFood: Food;
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
-    private gamebusMood: Mood;
+    private gamebusMood: Mood
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {

@@ -35,7 +35,8 @@ const getFileName = (filePath: string, forwardSlash?: boolean): string => {
     if (forwardSlash === undefined) forwardSlash = true;
     const indicator = forwardSlash ? '/' : '\\';
     const index = filePath.lastIndexOf(indicator);
-    // if no indicator can be found there is no folder path, return the whole path name, else return file name without path
+    // if no indicator can be found there is no folder path, return the whole path name
+    // else return file name without path
     return index == -1 ? filePath : filePath.substring(index + 1);
 };
 

@@ -81,7 +81,8 @@ const parseExcelDate = (daysSince1900: number): string => {
 /**
  * Some excel libraries do not offer possibility to convert times to string format
  * and instead return the fraction of a day, for example 0.5 for noon
- * This function converts the fraction to a readable dateformat (HH:mm) // TODO now only usable for fooddiary onedrive imports
+ * This function converts the fraction to a readable dateformat (HH:mm)
+ * TODO now only usable for fooddiary onedrive imports
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {

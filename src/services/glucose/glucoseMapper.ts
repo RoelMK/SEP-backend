@@ -22,12 +22,14 @@ export default class GlucoseMapper {
     ): (entry: any) => GlucoseModel {
         switch (glucoseSource) {
             case GlucoseSource.ABBOTT:
-                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                // returns a mapper function to the parser with a predefined dateFormat
+                // argument and variable entry argument
                 return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapAbbott(entry, dateFormat, glucoseUnit);
                 };
             case GlucoseSource.NIGHTSCOUT:
-                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                // returns a mapper function to the parser with a predefined dateFormat
+                // argument and variable entry argument
                 return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapNightScout(entry, glucoseUnit);
                 };

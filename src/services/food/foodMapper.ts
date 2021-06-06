@@ -21,7 +21,8 @@ export default class FoodMapper {
         switch (foodSource) {
             case FoodSource.ABBOTT:
                 // Abbott depends on date format (US/EU)
-                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                // returns a mapper function to the parser with a predefined dateFormat
+                // argument and variable entry argument
                 return function (entry: any): FoodModel {
                     return FoodMapper.mapAbbott(entry, dateFormat);
                 };

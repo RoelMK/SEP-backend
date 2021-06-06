@@ -100,7 +100,8 @@ export class Glucose extends GameBusObject {
                 }
             }
         });
-        // TODO: this might result in models that have a glucose value of 0, we should check that this does not cause issues
+        // TODO: this might result in models that have a glucose value of 0,
+        // we should check that this does not cause issues
         return glucose;
     }
 

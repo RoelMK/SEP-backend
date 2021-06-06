@@ -67,7 +67,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.PUT,
@@ -96,7 +96,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.POST,
@@ -123,7 +123,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.GET,
@@ -154,7 +154,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         // Current authentication is done via a pre-defined token
         // TODO: improve
         if (authRequired) {
@@ -185,8 +185,8 @@ export class GameBusClient {
             data: body
         });
 
-        // Error handling is already included in Axios, so unless you need to check for a correct status code outside of the
-        // 2xx range, no error handling is required
+        // Error handling is already included in Axios,
+        // so unless you need to check for a correct status code outside of the
 
         // If full response is needed, return it
         if (fullResponse) {

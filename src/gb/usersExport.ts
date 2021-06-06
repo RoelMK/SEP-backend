@@ -9,7 +9,8 @@ const kevinU: string = process.env.kevin_userID ?? '0';
 const kevin2P: string = process.env.kevin2_playerID ?? '0';
 const kevin2U: string = process.env.kevin2_userID ?? '0';
 
-const oneDriveToken: string = process.env.kevin_onedrivetoken ?? ''; //Needs to be refreshed often during testing: so login again and put the new token in .env
+//Needs to be refreshed often during testing: so login again and put the new token in .env
+const oneDriveToken: string = process.env.kevin_onedrivetoken ?? '';
 
 const userKevin: ConnectionData = {
     authToken: process.env.kevin_authtoken ?? '',

@@ -113,7 +113,8 @@ export class Exercise extends GameBusObject {
             timestamp: response.date,
             // Name is simply the translation key but correctly capitalized and removed underscores
             name: startCase(toLower(activities[0].translationKey)),
-            // Since the response is a single activity, the translation key (of the game descriptor) will be the same for all properties
+            // Since the response is a single activity,
+            // the translation key (of the game descriptor) will be the same for all properties
             type: activities[0].translationKey
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
@@ -195,8 +196,8 @@ export enum ExerciseGameDescriptorNames {
     GYMNASTICS = 'GYMNASTICS', // Duration, kcal, reason?
     HIKE = 'HIKE', // Nothing
     MOUNTAINBIKE = 'MOUNTAINBIKE', // Nothing,
-    WALK_DETAIL = 'WALK(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
-    RUN_DETAIL = 'RUN(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
+    WALK_DETAIL = 'WALK(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal,
+    RUN_DETAIL = 'RUN(DETAIL)', // heart rate (max, avg, min), accelerometer, ppg (both of these)
     BIKE_DETAIL = 'BIKE(DETAIL)' // Nothing
 }
 

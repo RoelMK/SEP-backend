@@ -1,10 +1,35 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const moodRouter = require('express').Router();
+import { Router, Request, Response } from 'express';
+import { MoodModel } from '../gb/models/moodModel';
+import { validUnixTimestamp } from '../services/utils/dates';
 
-moodRouter.post('/mood', (req: any, res: any) => {
+const moodRouter = Router()
+
+moodRouter.post('/mood', (req: Request, res: Response) => {
     // Call someone to aggregate and send data to gamebus
     console.log(req.body);
-    res.send(req.body);
+
+    const moodTime = req.body.timestamp as number;
+    const valence = req.body.valence as number;
+    const arousal = req.body.arousal as number
+
+    // Check if given timestamps are valid
+    if (!validUnixTimestamp(moodTime) 
+    || (valence < 0 || valence > 3) 
+    || (arousal < 0 || valence > 3)) {
+        // Bad request
+        res.sendStatus(400);
+        return;
+    }
+
+    const moodModel: MoodModel = {
+        timestamp: moodTime,
+        valence: valence,
+        arousal: arousal
+    }
+
+    //TODO: Add gamebus posting when ready
+
+    res.send(moodModel);
 });
 
 module.exports = moodRouter;

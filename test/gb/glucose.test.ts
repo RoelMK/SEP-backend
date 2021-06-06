@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import {

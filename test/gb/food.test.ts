@@ -1,7 +1,7 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
-import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
 import { FoodPropertyKeys } from '../../src/gb/objects/food';
 import { mockRequest } from '../testUtils/requestUtils';
 
@@ -472,5 +472,139 @@ describe('with mocked food get call', () => {
                 data: POSTData
             })
         );
+    });
+
+    test('POST a multiple activities', async () => {
+      const model1 : FoodModel = {
+        timestamp: 1,
+        carbohydrates: 2,
+        calories: 3,
+        meal_type: MEAL_TYPE.BREAKFAST, // indicates breakfast, lunch, snack etc.
+        glycemic_index: 4,
+        fat: 5,
+        saturatedFat: 6,
+        proteins: 7,
+        fibers: 8,
+        salt: 9,
+        water: 10,
+        sugars: 11,
+        description: "desc1"
+      }
+      const model2 : FoodModel = {
+        timestamp: 11,
+        carbohydrates: 12,
+        calories: 13,
+        meal_type: MEAL_TYPE.LUNCH, // indicates breakfast, lunch, snack etc.
+        glycemic_index: 14,
+        fat: 15,
+        saturatedFat: 16,
+        proteins: 17,
+        fibers: 18,
+        salt: 19,
+        water: 110,
+        sugars: 111,
+        description: "desc2"
+      }
+      const POSTData1 : IDActivityPOSTData= {
+          gameDescriptor: client.food().foodGameDescriptorID,
+          dataProvider: client.activity().dataProviderID,
+          date: 1,
+          image: "",
+          propertyInstances: expect.arrayContaining([{
+              property: 12,
+              value : "desc1"
+          },{
+              property: 77,
+              value: 3
+          },{
+              property: 79,
+              value: 8
+          },{
+              property: 1176,
+              value: 2
+          },{
+              property: 1177,
+              value: "Breakfast"
+          },{
+              property: 1178,
+              value: 4
+          },{
+              property: 1179,
+              value: 5
+          },{
+              property: 1180,
+              value: 6
+          },{
+              property: 1181,
+              value: 7
+          },{
+              property: 1182,
+              value: 9
+          },{
+              property: 1183,
+              value: 10
+          },{
+              property: 1184,
+              value: 11
+          }]),
+          players : [0]
+      }
+      const POSTData2 : IDActivityPOSTData= {
+        gameDescriptor: client.food().foodGameDescriptorID,
+        dataProvider: client.activity().dataProviderID,
+        date: 11,
+        image: "",
+        propertyInstances: expect.arrayContaining([{
+            property: 12,
+            value : "desc2"
+        },{
+            property: 77,
+            value: 13
+        },{
+            property: 79,
+            value: 18
+        },{
+            property: 1176,
+            value: 12
+        },{
+            property: 1177,
+            value: "Lunch"
+        },{
+            property: 1178,
+            value: 14
+        },{
+            property: 1179,
+            value: 15
+        },{
+            property: 1180,
+            value: 16
+        },{
+            property: 1181,
+            value: 17
+        },{
+            property: 1182,
+            value: 19
+        },{
+            property: 1183,
+            value: 110
+        },{
+            property: 1184,
+            value: 111
+        }]),
+        players : [0]
+      }
+      
+      client.food().postMultipleFoodActivities([model1,model2],0,undefined,undefined);
+
+      expect(request).toHaveBeenCalledTimes(1);
+      expect(request).toHaveBeenCalledWith(
+          expect.objectContaining({
+              url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+              headers: expect.objectContaining({
+                  Authorization: 'Bearer testToken'
+              }),
+              data: [POSTData1,POSTData2]
+          })
+      );
     });
 });

@@ -1,6 +1,6 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ActivityPOSTData } from '../../src/gb/models/gamebusModel';
+import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { InsulinPropertyKeys } from '../../src/gb/objects/insulin';
 import { ActivityGETData } from '../../src/gb/models/gamebusModel';
@@ -115,6 +115,60 @@ describe('with mocked insuline get call', () => {
                     Authorization: 'Bearer testToken'
                 }),
                 data: POSTData
+            })
+        );
+    });
+
+    test('POST a multiple activities', async () => {
+        const model1 : InsulinModel = {
+            timestamp: 1,
+            insulinAmount: 2,
+            insulinType: InsulinType.LONG
+        }
+        const model2 : InsulinModel = {
+            timestamp: 11,
+            insulinAmount: 12,
+            insulinType: InsulinType.RAPID
+        }
+        const POSTData1 : IDActivityPOSTData= {
+            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            dataProvider: client.activity().dataProviderID,
+            date: 1,
+            image: "",
+            propertyInstances: expect.arrayContaining([{
+                property: 1144,
+                value : 2
+            },{
+                property: 1185,
+                value : "long"
+            }]),
+            players : [0]
+        }
+        const POSTData2 : IDActivityPOSTData= {
+            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            dataProvider: client.activity().dataProviderID,
+            date: 11,
+            image: "",
+            propertyInstances: expect.arrayContaining([{
+                property: 1144,
+                value : 12
+            },{
+                property: 1185,
+                value : "rapid"
+            }]),
+            players : [0]
+        }
+        
+        client.insulin().postMultipleInsulinActivities([model1,model2],0,undefined,undefined);
+  
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+                headers: expect.objectContaining({
+                    Authorization: 'Bearer testToken'
+                }),
+                data: [POSTData1,POSTData2]
             })
         );
     });

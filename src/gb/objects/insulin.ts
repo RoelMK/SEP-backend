@@ -215,7 +215,11 @@ export class Insulin extends GameBusObject {
         }
         for (const key in InsulinIDs) {
             if (model[key] !== undefined) {
-                obj.propertyInstances.push({property : InsulinIDs[key], value : model[key]})
+                if(key === 'insulinType') {
+                    obj.propertyInstances.push({property : InsulinIDs[key], value : model[key] ? "long" : "rapid"})
+                } else {
+                    obj.propertyInstances.push({property : InsulinIDs[key], value : model[key]})
+                }
             }
         }
         return obj;

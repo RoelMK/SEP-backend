@@ -12,7 +12,7 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
-describe('with mocked insuline get call', () => {
+describe('with mocked insulin get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
         return Promise.resolve({

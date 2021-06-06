@@ -61,4 +61,7 @@ export enum FoodSource {
 /**
  * All possible input types for food data,
  */
-export type FoodInput = XOR<Consumptie[], XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>>;
+export type FoodInput = XOR<
+    Consumptie[],
+    XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>
+>;

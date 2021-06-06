@@ -111,11 +111,11 @@ export default class FoodMapper {
         const meal = {
             timestamp: new Date(entry.created_at).getTime(),
             carbohydrates: entry.carbs,
-            description: entry.notes ? entry.notes: '',
-            ...(entry.fat && { fat: entry.fat}),
-            ...(entry.protein && {proteins: entry.protein})
+            description: entry.notes ? entry.notes : '',
+            ...(entry.fat && { fat: entry.fat }),
+            ...(entry.protein && { proteins: entry.protein })
         } as FoodModel;
-        
+
         return meal;
     }
 

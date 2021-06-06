@@ -15,7 +15,7 @@ export default class GlucoseMapper {
      * @param glucoseUnit GlucoseUnit in which the glucose level is measured
      * @returns Mapping function that maps an entry from the source to a glucoseModel
      */
-    public static mapGlucose   (
+    public static mapGlucose(
         glucoseSource: GlucoseSource,
         dateFormat: DateFormat,
         glucoseUnit: GlucoseUnit
@@ -91,21 +91,16 @@ export default class GlucoseMapper {
         return emptyGlucoseModel();
     }
 
-    private static mapNightScout(entry: any, glucoseUnit: GlucoseUnit){
+    private static mapNightScout(entry: any, glucoseUnit: GlucoseUnit) {
         // Convert to mmol/L
         const glucose_level_mmol =
-        glucoseUnit == GlucoseUnit.MMOL_L
-            ? entry.sgv
-            : convertMG_DLtoMMOL_L(entry.sgv);
+            glucoseUnit == GlucoseUnit.MMOL_L ? entry.sgv : convertMG_DLtoMMOL_L(entry.sgv);
         return {
             timestamp: entry.date,
             glucoseLevel: glucose_level_mmol
-        } as GlucoseModel;         
+        } as GlucoseModel;
     }
 }
-
-
-
 
 /**
  * Function that can return an empty GlucoseModel entry that might be needed for easy returns

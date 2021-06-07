@@ -351,6 +351,7 @@ export class Activity {
                 inputType: value.property.inputType
             };
             const activityModel: ActivityModel = {
+                activityId: activity.id,
                 timestamp: activity.date,
                 id: value.id,
                 translationKey: activity.gameDescriptor.translationKey,

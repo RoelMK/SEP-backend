@@ -4,15 +4,16 @@
  * TODO: might need to be expanded
  */
 export interface ActivityModel {
+    activityId: number; // ID of GameBus activity
     timestamp: number;
-    id: number;
+    id: number; // ID of property instance
     translationKey: string;
     value: number | string;
     property: ActivityProperty;
 }
 
 export interface ActivityProperty {
-    id: number;
+    id: number; // ID of property
     translationKey: string;
     baseUnit: string;
     inputType: string;

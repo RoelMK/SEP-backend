@@ -261,7 +261,8 @@ describe('convert response to models', () => {
         const expectedResult: InsulinModel = {
             timestamp: 1622736981000,
             insulinAmount: 3,
-            insulinType: 0
+            insulinType: 0,
+            activityId: 0
         };
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });
@@ -349,7 +350,8 @@ describe('convert response to models', () => {
         const expectedResult: InsulinModel = {
             timestamp: 1622736981000,
             insulinAmount: 3,
-            insulinType: 1
+            insulinType: 1,
+            activityId: 0
         };
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });

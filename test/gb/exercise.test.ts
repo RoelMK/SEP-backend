@@ -204,7 +204,8 @@ describe('convert response to models', () => {
             timestamp: 1622652468000,
             name: 'Walk',
             type: 'WALK',
-            steps: 20
+            steps: 20,
+            activityId: 0
         };
         expect(Exercise.convertResponseToExerciseModels([response])).toStrictEqual([
             expectedResult

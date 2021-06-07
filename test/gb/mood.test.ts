@@ -250,7 +250,8 @@ describe('convert response to models', () => {
         const expectedResult: MoodModel = {
             timestamp: 1622652468000,
             arousal: 2,
-            valence: 2
+            valence: 2,
+            activityId: 0
         };
         expect(Mood.convertResponseToMoodModels([response])).toStrictEqual([expectedResult]);
     });

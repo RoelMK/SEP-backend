@@ -197,7 +197,8 @@ export class Exercise extends GameBusObject {
             name: startCase(toLower(activities[0].translationKey)),
             // Since the response is a single activity,
             // the translation key (of the game descriptor) will be the same for all properties
-            type: activities[0].translationKey
+            type: activities[0].translationKey,
+            activityId: response.id
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
         activities.forEach((activity: ActivityModel) => {

@@ -64,7 +64,8 @@ export class Mood extends GameBusObject {
         const mood: MoodModel = {
             timestamp: response.date,
             arousal: 0,
-            valence: 0
+            valence: 0,
+            activityId: response.id
         };
 
         // Now we have to map the translationKey to the right key in the MoodModels

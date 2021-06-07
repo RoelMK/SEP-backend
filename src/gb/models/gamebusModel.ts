@@ -63,7 +63,8 @@ export interface GameDescriptorReference {
     translationKey: string;
     image: string | null;
     type: string; //not sure if this is always there
-    isAggregate: boolean; //not sure if this is alway there
+    miniGames?:any[];
+    isAggregate: boolean | null; //not sure if this is alway there
 }
 
 export interface DataProviderReference {
@@ -118,9 +119,21 @@ export interface ChallengeReference {
     renewAutomatically: any;
     renewed: any;
     withNudging: any;
-    creator: UserReference;
+    creator: CreatorReference;
     challengeRules: ChallengeRules[];
+    participations:any;
+    showChallengeRights: ChallengeRightsReference[];
+    rewards: any;
+    rewardConfig: any[];
+    lottery:any;
+}
 
+export interface CreatorReference{
+    id: number;
+    firstName: string;
+    lastName: string;
+    image: any;
+    player: PlayerReference;
 }
 
 export interface ChallengeRules {
@@ -136,23 +149,28 @@ export interface ChallengeRules {
     minDaysBetweenFire: any;
     numberOfFiresInTimeWindow: any;
     conditions: ConditionsReference[];
-    participations:any;
-    showChallengeRights: ChallengeRightsReference[];
-    rewards: any;
-    rewardConfig: any[];
-    lottery:any;
+    pointMappings: any[];
+    restrictedGameDescriptors: GameDescriptorReference[];
+    defaultGameDescriptor: GameDescriptorReference;
+
 }
 
 export interface ConditionsReference{
     id: number;
     rhsValue: any;
     property: PropertyInstanceProperty;
+    operator: OperatorReference;
+}
+
+export interface OperatorReference{
+    id: number;
+    operator: string;
 }
 
 export interface PropertyPermissionsReference{
     id: number;
     index: any;
-    lastUpdate: number;
+    lastUpdate: any;
     decisionNote: any;
     state: any;
     gameDescriptor: GameDescriptorReference;

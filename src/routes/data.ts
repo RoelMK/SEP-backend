@@ -2,9 +2,8 @@ import { addDays } from "date-fns";
 import { Router } from "express";
 import { TokenHandler } from "../gb/auth/tokenHandler";
 import { GameBusClient } from "../gb/gbClient";
-import { ExerciseGameDescriptorNames } from "../gb/objects/exercise";
 import { checkJwt } from "../middlewares/checkJwt";
-import { DataEndpoint, EndpointParameters, rawToGds } from "../services/dataEndpoint";
+import { DataEndpoint, EndpointParameters, parseExerciseTypes } from "../services/dataEndpoint";
 import { DateFormat, DateSlice, parseDate } from "../services/utils/dates";
 const dataRouter = Router();
 
@@ -55,12 +54,12 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => { // checkJwt mi
     const dataTypes = req.query.dataTypes.split(',') as string[];
     const parameters: EndpointParameters = {};
     if (req.query.exerciseTypes) {
-        parameters.exerciseTypes = rawToGds(req.query.exerciseTypes);
+        parameters.exerciseTypes = parseExerciseTypes(req.query.exerciseTypes);
     }
 
     // Retrieve data
-    const dataEndpoint = new DataEndpoint(gbClient, Number(req.user.playerId), dataTypes, dateSlice, parameters);  // TODO: pass params
-    const data = await dataEndpoint.retrieveData();
+    const dataEndpoint = new DataEndpoint(gbClient, Number(req.user.playerId), dataTypes, parameters); 
+    const data = await dataEndpoint.retrieveData(dateSlice);
 
     // Return the data
     res.status(200).json(data);

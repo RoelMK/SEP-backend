@@ -17,24 +17,23 @@ export class DataEndpoint {
         private readonly gbClient: GameBusClient, 
         private readonly playerId: number,
         dataTypes: string[], 
-        private readonly dateSlice: DateSlice,
         private readonly parameters: EndpointParameters) {
             this.dataTypes = parseDataTypes(dataTypes);
     }
 
-    async retrieveData(): Promise<EndpointData> {
+    async retrieveData(dateSlice: DateSlice): Promise<EndpointData> {
         const data: EndpointData = {};
         for (let i = 0; i < this.dataTypes.length; i++) {
             if (this.dataTypes[i] === DataType.EXERCISE) {
-                data.exercise = await this.retrieveExerciseData(this.dateSlice);
+                data.exercise = await this.retrieveExerciseData(dateSlice);
             } else if (this.dataTypes[i] === DataType.GLUCOSE) {
-                data.glucose = await this.retrieveGlucoseData(this.dateSlice);
+                data.glucose = await this.retrieveGlucoseData(dateSlice);
             } else if (this.dataTypes[i] === DataType.INSULIN) {
-                data.insulin = await this.retrieveInsulinData(this.dateSlice);
+                data.insulin = await this.retrieveInsulinData(dateSlice);
             } else if (this.dataTypes[i] === DataType.MOOD) {
-                data.mood = await this.retrieveMoodData(this.dateSlice);
+                data.mood = await this.retrieveMoodData(dateSlice);
             } else if (this.dataTypes[i] === DataType.FOOD) {
-                data.food = await this.retrieveFoodData(this.dateSlice);
+                data.food = await this.retrieveFoodData(dateSlice);
             }
         }
         return data;
@@ -99,7 +98,7 @@ function parseDataTypes(dataTypes: string[]): DataType[] {
     return types;
 }
 
-export function rawToGds(gds: string): ExerciseGameDescriptorNames[] {
+export function parseExerciseTypes(gds: string): ExerciseGameDescriptorNames[] {
     // First split the list intro strings
     const sep = gds.split(',');
     const result: ExerciseGameDescriptorNames[] = [];

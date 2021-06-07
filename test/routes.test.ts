@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { InsulinModel } from '../src/gb/models/insulinModel';
 import { MoodModel } from '../src/gb/models/moodModel';
 import { server } from '../src/server';
 
@@ -64,6 +65,20 @@ describe('mood endpoint', () => {
         };
         // TODO: route not working
         const response = await request(server).post('/mood').send(moodData);
+        expect(response.statusCode).toBe(404);
+    });
+});
+
+describe('insulin endpoint', () => {
+    test('PUT insulin data', async () => {
+        const insulin: InsulinModel = {
+            timestamp: 0,
+            insulinAmount: 1,
+            insulinType: 0,
+            activityId: 1
+        };
+        // TODO: no idea how to test without authentication
+        const response = await request(server).post('/insulin').send(insulin);
         expect(response.statusCode).toBe(404);
     });
 });

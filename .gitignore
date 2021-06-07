@@ -56,3 +56,4 @@ sql/
 auth.test.db-journal
 auth.test.db
 db.test.db
+.vscode/

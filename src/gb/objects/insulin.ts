@@ -203,7 +203,7 @@ export class Insulin extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
-        if (!model.activityId) {
+        if (model.activityId === undefined) {
             throw new Error('Activity ID must be present in order to replace activity');
         }
         const data = this.toIDPOSTData(model, playerId);

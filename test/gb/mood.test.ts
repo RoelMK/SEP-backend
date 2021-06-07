@@ -78,6 +78,22 @@ describe('with mocked moods get call', () => {
         );
         expect(moods).toEqual([]);
     });
+});
+
+describe('with mocked mood post call', () => {
+    // Request handler that simply returns empty data for every request
+    const request = mockRequest(() => {
+        return Promise.resolve({
+            data: []
+        });
+    });
+
+    // Before each request, clear the count so we start at 0 again
+    beforeEach(() => request.mockClear());
+
+    // GameBusClient using mockToken
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('POST a single activity', async () => {
         const model: MoodModel = {
@@ -175,6 +191,56 @@ describe('with mocked moods get call', () => {
                 data: [POSTData1, POSTData2]
             })
         );
+    });
+});
+
+describe('with mocked mood put call', () => {
+    // Request handler that simply returns empty data for every request
+    const request = mockRequest(() => {
+        return Promise.resolve({
+            data: []
+        });
+    });
+
+    // Before each request, clear the count so we start at 0 again
+    beforeEach(() => request.mockClear());
+
+    // GameBusClient using mockToken
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
+
+    test('PUT a single mood model', async () => {
+        const mood: MoodModel = {
+            timestamp: 1,
+            valence: 2,
+            arousal: 2,
+            activityId: 1
+        };
+
+        const response = await client.mood().putSingleMoodActivity(mood, 0);
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/activities/1?dryrun=false`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(response).toEqual([]);
+    });
+
+    test('PUT a single mood model withoud ID', async () => {
+        const mood: MoodModel = {
+            timestamp: 1,
+            valence: 2,
+            arousal: 2
+        };
+
+        expect(async () => {
+            await client.mood().putSingleMoodActivity(mood, 0);
+        }).rejects.toThrow('Activity ID must be present in order to replace activity');
     });
 });
 

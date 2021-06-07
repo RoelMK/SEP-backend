@@ -190,16 +190,16 @@ export class Activity {
         };
         if (limit) {
             dateQuery = {
+                ...dateQuery,
                 // Use the given limit only if specified
-                limit: limit.toString(),
-                ...dateQuery
+                limit: limit.toString()
             };
         }
         if (page) {
             dateQuery = {
+                ...dateQuery,
                 // Use page number only if specified
-                page: page.toString(),
-                ...dateQuery
+                page: page.toString()
             };
         }
         const activities: ActivityGETData[] = await this.getAllActivities(

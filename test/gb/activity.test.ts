@@ -1,5 +1,6 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
+import { QueryOrder } from '../../src/gb/objects/activity';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -20,6 +21,23 @@ describe('with mocked activities get call', () => {
     // GameBusClient using mockToken
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
+
+    test('GET activity by ID', async () => {
+        // Get single activity from ID
+        const activity = await client.activity().getActivityById(0);
+
+        // Check that URL matches and token is used
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/activities/0`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(activity).toEqual([]);
+    });
 
     test('GET activities on date', async () => {
         // Get activities from a date (as Date object)
@@ -48,6 +66,30 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(activities).toEqual([]);
+    });
+
+    test('GET activities between dates with pagination', async () => {
+        const activities = await client
+            .activity()
+            .getAllAcitivitiesBetweenDate(
+                0,
+                new Date('2021-04-19'),
+                new Date('2021-04-21'),
+                QueryOrder.DESC,
+                10,
+                1
+            );
+
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&limit=10&page=1`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })

@@ -106,23 +106,7 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
-async function testGb() {
-    const client = new GameBusClient(
-        new TokenHandler('c90998f8-c883-4e7c-ac1c-c0d473d27ba1', '', '526'),
-        true
-    );
-    const mood: MoodModel = {
-        timestamp: 1623058442000,
-        arousal: 1,
-        valence: 1,
-        activityId: 27160
-    };
-
-    const response = await client.mood().putSingleMoodActivity(mood, 526);
-}
-
 export const testToken = '';
 //testAbbott();
-testGb();
 //testOneDrive();
 //testNightScout();

@@ -10,6 +10,25 @@ import GlucoseParser, { GlucoseSource } from '../../src/services/glucose/glucose
 import InsulinParser, { InsulinSource } from '../../src/services/insulin/insulinParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseEetmeter, parseFoodDiary } from '../testUtils/parseUtils';
+import fs from 'fs';
+
+// database init
+beforeAll(() => {
+    // Proper cleaning is required after each task
+    process.env.DATABASE = 'db.test.db';
+    const dbClient = new DBClient();
+    dbClient.reset();
+    dbClient.close();
+});
+
+// database destroy
+afterAll(() => {
+    try {
+        fs.unlinkSync(process.env.DATABASE!); // Remove db file
+    } catch (error) {
+        return;
+    }
+});
 
 // Before each test, clear the file parse events so old entries are not used
 beforeEach(() => new DBClient().cleanFileParseEvents());

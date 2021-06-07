@@ -18,6 +18,20 @@ export interface PropertyInstancePOST {
     value: any;
 }
 
+export interface IDActivityPOSTData {
+    gameDescriptor: number;
+    dataProvider: number;
+    image: string;
+    date: number;
+    propertyInstances: IDPropertyInstancePOST[];
+    players: number[];
+}
+
+export interface IDPropertyInstancePOST {
+    property: number;
+    value: any;
+}
+
 export interface ActivityGETData {
     id: number;
     date: number;
@@ -61,7 +75,7 @@ export interface DataProviderReference {
 
 export interface PropertyInstanceReference {
     id: number;
-    value: number; //TODO, check this!!
+    value: string; // still not sure about this one
     property: PropertyInstanceProperty;
 }
 
@@ -71,7 +85,7 @@ export interface PropertyInstanceProperty {
     baseUnit: string;
     inputType: string;
     aggregationStrategy: string;
-    properyPermissions: any[]; // Probably not needed
+    propertyPermissions: any[]; // Probably not needed
 }
 
 export interface SupportReference {

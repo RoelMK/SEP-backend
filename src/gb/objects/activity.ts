@@ -1,7 +1,12 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { format, addDays } from 'date-fns';
 import { ActivityProperty, ActivityModel } from '../models/activityModel';
-import { ActivityGETData, PropertyInstanceReference } from '../models/gamebusModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    IDActivityPOSTData,
+    PropertyInstanceReference
+} from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 
 /**
@@ -11,6 +16,40 @@ import { fromUnixMsTime } from '../../services/utils/dates';
  */
 export class Activity {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
+    public dataProviderName = 'Daily_run';
+    public dataProviderID = 18;
+
+    /**
+     * Posts an activity using the given data
+     */
+    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<void> {
+        this.gamebus.post(
+            'me/activities',
+            data,
+            headers,
+            { dryrun: 'false', ...query },
+            true,
+            true
+        );
+    }
+
+    /**
+     * Posts all activities using the given data in a single POST
+     */
+    async postActivities(
+        data: IDActivityPOSTData[],
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        this.gamebus.post(
+            'me/activities',
+            data,
+            headers,
+            { dryrun: 'false', bulk: 'true', ...query },
+            true,
+            true
+        );
+    }
 
     /**
      * Gets activity from activity ID
@@ -293,11 +332,6 @@ export class Activity {
         });
     }
 
-    // TODO: recursive query to get all activities since there's only 30 per page
-
-    // TODO: query for specific timestamp on a given date to start filtering time periods
-    // TODO: perhaps transform the ActivityGETData[] from the current requests into ActivityModel[] (see below)
-
     /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels
      * @param activity Response from GET activity request
@@ -319,7 +353,11 @@ export class Activity {
             const activityModel: ActivityModel = {
                 timestamp: activity.date,
                 id: value.id,
-                value: value.value,
+                translationKey: activity.gameDescriptor.translationKey,
+                // Make sure value is always a number
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                value: isNaN(value.value * 1) ? value.value : value.value * 1,
                 property: valueProperty
             };
             // Add model to array

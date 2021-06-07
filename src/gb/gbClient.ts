@@ -5,6 +5,7 @@ import { Exercise } from './objects/exercise';
 import { Food } from './objects/food';
 import { Glucose } from './objects/glucose';
 import { Insulin } from './objects/insulin';
+import { Mood } from './objects/mood';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
@@ -16,6 +17,7 @@ export class GameBusClient {
     private gamebusFood: Food;
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
+    private gamebusMood: Mood
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
@@ -27,6 +29,7 @@ export class GameBusClient {
         this.gamebusFood = new Food(this.gamebusActivity, true);
         this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
+        this.gamebusMood = new Mood(this.gamebusActivity,true);
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -48,6 +51,10 @@ export class GameBusClient {
 
     insulin(): Insulin {
         return this.gamebusInsulin;
+    }
+
+    mood(): Mood {
+        return this.gamebusMood;
     }
 
     /**

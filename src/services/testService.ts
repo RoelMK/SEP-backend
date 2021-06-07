@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
+import { ChallengeReference } from '../gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
 import { NightScoutClient } from '../nightscout/nsClient';
@@ -106,7 +107,50 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
+async function testGb() {
+    const client = new GameBusClient(new TokenHandler('TOKEN_HERE', '', '526'));
+    const challenge: any = {
+        name: 'challenge name 4',
+        description: null,
+        image: null,
+        websiteURL: 'https://www.google.com/',
+        minCircleSize: 1,
+        maxCircleSize: 1,
+        availableDate: '2021-06-06T00:00:00.000+02:00',
+        startDate: '2021-06-07T13:00:00.000+02:00',
+        endDate: '2021-07-05T23:59:59.999+02:00',
+        rewardDescription: null,
+        rewardInfo: null,
+        target: 0,
+        contenders: 1,
+        withNudging: false,
+        rules: [
+            {
+                id: null,
+                name: 'rule 1',
+                image: null,
+                imageRequired: false,
+                gameDescriptors: [1, 2, 3, 4, 5],
+                maxTimesFired: 1,
+                minDaysBetweenFire: 0,
+                conditions: [
+                    {
+                        property: 1,
+                        operator: 'STRICTLY_GREATER',
+                        value: '1'
+                    }
+                ],
+                points: []
+            }
+        ],
+        circles: [100784]
+    };
+    const response = await client.challenge().postChallenge(challenge);
+    console.log(response);
+}
+
 export const testToken = '';
 //testAbbott();
 //testOneDrive();
 //testNightScout();
+testGb();

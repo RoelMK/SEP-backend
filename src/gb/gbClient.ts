@@ -8,6 +8,7 @@ import { Insulin } from './objects/insulin';
 import { Mood } from './objects/mood';
 import FormData from 'form-data';
 import { Circle } from './objects/circle';
+import { Challenge } from './objects/challenge';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
@@ -21,6 +22,7 @@ export class GameBusClient {
     private gamebusInsulin: Insulin;
     private gamebusMood: Mood;
     private gamebusCircle: Circle;
+    private gamebusChallenge: Challenge;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
@@ -34,6 +36,7 @@ export class GameBusClient {
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
         this.gamebusMood = new Mood(this.gamebusActivity, true);
         this.gamebusCircle = new Circle(this, true);
+        this.gamebusChallenge = new Challenge(this, true);
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -63,6 +66,10 @@ export class GameBusClient {
 
     circle(): Circle {
         return this.gamebusCircle;
+    }
+
+    challenge(): Challenge {
+        return this.gamebusChallenge;
     }
 
     /**

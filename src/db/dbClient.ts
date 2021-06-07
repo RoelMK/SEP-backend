@@ -192,7 +192,7 @@ export class DBClient {
      * Throws out all entries in the file_parse_events table
      * Mainly used for testing purposes
      */
-    emptyFileParseEvents() {
+    cleanFileParseEvents() {
         try {
             const deleteAll = this.db.prepare('Delete from file_parse_events');
             deleteAll.run();

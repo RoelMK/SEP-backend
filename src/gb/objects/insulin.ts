@@ -115,7 +115,8 @@ export class Insulin extends GameBusObject {
         const insulin: InsulinModel = {
             timestamp: response.date,
             insulinAmount: 0,
-            insulinType: 0
+            insulinType: 0,
+            activityId: response.id
         };
         // Now we have to map the translationKey to the right key in the InsulinModel
         activities.forEach((activity: ActivityModel) => {
@@ -166,9 +167,10 @@ export class Insulin extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data = this.toPOSTData(model, playerID);
-        this.activity.postActivity(data, headers, query);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
     }
 
     /**
@@ -181,12 +183,32 @@ export class Insulin extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        this.activity.postActivities(data, headers, query);
+        const response = await this.activity.postActivities(data, headers, query);
+        return response;
+    }
+
+    /**
+     * Function that replaces the insulin model with a new model
+     * @param model New model (with ID of old model), must have activityId
+     * @param playerId ID of player
+     */
+    async putSingleInsulinActivity(
+        model: InsulinModel,
+        playerId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        if (model.activityId === undefined) {
+            throw new Error('Activity ID must be present in order to replace activity');
+        }
+        const data = this.toIDPOSTData(model, playerId);
+        const response = await this.activity.putActivity(data, model.activityId, headers, query);
+        return response;
     }
 
     /**

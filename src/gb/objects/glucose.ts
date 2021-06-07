@@ -49,9 +49,10 @@ export class Glucose extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data = this.toPOSTData(model, playerID);
-        this.activity.postActivity(data, headers, query);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
     }
 
     /**
@@ -64,12 +65,13 @@ export class Glucose extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        this.activity.postActivities(data, headers, query);
+        const response = await this.activity.postActivities(data, headers, query);
+        return response;
     }
 
     /**
@@ -161,7 +163,8 @@ export class Glucose extends GameBusObject {
         // We already know the date, glucose level will be 0 for now
         const glucose: GlucoseModel = {
             timestamp: response.date,
-            glucoseLevel: 0
+            glucoseLevel: 0,
+            activityId: response.id
         };
         // The GameBus game descriptor has 2 fields that are relevant, eAG_MMOLL and eAG_MGDL
         // We can use the eAG_MMOLL directly but can also convert the eAG_MGDL field to MMOL/L

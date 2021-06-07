@@ -31,9 +31,10 @@ export class Food extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data = this.toPOSTData(model, playerID);
-        this.activity.postActivity(data, headers, query);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
     }
 
     /**
@@ -46,12 +47,13 @@ export class Food extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        this.activity.postActivities(data, headers, query);
+        const response = await this.activity.postActivities(data, headers, query);
+        return response;
     }
 
     /**
@@ -193,7 +195,8 @@ export class Food extends GameBusObject {
         // We already know the date, carbs level will be 0 for now
         const model: FoodModel = {
             timestamp: activities[0].timestamp,
-            carbohydrates: 0
+            carbohydrates: 0,
+            activityId: response.id
         };
         //console.log(response)
         //console.log(activities)

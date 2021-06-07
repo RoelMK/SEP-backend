@@ -6,11 +6,12 @@ import { Food } from './objects/food';
 import { Glucose } from './objects/glucose';
 import { Insulin } from './objects/insulin';
 import { Mood } from './objects/mood';
+import FormData from 'form-data';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
-    private readonly client: AxiosInstance;
+    readonly client: AxiosInstance;
 
     private gamebusActivity: Activity;
     private gamebusExercise: Exercise;
@@ -69,7 +70,7 @@ export class GameBusClient {
      */
     async put(
         path: string,
-        body?: any,
+        body?: FormData,
         headers?: Headers,
         query?: Query,
         authRequired?: boolean,
@@ -156,14 +157,13 @@ export class GameBusClient {
     async request(
         path: string,
         method: RequestMethod,
-        body?: any,
+        body?: FormData | unknown,
         headers?: Headers,
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
         // Current authentication is done via a pre-defined token
-        // TODO: improve
         if (authRequired) {
             if (!this.tokenHandler) {
                 throw new Error(`You must be authorized to access this path: ${endpoint + path}`);
@@ -213,7 +213,7 @@ export class GameBusClient {
     createHeader(authRequired?: boolean, extraHeaders?: Headers): Headers {
         // Set Content-Type and User-Agent by default
         const headers: Headers = {
-            'Content-Type': 'application/json',
+            'content-type': 'application/json',
             'User-Agent': 'Diabetter Client',
             Accept: 'application/json',
             ...extraHeaders

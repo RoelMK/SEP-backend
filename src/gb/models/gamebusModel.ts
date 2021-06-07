@@ -21,7 +21,7 @@ export interface PropertyInstancePOST {
 export interface IDActivityPOSTData {
     gameDescriptor: number;
     dataProvider: number;
-    image: string;
+    image?: string;
     date: number;
     propertyInstances: IDPropertyInstancePOST[];
     players: number[];

@@ -170,13 +170,15 @@ describe('with mocked food get call', () => {
                 timestamp: 1622832265000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27130
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27131
             }
         ];
 
@@ -204,13 +206,15 @@ describe('with mocked food get call', () => {
                 timestamp: 1622832265000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27130
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27131
             }
         ];
         expect(request).toHaveBeenCalledTimes(1);
@@ -233,13 +237,15 @@ describe('with mocked food get call', () => {
                 timestamp: 1622832265000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27130
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
-                description: 'desc'
+                description: 'desc',
+                activityId: 27131
             }
         ];
         expect(request).toHaveBeenCalledTimes(1);

@@ -77,6 +77,22 @@ describe('with mocked insulin get call', () => {
         );
         expect(insulin).toEqual([]);
     });
+});
+
+describe('with mocked insulin post call', () => {
+    // Request handler that simply returns empty data for every request
+    const request = mockRequest(() => {
+        return Promise.resolve({
+            data: []
+        });
+    });
+
+    // Before each request, clear the count so we start at 0 again
+    beforeEach(() => request.mockClear());
+
+    // GameBusClient using mockToken
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('POST a single activity', async () => {
         const model: InsulinModel = {
@@ -177,6 +193,57 @@ describe('with mocked insulin get call', () => {
     });
 });
 
+describe('with mocked insulin put call', () => {
+    // Request handler that simply returns empty data for every request
+    const request = mockRequest(() => {
+        return Promise.resolve({
+            data: []
+        });
+    });
+
+    // Before each request, clear the count so we start at 0 again
+    beforeEach(() => request.mockClear());
+
+    // GameBusClient using mockToken
+    const mockToken = 'testToken';
+    const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
+
+    test('PUT a single insulin model', async () => {
+        const insulin: InsulinModel = {
+            timestamp: 1,
+            insulinAmount: 2,
+            insulinType: InsulinType.RAPID,
+            activityId: 1
+        };
+
+        const response = await client.insulin().putSingleInsulinActivity(insulin, 0);
+
+        // TODO: add form data check?
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/activities/1?dryrun=false`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+        expect(response).toEqual([]);
+    });
+
+    test('PUT a single insulin model without ID', async () => {
+        const insulin: InsulinModel = {
+            timestamp: 1,
+            insulinAmount: 2,
+            insulinType: InsulinType.RAPID
+        };
+
+        expect(async () => {
+            await client.insulin().putSingleInsulinActivity(insulin, 0);
+        }).rejects.toThrow('Activity ID must be present in order to replace activity');
+    });
+});
+
 describe('convert response to models', () => {
     test('convert single response to single model with insulin type 0', () => {
         const response: ActivityGETData = {
@@ -261,7 +328,8 @@ describe('convert response to models', () => {
         const expectedResult: InsulinModel = {
             timestamp: 1622736981000,
             insulinAmount: 3,
-            insulinType: 0
+            insulinType: 0,
+            activityId: 0
         };
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });
@@ -349,7 +417,8 @@ describe('convert response to models', () => {
         const expectedResult: InsulinModel = {
             timestamp: 1622736981000,
             insulinAmount: 3,
-            insulinType: 1
+            insulinType: 1,
+            activityId: 0
         };
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });

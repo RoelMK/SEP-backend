@@ -8,6 +8,7 @@ import {
     PropertyInstanceReference
 } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
+import FormData from 'form-data';
 
 /**
  * Class that is used to GET/POST to GameBus activities
@@ -20,17 +21,57 @@ export class Activity {
     public dataProviderID = 18;
 
     /**
+     * PUTs an activity using given data on given activity ID
+     * @param data Activity data to replace current activity with
+     * @param activityId Activity ID to replace
+     */
+    async putActivity(
+        data: IDActivityPOSTData,
+        activityId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        // PUT uses form-data, so we convert data to string and send as form data
+        const body = new FormData();
+        body.append('activity', JSON.stringify(data));
+        const formHeaders = body.getHeaders();
+
+        // We have to create the headers here because FormData has some extra headers
+        let gamebusHeaders = this.gamebus.createHeader(true, headers);
+        gamebusHeaders = {
+            ...gamebusHeaders,
+            ...formHeaders
+        };
+
+        // URL can be created here as well
+        const gamebusUrl = this.gamebus.createURL(`activities/${activityId}`, {
+            dryrun: 'false',
+            ...query
+        });
+
+        // Then send the request
+        const response = await this.gamebus.client.request({
+            method: 'PUT',
+            url: gamebusUrl,
+            headers: gamebusHeaders,
+            data: body
+        });
+        return response.data;
+    }
+
+    /**
      * Posts an activity using the given data
      */
-    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<void> {
-        this.gamebus.post(
+    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<unknown> {
+        const response = await this.gamebus.post(
             'me/activities',
             data,
             headers,
             { dryrun: 'false', ...query },
             true,
-            true
+            false
         );
+        return response;
     }
 
     /**
@@ -40,15 +81,16 @@ export class Activity {
         data: IDActivityPOSTData[],
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
-        this.gamebus.post(
+    ): Promise<unknown> {
+        const response = await this.gamebus.post(
             'me/activities',
             data,
             headers,
             { dryrun: 'false', bulk: 'true', ...query },
             true,
-            true
+            false
         );
+        return response;
     }
 
     /**
@@ -148,16 +190,16 @@ export class Activity {
         };
         if (limit) {
             dateQuery = {
+                ...dateQuery,
                 // Use the given limit only if specified
-                limit: limit.toString(),
-                ...dateQuery
+                limit: limit.toString()
             };
         }
         if (page) {
             dateQuery = {
+                ...dateQuery,
                 // Use page number only if specified
-                page: page.toString(),
-                ...dateQuery
+                page: page.toString()
             };
         }
         const activities: ActivityGETData[] = await this.getAllActivities(
@@ -351,6 +393,7 @@ export class Activity {
                 inputType: value.property.inputType
             };
             const activityModel: ActivityModel = {
+                activityId: activity.id,
                 timestamp: activity.date,
                 id: value.id,
                 translationKey: activity.gameDescriptor.translationKey,

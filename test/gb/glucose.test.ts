@@ -223,7 +223,8 @@ describe('convert response to models', () => {
         };
         const expectedResult: GlucoseModel = {
             timestamp: 1622652468000,
-            glucoseLevel: 6.2
+            glucoseLevel: 6.2,
+            activityId: 0
         };
         expect(Glucose.convertResponseToGlucoseModels([response])).toStrictEqual([expectedResult]);
     });
@@ -286,7 +287,8 @@ describe('convert response to models', () => {
         };
         const expectedResult: GlucoseModel = {
             timestamp: 1622652468000,
-            glucoseLevel: convertMG_DLtoMMOL_L(110)
+            glucoseLevel: convertMG_DLtoMMOL_L(110),
+            activityId: 0
         };
         expect(Glucose.convertResponseToGlucoseModels([response])).toStrictEqual([expectedResult]);
     });

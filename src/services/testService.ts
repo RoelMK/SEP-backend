@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
+import { MoodModel } from '../gb/models/moodModel';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -104,6 +108,5 @@ async function testNightScout() {
 
 export const testToken = '';
 //testAbbott();
-testExcel();
 //testOneDrive();
 //testNightScout();

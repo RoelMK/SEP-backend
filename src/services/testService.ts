@@ -107,7 +107,7 @@ async function testNightScout() {
 async function testParseNewest() {
     const client = new DBClient();
     client.initialize();
-    client.emptyFileParseEvents(); 
+    client.cleanFileParseEvents(); 
     client.close();
 
     // first run, so updated

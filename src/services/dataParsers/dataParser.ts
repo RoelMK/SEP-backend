@@ -128,7 +128,7 @@ export abstract class DataParser {
     /**
      * Returns the last timestamp when the file was parsed or the client was called for updates
      */
-    retrieveLastUpdate(fileName: string): void {
+    protected retrieveLastUpdate(fileName: string): void {
         const dbClient: DBClient = new DBClient(false);
         this.lastUpdated = dbClient.getLastUpdate('1', fileName);
         dbClient.close();
@@ -138,7 +138,7 @@ export abstract class DataParser {
      * Returns the last timestamp when the file was parsed or the client was called for updates
      * including the file name and playerId
      */
-    setLastUpdate(fileName: string, timestamp: number) {
+    protected setLastUpdate(fileName: string, timestamp: number) {
         const dbClient: DBClient = new DBClient(false);
         dbClient.registerFileParse('1', fileName, timestamp);
         dbClient.close();
@@ -149,7 +149,7 @@ export abstract class DataParser {
      * that was parsed and processed
      * @returns the timestamp of the most recent entry that was parsed
      */
-    getLastProcessedTimestamp(): number {
+    protected getLastProcessedTimestamp(): number {
         const newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
         //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless

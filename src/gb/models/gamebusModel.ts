@@ -85,7 +85,7 @@ export interface PropertyInstanceProperty {
     baseUnit: string;
     inputType: string;
     aggregationStrategy: string;
-    propertyPermissions: any[]; // Probably not needed
+    propertyPermissions: PropertyPermissionsReference[]; // Probably not needed
 }
 
 export interface SupportReference {
@@ -95,3 +95,116 @@ export interface SupportReference {
 }
 
 //TODO add output interfaces for getPlayer and getUser
+
+
+export interface ChallengeReference {
+    id: number;
+    name: string;
+    description: string | null;
+    image: string | null;
+    websiteURL: string | null;
+    maxCircleSize: any;
+    minCircleSize: any;
+    availableDate: number;
+    startDate: number;
+    endDate: number;
+    rewardDescription: any;
+    rewardInfo: any;
+    challengeType: any;
+    target: any;
+    contenders: any;
+    isPublic: any;
+    winnersAssigned: any;
+    renewAutomatically: any;
+    renewed: any;
+    withNudging: any;
+    creator: UserReference;
+    challengeRules: ChallengeRules[];
+
+}
+
+export interface ChallengeRules {
+    id:number;
+    name: string;
+    description: null | string;
+    image: any;
+    imageRequired: any;
+    videoAllowed: any;
+    imageAllowed: any;
+    backendOnly: any;
+    maxTimesFired: any;
+    minDaysBetweenFire: any;
+    numberOfFiresInTimeWindow: any;
+    conditions: ConditionsReference[];
+    participations:any;
+    showChallengeRights: ChallengeRightsReference[];
+    rewards: any;
+    rewardConfig: any[];
+    lottery:any;
+}
+
+export interface ConditionsReference{
+    id: number;
+    rhsValue: any;
+    property: PropertyInstanceProperty;
+}
+
+export interface PropertyPermissionsReference{
+    id: number;
+    index: any;
+    lastUpdate: number;
+    decisionNote: any;
+    state: any;
+    gameDescriptor: GameDescriptorReference;
+    allowedValues: any[];
+}
+
+export interface ChallengeRightsReference{
+    circle: CircleReference;
+}
+export interface CircleReference{
+    id: number;
+    name: string | null;
+    image: string | null;
+    isPrivate: any;
+    memberships: ChallengeMembership[];
+}
+
+export interface ChallengeMembership{
+    id:number;
+    state: string;
+    player: PlayerReference;
+}
+
+export interface PlayerReference{
+    id:number;
+}
+
+export interface CircleGETData {
+    id: number;
+    name: string;
+    image: string | null ;
+    type: string;
+    description: string;
+    isPrivate: boolean;
+    removed: boolean;
+    leadersCanLogActivities: boolean;
+    leadersCanSignUpPlayers: boolean;
+    autoAcceptMembershipRequests: boolean;
+    displayPersonalPointsToCircleMembersInMutualChallenges: boolean;
+    displayPersonalPointsToCircleMembers: boolean;
+    withNudging: boolean;
+    creator: UserReference;
+    memberships: MembershipReference[]; 
+    participations: any[];
+    showChallengeRights: any[];
+    chats: any[];
+}
+
+export interface MembershipReference {
+    id: number;
+    state: string;
+    player: UserReference;
+    initiatorOfMembership: UserReference;
+    initiatorOfLeadership: UserReference| null; //not sure
+}

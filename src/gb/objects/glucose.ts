@@ -49,9 +49,10 @@ export class Glucose extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data = this.toPOSTData(model, playerID);
-        this.activity.postActivity(data, headers, query);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
     }
 
     /**
@@ -64,12 +65,13 @@ export class Glucose extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        this.activity.postActivities(data, headers, query);
+        const response = await this.activity.postActivities(data, headers, query);
+        return response;
     }
 
     /**

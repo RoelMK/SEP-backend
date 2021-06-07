@@ -155,9 +155,10 @@ export class Mood extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data = this.toPOSTData(model, playerID);
-        this.activity.postActivity(data, headers, query);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
     }
 
     /**
@@ -170,12 +171,32 @@ export class Mood extends GameBusObject {
         playerID: number,
         headers?: Headers,
         query?: Query
-    ): Promise<void> {
+    ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        this.activity.postActivities(data, headers, query);
+        const response = await this.activity.postActivities(data, headers, query);
+        return response;
+    }
+
+    /**
+     * Function that replaces the mood model with a new model
+     * @param model New model (with ID of old model), must have activityId
+     * @param playerId ID of player
+     */
+    async putSingleMoodActivity(
+        model: MoodModel,
+        playerId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        if (!model.activityId) {
+            throw new Error('Activity ID must be present in order to replace activity');
+        }
+        const data = this.toIDPOSTData(model, playerId);
+        const response = await this.activity.putActivity(data, model.activityId, headers, query);
+        return response;
     }
 
     /**

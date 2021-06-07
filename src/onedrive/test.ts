@@ -71,7 +71,8 @@ async function getRange(
         {
         "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#range",
         "@odata.type": "#microsoft.graph.workbookRange",
-        "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items('01CYZLFJDYBLIGAE7G5FE3I4VO2XP7BLU4')/workbook/worksheets(%27%7B00000000-0001-0000-0300-000000000000%7D%27)/range(address=%27A1:B2%27)",
+        "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items('01CYZLFJDYBLIGAE7G5FE3I4VO2XP7BLU4')
+        /workbook/worksheets(%27%7B00000000-0001-0000-0300-000000000000%7D%27)/range(address=%27A1:B2%27)",
         "address": "test!A1:B2",
         "addressLocal": "test!A1:B2",
         "cellCount": 4,
@@ -180,14 +181,18 @@ async function getListOfSheets(workbookID: string, token: string, sessionID: str
         "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items('01CYZLFJGUJ7JHBSZDFZFL25KSZGQTVAUN')/workbook/worksheets",
         "value": [
             {
-                "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items('01CYZLFJGUJ7JHBSZDFZFL25KSZGQTVAUN')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)",
+                "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items
+                ('01CYZLFJGUJ7JHBSZDFZFL25KSZGQTVAUN')/workbook/
+                worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)",
                 "id": "{00000000-0001-0000-0000-000000000000}",
                 "name": "Sheet1",
                 "position": 0,
                 "visibility": "Visible"
             },
             {
-                "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items('01CYZLFJGUJ7JHBSZDFZFL25KSZGQTVAUN')/workbook/worksheets(%27%7B00000000-0001-0000-0100-000000000000%7D%27)",
+                "@odata.id": "/users('f6d92604-4b76-4b70-9a4c-93dfbcc054d5')/drive/items
+                ('01CYZLFJGUJ7JHBSZDFZFL25KSZGQTVAUN')/workbook/
+                worksheets(%27%7B00000000-0001-0000-0100-000000000000%7D%27)",
                 "id": "{00000000-0001-0000-0100-000000000000}",
                 "name": "Sheet57664",
                 "position": 1,

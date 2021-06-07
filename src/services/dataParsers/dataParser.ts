@@ -43,7 +43,7 @@ export abstract class DataParser {
     /**
      * Parse data file by looking at its extension and choosing the correct file parser
      */
-    protected async parse(): Promise<Record<string, string| number>[] | undefined> {
+    protected async parse(): Promise<Record<string, string | number>[] | undefined> {
         if (!this.filePath) {
             throw Error('File path is not set!');
         }
@@ -87,7 +87,9 @@ export abstract class DataParser {
      * @param outputType Glucose, Insulin or Food
      * @returns Glucose, Insulin or FoodModel object
      */
-    getData(outputType: OutputDataType): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] |undefined {
+    getData(
+        outputType: OutputDataType
+    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;

@@ -49,7 +49,8 @@ export default class AbbottParser extends DataParser {
      */
     private filterGlucose(): AbbottData[] {
         const glucose = this.abbottData?.filter((entry: AbbottData) => {
-            // We only include entries for which the record type is a glucose scan, either historical, manual (strip) or from a scan
+            // We only include entries for which the record type is a glucose scan, either historical,
+            // manual (strip) or from a scan
             // We also only include entries for which the date is specified
             return (
                 parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||

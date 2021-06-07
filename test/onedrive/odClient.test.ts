@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable quotes */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { OneDriveClient } from '../../src/onedrive/odClient';
 import { mockOnedriveRequest } from './odUtils';
@@ -18,7 +20,7 @@ describe('with mocked activities get call', () => {
                 //for getFile
                 data: {
                     '@odata.context':
-                        'https://graph.microsoft.com/v1.0/$metadata#users(\'diabettertest2%40outlook.com\')/drive/root/children',
+                        "https://graph.microsoft.com/v1.0/$metadata#users('diabettertest2%40outlook.com')/drive/root/children",
                     '@odata.count': 2,
                     value: [
                         {
@@ -111,7 +113,7 @@ describe('with mocked activities get call', () => {
             return Promise.resolve({
                 data: {
                     '@odata.context':
-                        'https://graph.microsoft.com/v1.0/$metadata#users(\'diabettertest2%40outlook.com\')/drive/root/children',
+                        "https://graph.microsoft.com/v1.0/$metadata#users('diabettertest2%40outlook.com')/drive/root/children",
                     '@odata.count': 5,
                     value: [
                         {
@@ -291,35 +293,35 @@ describe('with mocked activities get call', () => {
         //getTable
         if (
             obj.url ===
-            'https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/tables(\'fooddiary\')/rows'
+            "https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/tables('fooddiary')/rows"
         ) {
             return Promise.resolve({
                 //for getFile
                 data: {
                     '@odata.context':
-                        'https://graph.microsoft.com/v1.0/$metadata#users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(\'fooddiary\')/rows',
+                        "https://graph.microsoft.com/v1.0/$metadata#users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables('fooddiary')/rows",
                     value: [
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=0)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=0)",
                             index: 0,
                             values: [[44444, 0.5, '', 'Pasta', 10, 4, 5, 2, '', 7]]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=1)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=1)",
                             index: 1,
                             values: [[44413, 0.55, '', 'Pizza', 3, 2, 4, '', '', 4]]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=2)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=2)",
                             index: 2,
                             values: [['', 0, 'Snack', '', 5, 3, 2, 1, '', '']]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=3)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=3)",
                             index: 3,
                             values: [
                                 [44200, '', 'Breakfast', 'Cheese sandwich', 3, 1, 4, '', '', 4]
@@ -327,25 +329,25 @@ describe('with mocked activities get call', () => {
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=4)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=4)",
                             index: 4,
                             values: [['', '', '', '', '', '', '', '', '', '']]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=5)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=5)",
                             index: 5,
                             values: [['', 0.5, 'Lunch', 'Cheese sandwich', 12, '', 2, '', '', '']]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=6)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=6)",
                             index: 6,
                             values: [['', '', '', 'Cheese and ham sandwich', 24, '', 4, '', '', 4]]
                         },
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=7)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)/rows/itemAt(index=7)",
                             index: 7,
                             values: [['', '', '', 'Crisps', 12, '', 4, '', 5, '']]
                         }
@@ -356,14 +358,14 @@ describe('with mocked activities get call', () => {
         //getRange
         if (
             obj.url ===
-            'https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/worksheets(\'Sheet1\')/range(address=\'Sheet1!A2:J9\')'
+            "https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/worksheets('Sheet1')/range(address='Sheet1!A2:J9')"
         ) {
             return Promise.resolve({
                 data: {
                     '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#workbookRange',
                     '@odata.type': '#microsoft.graph.workbookRange',
                     '@odata.id':
-                        '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/range(address=%27Sheet1!A2:J9%27)',
+                        "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/range(address=%27Sheet1!A2:J9%27)",
                     address: 'Sheet1!A2:J9',
                     addressLocal: 'Sheet1!A2:J9',
                     columnCount: 10,
@@ -636,16 +638,16 @@ describe('with mocked activities get call', () => {
         }
         if (
             obj.url ===
-            'https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/worksheets(\'Sheet1\')/tables'
+            "https://graph.microsoft.com/v1.0/me/drive/items/4025833D974F9FE8!112/workbook/worksheets('Sheet1')/tables"
         ) {
             return Promise.resolve({
                 data: {
                     '@odata.context':
-                        'https://graph.microsoft.com/v1.0/$metadata#users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/worksheets(\'Sheet1\')/tables',
+                        "https://graph.microsoft.com/v1.0/$metadata#users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/worksheets('Sheet1')/tables",
                     value: [
                         {
                             '@odata.id':
-                                '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)',
+                                "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)",
                             style: 'TableStyleMedium2',
                             name: 'fooddiary',
                             showFilterButton: true,
@@ -799,7 +801,7 @@ describe('with mocked activities get call', () => {
         const expectation = [
             {
                 '@odata.id':
-                    '/users(\'diabettertest2%40outlook.com\')/drive/items(\'4025833D974F9FE8%21112\')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)',
+                    "/users('diabettertest2%40outlook.com')/drive/items('4025833D974F9FE8%21112')/workbook/worksheets(%27%7B00000000-0001-0000-0000-000000000000%7D%27)/tables(%27%7B4732EEDC-239B-483E-BDDA-BC9853616E86%7D%27)",
                 style: 'TableStyleMedium2',
                 name: 'fooddiary',
                 showFilterButton: true,

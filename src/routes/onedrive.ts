@@ -35,8 +35,9 @@ onedriveRouter.get('/redirect', async (req: any, res: any) => {
     }
 });
 
-onedriveRouter.get('/displayTokens', async (req: any, res: any) => { // Dummy endpoint for testing purposes
-    if (req.query.homeAccountId && req.query.accessToken && req.query.expiresOn ) {
+onedriveRouter.get('/displayTokens', async (req: any, res: any) => {
+    // Dummy endpoint for testing purposes
+    if (req.query.homeAccountId && req.query.accessToken && req.query.expiresOn) {
         const account: OneDriveTokenModel = req.query as OneDriveTokenModel;
         return res.status(200).json(account);
     } else {
@@ -53,10 +54,17 @@ function generateRedirectUrl(account: OneDriveTokenModel): string {
     let redirectUri = process.env.ONEDRIVE_FRONTEND_REDIRECT;
     if (!redirectUri) {
         redirectUri = '/onedrive/displayTokens'; // Set a default uri if none is specified in env
-    } 
+    }
 
-    return redirectUri + '?homeAccountId=' + encodeURIComponent(account.homeAccountId) + '&accessToken=' + 
-        encodeURIComponent(account.accessToken) + '&expiresOn=' + account.expiresOn.toString();
+    return (
+        redirectUri +
+        '?homeAccountId=' +
+        encodeURIComponent(account.homeAccountId) +
+        '&accessToken=' +
+        encodeURIComponent(account.accessToken) +
+        '&expiresOn=' +
+        account.expiresOn.toString()
+    );
 }
 
 module.exports = onedriveRouter;

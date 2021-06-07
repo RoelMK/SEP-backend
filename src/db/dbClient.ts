@@ -22,6 +22,7 @@ export class DBClient {
      */
     initialize(): void {
         this.db.exec(
+            // eslint-disable-next-line max-len
             'CREATE TABLE IF NOT EXISTS login_attempts (player_id TEXT PRIMARY KEY, login_token TEXT NOT NULL, expire_time DATETIME NOT NULL, access_token TEXT, refresh_token TEXT);'
         );
     }

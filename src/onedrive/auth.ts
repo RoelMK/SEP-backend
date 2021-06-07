@@ -80,7 +80,7 @@ export async function getAccessToken(
             return {
                 homeAccountId: response.account.homeAccountId,
                 accessToken: response.accessToken,
-                expiresOn: response.expiresOn?.getTime() ?? (new Date()).getTime()
+                expiresOn: response.expiresOn?.getTime() ?? new Date().getTime()
             };
         } else {
             return undefined;
@@ -113,7 +113,7 @@ export async function getAccessTokenSilent(
                 return {
                     homeAccountId: homeAccountId,
                     accessToken: response.accessToken,
-                    expiresOn: response.expiresOn?.getTime() ?? (new Date()).getTime() 
+                    expiresOn: response.expiresOn?.getTime() ?? new Date().getTime()
                 };
             }
         }

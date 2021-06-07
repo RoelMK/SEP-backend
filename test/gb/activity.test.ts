@@ -4,7 +4,7 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
-// TODO: improve coverage
+const endpoint: string = process.env.ENDPOINT!;
 
 describe('with mocked activities get call', () => {
     // Request handler that simply returns empty data for every request
@@ -29,7 +29,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -47,7 +47,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -64,7 +64,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -84,7 +84,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -100,7 +100,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=WALK',
+                url: `${endpoint}/players/0/activities?gds=WALK`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -120,7 +120,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=WALK`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })
@@ -139,7 +139,7 @@ describe('with mocked activities get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK',
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=WALK`,
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 })

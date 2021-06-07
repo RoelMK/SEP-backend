@@ -99,7 +99,7 @@ export class Food extends GameBusObject {
 
     /**
      * Function that returns all fooddata
-     * @returns All food activities 
+     * @returns All food activities
      */
     async getAllFoodActivities(
         playerId: number,

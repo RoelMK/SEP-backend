@@ -19,7 +19,8 @@ export default class InsulinMapper {
     ): (entry: any) => InsulinModel {
         switch (insulinSource) {
             case InsulinSource.ABBOTT:
-                // returns a mapper function to the parser with a predefined dateFormat argument and variable entry argument
+                // returns a mapper function to the parser with a predefined dateFormat
+                // argument and variable entry argument
                 return function (entry: any): InsulinModel {
                     return InsulinMapper.mapAbbott(entry, dateFormat);
                 };

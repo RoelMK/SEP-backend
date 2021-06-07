@@ -12,6 +12,8 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
+const endpoint: string = process.env.ENDPOINT!;
+
 describe('with mocked insulin get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
@@ -37,7 +39,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?gds=LOG_INSULIN'
+                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN`
             })
         );
         expect(insulin).toEqual([]);
@@ -55,7 +57,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_INSULIN'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_INSULIN`
             })
         );
         expect(insulin).toEqual([]);
@@ -70,7 +72,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: 'https://api3.gamebus.eu/v2/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_INSULIN'
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_INSULIN`
             })
         );
         expect(insulin).toEqual([]);
@@ -97,17 +99,17 @@ describe('with mocked insulin get call', () => {
                     value: 'rapid'
                 }
             ]),
-            players: [90]
+            players: [0]
         };
 
-        client.insulin().postSingleInsulinActivity(model, 90, undefined, undefined);
+        client.insulin().postSingleInsulinActivity(model, 0, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false',
+                url: `${endpoint}/me/activities?dryrun=false`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: POSTData
             })
@@ -165,9 +167,9 @@ describe('with mocked insulin get call', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/me/activities?dryrun=false&bulk=true',
+                url: `${endpoint}/me/activities?dryrun=false&bulk=true`,
                 headers: expect.objectContaining({
-                    Authorization: 'Bearer testToken'
+                    Authorization: `Bearer ${mockToken}`
                 }),
                 data: [POSTData1, POSTData2]
             })
@@ -211,7 +213,7 @@ describe('convert response to models', () => {
             dataProvider: {
                 id: 1,
                 name: 'GameBus',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                image: '',
                 isConnected: false
             },
             propertyInstances: [
@@ -224,24 +226,7 @@ describe('convert response to models', () => {
                         baseUnit: 'String text',
                         inputType: 'STRING',
                         aggregationStrategy: 'SUM',
-                        propertyPermissions: [
-                            {
-                                id: 1268,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1369,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 },
                 {
@@ -253,24 +238,7 @@ describe('convert response to models', () => {
                         baseUnit: 'IU',
                         inputType: 'INT',
                         aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: [
-                            {
-                                id: 1269,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1366,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 },
                 {
@@ -282,35 +250,7 @@ describe('convert response to models', () => {
                         baseUnit: '[rapid,long]',
                         inputType: 'STRING',
                         aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: [
-                            {
-                                id: 1367,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1368,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: [
-                                    {
-                                        index: 0,
-                                        translationKey: 'INSULIN_TYPE_RAPID',
-                                        enumValue: 'rapid'
-                                    },
-                                    {
-                                        index: 1,
-                                        translationKey: 'INSULIN_TYPE_LONG',
-                                        enumValue: 'long'
-                                    }
-                                ]
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 }
             ],
@@ -361,7 +301,7 @@ describe('convert response to models', () => {
             dataProvider: {
                 id: 1,
                 name: 'GameBus',
-                image: 'https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png',
+                image: '',
                 isConnected: false
             },
             propertyInstances: [
@@ -374,24 +314,7 @@ describe('convert response to models', () => {
                         baseUnit: 'String text',
                         inputType: 'STRING',
                         aggregationStrategy: 'SUM',
-                        propertyPermissions: [
-                            {
-                                id: 1268,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1369,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 },
                 {
@@ -403,24 +326,7 @@ describe('convert response to models', () => {
                         baseUnit: 'IU',
                         inputType: 'INT',
                         aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: [
-                            {
-                                id: 1269,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1366,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 },
                 {
@@ -432,35 +338,7 @@ describe('convert response to models', () => {
                         baseUnit: '[rapid,long]',
                         inputType: 'STRING',
                         aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: [
-                            {
-                                id: 1367,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: []
-                            },
-                            {
-                                id: 1368,
-                                index: 0,
-                                lastUpdate: null,
-                                decisionNote: null,
-                                state: 'PUBLIC_APPROVED',
-                                allowedValues: [
-                                    {
-                                        index: 0,
-                                        translationKey: 'INSULIN_TYPE_RAPID',
-                                        enumValue: 'rapid'
-                                    },
-                                    {
-                                        index: 1,
-                                        translationKey: 'INSULIN_TYPE_LONG',
-                                        enumValue: 'long'
-                                    }
-                                ]
-                            }
-                        ]
+                        propertyPermissions: []
                     }
                 }
             ],

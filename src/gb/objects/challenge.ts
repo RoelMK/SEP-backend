@@ -11,9 +11,8 @@ export class Challenge {
      * @param data Activity data to replace current activity with
      * @param activityId Activity ID to replace
      */
-     async putChallenge(
+     async postChallenge(
         data: ChallengeReference,
-        challengeId: number,
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
@@ -29,15 +28,20 @@ export class Challenge {
             ...formHeaders
         };
 
-        const response = await this.gamebus.post(
-            'me/challenges',
-            body,
-            gamebusHeaders,
-            { dryrun: 'false', ...query },
-            true,
-            false
-        );
-        return response;
+        // URL can be created here as well
+        const gamebusUrl = this.gamebus.createURL(`challenges`, {
+            dryrun: 'false',
+            ...query
+        });
+
+        // Then send the request
+        const response = await this.gamebus.client.request({
+            method: 'POST',
+            url: gamebusUrl,
+            headers: gamebusHeaders,
+            data: body
+        });
+        return response.data;
     }
 }
 
@@ -471,14 +475,14 @@ const repsonse1 : ChallengeReference = {
 
 
 async function testGb() {
-    const client = new GameBusClient(new TokenHandler("token", "token", "532"), true);
+    const client = new GameBusClient(new TokenHandler("", "", "532"), true);
     const challenge = new Challenge(client,true);
 
     process.on('unhandledRejection', (reason: any, p: Promise<any>) => {
         console.log(`Unhandled rejection at: Promise ${JSON.stringify(p)}, reason: ${reason}`);
     });
 
-    await challenge.putChallenge(repsonse1,102);
+    await challenge.postChallenge(repsonse1);
 }
 
 testGb()

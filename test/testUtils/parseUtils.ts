@@ -89,7 +89,6 @@ export async function parseEetmeter(
     filePath: string,
     only_parse_newest?: boolean
 ): Promise<FoodModel[] | undefined> {
-    console.log("zoek" + only_parse_newest)
     const eetmeterParser: EetMeterParser = new EetMeterParser(filePath);
     if (only_parse_newest) eetmeterParser.parseOnlyNewest(true);
     await eetmeterParser.process();

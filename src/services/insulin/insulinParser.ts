@@ -19,13 +19,15 @@ export default class InsulinParser extends ModelParser {
      * @param insulinInput array of insulin inputs
      * @param insulinSource specifies where the insulin input comes from
      * @param dateFormat specifies the format in which dates are represented
+     * @param lastUpdated: when this file was processed for the last time
+     * @param only_process_newest whether to process all data or only newest
      */
     constructor(
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
         lastUpdated: number,
-        only_process_newest = false
+        only_process_newest: boolean
     ) {
         // Process incoming insulinInput data
         super(lastUpdated, only_process_newest);

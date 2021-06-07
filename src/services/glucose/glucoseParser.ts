@@ -20,13 +20,15 @@ export default class GlucoseParser extends ModelParser {
      * @param glucoseInput array of glucose inputs
      * @param glucoseSource specifies where the glucose input comes from
      * @param dateFormat specifies the format in which dates are represented
+     * @param lastUpdated: when this file was processed for the last time
+     * @param only_process_newest whether to process all data or only newest
      */
     constructor(
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
         lastUpdated: number,
-        only_process_newest = false,
+        only_process_newest: boolean,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {

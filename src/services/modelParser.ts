@@ -1,11 +1,14 @@
 export abstract class ModelParser {
     protected newestEntry = 0;
 
-
     constructor(
-        protected lastUpdated: number,
-        private only_process_newest // whether to upload all input data, or only data after the last update
-    ) {}
+        private lastUpdated?: number,
+        // whether to upload all input data, or only data after the last update
+        private only_process_newest?: boolean
+    ) {
+        this.lastUpdated = lastUpdated !== undefined ? lastUpdated : 0;
+        this.only_process_newest = only_process_newest !== undefined ? only_process_newest : false;
+    }
 
     /**
      * Calculates the most recent entry in the items array by checking
@@ -36,7 +39,7 @@ export abstract class ModelParser {
     protected filterAfterLastUpdate(entries: any[]) {
         if (!this.only_process_newest) return entries;
         return entries.filter((entry: any) => {
-            return entry.timestamp > this.lastUpdated;
+            return entry.timestamp > (this.lastUpdated as number);
         });
     }
 

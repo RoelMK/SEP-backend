@@ -19,20 +19,20 @@ export default class FoodParser extends ModelParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
-
-
     /**
      * Create foodparser with list of food datapoints that can stem from several sources
      * @param foodInput array of food inputs
      * @param foodSource specifies where the food input comes from
      * @param dateFormat specifies the format in which dates are represented
+     * @param lastUpdated: when this file was processed for the last time
+     * @param only_process_newest whether to process all data or only newest
      */
     constructor(
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        lastUpdated: number,
-        only_process_newest = false,
+        lastUpdated?: number,
+        only_process_newest?: boolean
     ) {
         super(lastUpdated, only_process_newest);
         // Process incoming foodInput data
@@ -51,7 +51,6 @@ export default class FoodParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.foodData = this.filterAfterLastUpdate(this.foodData);
-        
     }
 
     /**
@@ -75,4 +74,7 @@ export enum FoodSource {
 /**
  * All possible input types for food data,
  */
-export type FoodInput = XOR<Consumptie[], XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>>;
+export type FoodInput = XOR<
+    Consumptie[],
+    XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>
+>;

@@ -6,6 +6,7 @@ import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
+import { checkJwt } from '../middlewares/checkJwt';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -15,7 +16,7 @@ const uploadRouter = Router();
  * Parameters:
  * format: one of eetmeter, abbott or fooddiary
  */
-uploadRouter.post('/upload', upload.single('file'), function (req: any, res) {
+uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
     // filename is not transferred automatically with the file, meaning the file is named as '0133dsdf'-like
     // use original filename to create a more readable file path 
     const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; 

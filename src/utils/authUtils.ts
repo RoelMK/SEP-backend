@@ -124,7 +124,7 @@ async function getClientAccessToken(): Promise<string | undefined> {
     try {
         const response = await gbClient.post('oauth/token', params.toString(), {
             Authorization: gbClientAuthHeader,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'content-type': 'application/x-www-form-urlencoded'
         });
         if (response && response.access_token) {
             return response.access_token as string;

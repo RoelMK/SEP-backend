@@ -203,8 +203,8 @@ export class GameBusClient {
             return response.data;
         } catch (err: unknown | AxiosError) {
             if (axios.isAxiosError(err)) {
-                // If the error is from Axios, throw it
-                throw new Error(err.message);
+                // If the error is from Axios, throw it (as AxiosError)
+                throw err as AxiosError;
             } else {
                 // If not, show it
                 console.error(err);

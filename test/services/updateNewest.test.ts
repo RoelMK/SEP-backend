@@ -71,11 +71,9 @@ describe('Parsing files twice without updates returns nothing', () => {
             }
         ];
 
-        
         expect(
             await parseAbbott('test/services/data/abbott_eu.csv', OutputDataType.GLUCOSE, true)
         ).toStrictEqual(expectedResultGlucose);
-
 
         // then it is old, so it should not be retrieved
         expect(
@@ -106,21 +104,20 @@ describe('Parsing files twice without updates returns nothing', () => {
             (
                 (await parseFoodDiary(
                     'test/services/data/foodDiary_standard_missing_table.xlsx',
-                    OutputDataType.FOOD, true
+                    OutputDataType.FOOD,
+                    true
                 )) as FoodModel[]
             )[1]
         ).toStrictEqual(expectedResultFood);
 
-
         // then it should not be parsed
-        // food 
+        // food
         expect(
-            (
-                (await parseFoodDiary(
-                    'test/services/data/foodDiary_standard_missing_table.xlsx',
-                    OutputDataType.FOOD, true
-                )) as FoodModel[]
-            )
+            (await parseFoodDiary(
+                'test/services/data/foodDiary_standard_missing_table.xlsx',
+                OutputDataType.FOOD,
+                true
+            )) as FoodModel[]
         ).toStrictEqual([]);
     });
 
@@ -229,48 +226,49 @@ describe('Tests if ModelParsers only process to newest data', () => {
             true
         ) as number;
 
-
         // define expected outcomes
-        const expectedFood: FoodModel[] = [{
-            timestamp: parseDate(
-                '08/05/21 13:12',
-                DateFormat.FOOD_DIARY,
-                new Date(),
-                true
-            ) as number,
-            carbohydrates: 3,
-            glycemic_index: 2,
-            meal_type: MEAL_TYPE.UNDEFINED,
-            description: 'Pizza'
-        }];
+        const expectedFood: FoodModel[] = [
+            {
+                timestamp: parseDate(
+                    '08/05/21 13:12',
+                    DateFormat.FOOD_DIARY,
+                    new Date(),
+                    true
+                ) as number,
+                carbohydrates: 3,
+                glycemic_index: 2,
+                meal_type: MEAL_TYPE.UNDEFINED,
+                description: 'Pizza'
+            }
+        ];
 
-        const expectedInsulin: InsulinModel[] = [{
-            timestamp: parseDate(
-                '08/05/21 13:12',
-                DateFormat.FOOD_DIARY,
-                new Date(),
-                true
-            ) as number,
-            insulinType: InsulinType.RAPID,
-            insulinAmount: 4
-        }];
-
-        
+        const expectedInsulin: InsulinModel[] = [
+            {
+                timestamp: parseDate(
+                    '08/05/21 13:12',
+                    DateFormat.FOOD_DIARY,
+                    new Date(),
+                    true
+                ) as number,
+                insulinType: InsulinType.RAPID,
+                insulinAmount: 4
+            }
+        ];
 
         // create parsers
         const foodParser: FoodParser = new FoodParser(
             rawDiaryData,
             FoodSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY,
-            inbetweenTimestamp,
-            true
+            true,
+            inbetweenTimestamp
         );
         const insulinParser: InsulinParser = new InsulinParser(
             rawDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY,
-            inbetweenTimestamp,
-            true
+            true,
+            inbetweenTimestamp
         );
 
         expect(foodParser.foodData).toBeDefined();
@@ -345,23 +343,25 @@ describe('Tests if ModelParsers only process to newest data', () => {
         ) as number;
 
         // define expected outcome
-        const expectedGlucose: GlucoseModel[] = [{
-            timestamp: parseDate(
-                '01/01/2020 00:00',
-                DateFormat.ABBOTT_EU,
-                new Date(),
-                true
-            ) as number,
-            glucoseLevel: 6
-        }];
+        const expectedGlucose: GlucoseModel[] = [
+            {
+                timestamp: parseDate(
+                    '01/01/2020 00:00',
+                    DateFormat.ABBOTT_EU,
+                    new Date(),
+                    true
+                ) as number,
+                glucoseLevel: 6
+            }
+        ];
 
         // create parser
         const glucoseParser: GlucoseParser = new GlucoseParser(
             abbott,
             GlucoseSource.ABBOTT,
             DateFormat.ABBOTT_EU,
-            inbetweenTimestamp,
-            true
+            true,
+            inbetweenTimestamp
         );
 
         expect(glucoseParser.glucoseData).toBeDefined();

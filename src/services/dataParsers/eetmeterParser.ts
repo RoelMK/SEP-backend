@@ -33,8 +33,8 @@ export class EetMeterParser extends DataParser {
             this.eetmeterConsumptionData,
             FoodSource.EETMETER,
             this.dateFormat,
+            this.only_parse_newest,
             this.lastUpdated,
-            this.only_parse_newest
         );
 
         // update the timestamp of newest parsed entry to this file

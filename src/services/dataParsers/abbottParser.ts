@@ -39,8 +39,8 @@ export default class AbbottParser extends DataParser {
             foodData,
             FoodSource.ABBOTT,
             this.dateFormat,
-            this.lastUpdated,
-            this.only_parse_newest
+            this.only_parse_newest,
+            this.lastUpdated
         );
 
         const glucoseData: AbbottData[] = this.filterGlucose();
@@ -48,8 +48,8 @@ export default class AbbottParser extends DataParser {
             glucoseData,
             GlucoseSource.ABBOTT,
             this.dateFormat,
-            this.lastUpdated,
-            this.only_parse_newest
+            this.only_parse_newest,
+            this.lastUpdated
         );
 
         const insulinData: AbbottData[] = this.filterInsulin();
@@ -57,8 +57,8 @@ export default class AbbottParser extends DataParser {
             insulinData,
             InsulinSource.ABBOTT,
             this.dateFormat,
-            this.lastUpdated,
-            this.only_parse_newest
+            this.only_parse_newest,
+            this.lastUpdated
         );
 
         // update the timestamp of newest parsed entry to this file

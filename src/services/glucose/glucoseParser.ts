@@ -27,12 +27,12 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
-        lastUpdated: number,
         only_process_newest: boolean,
+        lastUpdated?: number,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
-        super(lastUpdated, only_process_newest);
+        super(only_process_newest, lastUpdated);
         // Process incoming glucoseInput data
         this.process();
     }

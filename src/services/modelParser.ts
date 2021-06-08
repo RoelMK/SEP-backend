@@ -2,13 +2,10 @@ export abstract class ModelParser {
     protected newestEntry = 0;
 
     constructor(
-        private lastUpdated?: number,
         // whether to upload all input data, or only data after the last update
-        private only_process_newest?: boolean
-    ) {
-        this.lastUpdated = lastUpdated !== undefined ? lastUpdated : 0;
-        this.only_process_newest = only_process_newest !== undefined ? only_process_newest : false;
-    }
+        private only_process_newest: boolean,
+        private lastUpdated?: number
+    ) {}
 
     /**
      * Calculates the most recent entry in the items array by checking

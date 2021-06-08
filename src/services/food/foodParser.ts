@@ -31,10 +31,10 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        lastUpdated?: number,
-        only_process_newest?: boolean
+        only_process_newest: boolean,
+        lastUpdated?: number
     ) {
-        super(lastUpdated, only_process_newest);
+        super(only_process_newest, lastUpdated);
         // Process incoming foodInput data
         this.process();
     }

@@ -5,8 +5,8 @@ import {
     InputError,
     OutputDataType
 } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { FoodSource } from '../food/foodParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
@@ -58,7 +58,7 @@ export default class FoodDiaryParser extends DataParser {
             preprocessedFoodDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL
         );
-        
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }

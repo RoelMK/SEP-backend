@@ -1,5 +1,5 @@
 import { FoodModel } from '../../gb/models/foodModel';
-import FoodParser, { FoodSource } from '../food/foodParser';
+import { FoodSource } from '../food/foodParser';
 import { getFileName } from '../utils/files';
 import { DataParser, DataSource, DiabetterUserInfo, OutputDataType } from './dataParser';
 /**
@@ -26,7 +26,7 @@ export class EetMeterParser extends DataParser {
         const eetmeterData: EetmeterData = (await this.parse()) as unknown as EetmeterData;
         this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as Consumptie[];
 
-        // TODO check input and possibly throw input error 
+        // TODO check input and possibly throw input error
 
         // Not sure why it does not always map it to an array (even with a single element)
         if (this.eetmeterConsumptionData.length == undefined) {

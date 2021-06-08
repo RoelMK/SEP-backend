@@ -7,8 +7,7 @@ import { XOR } from 'ts-xor';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { DiabetterUserInfo } from '../dataParsers/dataParser';
-import { GameBusClient } from '../../gb/gbClient';
-import { TokenHandler } from '../../gb/auth/tokenHandler';
+
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:

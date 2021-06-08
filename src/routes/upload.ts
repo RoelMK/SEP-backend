@@ -1,7 +1,7 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, DiabetterUserInfo, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser, DiabetterUserInfo } from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';

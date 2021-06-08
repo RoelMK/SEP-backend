@@ -1,5 +1,3 @@
-import { TokenHandler } from '../../gb/auth/tokenHandler';
-import { GameBusClient } from '../../gb/gbClient';
 import { MoodModel } from '../../gb/models/moodModel';
 import { DiabetterUserInfo } from '../dataParsers/dataParser';
 import { ModelParser } from '../modelParser';

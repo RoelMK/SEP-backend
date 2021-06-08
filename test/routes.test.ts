@@ -111,7 +111,6 @@ describe('POST files', () => {
         expect(response.statusCode).toBe(400);
     });
 
-
     test('POST supported format, with supported file extension but wrong file content', async () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')

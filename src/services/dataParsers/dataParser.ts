@@ -104,7 +104,7 @@ export abstract class DataParser {
      * @param data array containing model objects
      * @param dataSource FoodSource, GlucoseSource or InsulinSource object
      */
-    protected createParser(type: OutputDataType, data: any[], dataSource: any): ModelParser {
+    protected createParser(type: OutputDataType, data: any[], dataSource: any): void {
         switch (type) {
             case OutputDataType.FOOD:
                 this.foodParser = new FoodParser(
@@ -114,9 +114,11 @@ export abstract class DataParser {
                     this.userInfo,
                     this.only_parse_newest
                 );
+                return;
             case OutputDataType.MOOD:
                 //TODO
                 this.moodParser = new MoodParser(data, this.userInfo);
+                return;
             case OutputDataType.INSULIN:
                 this.insulinParser = new InsulinParser(
                     data,
@@ -125,6 +127,7 @@ export abstract class DataParser {
                     this.userInfo,
                     this.only_parse_newest
                 );
+                return;
             case OutputDataType.GLUCOSE:
                 this.glucoseParser = new GlucoseParser(
                     data,
@@ -133,6 +136,7 @@ export abstract class DataParser {
                     this.userInfo,
                     this.only_parse_newest
                 );
+                return;
             default:
                 throw Error('Output type is not implemented');
         }
@@ -236,6 +240,7 @@ export enum OutputDataType {
 export interface DiabetterUserInfo {
     playerId: string;
     accessToken: string;
+    refreshToken: string;
 }
 
 // custom errors

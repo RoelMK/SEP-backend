@@ -205,7 +205,8 @@ describe('convert response to models', () => {
             name: 'Walk',
             type: 'WALK',
             steps: 20,
-            activityId: 0
+            activityId: 0,
+            heartrate: null
         };
         expect(Exercise.convertResponseToExerciseModels([response])).toStrictEqual([
             expectedResult

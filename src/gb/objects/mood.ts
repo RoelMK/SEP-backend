@@ -26,7 +26,10 @@ export class Mood extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of MoodModels
      */
-    static convertResponseToMoodModels(response: ActivityGETData[]): MoodModel[] {
+    static convertResponseToMoodModels(response: ActivityGETData[] | undefined): MoodModel[] {
+        if (!response) {
+            return [];
+        }
         return response.filter((response: ActivityGETData) => {
             return response.propertyInstances.length > 0;
         }).map((response: ActivityGETData) => {

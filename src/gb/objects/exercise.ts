@@ -198,7 +198,9 @@ export class Exercise extends GameBusObject {
             // Since the response is a single activity,
             // the translation key (of the game descriptor) will be the same for all properties
             type: activities[0].translationKey,
-            activityId: response.id
+            activityId: response.id,
+            // Set it to null for now, might be added later
+            heartrate: null
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
         activities.forEach((activity: ActivityModel) => {
@@ -217,7 +219,12 @@ export class Exercise extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of ExerciseModels
      */
-    static convertResponseToExerciseModels(response: ActivityGETData[]): ExerciseModel[] {
+    static convertResponseToExerciseModels(
+        response: ActivityGETData[] | undefined
+    ): ExerciseModel[] {
+        if (!response) {
+            return [];
+        }
         return response.filter((response: ActivityGETData) => {
             return response.propertyInstances.length > 0;
         }).map((response: ActivityGETData) => {
@@ -302,5 +309,6 @@ export enum ExercisePropertyKeys {
     avgSpeed = 'SPEED.AVG', // average speed reached in m/s
     maxHeartrate = 'MAX_HEART_RATE', // maximum heart rate reached (in bpm)
     avgHeartrate = 'AVG_HEART_RATE', // average heart rate reached (in bpm)
-    minHeartrate = 'MIN_HEART_RATE' // minimum heart rate reached (in bpm)
+    minHeartrate = 'MIN_HEART_RATE', // minimum heart rate reached (in bpm)
+    heartrate = '' // heart rate (in bpm), add if required
 }

@@ -62,7 +62,7 @@ export default class InsulinParser extends ModelParser {
         if (this.insulinData && this.insulinData.length > 0)
             this.gbClient
                 .insulin()
-                .postMultipleInsulinActivities(this.insulinData, this.userInfo.playerId);
+                .postMultipleInsulinActivities(this.insulinData, parseInt(this.userInfo.playerId));
     }
 }
 /**

@@ -49,7 +49,7 @@ export abstract class DataParser {
         protected filePath: string,
         protected userInfo: DiabetterUserInfo,
         protected oneDriveToken?: string,
-        protected tableName?: string, // for excel parsing
+        protected tableName?: string // for excel parsing
     ) {}
 
     /**
@@ -240,7 +240,7 @@ export enum OutputDataType {
  * Contains relevant information about the user for which data is parsed
  */
 export interface DiabetterUserInfo {
-    playerId: number;
+    playerId: string;
     accessToken: string;
     refreshToken: string;
 }

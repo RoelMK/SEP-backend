@@ -63,7 +63,7 @@ export default class FoodParser extends ModelParser {
         if (this.foodData && this.foodData.length > 0)
             this.gbClient
                 .food()
-                .postMultipleFoodActivities(this.foodData, this.userInfo.playerId);
+                .postMultipleFoodActivities(this.foodData, parseInt(this.userInfo.playerId));
     }
 }
 

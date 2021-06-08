@@ -84,7 +84,7 @@ export default class GlucoseParser extends ModelParser {
         if (this.glucoseData && this.glucoseData.length > 0)
             this.gbClient
                 .glucose()
-                .postMultipleGlucoseActivities(this.glucoseData, this.userInfo.playerId);
+                .postMultipleGlucoseActivities(this.glucoseData, parseInt(this.userInfo.playerId));
     }
 }
 /**

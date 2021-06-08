@@ -1,6 +1,6 @@
-import { TokenHandler } from "../gb/auth/tokenHandler";
-import { GameBusClient } from "../gb/gbClient";
-import { DiabetterUserInfo } from "./dataParsers/dataParser";
+import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+import { DiabetterUserInfo } from './dataParsers/dataParser';
 
 export abstract class ModelParser {
     protected newestEntry = 0;
@@ -15,11 +15,7 @@ export abstract class ModelParser {
         private lastUpdated?: number
     ) {
         this.gbClient = new GameBusClient(
-            new TokenHandler(
-                userInfo.accessToken,
-                userInfo.refreshToken,
-                userInfo.playerId.toString()
-            )
+            new TokenHandler(userInfo.accessToken, userInfo.refreshToken, userInfo.playerId)
         );
     }
 

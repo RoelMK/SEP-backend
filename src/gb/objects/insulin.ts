@@ -151,10 +151,17 @@ export class Insulin extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of InsulinModels
      */
-    static convertResponseToInsulinModels(response: ActivityGETData[]): InsulinModel[] {
-        return response.map((response: ActivityGETData) => {
-            return this.convertInsulinResponseToModel(response);
-        });
+    static convertResponseToInsulinModels(response: ActivityGETData[] | undefined): InsulinModel[] {
+        if (!response) {
+            return [];
+        }
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertInsulinResponseToModel(response);
+            });
     }
 
     /**

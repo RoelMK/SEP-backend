@@ -1,6 +1,8 @@
+import { DBClient } from '../../db/dbClient';
 import { FoodModel } from '../../gb/models/foodModel';
 import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
+import { MoodModel } from '../../gb/models/moodModel';
 import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
@@ -8,8 +10,9 @@ import XMLParser from '../fileParsers/xmlParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
+import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
-import { getFileExtension } from '../utils/files';
+import { getFileExtension, getFileName } from '../utils/files';
 import { NightScoutEntryModel } from './nightscoutParser';
 
 /**
@@ -27,6 +30,10 @@ export abstract class DataParser {
     protected foodParser?: FoodParser;
     protected glucoseParser?: GlucoseParser;
     protected insulinParser?: InsulinParser;
+    protected moodParser?: MoodParser;
+
+    // UNIX timestamp in ms that indicates when it was last parsed
+    protected lastUpdated = 0;
 
     /**
      * Constructor with file path and data source (provided by children)
@@ -37,7 +44,8 @@ export abstract class DataParser {
         protected readonly dataSource: DataSource,
         protected filePath?: string,
         protected oneDriveToken?: string,
-        protected tableName?: string // for excel parsing
+        protected tableName?: string, // for excel parsing
+        protected only_parse_newest = false
     ) {}
 
     /**
@@ -47,6 +55,10 @@ export abstract class DataParser {
         if (!this.filePath) {
             throw Error('File path is not set!');
         }
+
+        // retrieve when the file was parsed for the last time
+        this.retrieveLastUpdate(getFileName(this.filePath));
+
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
         switch (extension) {
@@ -89,7 +101,13 @@ export abstract class DataParser {
      */
     getData(
         outputType: OutputDataType
-    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | undefined {
+    ):
+        | InsulinModel[]
+        | FoodModel[]
+        | GlucoseModel[]
+        | NightScoutEntryModel[]
+        | MoodModel[]
+        | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -97,13 +115,61 @@ export abstract class DataParser {
                 return this.insulinParser?.insulinData;
             case OutputDataType.FOOD:
                 return this.foodParser?.foodData;
+
+            case OutputDataType.MOOD:
+                return [this.moodParser?.mood as MoodModel];
+
             default:
                 // TODO this should not happen
                 return [];
         }
     }
+
+    /**
+     * Returns the last timestamp when the file was parsed or the client was called for updates
+     */
+    protected retrieveLastUpdate(fileName: string): void {
+        const dbClient: DBClient = new DBClient(false);
+        this.lastUpdated = dbClient.getLastUpdate('1', fileName);
+        dbClient.close();
+    }
+
+    /**
+     * Returns the last timestamp when the file was parsed or the client was called for updates
+     * including the file name and playerId
+     */
+    protected setLastUpdate(fileName: string, timestamp: number) {
+        const dbClient: DBClient = new DBClient(false);
+        dbClient.registerFileParse('1', fileName, timestamp);
+        dbClient.close();
+    }
+
+    /**
+     * Looks over all parsers and returns the timestamp of the newest datapoint
+     * that was parsed and processed
+     * @returns the timestamp of the most recent entry that was parsed
+     */
+    protected getLastProcessedTimestamp(): number {
+        const newestModels: number[] = [];
+        newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
+        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
+        newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
+        newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
+        return Math.max(...newestModels);
+    }
+
+    /**
+     * Configures whether to upload all incoming data or only data after the last known update
+     * @param only_parse_newest true = only process data after last update, false = process all
+     */
+    parseOnlyNewest(only_parse_newest: boolean): void {
+        this.only_parse_newest = only_parse_newest;
+    }
 }
 
+/**
+ * A list of possible data sources
+ */
 export enum DataSource {
     ABBOTT = 0,
     FOOD_DIARY = 1,
@@ -111,8 +177,12 @@ export enum DataSource {
     NIGHTSCOUT = 3
 }
 
+/**
+ * A list of possible output models
+ */
 export enum OutputDataType {
     GLUCOSE = 0,
     INSULIN = 1,
-    FOOD = 2
+    FOOD = 2,
+    MOOD = 3
 }

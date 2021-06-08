@@ -215,10 +215,17 @@ export class Food extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of GlucoseModels
      */
-    static convertResponseToFoodModels(response: ActivityGETData[]): FoodModel[] {
-        return response.map((response: ActivityGETData) => {
-            return this.convertResponseToFoodModel(response);
-        });
+    static convertResponseToFoodModels(response: ActivityGETData[] | undefined): FoodModel[] {
+        if (!response) {
+            return [];
+        }
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertResponseToFoodModel(response);
+            });
     }
 }
 

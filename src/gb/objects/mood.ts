@@ -192,7 +192,7 @@ export class Mood extends GameBusObject {
      * @param model New model (with ID of old model), must have activityId
      * @param playerId ID of player
      */
-    async putSingleMoodActivity(
+    public async putSingleMoodActivity(
         model: MoodModel,
         playerId: number,
         headers?: Headers,

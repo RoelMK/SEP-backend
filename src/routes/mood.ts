@@ -1,12 +1,81 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const moodRouter = require('express').Router();
+import axios from 'axios';
+import { Router, Response } from 'express';
+import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+import { MoodModel } from '../gb/models/moodModel';
+import { validUnixTimestamp } from '../services/utils/dates';
 
-moodRouter.post('/mood', (req: any, res: any) => {
+const moodRouter = Router();
+
+moodRouter.post('/mood', (req: any, res: Response) => {
+    // For now, the 'modify' parameter will be used to distinguish between POST and PUT
+    // modify as boolean (only important if true)
+
     // Call someone to aggregate and send data to gamebus
     console.log(req.body);
-    res.send(req.body);
 
-    // TODO: wait for mood-post branch to be finished, then check for activityId to see whether to POST or PUT
+    const moodTime = req.body.timestamp as number;
+    const valence = req.body.valence as number;
+    const arousal = req.body.arousal as number;
+
+    // Check if given timestamps are valid
+    if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
+        // Bad request
+        res.sendStatus(400);
+        return;
+    }
+
+    let moodModel: MoodModel = {
+        timestamp: moodTime,
+        valence: valence,
+        arousal: arousal
+    };
+
+    const gbClient = new GameBusClient(
+        new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
+    );
+
+    // PUT
+    if (req.query.modify) {
+        if (!req.body.activityId) {
+            // Bad request, missing activity ID for PUT
+            res.sendStatus(400);
+        }
+        // Get activity ID
+        const activityId = req.body.activityId as number;
+        moodModel = {
+            ...moodModel,
+            activityId: activityId
+        };
+        try {
+            gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
+            res.send(moodModel);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                // Unauthorized -> 401
+                if (error.response?.status === 401) {
+                    return res.status(401).send();
+                }
+            }
+            // Unknown error -> 503
+            return res.status(503).send();
+        }
+    }
+
+    // POST
+    try {
+        gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+        res.send(moodModel);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            // Unauthorized -> 401
+            if (error.response?.status === 401) {
+                return res.status(401).send();
+            }
+        }
+        // Unknown error -> 503
+        return res.status(503).send();
+    }
 });
 
 module.exports = moodRouter;

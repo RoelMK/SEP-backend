@@ -158,7 +158,7 @@ export class DBClient {
      * @param time_stamp time of last parsed entry
      * @returns
      */
-    registerFileParse(playerId: string, file_name: string, timestamp: number): boolean {
+    registerFileParse(playerId: number, file_name: string, timestamp: number): boolean {
         try {
             const insrt = this.db.prepare(
                 `INSERT INTO file_parse_events (player_id, file_name, time_stamp) 
@@ -178,7 +178,7 @@ export class DBClient {
      * @param file_name Name of file that is parsed
      * @returns Timestamp of last parse
      */
-    getLastUpdate(playerId: string, file_name: string): number {
+    getLastUpdate(playerId: number, file_name: string): number {
         try {
             const getLastParsed = this.db
                 .prepare('SELECT * FROM file_parse_events WHERE player_id=? AND file_name=?')

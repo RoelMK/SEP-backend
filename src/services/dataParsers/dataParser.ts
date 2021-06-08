@@ -238,7 +238,7 @@ export enum OutputDataType {
  * Contains relevant information about the user for which data is parsed
  */
 export interface DiabetterUserInfo {
-    playerId: string;
+    playerId: number;
     accessToken: string;
     refreshToken: string;
 }

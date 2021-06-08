@@ -219,7 +219,12 @@ export class Exercise extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of ExerciseModels
      */
-    static convertResponseToExerciseModels(response: ActivityGETData[]): ExerciseModel[] {
+    static convertResponseToExerciseModels(
+        response: ActivityGETData[] | undefined
+    ): ExerciseModel[] {
+        if (!response) {
+            return [];
+        }
         return response.map((response: ActivityGETData) => {
             return this.convertExerciseResponseToModel(response);
         });

@@ -201,7 +201,10 @@ export class Glucose extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of GlucoseModels
      */
-    static convertResponseToGlucoseModels(response: ActivityGETData[]): GlucoseModel[] {
+    static convertResponseToGlucoseModels(response: ActivityGETData[] | undefined): GlucoseModel[] {
+        if (!response) {
+            return [];
+        }
         return response.map((response: ActivityGETData) => {
             return this.convertGlucoseResponseToModel(response);
         });

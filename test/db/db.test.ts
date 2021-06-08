@@ -187,3 +187,21 @@ test('Retrieve non existing parse event', () => {
     expect(dbClient.getLastUpdate(playerId, fileName)).toStrictEqual(0);
     dbClient.close();
 });
+
+test('Execute methods while database does not exist', () => {
+    try {
+        fs.unlinkSync(process.env.DATABASE!); // Remove db file
+    } catch (error) {
+        return;
+    }
+    const dbClient = new DBClient(true); // with logging to see errors
+    expect(dbClient.cleanFileParseEvents()).toBeUndefined();
+    expect(dbClient.registerFileParse('1', 'file.xlsx', 1000000000000)).toBeFalsy();
+    expect(dbClient.getLastUpdate('1', 'file.xlsx')).toStrictEqual(0);
+    expect(dbClient.cleanLoginAttempts()).toBeFalsy();
+    expect(dbClient.getLoginAttemptByLoginToken('token')).toBeUndefined();
+    expect(dbClient.getLoginAttemptByPlayerId('id')).toBeUndefined();
+    expect(dbClient.registerCallback('id', 't1', 't2')).toBeFalsy();
+    expect(dbClient.registerLoginAttempt('id', 't1', new Date())).toBeFalsy();
+    expect(dbClient.removeFinishedLoginAttempt('id')).toBeFalsy();
+});

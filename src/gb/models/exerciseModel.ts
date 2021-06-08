@@ -14,4 +14,6 @@ export interface ExerciseModel {
     maxHeartrate?: number; // in bpm, only relevant for (detail) activities
     avgHeartrate?: number; // in bpm, only relevant for (detail) activities
     minHeartrate?: number; // in bpm, only relevant for (detail) activities
+    heartrate: null | number; // in bpm, currently unused but can be used at a later date
+    activityId?: number; // ID of GameBus activity
 }

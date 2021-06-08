@@ -181,7 +181,9 @@ export class OneDriveClient {
      * Retrieves the data in the remote excel file as a JSON response
      * @param topLeft Topleft cell of the to be retrieved range
      * @param bottomRight Bottomright cell of the to be retrieved range
-     * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done
+     * @returns its complicated
+     * TODO actually make an interface for it, even though it doesn't do anything as
+     * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getRangeResult(topLeft: string, bottomRight: string) {
         this.printBool('Get fileID');
@@ -208,7 +210,9 @@ export class OneDriveClient {
      * Retrieves the data in the remote excel file as a text array using parameter
      * @param topLeft Topleft cell of the to be retrieved range
      * @param bottomRight Bottomright cell of the to be retrieved range
-     * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done
+     * @returns its complicated
+     * TODO actually make an interface for it, even though it doesn't do anything as
+     * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getRangeDetailed(
         workbookID: string,
@@ -241,7 +245,9 @@ export class OneDriveClient {
      * Creates a non-persistent Excelsession
      * @param workbookID ID of the Excel workbook to get a session for
      * @param token Onedrive token for authentication
-     * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done
+     * @returns its complicated
+     * TODO actually make an interface for it, even though it doesn't do anything as
+     * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getExcelSession(workbookID: string, token: string) {
         const requestHeaders = {
@@ -270,7 +276,9 @@ export class OneDriveClient {
      * @param token Onedrive token for authentication
      * @param fileName Name of the file to get the data from
      * @param folderPath The path to the file (exculding the filename), if root set to undefined
-     * @returns its complicated //TODO actually make an interface for it, even though it doesn't do anything as it isnt used outside of this class and it is AXIOS response, so class checking is not done
+     * @returns its complicated
+     * TODO actually make an interface for it, even though it doesn't do anything as
+     * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
 
     private async getFile(token: string, fileName: string, folderPath?: string) {

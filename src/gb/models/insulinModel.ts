@@ -4,6 +4,7 @@ export interface InsulinModel {
     timestamp: number;
     insulinAmount: number;
     insulinType: InsulinType;
+    activityId?: number; // ID of GameBus activity
 }
 
 export enum InsulinType {

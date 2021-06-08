@@ -4,6 +4,8 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
+const endpoint: string = process.env.ENDPOINT!;
+
 describe('GameBusClient requests', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
@@ -47,7 +49,7 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
         );
     });
@@ -66,7 +68,7 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
         );
     });
@@ -84,7 +86,7 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
         );
     });
@@ -100,7 +102,7 @@ describe('GameBusClient helper functions', () => {
     });
 
     test('URL without query', () => {
-        expect(client.createURL('players')).toBe('https://api3.gamebus.eu/v2/players');
+        expect(client.createURL('players')).toBe(`${endpoint}/players`);
     });
 
     test('URL with query', () => {
@@ -109,6 +111,6 @@ describe('GameBusClient helper functions', () => {
                 query1: 'value1',
                 query2: 'value2'
             })
-        ).toBe('https://api3.gamebus.eu/v2/players?query1=value1&query2=value2');
+        ).toBe(`${endpoint}/players?query1=value1&query2=value2`);
     });
 });

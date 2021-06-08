@@ -5,17 +5,20 @@ import { Exercise } from './objects/exercise';
 import { Food } from './objects/food';
 import { Glucose } from './objects/glucose';
 import { Insulin } from './objects/insulin';
+import { Mood } from './objects/mood';
+import FormData from 'form-data';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
-    private readonly client: AxiosInstance;
+    readonly client: AxiosInstance;
 
     private gamebusActivity: Activity;
     private gamebusExercise: Exercise;
     private gamebusFood: Food;
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
+    private gamebusMood: Mood;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
@@ -27,6 +30,7 @@ export class GameBusClient {
         this.gamebusFood = new Food(this.gamebusActivity, true);
         this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
+        this.gamebusMood = new Mood(this.gamebusActivity, true);
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -50,6 +54,10 @@ export class GameBusClient {
         return this.gamebusInsulin;
     }
 
+    mood(): Mood {
+        return this.gamebusMood;
+    }
+
     /**
      * PUT request
      * @param path Endpoint URL (without base in {endpoint})
@@ -62,12 +70,12 @@ export class GameBusClient {
      */
     async put(
         path: string,
-        body?: any,
+        body?: FormData,
         headers?: Headers,
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.PUT,
@@ -96,7 +104,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.POST,
@@ -123,7 +131,7 @@ export class GameBusClient {
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         return this.request(
             path,
             RequestMethod.GET,
@@ -149,14 +157,13 @@ export class GameBusClient {
     async request(
         path: string,
         method: RequestMethod,
-        body?: any,
+        body?: FormData | unknown,
         headers?: Headers,
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
-    ) {
+    ): Promise<any> {
         // Current authentication is done via a pre-defined token
-        // TODO: improve
         if (authRequired) {
             if (!this.tokenHandler) {
                 throw new Error(`You must be authorized to access this path: ${endpoint + path}`);
@@ -185,8 +192,8 @@ export class GameBusClient {
             data: body
         });
 
-        // Error handling is already included in Axios, so unless you need to check for a correct status code outside of the
-        // 2xx range, no error handling is required
+        // Error handling is already included in Axios,
+        // so unless you need to check for a correct status code outside of the
 
         // If full response is needed, return it
         if (fullResponse) {
@@ -206,7 +213,7 @@ export class GameBusClient {
     createHeader(authRequired?: boolean, extraHeaders?: Headers): Headers {
         // Set Content-Type and User-Agent by default
         const headers: Headers = {
-            'Content-Type': 'application/json',
+            'content-type': 'application/json',
             'User-Agent': 'Diabetter Client',
             Accept: 'application/json',
             ...extraHeaders

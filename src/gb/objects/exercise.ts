@@ -11,6 +11,24 @@ import { startCase, toLower } from 'lodash';
  */
 export class Exercise extends GameBusObject {
     /**
+     * Function that returns ALL exercise activities
+     * @param playerId ID of player
+     * @returns All exercise activities as ExerciseModels
+     */
+    async getAllExerciseActivities(
+        playerId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ExerciseModel[]> {
+        return await this.getExerciseActivityFromGd(
+            playerId,
+            Object.values(ExerciseGameDescriptorNames),
+            headers,
+            query
+        );
+    }
+
+    /**
      * Function that returns all exercises from the given exercise type (game descriptors)
      * @param gameDescriptors Game descriptor(s) you want to get activities from
      * @returns All exercise activities belonging to the given Type(s) as ExerciseModels
@@ -67,6 +85,39 @@ export class Exercise extends GameBusObject {
     }
 
     /**
+     * Function that returns ALL exercise activities between given dates
+     * @param playerId ID of player
+     * @param startDate Starting date (including, unix)
+     * @param endDate Ending date (excluding, unix)
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
+     * @returns ALL exercise activities between given dates as ExerciseModels
+     */
+    async getAllExerciseActivitiesBetweenUnix(
+        playerId: number,
+        startDate: number,
+        endDate: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ExerciseModel[]> {
+        return await this.getExerciseActivityFromGdBetweenUnix(
+            playerId,
+            Object.values(ExerciseGameDescriptorNames),
+            startDate,
+            endDate,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
+    }
+
+    /**
      * Function that returns all activities of given types on given date (as unix)
      * @param playerId ID of player
      * @param gameDescriptors List of activity types (see below)
@@ -100,6 +151,37 @@ export class Exercise extends GameBusObject {
     }
 
     /**
+     * Function that returns ALL exercise activities on given date
+     * @param playerId ID of player
+     * @param gameDescriptors List of activity types (see below)
+     * @param date Date as unix
+     * @param order Optional, ascending (+) or descending (-)
+     * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
+     * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
+     * @returns ALL activities on given date as ExerciseModels
+     */
+    async getAllExerciseActivitiesOnUnixDate(
+        playerId: number,
+        date: number,
+        order?: QueryOrder,
+        limit?: number,
+        page?: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ExerciseModel[]> {
+        return await this.getExerciseActivityFromGdOnUnixDate(
+            playerId,
+            Object.values(ExerciseGameDescriptorNames),
+            date,
+            order,
+            limit,
+            page,
+            headers,
+            query
+        );
+    }
+
+    /**
      * Converts a response of ActivityGETData to an ExerciseModel
      * @param response single ActivityGETData to convert
      * @returns ExerciseModel with correct properties filled in
@@ -113,8 +195,12 @@ export class Exercise extends GameBusObject {
             timestamp: response.date,
             // Name is simply the translation key but correctly capitalized and removed underscores
             name: startCase(toLower(activities[0].translationKey)),
-            // Since the response is a single activity, the translation key (of the game descriptor) will be the same for all properties
-            type: activities[0].translationKey
+            // Since the response is a single activity,
+            // the translation key (of the game descriptor) will be the same for all properties
+            type: activities[0].translationKey,
+            activityId: response.id,
+            // Set it to null for now, might be added later
+            heartrate: null
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel
         activities.forEach((activity: ActivityModel) => {
@@ -195,8 +281,8 @@ export enum ExerciseGameDescriptorNames {
     GYMNASTICS = 'GYMNASTICS', // Duration, kcal, reason?
     HIKE = 'HIKE', // Nothing
     MOUNTAINBIKE = 'MOUNTAINBIKE', // Nothing,
-    WALK_DETAIL = 'WALK(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
-    RUN_DETAIL = 'RUN(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal, heart rate (max, avg, min), accelerometer, ppg
+    WALK_DETAIL = 'WALK(DETAIL)', // Steps, distance, duration, speed (max, avg), kcal,
+    RUN_DETAIL = 'RUN(DETAIL)', // heart rate (max, avg, min), accelerometer, ppg (both of these)
     BIKE_DETAIL = 'BIKE(DETAIL)' // Nothing
 }
 
@@ -216,5 +302,6 @@ export enum ExercisePropertyKeys {
     avgSpeed = 'SPEED.AVG', // average speed reached in m/s
     maxHeartrate = 'MAX_HEART_RATE', // maximum heart rate reached (in bpm)
     avgHeartrate = 'AVG_HEART_RATE', // average heart rate reached (in bpm)
-    minHeartrate = 'MIN_HEART_RATE' // minimum heart rate reached (in bpm)
+    minHeartrate = 'MIN_HEART_RATE', // minimum heart rate reached (in bpm)
+    heartrate = '' // heart rate (in bpm), add if required
 }

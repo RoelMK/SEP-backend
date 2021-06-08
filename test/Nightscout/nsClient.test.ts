@@ -1,5 +1,8 @@
 import { NightScoutClient } from '../../src/nightscout/nsClient';
-import { NightScoutEntryModel, NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
+import {
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from '../../src/services/dataParsers/nightscoutParser';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
@@ -18,7 +21,6 @@ describe('GameBusClient requests', () => {
     const nightscoutUrl = 'https://example-instance.herokuapp.com';
     const token = 'addtokenhere';
     const client = new NightScoutClient(nightscoutUrl, token);
-
 
     // test objects
     const testEntry: NightScoutEntryModel = {
@@ -61,7 +63,6 @@ describe('GameBusClient requests', () => {
         );
     });
 
-
     test('Getting entries', async () => {
         const response = await client.getEntries();
         // Full response means data is given separately
@@ -86,10 +87,11 @@ describe('GameBusClient requests', () => {
         );
     });
 
-
     test('Getting glucose unit', async () => {
         // Full response means data is given separately
-        expect(async () => {await client.getGlucoseUnit();}).rejects.toThrow('Could not read glucose unit from the Nightscout website!');
+        expect(async () => {
+            await client.getGlucoseUnit();
+        }).rejects.toThrow('Could not read glucose unit from the Nightscout website!');
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -97,5 +99,4 @@ describe('GameBusClient requests', () => {
             })
         );
     });
-
 });

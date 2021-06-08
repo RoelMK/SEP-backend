@@ -6,6 +6,7 @@ import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
 import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
+import { getFileName } from '../utils/files';
 
 /**
  * Default class for parsing food diaries
@@ -37,13 +38,19 @@ export default class FoodDiaryParser extends DataParser {
         this.foodParser = new FoodParser(
             preprocessedFoodDiaryData,
             FoodSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            DateFormat.FOOD_DIARY,
+            this.only_parse_newest,
+            this.lastUpdated
         );
         this.insulinParser = new InsulinParser(
             preprocessedFoodDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            DateFormat.FOOD_DIARY,
+            this.only_parse_newest,
+            this.lastUpdated
         );
+        // update the timestamp of newest parsed entry to this file
+        this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 
     /**
@@ -91,7 +98,6 @@ export default class FoodDiaryParser extends DataParser {
         rawData: FoodDiaryData[],
         mealTimeMap?: Map<string, string>
     ): FoodDiaryData[] {
-        //TODO for excel uploads this can be included during read, but not for onedrive excels
         // filter out empty rows
         rawData = rawData.filter((entry: FoodDiaryData) => {
             return (
@@ -169,14 +175,15 @@ export default class FoodDiaryParser extends DataParser {
             mealTimeMap.get(entry.meal_type) != undefined
         ) {
             entry.time = mealTimeMap.get(entry.meal_type) as string;
-        } else if (entry.time == '') {
+            return [entry, lastTime];
+        }
+        if (entry.time == '') {
             // if no mapping can be done, use last known time or midnight
             entry.time = lastTime == '' ? '00:00' : lastTime;
-        } else {
-            // update last known time
-            lastTime = entry.time;
+            return [entry, lastTime];
         }
-        return [entry, lastTime];
+        // update last known time
+        return [entry, entry.time];
     }
 
     /**
@@ -185,7 +192,7 @@ export default class FoodDiaryParser extends DataParser {
      * @param element food diary data element
      * @returns updated entry
      */
-    static computeTotalInsulin(entry: FoodDiaryData) {
+    static computeTotalInsulin(entry: FoodDiaryData): FoodDiaryData {
         // automatically computes the sum of insulin if not specified
         if (entry.total_insulin == '') {
             const base = entry.base_insulin == '' ? 0 : parseFloat(entry.base_insulin);

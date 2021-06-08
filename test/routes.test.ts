@@ -29,6 +29,33 @@ describe('test routes from test.ts', () => {
     });
 });
 
+describe('GET data', () => {
+    test('no authorization header given', async () => {
+        const response = await request(server).get('/data');
+        expect(response.statusCode).toBe(401);
+    });
+
+    test('no query parameters given', async () => {
+        const response = await request(server)
+            .get('/data')
+            .set(
+                'Authorization',
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI'
+            );
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('only start date given', async () => {
+        const response = await request(server)
+            .get('/data?startDate=8-6-2021&dataTypes=GLUCOSE')
+            .set(
+                'Authorization',
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI'
+            );
+        expect(response.statusCode).toBe(401);
+    });
+});
+
 describe('GET files', () => {
     //TODO remove these / redescribe, the gets are just for testing
     test('GET Abbott file', async () => {
@@ -97,8 +124,8 @@ describe('mood endpoint', () => {
     test('POST mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
-            moodDescription: 'happy',
-            moodValue: 1
+            arousal: 1,
+            valence: 1
         };
         // TODO: route not working
         const response = await request(server).post('/mood').send(moodData);

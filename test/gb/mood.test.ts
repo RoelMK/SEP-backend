@@ -1,20 +1,19 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import {
+    ActivityGETData,
     ActivityPOSTData,
-    IDActivityPOSTData,
-    ActivityGETData
+    IDActivityPOSTData
 } from '../../src/gb/models/gamebusModel';
-import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { InsulinPropertyKeys, Insulin } from '../../src/gb/objects/insulin';
-
+import { MoodModel } from '../../src/gb/models/moodModel';
+import { Mood, MoodPropertyKeys } from '../../src/gb/objects/mood';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
 const endpoint: string = process.env.ENDPOINT!;
 
-describe('with mocked insulin get call', () => {
+describe('with mocked moods get call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
         return Promise.resolve({
@@ -30,7 +29,7 @@ describe('with mocked insulin get call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('GET activities from type', async () => {
-        const insulin = await client.insulin().getInsulinActivities(0);
+        const moods = await client.mood().getAllMoodActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
@@ -39,47 +38,49 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN`
+                url: `${endpoint}/players/0/activities?gds=LOG_MOOD`
             })
         );
-        expect(insulin).toEqual([]);
+        expect(moods).toEqual([]);
     });
 
     test('GET activities from type between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
-        const insulin = await client
-            .insulin()
-            .getInsulinActivitiesBetweenUnix(0, unixTimestampBefore, unixTimestampAfter);
+        const moods = await client
+            .mood()
+            .getMoodActivitiesBetweenUnix(0, unixTimestampBefore, unixTimestampAfter);
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_INSULIN`
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_MOOD`
             })
         );
-        expect(insulin).toEqual([]);
+        expect(moods).toEqual([]);
     });
 
     test('GET activities from type on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
-        const insulin = await client.insulin().getInsulinActivitiesOnUnixDate(0, unixTimestamp);
+        const moods = await client.mood().getMoodActivitiesOnUnixDate(0, unixTimestamp);
+
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_INSULIN`
+                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_MOOD`
             })
         );
-        expect(insulin).toEqual([]);
+        expect(moods).toEqual([]);
     });
 });
 
-describe('with mocked insulin post call', () => {
+describe('with mocked mood post call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
         return Promise.resolve({
@@ -95,30 +96,30 @@ describe('with mocked insulin post call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     test('POST a single activity', async () => {
-        const model: InsulinModel = {
+        const model: MoodModel = {
             timestamp: 12,
-            insulinAmount: 34,
-            insulinType: InsulinType.RAPID
+            valence: 34,
+            arousal: 56
         };
         const POSTData: ActivityPOSTData = {
-            gameDescriptorTK: client.insulin().insulinTranslationKey,
+            gameDescriptorTK: client.mood().moodGameDescriptor,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
             propertyInstances: expect.arrayContaining([
                 {
-                    propertyTK: InsulinPropertyKeys.insulinAmount,
+                    propertyTK: MoodPropertyKeys.valence,
                     value: 34
                 },
                 {
-                    propertyTK: InsulinPropertyKeys.insulinType,
-                    value: 'rapid'
+                    propertyTK: MoodPropertyKeys.arousal,
+                    value: 56
                 }
             ]),
-            players: [0]
+            players: [90]
         };
 
-        client.insulin().postSingleInsulinActivity(model, 0, undefined, undefined);
+        client.mood().postSingleMoodActivity(model, 90, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -133,52 +134,52 @@ describe('with mocked insulin post call', () => {
     });
 
     test('POST a multiple activities', async () => {
-        const model1: InsulinModel = {
+        const model1: MoodModel = {
             timestamp: 1,
-            insulinAmount: 2,
-            insulinType: InsulinType.LONG
+            arousal: 2,
+            valence: 3
         };
-        const model2: InsulinModel = {
+        const model2: MoodModel = {
             timestamp: 11,
-            insulinAmount: 12,
-            insulinType: InsulinType.RAPID
+            arousal: 12,
+            valence: 13
         };
         const POSTData1: IDActivityPOSTData = {
-            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            gameDescriptor: client.mood().moodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
             propertyInstances: expect.arrayContaining([
                 {
-                    property: 1144,
+                    property: 1186,
                     value: 2
                 },
                 {
-                    property: 1185,
-                    value: 'long'
+                    property: 1187,
+                    value: 3
                 }
             ]),
             players: [0]
         };
         const POSTData2: IDActivityPOSTData = {
-            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            gameDescriptor: client.mood().moodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',
             propertyInstances: expect.arrayContaining([
                 {
-                    property: 1144,
+                    property: 1186,
                     value: 12
                 },
                 {
-                    property: 1185,
-                    value: 'rapid'
+                    property: 1187,
+                    value: 13
                 }
             ]),
             players: [0]
         };
 
-        client.insulin().postMultipleInsulinActivities([model1, model2], 0, undefined, undefined);
+        client.mood().postMultipleMoodActivities([model1, model2], 0, undefined, undefined);
 
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
@@ -193,7 +194,7 @@ describe('with mocked insulin post call', () => {
     });
 });
 
-describe('with mocked insulin put call', () => {
+describe('with mocked mood put call', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
         return Promise.resolve({
@@ -208,17 +209,16 @@ describe('with mocked insulin put call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
-    test('PUT a single insulin model', async () => {
-        const insulin: InsulinModel = {
+    test('PUT a single mood model', async () => {
+        const mood: MoodModel = {
             timestamp: 1,
-            insulinAmount: 2,
-            insulinType: InsulinType.RAPID,
+            valence: 2,
+            arousal: 2,
             activityId: 1
         };
 
-        const response = await client.insulin().putSingleInsulinActivity(insulin, 0);
+        const response = await client.mood().putSingleMoodActivity(mood, 0);
 
-        // TODO: add form data check?
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -231,24 +231,24 @@ describe('with mocked insulin put call', () => {
         expect(response).toEqual([]);
     });
 
-    test('PUT a single insulin model without ID', async () => {
-        const insulin: InsulinModel = {
+    test('PUT a single mood model withoud ID', async () => {
+        const mood: MoodModel = {
             timestamp: 1,
-            insulinAmount: 2,
-            insulinType: InsulinType.RAPID
+            valence: 2,
+            arousal: 2
         };
 
         expect(async () => {
-            await client.insulin().putSingleInsulinActivity(insulin, 0);
+            await client.mood().putSingleMoodActivity(mood, 0);
         }).rejects.toThrow('Activity ID must be present in order to replace activity');
     });
 });
 
 describe('convert response to models', () => {
-    test('convert single response to single model with insulin type 0', () => {
+    test('convert mood response to model', () => {
         const response: ActivityGETData = {
             id: 0,
-            date: 1622736981000,
+            date: 1622652468000,
             isManual: true,
             group: null,
             image: null,
@@ -271,10 +271,10 @@ describe('convert response to models', () => {
                 }
             },
             gameDescriptor: {
-                id: 1075,
-                translationKey: 'LOG_INSULIN',
-                image: null,
-                type: 'PHYSICAL',
+                id: 1062,
+                translationKey: 'LOG_MOOD',
+                image: '',
+                type: 'COGNITIVE',
                 isAggregate: false
             },
             dataProvider: {
@@ -285,37 +285,25 @@ describe('convert response to models', () => {
             },
             propertyInstances: [
                 {
-                    id: 69397,
+                    id: 0,
                     value: '2',
                     property: {
-                        id: 1143,
-                        translationKey: 'INSULIN_TYPE',
-                        baseUnit: 'String text',
-                        inputType: 'STRING',
-                        aggregationStrategy: 'SUM',
-                        propertyPermissions: []
-                    }
-                },
-                {
-                    id: 69398,
-                    value: '3',
-                    property: {
-                        id: 1144,
-                        translationKey: 'INSULIN_DOSE',
-                        baseUnit: 'IU',
+                        id: 1187,
+                        translationKey: 'MOOD_VALENCE',
+                        baseUnit: '[1,3]',
                         inputType: 'INT',
                         aggregationStrategy: 'AVERAGE',
                         propertyPermissions: []
                     }
                 },
                 {
-                    id: 69399,
-                    value: 'rapid',
+                    id: 0,
+                    value: '2',
                     property: {
-                        id: 1185,
-                        translationKey: 'INSULIN_SPEED',
-                        baseUnit: '[rapid,long]',
-                        inputType: 'STRING',
+                        id: 1186,
+                        translationKey: 'MOOD_AROUSAL',
+                        baseUnit: '[1,3]',
+                        inputType: 'INT',
                         aggregationStrategy: 'AVERAGE',
                         propertyPermissions: []
                     }
@@ -325,101 +313,12 @@ describe('convert response to models', () => {
             supports: [],
             chats: []
         };
-        const expectedResult: InsulinModel = {
-            timestamp: 1622736981000,
-            insulinAmount: 3,
-            insulinType: 0,
+        const expectedResult: MoodModel = {
+            timestamp: 1622652468000,
+            arousal: 2,
+            valence: 2,
             activityId: 0
         };
-        expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
-    });
-
-    test('convert single response to single model with insulin type 1', () => {
-        const response: ActivityGETData = {
-            id: 0,
-            date: 1622736981000,
-            isManual: true,
-            group: null,
-            image: null,
-            creator: {
-                id: 0,
-                user: {
-                    id: 0,
-                    firstName: 'First',
-                    lastName: 'Last',
-                    image: null
-                }
-            },
-            player: {
-                id: 0,
-                user: {
-                    id: 0,
-                    firstName: 'First',
-                    lastName: 'Last',
-                    image: null
-                }
-            },
-            gameDescriptor: {
-                id: 1075,
-                translationKey: 'LOG_INSULIN',
-                image: null,
-                type: 'PHYSICAL',
-                isAggregate: false
-            },
-            dataProvider: {
-                id: 1,
-                name: 'GameBus',
-                image: '',
-                isConnected: false
-            },
-            propertyInstances: [
-                {
-                    id: 69397,
-                    value: '2',
-                    property: {
-                        id: 1143,
-                        translationKey: 'INSULIN_TYPE',
-                        baseUnit: 'String text',
-                        inputType: 'STRING',
-                        aggregationStrategy: 'SUM',
-                        propertyPermissions: []
-                    }
-                },
-                {
-                    id: 69398,
-                    value: '3',
-                    property: {
-                        id: 1144,
-                        translationKey: 'INSULIN_DOSE',
-                        baseUnit: 'IU',
-                        inputType: 'INT',
-                        aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: []
-                    }
-                },
-                {
-                    id: 69399,
-                    value: 'long',
-                    property: {
-                        id: 1185,
-                        translationKey: 'INSULIN_SPEED',
-                        baseUnit: '[rapid,long]',
-                        inputType: 'STRING',
-                        aggregationStrategy: 'AVERAGE',
-                        propertyPermissions: []
-                    }
-                }
-            ],
-            personalPoints: [],
-            supports: [],
-            chats: []
-        };
-        const expectedResult: InsulinModel = {
-            timestamp: 1622736981000,
-            insulinAmount: 3,
-            insulinType: 1,
-            activityId: 0
-        };
-        expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
+        expect(Mood.convertResponseToMoodModels([response])).toStrictEqual([expectedResult]);
     });
 });

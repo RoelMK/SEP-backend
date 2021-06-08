@@ -17,12 +17,6 @@ describe('getting date format from string', () => {
         expect(getDateFormat(dateStringEU)).toBe(DateFormat.ABBOTT_EU);
         expect(getDateFormat(dateStringUS)).toBe(DateFormat.ABBOTT_US);
     });
-
-    test('Getting unknown date format from string', () => {
-        const dateStringUnknown = '01-01-2021 12:01';
-
-        expect(getDateFormat(dateStringUnknown)).toBe(DateFormat.NONE);
-    });
 });
 
 describe('parsing date from string', () => {

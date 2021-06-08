@@ -4,6 +4,8 @@ import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
 
+const endpoint: string = process.env.ENDPOINT!;
+
 describe('GameBusClient requests', () => {
     // Request handler that simply returns empty data for every request
     const request = mockRequest(() => {
@@ -16,6 +18,8 @@ describe('GameBusClient requests', () => {
     beforeEach(() => request.mockClear());
 
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
+    const unauthorizedClient = new GameBusClient();
+    const unauthorizedClientWithToken = new GameBusClient(new TokenHandler('', '', ''));
 
     test('full response', async () => {
         const response = await client.request(
@@ -47,7 +51,7 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
         );
     });
@@ -66,7 +70,7 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
         );
     });
@@ -84,8 +88,38 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: 'https://api3.gamebus.eu/v2/players/0/activities'
+                url: `${endpoint}/players/0/activities`
             })
+        );
+    });
+
+    test('Unauthorized request without TokenHandler', async () => {
+        expect(async () => {
+            await unauthorizedClient.request(
+                '',
+                RequestMethod.GET,
+                undefined,
+                undefined,
+                undefined,
+                true
+            );
+        }).rejects.toThrow(
+            'You must be authorized to access this path: https://api3.gamebus.eu/v2/'
+        );
+    });
+
+    test('Unauthorized request with empty TokenHandler', async () => {
+        expect(async () => {
+            await unauthorizedClientWithToken.request(
+                '',
+                RequestMethod.GET,
+                undefined,
+                undefined,
+                undefined,
+                true
+            );
+        }).rejects.toThrow(
+            'You must be authorized to access this path: https://api3.gamebus.eu/v2/'
         );
     });
 });
@@ -100,7 +134,7 @@ describe('GameBusClient helper functions', () => {
     });
 
     test('URL without query', () => {
-        expect(client.createURL('players')).toBe('https://api3.gamebus.eu/v2/players');
+        expect(client.createURL('players')).toBe(`${endpoint}/players`);
     });
 
     test('URL with query', () => {
@@ -109,6 +143,6 @@ describe('GameBusClient helper functions', () => {
                 query1: 'value1',
                 query2: 'value2'
             })
-        ).toBe('https://api3.gamebus.eu/v2/players?query1=value1&query2=value2');
+        ).toBe(`${endpoint}/players?query1=value1&query2=value2`);
     });
 });

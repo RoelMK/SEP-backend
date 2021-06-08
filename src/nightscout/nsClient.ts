@@ -17,7 +17,7 @@ export class NightScoutClient {
      * Posts a night scout entry to the nightscout instance
      * @param entry NightScoutEntry: a nightscout entry
      */
-    async postEntry(entry: NightScoutEntryModel) {
+    async postEntry(entry: NightScoutEntryModel): Promise<void> {
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
@@ -45,7 +45,7 @@ export class NightScoutClient {
      * Posts a night scout treatment to the nightscout instance
      * @param entry NightScoutTreatment: a nightscout treatment
      */
-    async postTreatment(treatment: NightScoutTreatmentModel) {
+    async postTreatment(treatment: NightScoutTreatmentModel): Promise<void> {
         try {
             const config: AxiosRequestConfig = {
                 method: 'POST',
@@ -123,5 +123,9 @@ export class NightScoutClient {
         } catch (error) {
             throw new Error('Could not read glucose unit from the Nightscout website!');
         }
+    }
+
+    getNightscoutHost(): string {
+        return this.nightScoutHost;
     }
 }

@@ -2,6 +2,7 @@
 export interface GlucoseModel {
     timestamp: number;
     glucoseLevel: number;
+    activityId?: number; // ID of GameBus activity
 }
 
 /**

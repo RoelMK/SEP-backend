@@ -221,7 +221,7 @@ export class GameBusClient {
     createHeader(authRequired?: boolean, extraHeaders?: Headers): Headers {
         // Set Content-Type and User-Agent by default
         const headers: Headers = {
-            'content-type': 'application/json',
+            'Content-Type': 'application/json',
             'User-Agent': 'Diabetter Client',
             Accept: 'application/json',
             ...extraHeaders

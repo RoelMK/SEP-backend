@@ -123,11 +123,11 @@ async function parseFile(dataParser: DataParser): Promise<void> {
     await dataParser.process();
 
     // TODO just for testing, get some insulin data and send it back
-    const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
-    const foodData: any = dataParser.getData(OutputDataType.FOOD);
+    //const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
+    //const foodData: any = dataParser.getData(OutputDataType.FOOD);
 
-    console.log(insulinData);
-    console.log(foodData);
+    //console.log(insulinData);
+    //console.log(foodData);
 }
 
 module.exports = uploadRouter;

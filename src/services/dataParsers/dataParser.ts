@@ -36,6 +36,9 @@ export abstract class DataParser {
     // UNIX timestamp in ms that indicates when it was last parsed
     protected lastUpdated = 0;
 
+    // whether to parse all incoming data or only new data
+    protected only_parse_newest = false;
+
     /**
      * Constructor with file path and data source (provided by children)
      * @param filePath Path to .csv file
@@ -47,7 +50,6 @@ export abstract class DataParser {
         protected userInfo: DiabetterUserInfo,
         protected oneDriveToken?: string,
         protected tableName?: string, // for excel parsing
-        protected only_parse_newest = false
     ) {}
 
     /**

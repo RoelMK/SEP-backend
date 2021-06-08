@@ -4,7 +4,7 @@ import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
 import { validUnixTimestamp } from '../services/utils/dates';
 
-const moodRouter = Router()
+const moodRouter = Router();
 
 moodRouter.post('/mood', (req: any, res: Response) => {
     // Call someone to aggregate and send data to gamebus
@@ -12,12 +12,10 @@ moodRouter.post('/mood', (req: any, res: Response) => {
 
     const moodTime = req.body.timestamp as number;
     const valence = req.body.valence as number;
-    const arousal = req.body.arousal as number
+    const arousal = req.body.arousal as number;
 
     // Check if given timestamps are valid
-    if (!validUnixTimestamp(moodTime) 
-    || (valence < 1 || valence > 3) 
-    || (arousal < 1 || valence > 3)) {
+    if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
         // Bad request
         res.sendStatus(400);
         return;
@@ -27,13 +25,13 @@ moodRouter.post('/mood', (req: any, res: Response) => {
         timestamp: moodTime,
         valence: valence,
         arousal: arousal
-    }
+    };
 
     const gbClient = new GameBusClient(
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId)
+    gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
 
     res.send(moodModel);
 });

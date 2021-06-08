@@ -1,4 +1,10 @@
-import { DataParser, DataSource, InputError } from './dataParser';
+import {
+    DataParser,
+    DataSource,
+    DiabetterUserInfo,
+    InputError,
+    OutputDataType
+} from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
@@ -14,8 +20,12 @@ import { getFileName } from '../utils/files';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(foodDiaryFile: string, protected oneDriveToken?: string) {
-        super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken, 'fooddiary');
+    constructor(
+        foodDiaryFile: string,
+        userInfo: DiabetterUserInfo,
+        protected oneDriveToken?: string
+    ) {
+        super(DataSource.FOOD_DIARY, foodDiaryFile, userInfo, oneDriveToken, 'fooddiary');
     }
 
     /**
@@ -35,20 +45,20 @@ export default class FoodDiaryParser extends DataParser {
             this.foodDiaryData,
             await this.getMealTypeMap(this.filePath as string, oneDriveToken)
         );
-        this.foodParser = new FoodParser(
+
+        // set dateFormat and create parsers
+        this.dateFormat = DateFormat.FOOD_DIARY;
+        this.createParser(
+            OutputDataType.FOOD,
             preprocessedFoodDiaryData,
-            FoodSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY,
-            this.only_parse_newest,
-            this.lastUpdated
+            FoodSource.FOOD_DIARY_EXCEL
         );
-        this.insulinParser = new InsulinParser(
+        this.createParser(
+            OutputDataType.INSULIN,
             preprocessedFoodDiaryData,
-            InsulinSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY,
-            this.only_parse_newest,
-            this.lastUpdated
+            InsulinSource.FOOD_DIARY_EXCEL
         );
+        
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
@@ -232,7 +242,7 @@ export type FoodDiaryData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function FoodDiaryDataGuard(object: any): object is FoodDiaryData {
-    if (object === undefined){
+    if (object === undefined) {
         return false;
     }
     return (

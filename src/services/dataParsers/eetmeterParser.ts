@@ -1,7 +1,7 @@
 import { FoodModel } from '../../gb/models/foodModel';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import { getFileName } from '../utils/files';
-import { DataParser, DataSource } from './dataParser';
+import { DataParser, DataSource, DiabetterUserInfo, OutputDataType } from './dataParser';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
@@ -15,8 +15,8 @@ export class EetMeterParser extends DataParser {
      * DataParser construction with DataSource set
      * @param xmlFile file path of Eetmeter file
      */
-    constructor(private readonly xmlFile: string) {
-        super(DataSource.EETMETER, xmlFile);
+    constructor(private readonly xmlFile: string, userInfo: DiabetterUserInfo) {
+        super(DataSource.EETMETER, xmlFile, userInfo);
     }
 
     /**
@@ -32,13 +32,9 @@ export class EetMeterParser extends DataParser {
         if (this.eetmeterConsumptionData.length == undefined) {
             this.eetmeterConsumptionData = [this.eetmeterConsumptionData as unknown as Consumptie];
         }
-        this.foodParser = new FoodParser(
-            this.eetmeterConsumptionData,
-            FoodSource.EETMETER,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+
+        // create the food parser
+        this.createParser(OutputDataType.FOOD, this.eetmeterConsumptionData, FoodSource.EETMETER);
 
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());

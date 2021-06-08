@@ -1,4 +1,4 @@
-import { DataParser, DataSource, InputError } from './dataParser';
+import { DataParser, DataSource, DiabetterUserInfo, InputError, OutputDataType } from './dataParser';
 import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
 import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
@@ -15,8 +15,8 @@ export default class AbbottParser extends DataParser {
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private abbotFile: string) {
-        super(DataSource.ABBOTT, abbotFile);
+    constructor(private abbotFile: string, userInfo: DiabetterUserInfo) {
+        super(DataSource.ABBOTT, abbotFile, userInfo);
     }
 
     /**
@@ -35,31 +35,13 @@ export default class AbbottParser extends DataParser {
 
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData: AbbottData[] = this.filterFood();
-        this.foodParser = new FoodParser(
-            foodData,
-            FoodSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.FOOD, foodData, FoodSource.ABBOTT);
 
         const glucoseData: AbbottData[] = this.filterGlucose();
-        this.glucoseParser = new GlucoseParser(
-            glucoseData,
-            GlucoseSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.GLUCOSE, glucoseData, GlucoseSource.ABBOTT);
 
         const insulinData: AbbottData[] = this.filterInsulin();
-        this.insulinParser = new InsulinParser(
-            insulinData,
-            InsulinSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.INSULIN, insulinData, InsulinSource.ABBOTT);
 
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());

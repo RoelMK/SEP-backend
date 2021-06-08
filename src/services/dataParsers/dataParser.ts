@@ -7,9 +7,10 @@ import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import XMLParser from '../fileParsers/xmlParser';
-import FoodParser from '../food/foodParser';
+import FoodParser, { FoodSource } from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
-import InsulinParser from '../insulin/insulinParser';
+import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { ModelParser } from '../modelParser';
 import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
@@ -43,6 +44,7 @@ export abstract class DataParser {
     constructor(
         protected readonly dataSource: DataSource,
         protected filePath: string,
+        protected userInfo: DiabetterUserInfo,
         protected oneDriveToken?: string,
         protected tableName?: string, // for excel parsing
         protected only_parse_newest = false
@@ -90,12 +92,51 @@ export abstract class DataParser {
     setFilePath(path: string): void {
         this.filePath = path;
     }
-    getFilePath(): string{
+    getFilePath(): string {
         return this.filePath;
     }
 
     abstract process(): Promise<void>;
 
+    /**
+     * Creates parsers and allows easy non-duplicative class variable insertion
+     * @param type output datatype
+     * @param data array containing model objects
+     * @param dataSource FoodSource, GlucoseSource or InsulinSource object
+     */
+    protected createParser(type: OutputDataType, data: any[], dataSource: any): ModelParser {
+        switch (type) {
+            case OutputDataType.FOOD:
+                this.foodParser = new FoodParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest
+                );
+            case OutputDataType.MOOD:
+                //TODO
+                this.moodParser = new MoodParser(data, this.userInfo);
+            case OutputDataType.INSULIN:
+                this.insulinParser = new InsulinParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest
+                );
+            case OutputDataType.GLUCOSE:
+                this.glucoseParser = new GlucoseParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest
+                );
+            default:
+                throw Error('Output type is not implemented');
+        }
+    }
     /**
      * To be called after processing, for retrieving processed data
      * @param outputType Glucose, Insulin or Food
@@ -132,7 +173,7 @@ export abstract class DataParser {
      */
     protected retrieveLastUpdate(fileName: string): void {
         const dbClient: DBClient = new DBClient(false);
-        this.lastUpdated = dbClient.getLastUpdate('1', fileName);
+        this.lastUpdated = dbClient.getLastUpdate(this.userInfo.playerId, fileName);
         dbClient.close();
     }
 
@@ -142,7 +183,7 @@ export abstract class DataParser {
      */
     protected setLastUpdate(fileName: string, timestamp: number) {
         const dbClient: DBClient = new DBClient(false);
-        dbClient.registerFileParse('1', fileName, timestamp);
+        dbClient.registerFileParse(this.userInfo.playerId, fileName, timestamp);
         dbClient.close();
     }
 
@@ -189,18 +230,25 @@ export enum OutputDataType {
     MOOD = 3
 }
 
+/**
+ * Contains relevant information about the user for which data is parsed
+ */
+export interface DiabetterUserInfo {
+    playerId: string;
+    accessToken: string;
+}
+
+// custom errors
 export class InputError extends Error {
     constructor(message) {
-        super(message); 
-        this.name = 'InputError'; 
+        super(message);
+        this.name = 'InputError';
     }
 }
 
 class DeveloperError extends Error {
     constructor(message) {
-        super(message); 
-        this.name = 'DeveloperError'; 
+        super(message);
+        this.name = 'DeveloperError';
     }
 }
-
-

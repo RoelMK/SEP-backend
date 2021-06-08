@@ -28,13 +28,13 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
-        private readonly userInfo: DiabetterUserInfo,
+        userInfo: DiabetterUserInfo,
         only_process_newest: boolean,
         lastUpdated?: number,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         // Process incoming glucoseInput data
         this.process();
         this.post();
@@ -81,7 +81,10 @@ export default class GlucoseParser extends ModelParser {
      * Posts the imported glucose data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the glucoseData to GameBus
+        if (this.glucoseData && this.glucoseData.length > 0)
+            this.gbClient
+                .glucose()
+                .postMultipleGlucoseActivities(this.glucoseData, this.userInfo.playerId);
     }
 }
 /**

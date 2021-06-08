@@ -1,11 +1,27 @@
+import { TokenHandler } from "../gb/auth/tokenHandler";
+import { GameBusClient } from "../gb/gbClient";
+import { DiabetterUserInfo } from "./dataParsers/dataParser";
+
 export abstract class ModelParser {
     protected newestEntry = 0;
 
+    // client for posting to GameBus
+    protected gbClient: GameBusClient;
+
     constructor(
+        protected userInfo: DiabetterUserInfo,
         // whether to upload all input data, or only data after the last update
         private only_process_newest: boolean,
         private lastUpdated?: number
-    ) {}
+    ) {
+        this.gbClient = new GameBusClient(
+            new TokenHandler(
+                userInfo.accessToken,
+                userInfo.refreshToken,
+                userInfo.playerId.toString()
+            )
+        );
+    }
 
     /**
      * Calculates the most recent entry in the items array by checking

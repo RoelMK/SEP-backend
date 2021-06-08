@@ -7,10 +7,11 @@ import { XOR } from 'ts-xor';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { DiabetterUserInfo } from '../dataParsers/dataParser';
+import { GameBusClient } from '../../gb/gbClient';
+import { TokenHandler } from '../../gb/auth/tokenHandler';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
- * - Abbott
  */
 export default class InsulinParser extends ModelParser {
     insulinData?: InsulinModel[];
@@ -27,12 +28,12 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
-        private readonly userInfo: DiabetterUserInfo,
+        userInfo: DiabetterUserInfo,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {
         // Process incoming insulinInput data
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         this.process();
         this.post();
     }
@@ -57,7 +58,11 @@ export default class InsulinParser extends ModelParser {
      * Posts the imported insulin data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the insulinData to GameBus
+        console.log(this.insulinData);
+        if (this.insulinData && this.insulinData.length > 0)
+            this.gbClient
+                .insulin()
+                .postMultipleInsulinActivities(this.insulinData, this.userInfo.playerId);
     }
 }
 /**

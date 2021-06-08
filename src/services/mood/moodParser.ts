@@ -1,3 +1,5 @@
+import { TokenHandler } from '../../gb/auth/tokenHandler';
+import { GameBusClient } from '../../gb/gbClient';
 import { MoodModel } from '../../gb/models/moodModel';
 import { DiabetterUserInfo } from '../dataParsers/dataParser';
 import { ModelParser } from '../modelParser';
@@ -13,10 +15,10 @@ export default class MoodParser extends ModelParser {
      */
     constructor(
         private readonly moodInput: MoodModel[],
-        private readonly userInfo: DiabetterUserInfo
+        userInfo: DiabetterUserInfo
     ) {
         // only processing newest is not necessary for moods, since it is only given via the dashboard
-        super(false);
+        super(userInfo, false);
         // Maybe process if needed in the future
         this.process();
         this.post();
@@ -33,6 +35,9 @@ export default class MoodParser extends ModelParser {
      * Posts mood data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post mood data to GameBus
+        if (this.moodInput && this.moodInput.length > 0)
+            this.gbClient
+                .mood()
+                .postMultipleMoodActivities(this.moodInput, this.userInfo.playerId);
     }
 }

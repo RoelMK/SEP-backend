@@ -32,11 +32,11 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        private readonly userInfo: DiabetterUserInfo,
+        userInfo: DiabetterUserInfo,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         // Process incoming foodInput data
         this.process();
         this.post();
@@ -60,7 +60,10 @@ export default class FoodParser extends ModelParser {
      * Posts the imported food data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the foodData (correctly formatted) to GameBus
+        if (this.foodData && this.foodData.length > 0)
+            this.gbClient
+                .food()
+                .postMultipleFoodActivities(this.foodData, this.userInfo.playerId);
     }
 }
 

@@ -9,7 +9,7 @@ onedriveRouter.get('/login', async (req: any, res: any) => {
     if (req.query.homeAccountId) {
         const account = await getAccessTokenSilent(req.query.homeAccountId);
         if (account) {
-            return res.redirect(generateRedirectUrl(account));
+            return res.status(200).json(account);
         }
     }
 

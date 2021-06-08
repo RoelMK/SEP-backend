@@ -98,7 +98,7 @@ export interface SupportReference {
 //TODO add output interfaces for getPlayer and getUser
 
 
-export interface ChallengeReference {
+export interface ChallengeGETData {
     id: number;
     name: string;
     description: string | null;
@@ -225,4 +225,45 @@ export interface MembershipReference {
     player: UserReference;
     initiatorOfMembership: UserReference;
     initiatorOfLeadership: UserReference| null; //not sure
+}
+
+export interface ChallengePOSTData{
+    name: string;
+    description: null | string;
+    image: null | string;
+    websiteURL: null | string;
+    minCircleSize: number;
+    maxCircleSize: number;
+    availableDate: string | number;
+    startDate: string | number;
+    endDate: string | number;
+    rewardDescription
+    rewardInfo
+    target
+    contenders
+    withNudging
+    rules: ChallengeRulesPOSTData[]
+    circles: number[];
+}
+
+export interface ChallengeRulesPOSTData{
+    id: any;
+    name: string;
+    image: string | null;
+    imageRequired: boolean;
+    gameDescriptors: any;
+    maxTimesFired: any;
+    minDaysBetweenFire: any;
+    conditions: ChallengeConditionsPOSTData[];
+    points: Points[];
+}
+
+export interface ChallengeConditionsPOSTData{
+    property: number;
+    operator: string;
+    value: string;
+}
+
+export interface Points{
+    dataProviders?: DataProviderReference;
 }

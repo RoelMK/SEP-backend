@@ -124,4 +124,8 @@ export class NightScoutClient {
             throw new Error('Could not read glucose unit from the Nightscout website!');
         }
     }
+
+    getNightscoutHost(): string {
+        return this.nightScoutHost;
+    }
 }

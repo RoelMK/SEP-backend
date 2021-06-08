@@ -3,14 +3,18 @@ import { DataSource } from '../dataParsers/dataParser';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getFileDirectory, getFileName } from '../utils/files';
 import { getKeys } from '../utils/interfaceKeys';
+import { FileParser } from './fileParser';
 
 /**
  * Default class for parsing .xlsx files from a OneDrive
  */
-export default class OneDriveExcelParser {
+export default class OneDriveExcelParser extends FileParser {
     // on which page the mapping tables reside
     private static mappingTableSheet = 'Sheet2';
 
+    constructor() {
+        super();
+    }
     /**
      * Asynchronous function that parses Excel data on a onedrive
      * @param filePath path to the file on the OneDrive

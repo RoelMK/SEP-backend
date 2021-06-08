@@ -6,6 +6,7 @@ import FoodMapper from './foodMapper';
 import { XOR } from 'ts-xor';
 import { Consumptie } from '../dataParsers/eetmeterParser';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { ModelParser } from '../modelParser';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -14,7 +15,7 @@ import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
  * TODO: automatically detect food source based on column names
  * TODO: use dynamic format where user is able to pick what column represents what
  */
-export default class FoodParser {
+export default class FoodParser extends ModelParser {
     // Food data to be exported
     foodData?: FoodModel[];
 
@@ -23,12 +24,17 @@ export default class FoodParser {
      * @param foodInput array of food inputs
      * @param foodSource specifies where the food input comes from
      * @param dateFormat specifies the format in which dates are represented
+     * @param lastUpdated: when this file was processed for the last time
+     * @param only_process_newest whether to process all data or only newest
      */
     constructor(
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
-        private readonly dateFormat: DateFormat
+        private readonly dateFormat: DateFormat,
+        only_process_newest: boolean,
+        lastUpdated?: number
     ) {
+        super(only_process_newest, lastUpdated);
         // Process incoming foodInput data
         this.process();
     }
@@ -38,6 +44,13 @@ export default class FoodParser {
      */
     private process() {
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
+
+        // retrieve the last time stamp in the glucoseData and set it as a threshold
+        // to prevent double parsing in the future
+        this.setNewestEntry(this.foodData);
+
+        // filter on entries after the last update with this file for this person
+        this.foodData = this.filterAfterLastUpdate(this.foodData);
     }
 
     /**

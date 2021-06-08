@@ -25,6 +25,10 @@ export class DBClient {
             // eslint-disable-next-line max-len
             'CREATE TABLE IF NOT EXISTS login_attempts (player_id TEXT PRIMARY KEY, login_token TEXT NOT NULL, expire_time DATETIME NOT NULL, access_token TEXT, refresh_token TEXT);'
         );
+
+        this.db.exec(
+            'CREATE TABLE IF NOT EXISTS file_parse_events (player_id TEXT, file_name TEXT NOT NULL, time_stamp bigint NOT NULL, primary key (player_id, file_name));'
+        );
     }
 
     /**
@@ -136,6 +140,65 @@ export class DBClient {
             return this.db.prepare('SELECT * FROM login_attempts WHERE player_id=?').get(playerId);
         } catch (e) {
             return undefined;
+        }
+    }
+
+    /**
+    
+     */
+
+    /**
+     * Every time a file is parsed, its file path or unique indicator (e.g. 'nightscout') and Unix timestamp
+     * are added to the database. This data is used when the file is re-uploaded to prevent duplication of data.
+     *
+     * The funtion below adds an entry to the database stating the last parse time (time_stamp) for a certain file (file_name)
+     * of a certain player (playerId)
+     * @param playerId Id of player
+     * @param file_name Name of file that is parsed
+     * @param time_stamp time of last parsed entry
+     * @returns
+     */
+    registerFileParse(playerId: string, file_name: string, timestamp: number): boolean {
+        try {
+            const insrt = this.db.prepare(
+                `INSERT INTO file_parse_events (player_id, file_name, time_stamp) 
+                                    VALUES(?, ?, ?) ON CONFLICT(player_id, file_name) DO UPDATE SET time_stamp=?`
+            );
+            insrt.run(playerId, file_name, timestamp, timestamp);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+    /**
+     * Every time a file is parsed, its file path or unique indicator (e.g. 'nightscout') and Unix timestamp
+     * are added to the database. This data is used when the file is re-uploaded to prevent duplication of data.
+     * It fetches the last update of the file of the player.
+     * @param playerId ID of player
+     * @param file_name Name of file that is parsed
+     * @returns Timestamp of last parse
+     */
+    getLastUpdate(playerId: string, file_name: string): number {
+        try {
+            const getLastParsed = this.db
+                .prepare('SELECT * FROM file_parse_events WHERE player_id=? AND file_name=?')
+                .get(playerId, file_name);
+            return getLastParsed ? getLastParsed.time_stamp : 0;
+        } catch (e) {
+            return 0; // if an error occurs, pick the oldest timestamp
+        }
+    }
+
+    /**
+     * Throws out all entries in the file_parse_events table
+     * Mainly used for testing purposes
+     */
+    cleanFileParseEvents() {
+        try {
+            const deleteAll = this.db.prepare('Delete from file_parse_events');
+            deleteAll.run();
+        } catch (e) {
+            return undefined; // if an error occurs, return undefined
         }
     }
 

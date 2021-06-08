@@ -114,3 +114,94 @@ test('database register double login attempt', () => {
     expect(dbClient.removeFinishedLoginAttempt(playerId)).toBeTruthy();
     dbClient.close();
 });
+
+test('Register a file parse event and retrieve it', () => {
+    const playerId = '443';
+    const fileName = 'foodDiary.xlsx';
+    const timeStamp = 1000000000000;
+
+    let dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId, fileName, timeStamp)).toBeTruthy();
+    dbClient.close();
+    dbClient = new DBClient();
+    expect(dbClient.getLastUpdate(playerId, fileName)).toStrictEqual(timeStamp);
+    dbClient.close();
+});
+
+test('Register and update a file parse event and retrieve it', () => {
+    const playerId = '443';
+    const fileName = 'foodDiary.xlsx';
+    const timeStamp = 1000000000000;
+
+    let dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId, fileName, timeStamp)).toBeTruthy();
+    dbClient.close();
+
+    dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId, fileName, timeStamp + 100000)).toBeTruthy();
+    dbClient.close();
+
+    dbClient = new DBClient();
+    expect(dbClient.getLastUpdate(playerId, fileName)).toStrictEqual(timeStamp + 100000);
+    dbClient.close();
+});
+
+test('Register and update multple file parse events and retrieve it', () => {
+    const playerId1 = '443';
+    const playerId2 = '444';
+    const fooddiary = 'foodDiary.xlsx';
+    const abbott = 'abbott.csv';
+    const timeStamp_player1 = 1000000000000;
+    const timeStamp_player2 = 1100000000000;
+
+    let dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId1, fooddiary, timeStamp_player1)).toBeTruthy();
+    expect(dbClient.registerFileParse(playerId1, abbott, timeStamp_player1)).toBeTruthy();
+    dbClient.close();
+
+    dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId2, fooddiary, timeStamp_player2)).toBeTruthy();
+    expect(dbClient.registerFileParse(playerId2, abbott, timeStamp_player2)).toBeTruthy();
+    dbClient.close();
+
+    dbClient = new DBClient();
+    expect(dbClient.registerFileParse(playerId1, abbott, timeStamp_player1 + 100000)).toBeTruthy();
+    expect(
+        dbClient.registerFileParse(playerId2, fooddiary, timeStamp_player2 + 100000)
+    ).toBeTruthy();
+    dbClient.close();
+
+    dbClient = new DBClient();
+    expect(dbClient.getLastUpdate(playerId1, fooddiary)).toStrictEqual(timeStamp_player1);
+    expect(dbClient.getLastUpdate(playerId1, abbott)).toStrictEqual(timeStamp_player1 + 100000);
+    expect(dbClient.getLastUpdate(playerId2, fooddiary)).toStrictEqual(timeStamp_player2 + 100000);
+    expect(dbClient.getLastUpdate(playerId2, abbott)).toStrictEqual(timeStamp_player2);
+
+    dbClient.close();
+});
+
+test('Retrieve non existing parse event', () => {
+    const playerId = '-1';
+    const fileName = 'nonsense.xlsx';
+    const dbClient = new DBClient();
+    expect(dbClient.getLastUpdate(playerId, fileName)).toStrictEqual(0);
+    dbClient.close();
+});
+
+test('Execute methods while database does not exist', () => {
+    try {
+        fs.unlinkSync(process.env.DATABASE!); // Remove db file
+    } catch (error) {
+        return;
+    }
+    const dbClient = new DBClient(true); // with logging to see errors
+    expect(dbClient.cleanFileParseEvents()).toBeUndefined();
+    expect(dbClient.registerFileParse('1', 'file.xlsx', 1000000000000)).toBeFalsy();
+    expect(dbClient.getLastUpdate('1', 'file.xlsx')).toStrictEqual(0);
+    expect(dbClient.cleanLoginAttempts()).toBeFalsy();
+    expect(dbClient.getLoginAttemptByLoginToken('token')).toBeUndefined();
+    expect(dbClient.getLoginAttemptByPlayerId('id')).toBeUndefined();
+    expect(dbClient.registerCallback('id', 't1', 't2')).toBeFalsy();
+    expect(dbClient.registerLoginAttempt('id', 't1', new Date())).toBeFalsy();
+    expect(dbClient.removeFinishedLoginAttempt('id')).toBeFalsy();
+});

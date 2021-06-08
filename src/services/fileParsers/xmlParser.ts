@@ -1,11 +1,14 @@
 import { readFileSync } from 'fs';
 import { parseString, processors } from 'xml2js';
+import { FileParser } from './fileParser';
 
 /**
  * Generic XML reader and parser to be used for all XML files
  */
-export default class XMLParser {
-    constructor(private readonly config = defaultConfig) {}
+export default class XMLParser extends FileParser {
+    constructor(private readonly config = defaultConfig) {
+        super();
+    }
 
     /**
      * Async function that parses the given .xml file's path

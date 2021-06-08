@@ -1,45 +1,52 @@
-import { Request, Response, Router } from 'express';
+import axios from 'axios';
+import { Response, Router } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
-import { InsulinModel } from '../gb/models/insulinModel';
+import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
 import { checkJwt } from '../middlewares/checkJwt';
+import { validUnixTimestamp } from '../services/utils/dates';
 
 const insulinRouter = Router();
 
-insulinRouter.post('/insulin', checkJwt, async (req: Request, res: Response) => {
+insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     // Simple POST should only include an InsulinModel
-    if (!InsulinModelGuard(req.body)) {
-        // Bad request as body is not InsulinModel
-        res.sendStatus(400);
+
+    const insulinTime = req.body.timestamp as number;
+    const insulinAmount = req.body.insulinAmount as number;
+    const insulinType = req.body.insulinType as InsulinType;
+    const activityId = req.body.activityId as number;
+
+    if (!validUnixTimestamp(insulinTime) || insulinAmount < 0 || !activityId) {
+        // Bad request
+        return res.sendStatus(400);
     }
 
-    // TODO: not sure if this works directly, might need to "rebuild" the model from the body
-    const insulin: InsulinModel = req.body;
+    const insulinModel: InsulinModel = {
+        timestamp: insulinTime,
+        insulinAmount: insulinAmount,
+        insulinType: insulinType,
+        activityId: activityId
+    };
 
     const gbClient = new GameBusClient(
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
     try {
-        // Store response and PUT insulin data
-        const response = await gbClient
-            .insulin()
-            .putSingleInsulinActivity(insulin, req.user.playerId);
-        // Send response back and also 200
-        res.status(200).send(response);
-    } catch (e) {
-        // If error, send 400 and error
-        res.status(400).send(e);
+        // PUT data
+        await gbClient.insulin().putSingleInsulinActivity(insulinModel, req.user.playerId);
+        // Send 200 and new model
+        res.status(200).send(insulinModel);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            // Unauthorized -> 401
+            if (error.response?.status === 401) {
+                return res.status(401).send();
+            }
+        }
+        // Unknown error -> 503
+        return res.status(503).send();
     }
 });
-
-function InsulinModelGuard(object: any): object is InsulinModel {
-    return (
-        object.timestamp !== undefined &&
-        object.insulinAmount !== undefined &&
-        object.insulinType !== undefined &&
-        object.activityId !== undefined
-    );
-}
 
 module.exports = insulinRouter;

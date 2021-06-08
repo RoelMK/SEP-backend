@@ -193,7 +193,7 @@ export default class FoodDiaryParser extends DataParser {
      * @param element food diary data element
      * @returns updated entry
      */
-    static computeTotalInsulin(entry: FoodDiaryData) {
+    static computeTotalInsulin(entry: FoodDiaryData): FoodDiaryData {
         // automatically computes the sum of insulin if not specified
         if (entry.total_insulin == '') {
             const base = entry.base_insulin == '' ? 0 : parseFloat(entry.base_insulin);

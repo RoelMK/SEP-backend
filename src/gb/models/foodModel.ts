@@ -16,6 +16,7 @@ export interface FoodModel {
     water?: number;
     sugars?: number;
     description?: string;
+    activityId?: number; // ID of GameBus activity
 }
 
 export enum MEAL_TYPE {

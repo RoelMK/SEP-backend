@@ -1,7 +1,7 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser, DiabetterUserInfo, OutputDataType } from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -17,29 +17,45 @@ const uploadRouter = Router();
  * format: one of eetmeter, abbott or fooddiary
  */
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
+    // retrieve user information
+    const userInfo: DiabetterUserInfo = {
+        playerId: req.user.playerId,
+        accessToken: req.user.accessToken,
+        refreshToken: req.user.refreshToken
+    };
+
     // filename is not transferred automatically with the file, meaning the file is named as '0133dsdf'-like
-    // use original filename to create a more readable file path 
-    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname; 
+    // use original filename to create a more readable file path
+    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname;
     let promise: Promise<void>;
     switch (req.query.format) {
         case 'eetmeter':
-            promise = uploadFile(req, res, new EetMeterParser(filePath));
+            promise = uploadFile(req, res, new EetMeterParser(filePath, userInfo));
             break;
         case 'abbott':
-            promise = uploadFile(req, res, new AbbottParser(filePath));
+            promise = uploadFile(req, res, new AbbottParser(filePath, userInfo));
             break;
         case 'fooddiary':
-            promise = uploadFile(req, res, new FoodDiaryParser(filePath));
+            promise = uploadFile(req, res, new FoodDiaryParser(filePath, userInfo));
             break;
         default:
             res.status(400).send('This data format is not supported');
-            try{fs.unlinkSync(req.file.path);}catch(e){console.log(e.message);}
+            try {
+                fs.unlinkSync(req.file.path);
+            } catch (e) {
+                console.log(e.message);
+            }
             return;
     }
     // When an upload is done, remove the file from the server
-    promise.then(() => {try{fs.unlinkSync(filePath);}catch(e){console.log(e.message);}});
+    promise.then(() => {
+        try {
+            fs.unlinkSync(filePath);
+        } catch (e) {
+            console.log(e.message);
+        }
+    });
 });
-
 
 // test get requests for file uploads //TODO remove
 uploadRouter.get('/upload/abbott', function (req, res) {
@@ -55,7 +71,7 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
 });
 
 /**
- * 
+ *
  * @param req Post request, containing file path of uploaded file and more
  * @param res Query response object, for determining response to frontend
  * @param dataParser DataParser object for parsing incoming files
@@ -63,11 +79,15 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
  */
 async function uploadFile(req, res, dataParser: DataParser) {
     //rename auto-generated file path to original name
-    try{
+    try {
         fs.renameSync(req.file.path, dataParser.getFilePath());
-    }catch (e){
+    } catch (e) {
         console.log(e);
-        try{fs.unlinkSync(req.file.path);}catch(e){console.log(e.message);}
+        try {
+            fs.unlinkSync(req.file.path);
+        } catch (e) {
+            console.log(e.message);
+        }
         res.status(500).send('Could not rename file!');
         return;
     }
@@ -77,7 +97,7 @@ async function uploadFile(req, res, dataParser: DataParser) {
         await parseFile(dataParser);
     } catch (e) {
         console.log(e);
-        switch(e.name){
+        switch (e.name) {
             case 'InputError':
                 res.status(400).send(
                     `An erroneous file was uploaded for the selected format, check if you have selected the correct file! Reason: ${e.message}`

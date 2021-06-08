@@ -12,7 +12,7 @@ export default class MoodParser extends ModelParser {
      */
     constructor(private readonly moodInput: MoodModel) {
         // only processing newest is not necessary for moods, since it is only given via the dashboard
-        super(false); 
+        super(false);
         // Maybe process if needed in the future
         this.process();
     }

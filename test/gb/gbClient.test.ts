@@ -18,6 +18,8 @@ describe('GameBusClient requests', () => {
     beforeEach(() => request.mockClear());
 
     const client = new GameBusClient(new TokenHandler('testToken', 'refreshToken', '0'));
+    const unauthorizedClient = new GameBusClient();
+    const unauthorizedClientWithToken = new GameBusClient(new TokenHandler('', '', ''));
 
     test('full response', async () => {
         const response = await client.request(
@@ -88,6 +90,36 @@ describe('GameBusClient requests', () => {
             expect.objectContaining({
                 url: `${endpoint}/players/0/activities`
             })
+        );
+    });
+
+    test('Unauthorized request without TokenHandler', async () => {
+        expect(async () => {
+            await unauthorizedClient.request(
+                '',
+                RequestMethod.GET,
+                undefined,
+                undefined,
+                undefined,
+                true
+            );
+        }).rejects.toThrow(
+            'You must be authorized to access this path: https://api3.gamebus.eu/v2/'
+        );
+    });
+
+    test('Unauthorized request with empty TokenHandler', async () => {
+        expect(async () => {
+            await unauthorizedClientWithToken.request(
+                '',
+                RequestMethod.GET,
+                undefined,
+                undefined,
+                undefined,
+                true
+            );
+        }).rejects.toThrow(
+            'You must be authorized to access this path: https://api3.gamebus.eu/v2/'
         );
     });
 });

@@ -1,4 +1,14 @@
-import { parse, isValid, fromUnixTime, add, format } from 'date-fns';
+import {
+    parse,
+    isValid,
+    fromUnixTime,
+    add,
+    format,
+    addDays,
+    addHours,
+    addMinutes,
+    differenceInDays
+} from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -147,6 +157,40 @@ const validUnixTimestamp = (unixDate: number): boolean => {
 };
 
 /**
+ * Function that creates date slices.
+ * @param startDate First date to create a slice for
+ * @param endDate Last date to create a slice for
+ * @param startTimeHours Start hour of slice
+ * @param startTimeMinutes Start minute of slice
+ * @param endTimeHours End hour of slice
+ * @param endTimeMinutes End minute of slice
+ * @param maxNumberOfSlices Maximum number of slices to create, default is 365
+ * @returns List of date slices
+ */
+const createDateSlices = (
+    startDate: Date,
+    endDate: Date,
+    startTimeHours: number,
+    startTimeMinutes: number,
+    endTimeHours: number,
+    endTimeMinutes: number,
+    maxNumberOfSlices = 365
+): DateSlice[] => {
+    const dateSlices: DateSlice[] = [];
+    const days = Math.min(maxNumberOfSlices, differenceInDays(endDate, startDate) + 1);
+    for (let i = 0; i < days; i++) {
+        dateSlices.push({
+            startDate: addMinutes(
+                addHours(addDays(startDate, i), startTimeHours),
+                startTimeMinutes
+            ),
+            endDate: addMinutes(addHours(addDays(startDate, i), endTimeHours), endTimeMinutes)
+        });
+    }
+    return dateSlices;
+};
+
+/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -154,8 +198,18 @@ enum DateFormat {
     ABBOTT_EU = 'dd/MM/yyyy HH:mm',
     FOOD_DIARY = 'dd/MM/yy HH:mm',
     EETMETER = 'd/M/yyyy H:m',
+    ENDPOINT_DATETIME = 'dd-MM-yyyy HH:mm',
+    ENDPOINT_DATE = 'dd-MM-yyyy',
 
     NONE = ''
+}
+
+/**
+ * Content of a date slice
+ */
+interface DateSlice {
+    startDate: Date;
+    endDate: Date;
 }
 
 export {
@@ -166,5 +220,7 @@ export {
     parseExcelTime,
     convertExcelDateTimes,
     DateFormat,
-    validUnixTimestamp
+    validUnixTimestamp,
+    createDateSlices,
+    DateSlice
 };

@@ -68,7 +68,7 @@ export default class FoodMapper {
             ),
             meal_type: entry.meal_type,
             carbohydrates: parseFloat(entry.carbohydrates),
-            glycemic_index: entry.glycemic_index,
+            glycemic_index: parseInt(entry.glycemic_index),
             description: entry.description
         } as FoodModel;
     }

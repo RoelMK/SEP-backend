@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TokenHandler } from '../gb/auth/tokenHandler';
-import { GameBusClient } from '../gb/gbClient';
-import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
-import { MoodModel } from '../gb/models/moodModel';
+import { DBClient } from '../db/dbClient';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -11,6 +8,7 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
+import ExcelParser from './fileParsers/excelParser';
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
@@ -106,7 +104,30 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
+async function testParseNewest() {
+    const client = new DBClient();
+    client.initialize();
+    client.cleanFileParseEvents();
+    client.close();
+
+    // first run, so updated
+    console.log('Should be filled');
+    let fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));
+
+    // second run with same file, no data should show up
+    console.log('Should be empty');
+    fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));
+}
+
 export const testToken = '';
 //testAbbott();
+//testExcel();
 //testOneDrive();
 //testNightScout();
+testParseNewest();

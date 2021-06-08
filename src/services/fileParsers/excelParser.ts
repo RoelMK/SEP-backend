@@ -2,13 +2,16 @@ import XLSX from 'xlsx';
 import { DataSource } from '../dataParsers/dataParser';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getKeys } from '../utils/interfaceKeys';
+import { FileParser } from './fileParser';
 
 /**
  * Default class for parsing .xlsx files
  */
 
-export default class ExcelParser {
-    constructor(private readonly config: ExcelConfig = defaultExcelConfig) {}
+export default class ExcelParser extends FileParser {
+    constructor(private readonly config: ExcelConfig = defaultExcelConfig) {
+        super();
+    }
 
     parse(filePath: string, dataSource: DataSource): Record<string, string>[] {
         const workbook = XLSX.read(filePath, { type: 'file' });

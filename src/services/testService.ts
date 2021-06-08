@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
-import { ChallengeReference } from '../gb/models/gamebusModel';
+import { ChallengeGETData, ChallengePOSTData } from '../gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
 import { NightScoutClient } from '../nightscout/nsClient';
@@ -108,9 +108,9 @@ async function testNightScout() {
 }
 
 async function testGb() {
-    const client = new GameBusClient(new TokenHandler('TOKEN_HERE', '', '526'));
-    const challenge: any = {
-        name: 'challenge name 4',
+    const client = new GameBusClient(new TokenHandler('1359b7c4-22b7-405b-aba7-25d13ff42613', '1359b7c4-22b7-405b-aba7-25d13ff42613', '532'));
+    const challenge: ChallengePOSTData = {
+        name: 'challenge name 11',
         description: null,
         image: null,
         websiteURL: 'https://www.google.com/',
@@ -140,13 +140,23 @@ async function testGb() {
                         value: '1'
                     }
                 ],
-                points: []
+                points: [
+                //     {
+                //     dataProviders :{
+                //         id: 1,
+                //         image: "https://api3.gamebus.eu/v2/uploads/public/brand/dp/GameBus.png",
+                //         isConnected: false,
+                //         name: "GameBus"
+                //     }
+                // }
+            ]
             }
         ],
-        circles: [100784]
+        circles: [100792, 100797]
     };
     const response = await client.challenge().postChallenge(challenge);
-    console.log(response);
+    //console.log(response);
+    //await client.challenge().postCircleMembership(100792, 100797,2884)
 }
 
 export const testToken = '';

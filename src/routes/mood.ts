@@ -1,10 +1,12 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
+import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
 import { validUnixTimestamp } from '../services/utils/dates';
 
 const moodRouter = Router()
 
-moodRouter.post('/mood', (req: Request, res: Response) => {
+moodRouter.post('/mood', (req: any, res: Response) => {
     // Call someone to aggregate and send data to gamebus
     console.log(req.body);
 
@@ -27,7 +29,11 @@ moodRouter.post('/mood', (req: Request, res: Response) => {
         arousal: arousal
     }
 
-    //TODO: Add gamebus posting when ready
+    const gbClient = new GameBusClient(
+        new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
+    );
+
+    gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId)
 
     res.send(moodModel);
 });

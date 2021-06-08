@@ -110,7 +110,11 @@ export abstract class DataParser {
      * @param endTime End of timeframe, as Unix timestamp
      * @returns Glucose, Insulin or FoodModel object
      */
-    getDataForTimeframe(outputType: OutputDataType, startTime: number, endTime: number): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
+    getDataForTimeframe(
+        outputType: OutputDataType,
+        startTime: number,
+        endTime: number
+    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | undefined {
         const data = this.getData(outputType) as [];
         if (data) {
             return data.filter((entry: InsulinModel | FoodModel | GlucoseModel) => {

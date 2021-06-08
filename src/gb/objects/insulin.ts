@@ -155,11 +155,13 @@ export class Insulin extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response.filter((response: ActivityGETData) => {
-            return response.propertyInstances.length > 0;
-        }).map((response: ActivityGETData) => {
-            return this.convertInsulinResponseToModel(response);
-        });
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertInsulinResponseToModel(response);
+            });
     }
 
     /**

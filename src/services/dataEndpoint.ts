@@ -1,13 +1,13 @@
-import { GameBusClient } from "../gb/gbClient";
-import { ExerciseModel } from "../gb/models/exerciseModel";
-import { FoodModel } from "../gb/models/foodModel";
-import { GlucoseModel } from "../gb/models/glucoseModel";
-import { InsulinModel } from "../gb/models/insulinModel";
-import { MoodModel } from "../gb/models/moodModel";
-import { ExerciseGameDescriptorNames } from "../gb/objects/exercise";
-import { Insulin } from "../gb/objects/insulin";
-import { Mood } from "../gb/objects/mood";
-import { DateSlice } from "./utils/dates";
+import { GameBusClient } from '../gb/gbClient';
+import { ExerciseModel } from '../gb/models/exerciseModel';
+import { FoodModel } from '../gb/models/foodModel';
+import { GlucoseModel } from '../gb/models/glucoseModel';
+import { InsulinModel } from '../gb/models/insulinModel';
+import { MoodModel } from '../gb/models/moodModel';
+import { ExerciseGameDescriptorNames } from '../gb/objects/exercise';
+import { Insulin } from '../gb/objects/insulin';
+import { Mood } from '../gb/objects/mood';
+import { DateSlice } from './utils/dates';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve
@@ -20,11 +20,12 @@ export class DataEndpoint {
      * @param parameters Parameters to use
      */
     constructor(
-        private readonly gbClient: GameBusClient, 
+        private readonly gbClient: GameBusClient,
         private readonly playerId: number,
-        dataTypes: string[], 
-        private readonly parameters: EndpointParameters) {
-            this.dataTypes = parseDataTypes(dataTypes);
+        dataTypes: string[],
+        private readonly parameters: EndpointParameters
+    ) {
+        this.dataTypes = parseDataTypes(dataTypes);
     }
 
     /**
@@ -59,7 +60,12 @@ export class DataEndpoint {
         if (this.parameters.exerciseTypes) {
             return await this.gbClient
                 .exercise()
-                .getExerciseActivityFromGdBetweenUnix(this.playerId, this.parameters.exerciseTypes, dateSlice.startDate.getTime(), dateSlice.endDate.getTime());
+                .getExerciseActivityFromGdBetweenUnix(
+                    this.playerId,
+                    this.parameters.exerciseTypes,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime()
+                );
         } else {
             return [];
         }
@@ -73,7 +79,11 @@ export class DataEndpoint {
     private async retrieveGlucoseData(dateSlice: DateSlice): Promise<GlucoseModel[]> {
         return await this.gbClient
             .glucose()
-            .getGlucoseActivitiesBetweenUnix(this.playerId, dateSlice.startDate.getTime(), dateSlice.endDate.getTime());
+            .getGlucoseActivitiesBetweenUnix(
+                this.playerId,
+                dateSlice.startDate.getTime(),
+                dateSlice.endDate.getTime()
+            );
     }
 
     /**
@@ -82,9 +92,15 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved insulin data
      */
     private async retrieveInsulinData(dateSlice: DateSlice): Promise<InsulinModel[]> {
-        return Insulin.convertResponseToInsulinModels(await this.gbClient
-            .insulin()
-            .getInsulinActivitiesBetweenUnix(this.playerId, dateSlice.startDate.getTime(), dateSlice.endDate.getTime()));
+        return Insulin.convertResponseToInsulinModels(
+            await this.gbClient
+                .insulin()
+                .getInsulinActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime()
+                )
+        );
     }
 
     /**
@@ -92,10 +108,16 @@ export class DataEndpoint {
      * @param dateSlice Timeframe to retrieve data for
      * @returns Awaitable array of retrieved mood data
      */
-    private async retrieveMoodData(dateSlice: DateSlice): Promise<MoodModel[]> { 
-        return Mood.convertResponseToMoodModels(await this.gbClient
-            .mood()
-            .getMoodActivitiesBetweenUnix(this.playerId, dateSlice.startDate.getTime(), dateSlice.endDate.getTime()));
+    private async retrieveMoodData(dateSlice: DateSlice): Promise<MoodModel[]> {
+        return Mood.convertResponseToMoodModels(
+            await this.gbClient
+                .mood()
+                .getMoodActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime()
+                )
+        );
     }
 
     /**
@@ -106,9 +128,12 @@ export class DataEndpoint {
     private async retrieveFoodData(dateSlice: DateSlice): Promise<FoodModel[]> {
         return await this.gbClient
             .food()
-            .getFoodActivitiesBetweenUnix(this.playerId, dateSlice.startDate.getTime(), dateSlice.endDate.getTime());
+            .getFoodActivitiesBetweenUnix(
+                this.playerId,
+                dateSlice.startDate.getTime(),
+                dateSlice.endDate.getTime()
+            );
     }
-
 }
 
 /**
@@ -139,7 +164,7 @@ export function parseDataTypes(dataTypes: string[]): DataType[] {
     for (let i = 0; i < dataTypes.length; i++) {
         const type = DataType[dataTypes[i].toUpperCase().trim()];
         if (type !== undefined && !types.includes(type)) {
-            types.push(type)
+            types.push(type);
         }
     }
     return types;
@@ -158,12 +183,12 @@ export function parseExerciseTypes(exerciseTypes: string): ExerciseGameDescripto
     for (let i = 0; i < sep.length; i++) {
         const type = ExerciseGameDescriptorNames[sep[i].toUpperCase().trim()];
         if (type !== undefined && !result.includes(type)) {
-            result.push(type)
+            result.push(type);
         }
     }
     // Return all game descriptors that exist
     return result;
-};
+}
 
 /**
  * Types of data which can be requested.

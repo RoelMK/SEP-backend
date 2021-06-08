@@ -225,11 +225,13 @@ export class Exercise extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response.filter((response: ActivityGETData) => {
-            return response.propertyInstances.length > 0;
-        }).map((response: ActivityGETData) => {
-            return this.convertExerciseResponseToModel(response);
-        });
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertExerciseResponseToModel(response);
+            });
     }
 }
 

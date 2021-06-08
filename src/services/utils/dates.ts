@@ -1,4 +1,14 @@
-import { parse, isValid, fromUnixTime, add, format, addDays, addHours, addMinutes, differenceInDays } from 'date-fns';
+import {
+    parse,
+    isValid,
+    fromUnixTime,
+    add,
+    format,
+    addDays,
+    addHours,
+    addMinutes,
+    differenceInDays
+} from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -158,24 +168,27 @@ const validUnixTimestamp = (unixDate: number): boolean => {
  * @returns List of date slices
  */
 const createDateSlices = (
-    startDate: Date, 
-    endDate: Date, 
-    startTimeHours: number, 
-    startTimeMinutes: number, 
-    endTimeHours: number, 
-    endTimeMinutes: number, 
+    startDate: Date,
+    endDate: Date,
+    startTimeHours: number,
+    startTimeMinutes: number,
+    endTimeHours: number,
+    endTimeMinutes: number,
     maxNumberOfSlices = 365
 ): DateSlice[] => {
     const dateSlices: DateSlice[] = [];
     const days = Math.min(maxNumberOfSlices, differenceInDays(endDate, startDate) + 1);
     for (let i = 0; i < days; i++) {
         dateSlices.push({
-            startDate: addMinutes(addHours(addDays(startDate, i), startTimeHours), startTimeMinutes),
+            startDate: addMinutes(
+                addHours(addDays(startDate, i), startTimeHours),
+                startTimeMinutes
+            ),
             endDate: addMinutes(addHours(addDays(startDate, i), endTimeHours), endTimeMinutes)
         });
     }
     return dateSlices;
-}
+};
 
 /**
  * Different date formats used in different data sources (including NONE)

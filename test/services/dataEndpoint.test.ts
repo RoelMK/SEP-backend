@@ -1,12 +1,15 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { ExerciseGameDescriptorNames } from '../../src/gb/objects/exercise';
-import { DataEndpoint, DataType, parseDataTypes, parseExerciseTypes } from '../../src/services/dataEndpoint';
+import {
+    DataEndpoint,
+    DataType,
+    parseDataTypes,
+    parseExerciseTypes
+} from '../../src/services/dataEndpoint';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');
-
-const endpoint: string = process.env.ENDPOINT!;
 
 describe('with mocked requests get call', () => {
     // Request handler that simply returns empty data for every request
@@ -22,7 +25,6 @@ describe('with mocked requests get call', () => {
     // GameBusClient using mockToken
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
-
 
     test('empty request', async () => {
         const endpoint = new DataEndpoint(client, 0, [], {});
@@ -67,7 +69,12 @@ describe('with mocked requests get call', () => {
     });
 
     test('request all data types', async () => {
-        const endpoint = new DataEndpoint(client, 0, ['food', 'mood', 'glucose', 'insulin', 'exercise'], {});
+        const endpoint = new DataEndpoint(
+            client,
+            0,
+            ['food', 'mood', 'glucose', 'insulin', 'exercise'],
+            {}
+        );
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ food: [], mood: [], glucose: [], insulin: [], exercise: [] });
     });
@@ -84,24 +91,39 @@ describe('with mocked requests get call', () => {
 
     test('parsing of multiple exercise types in list', () => {
         const exTypes = parseExerciseTypes('WALK,RUN,MOUNTAINBIKE');
-        expect(exTypes).toStrictEqual([ExerciseGameDescriptorNames.WALK, ExerciseGameDescriptorNames.RUN, ExerciseGameDescriptorNames.MOUNTAINBIKE]);
+        expect(exTypes).toStrictEqual([
+            ExerciseGameDescriptorNames.WALK,
+            ExerciseGameDescriptorNames.RUN,
+            ExerciseGameDescriptorNames.MOUNTAINBIKE
+        ]);
     });
 
     test('parsing of multiple exercise types in list with duplicates', () => {
         const exTypes = parseExerciseTypes('WALK,WALK,RUN,MOUNTAINBIKE,RUN');
-        expect(exTypes).toStrictEqual([ExerciseGameDescriptorNames.WALK, ExerciseGameDescriptorNames.RUN, ExerciseGameDescriptorNames.MOUNTAINBIKE]);
+        expect(exTypes).toStrictEqual([
+            ExerciseGameDescriptorNames.WALK,
+            ExerciseGameDescriptorNames.RUN,
+            ExerciseGameDescriptorNames.MOUNTAINBIKE
+        ]);
     });
 
     test('parsing of multiple exercise types in list with non-existent', () => {
         const exTypes = parseExerciseTypes('WALK,wefojwefjowef,RUN,MOUNTAINBIKE,BLABLA');
-        expect(exTypes).toStrictEqual([ExerciseGameDescriptorNames.WALK, ExerciseGameDescriptorNames.RUN, ExerciseGameDescriptorNames.MOUNTAINBIKE]);
+        expect(exTypes).toStrictEqual([
+            ExerciseGameDescriptorNames.WALK,
+            ExerciseGameDescriptorNames.RUN,
+            ExerciseGameDescriptorNames.MOUNTAINBIKE
+        ]);
     });
 
     test('parsing of multiple exercise types in list with whitespace and irregular capitalization', () => {
         const exTypes = parseExerciseTypes('wAlk, run, MOUNTAINBIKE');
-        expect(exTypes).toStrictEqual([ExerciseGameDescriptorNames.WALK, ExerciseGameDescriptorNames.RUN, ExerciseGameDescriptorNames.MOUNTAINBIKE]);
+        expect(exTypes).toStrictEqual([
+            ExerciseGameDescriptorNames.WALK,
+            ExerciseGameDescriptorNames.RUN,
+            ExerciseGameDescriptorNames.MOUNTAINBIKE
+        ]);
     });
-
 
     test('parsing of empty data type list', () => {
         const dataTypes = parseDataTypes([]);

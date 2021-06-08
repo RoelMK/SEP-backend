@@ -6,6 +6,7 @@ import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { XOR } from 'ts-xor';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
+import { DiabetterUserInfo } from '../dataParsers/dataParser';
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
@@ -26,12 +27,14 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
+        private readonly userInfo: DiabetterUserInfo,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {
         // Process incoming insulinInput data
         super(only_process_newest, lastUpdated);
         this.process();
+        this.post();
     }
 
     /**

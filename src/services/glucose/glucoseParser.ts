@@ -1,6 +1,7 @@
 import { XOR } from 'ts-xor';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
+import { DiabetterUserInfo } from '../dataParsers/dataParser';
 import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
@@ -27,6 +28,7 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
+        private readonly userInfo: DiabetterUserInfo,
         only_process_newest: boolean,
         lastUpdated?: number,
         // indicates in which unit the glucose levels are measured
@@ -35,6 +37,7 @@ export default class GlucoseParser extends ModelParser {
         super(only_process_newest, lastUpdated);
         // Process incoming glucoseInput data
         this.process();
+        this.post();
     }
 
     /**

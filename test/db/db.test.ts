@@ -146,7 +146,6 @@ test('Register and update a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
-
 test('Register and update multple file parse events and retrieve it', () => {
     const playerId1 = '443';
     const playerId2 = '444';
@@ -154,8 +153,6 @@ test('Register and update multple file parse events and retrieve it', () => {
     const abbott = 'abbott.csv';
     const timeStamp_player1 = 1000000000000;
     const timeStamp_player2 = 1100000000000;
-
-
 
     let dbClient = new DBClient();
     expect(dbClient.registerFileParse(playerId1, fooddiary, timeStamp_player1)).toBeTruthy();
@@ -169,7 +166,9 @@ test('Register and update multple file parse events and retrieve it', () => {
 
     dbClient = new DBClient();
     expect(dbClient.registerFileParse(playerId1, abbott, timeStamp_player1 + 100000)).toBeTruthy();
-    expect(dbClient.registerFileParse(playerId2, fooddiary, timeStamp_player2 + 100000)).toBeTruthy();
+    expect(
+        dbClient.registerFileParse(playerId2, fooddiary, timeStamp_player2 + 100000)
+    ).toBeTruthy();
     dbClient.close();
 
     dbClient = new DBClient();
@@ -180,7 +179,6 @@ test('Register and update multple file parse events and retrieve it', () => {
 
     dbClient.close();
 });
-
 
 test('Retrieve non existing parse event', () => {
     const playerId = '-1';

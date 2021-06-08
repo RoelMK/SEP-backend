@@ -6,7 +6,7 @@ import { FileParser } from './fileParser';
  * Generic CSV reader and parser to be used for all CSV files
  */
 export default class CSVParser extends FileParser {
-    constructor( private readonly config: ParseConfig = defaultConfig) {
+    constructor(private readonly config: ParseConfig = defaultConfig) {
         super();
     }
 

@@ -6,7 +6,7 @@ import { FileParser } from './fileParser';
  * Generic XML reader and parser to be used for all XML files
  */
 export default class XMLParser extends FileParser {
-    constructor( private readonly config = defaultConfig) {
+    constructor(private readonly config = defaultConfig) {
         super();
     }
 

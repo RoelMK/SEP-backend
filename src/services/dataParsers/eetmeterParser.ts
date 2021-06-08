@@ -34,11 +34,11 @@ export class EetMeterParser extends DataParser {
             FoodSource.EETMETER,
             this.dateFormat,
             this.only_parse_newest,
-            this.lastUpdated,
+            this.lastUpdated
         );
 
         // update the timestamp of newest parsed entry to this file
-        this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp()); 
+        this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 
     getData(): FoodModel[] | undefined {

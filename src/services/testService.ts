@@ -107,7 +107,7 @@ async function testNightScout() {
 async function testParseNewest() {
     const client = new DBClient();
     client.initialize();
-    client.cleanFileParseEvents(); 
+    client.cleanFileParseEvents();
     client.close();
 
     // first run, so updated
@@ -122,7 +122,7 @@ async function testParseNewest() {
     fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
     fdParser.parseOnlyNewest(true);
     await fdParser.process();
-    console.log(fdParser.getData(OutputDataType.FOOD));    
+    console.log(fdParser.getData(OutputDataType.FOOD));
 }
 
 export const testToken = '';

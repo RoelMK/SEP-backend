@@ -66,8 +66,6 @@ export default class OneDriveExcelParser extends FileParser {
         oneDriveToken: string,
         tableName: string
     ): Promise<Map<string, string>> {
-
-        
         // create onedrive client
         const odClient = new OneDriveClient(
             oneDriveToken,

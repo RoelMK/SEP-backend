@@ -125,7 +125,7 @@ export class NightScoutClient {
         }
     }
 
-    getNightscoutHost(): string{
+    getNightscoutHost(): string {
         return this.nightScoutHost;
     }
 }

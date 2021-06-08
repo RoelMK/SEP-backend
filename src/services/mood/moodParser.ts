@@ -1,7 +1,8 @@
 import { MoodModel } from '../../gb/models/moodModel';
 //import { ModelParser } from '../modelParser';
 
-export default class MoodParser { // TODO should it extend ModelParser? It does not really make use of its functions
+export default class MoodParser {
+    // TODO should it extend ModelParser? It does not really make use of its functions
     // Mood data to be exported
     mood?: MoodModel;
 

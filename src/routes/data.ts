@@ -10,10 +10,9 @@ const dataRouter = Router();
 dataRouter.get('/data', checkJwt, async (req: any, res: any) => { // checkJwt middleware should be included
     // Data we get:
     // startDate formatted as dd-MM-yyyy 
-    // Optional: endDate formatted as dd-MM-yyyy 
-    // sliceDate, boolean
-    // dataTypes, array of data types to retrieve, seperated by ','
-    // Optional: exerciseTypes, array of gamedescriptors, seperated by ','
+    // [Optional] endDate formatted as dd-MM-yyyy 
+    // dataTypes, array of data types to retrieve, seperated by ',', choose from glucose,mood,exercise,insulin,food
+    // [Optional] exerciseTypes, array of gamedescriptors, seperated by ','
 
     if (!req.query.startDate || !req.query.dataTypes) { // || !req.query.startTime || !req.query.endTime ) {
         return res.status(400).send();

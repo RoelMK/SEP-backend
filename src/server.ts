@@ -16,7 +16,11 @@ dbClient.close();
 
 // Create app object
 const app = express();
-const port = 8080;
+let port: number = 8080;
+if (process.env.PORT) {
+    port = Number(process.env.PORT);
+} 
+
 
 // This is so you can see every incoming request (from GameBus) in console
 app.use(

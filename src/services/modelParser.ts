@@ -1,6 +1,5 @@
-import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
-import { DiabetterUserInfo } from './dataParsers/dataParser';
 
 export abstract class ModelParser {
     protected newestEntry = 0;
@@ -9,13 +8,14 @@ export abstract class ModelParser {
     protected gbClient: GameBusClient;
 
     constructor(
-        protected userInfo: DiabetterUserInfo,
+        protected userInfo: GameBusToken,
         // whether to upload all input data, or only data after the last update
         private only_process_newest: boolean,
         private lastUpdated?: number
     ) {
         this.gbClient = new GameBusClient(
-            new TokenHandler(userInfo.accessToken, userInfo.refreshToken, userInfo.playerId)
+            //TODO optional, because it is not used?
+            new TokenHandler(userInfo.accessToken, userInfo.refreshToken as string, userInfo.playerId)
         );
     }
 

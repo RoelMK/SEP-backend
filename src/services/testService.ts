@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DBClient } from '../db/dbClient';
+import { GameBusToken } from '../gb/auth/tokenHandler';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
-import { OutputDataType } from './dataParsers/dataParser';
+import {OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
 import NightscoutParser, {
     NightScoutEntryModel,
@@ -10,9 +11,15 @@ import NightscoutParser, {
 } from './dataParsers/nightscoutParser';
 import ExcelParser from './fileParsers/excelParser';
 
+const dummyUserInfo: GameBusToken = {
+    playerId: '1',
+    accessToken: '12345',
+    refreshToken: '67890'
+};
+
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
-    const abbottParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv');
+    const abbottParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv', dummyUserInfo);
     // const abbottParser: AbbottParser = new AbbottParser('test/services/data/foodDiary_standard_missing.xlsx');
     // Currently this step is required since reading the file is async
     await abbottParser.process();
@@ -27,14 +34,14 @@ async function testExcel() {
     const wrongTestPath = 'test/services/data/abbott_eu.csv';
 
     try {
-        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(wrongTestPath);
+        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(wrongTestPath, dummyUserInfo);
         await foodDiaryParser.process();
         console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
         console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     } catch (e) {
         console.log(e.message);
     }
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath, dummyUserInfo);
     await foodDiaryParser.process();
 
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
@@ -47,6 +54,7 @@ async function testOneDrive() {
 
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(
         'Documents/DeepFolder/diary.xlsx',
+        dummyUserInfo,
         testToken
     );
     await foodDiaryParser.process();
@@ -96,6 +104,7 @@ async function testNightScout() {
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
+        dummyUserInfo,
         '' // TODO why don't you need a token to get entry data??
     );
     await nsParser.process();
@@ -112,14 +121,14 @@ async function testParseNewest() {
 
     // first run, so updated
     console.log('Should be filled');
-    let fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    let fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx', dummyUserInfo);
     fdParser.parseOnlyNewest(true);
     await fdParser.process();
     console.log(fdParser.getData(OutputDataType.FOOD));
 
     // second run with same file, no data should show up
     console.log('Should be empty');
-    fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx');
+    fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx', dummyUserInfo);
     fdParser.parseOnlyNewest(true);
     await fdParser.process();
     console.log(fdParser.getData(OutputDataType.FOOD));

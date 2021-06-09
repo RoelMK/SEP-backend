@@ -1,6 +1,9 @@
 import request from 'supertest';
 import { MoodModel } from '../src/gb/models/moodModel';
 import { server } from '../src/server';
+import { mockRequest } from './testUtils/requestUtils';
+
+jest.mock('axios');
 
 // Everything is currently in 1 file since server.close() can only happen once
 afterAll((done) => {
@@ -75,10 +78,11 @@ describe('GET files', () => {
     });
 });
 
-describe('POST files', () => {
+describe('POST files', () => {  
     test('POST Abbott file', async () => {
         const response = await request(server)
             .post('/upload?format=abbott')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/abbott_eu.csv');
         expect(response.statusCode).toBe(200);
     });
@@ -86,6 +90,7 @@ describe('POST files', () => {
     test('POST FoodDiary file', async () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/foodDiary_standard_missing_table.xlsx');
         expect(response.statusCode).toBe(200);
     });
@@ -93,6 +98,7 @@ describe('POST files', () => {
     test('POST Eetmeter file', async () => {
         const response = await request(server)
             .post('/upload?format=eetmeter')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(200);
     });
@@ -100,6 +106,7 @@ describe('POST files', () => {
     test('POST unsupported format', async () => {
         const response = await request(server)
             .post('/upload?format=story')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(400);
     });
@@ -107,14 +114,15 @@ describe('POST files', () => {
     test('POST supported format, with unsupported file extension', async () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/text.txt');
         expect(response.statusCode).toBe(400);
     });
 
-
     test('POST supported format, with supported file extension but wrong file content', async () => {
         const response = await request(server)
             .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer 12')
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(400);
     });

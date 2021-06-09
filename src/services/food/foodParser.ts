@@ -7,7 +7,7 @@ import { XOR } from 'ts-xor';
 import { Consumptie } from '../dataParsers/eetmeterParser';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
-import { DiabetterUserInfo } from '../dataParsers/dataParser';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -32,7 +32,7 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
-        userInfo: DiabetterUserInfo,
+        userInfo: GameBusToken,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {

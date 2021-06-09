@@ -1,21 +1,27 @@
-import { DataParser, DataSource, DiabetterUserInfo, InputError, OutputDataType } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import {
+    DataParser,
+    DataSource,
+    InputError,
+    OutputDataType
+} from './dataParser';
+import { FoodSource } from '../food/foodParser';
+import { GlucoseSource } from '../glucose/glucoseParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
+
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
 export default class AbbottParser extends DataParser {
     private abbottData: AbbottData[] = [];
-
     /**
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private abbotFile: string, userInfo: DiabetterUserInfo) {
+    constructor(private abbotFile: string, userInfo: GameBusToken) {
         super(DataSource.ABBOTT, abbotFile, userInfo);
     }
 
@@ -180,7 +186,7 @@ export type AbbottData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function AbbottDataGuard(object: any): object is AbbottData {
-    if (object === undefined){
+    if (object === undefined) {
         return false;
     }
     return (

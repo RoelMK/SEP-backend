@@ -1,7 +1,8 @@
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { FoodModel } from '../../gb/models/foodModel';
-import FoodParser, { FoodSource } from '../food/foodParser';
+import { FoodSource } from '../food/foodParser';
 import { getFileName } from '../utils/files';
-import { DataParser, DataSource, DiabetterUserInfo, OutputDataType } from './dataParser';
+import { DataParser, DataSource, OutputDataType } from './dataParser';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
@@ -15,7 +16,7 @@ export class EetMeterParser extends DataParser {
      * DataParser construction with DataSource set
      * @param xmlFile file path of Eetmeter file
      */
-    constructor(private readonly xmlFile: string, userInfo: DiabetterUserInfo) {
+    constructor(private readonly xmlFile: string, userInfo: GameBusToken) {
         super(DataSource.EETMETER, xmlFile, userInfo);
     }
 
@@ -26,7 +27,7 @@ export class EetMeterParser extends DataParser {
         const eetmeterData: EetmeterData = (await this.parse()) as unknown as EetmeterData;
         this.eetmeterConsumptionData = eetmeterData.Consumpties.Consumptie as Consumptie[];
 
-        // TODO check input and possibly throw input error 
+        // TODO check input and possibly throw input error
 
         // Not sure why it does not always map it to an array (even with a single element)
         if (this.eetmeterConsumptionData.length == undefined) {

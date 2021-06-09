@@ -1,18 +1,18 @@
 import {
     DataParser,
     DataSource,
-    DiabetterUserInfo,
     InputError,
     OutputDataType
 } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { FoodSource } from '../food/foodParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
 import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
 import { getFileName } from '../utils/files';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 
 /**
  * Default class for parsing food diaries
@@ -22,7 +22,7 @@ export default class FoodDiaryParser extends DataParser {
 
     constructor(
         foodDiaryFile: string,
-        userInfo: DiabetterUserInfo,
+        userInfo: GameBusToken,
         protected oneDriveToken?: string
     ) {
         super(DataSource.FOOD_DIARY, foodDiaryFile, userInfo, oneDriveToken, 'fooddiary');
@@ -58,7 +58,7 @@ export default class FoodDiaryParser extends DataParser {
             preprocessedFoodDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL
         );
-        
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }

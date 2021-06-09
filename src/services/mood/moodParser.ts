@@ -1,7 +1,5 @@
-import { TokenHandler } from '../../gb/auth/tokenHandler';
-import { GameBusClient } from '../../gb/gbClient';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { MoodModel } from '../../gb/models/moodModel';
-import { DiabetterUserInfo } from '../dataParsers/dataParser';
 import { ModelParser } from '../modelParser';
 //import { ModelParser } from '../modelParser';
 
@@ -13,7 +11,7 @@ export default class MoodParser extends ModelParser {
      * Create mood parser that makes sure mood data to reach Gamebus
      * @param moodInput mood input from front end
      */
-    constructor(private readonly moodInput: MoodModel[], userInfo: DiabetterUserInfo) {
+    constructor(private readonly moodInput: MoodModel[], userInfo: GameBusToken) {
         // only processing newest is not necessary for moods, since it is only given via the dashboard
         super(userInfo, false);
         // Maybe process if needed in the future

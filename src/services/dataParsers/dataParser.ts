@@ -1,4 +1,5 @@
 import { DBClient } from '../../db/dbClient';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { FoodModel } from '../../gb/models/foodModel';
 import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
@@ -7,14 +8,12 @@ import CSVParser from '../fileParsers/csvParser';
 import ExcelParser from '../fileParsers/excelParser';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import XMLParser from '../fileParsers/xmlParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
+import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
-import { ModelParser } from '../modelParser';
+import InsulinParser from '../insulin/insulinParser';
 import MoodParser from '../mood/moodParser';
-import { DateFormat } from '../utils/dates';
+import {DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
-import { NightScoutEntryModel } from './nightscoutParser';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
@@ -47,7 +46,7 @@ export abstract class DataParser {
     constructor(
         protected readonly dataSource: DataSource,
         protected filePath: string,
-        protected userInfo: DiabetterUserInfo,
+        protected userInfo: GameBusToken,
         protected oneDriveToken?: string,
         protected tableName?: string // for excel parsing
     ) {}
@@ -154,7 +153,6 @@ export abstract class DataParser {
         | InsulinModel[]
         | FoodModel[]
         | GlucoseModel[]
-        | NightScoutEntryModel[]
         | MoodModel[]
         | undefined {
         switch (outputType) {
@@ -234,15 +232,6 @@ export enum OutputDataType {
     INSULIN = 1,
     FOOD = 2,
     MOOD = 3
-}
-
-/**
- * Contains relevant information about the user for which data is parsed
- */
-export interface DiabetterUserInfo {
-    playerId: string;
-    accessToken: string;
-    refreshToken: string;
 }
 
 // custom errors

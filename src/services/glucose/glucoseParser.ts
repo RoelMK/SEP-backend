@@ -1,7 +1,7 @@
 import { XOR } from 'ts-xor';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
-import { DiabetterUserInfo } from '../dataParsers/dataParser';
 import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
@@ -28,7 +28,7 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
-        userInfo: DiabetterUserInfo,
+        userInfo: GameBusToken,
         only_process_newest: boolean,
         lastUpdated?: number,
         // indicates in which unit the glucose levels are measured

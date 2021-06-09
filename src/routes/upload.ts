@@ -1,12 +1,13 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, DiabetterUserInfo, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser } from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 import { checkJwt } from '../middlewares/checkJwt';
+import { GameBusToken } from '../gb/auth/tokenHandler';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -18,7 +19,7 @@ const uploadRouter = Router();
  */
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
     // retrieve user information
-    const userInfo: DiabetterUserInfo = {
+    const userInfo: GameBusToken = {
         playerId: req.user.playerId,
         accessToken: req.user.accessToken,
         refreshToken: req.user.refreshToken

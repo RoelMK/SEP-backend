@@ -50,7 +50,7 @@ export class DataEndpoint {
                 promises.food = this.retrieveFoodData(dateSlice);
             }
         }
-        
+
         // Make calls and copy results
         Object.keys(promises).forEach((key) => {
             promises[key].then((value: any) => {
@@ -62,6 +62,11 @@ export class DataEndpoint {
         return data;
     }
 
+    /**
+     * Unions given data and returns it as an array.
+     * @param data Retrieved data
+     * @returns Union of given data
+     */
     public static unionData(data: EndpointData): Array<any> {
         const dict: Record<number, any> = {};
         if (data.exercise) {
@@ -178,7 +183,7 @@ export class DataEndpoint {
 }
 
 /**
- * Data retrieved by the endpoint.
+ * Data retrieved from the endpoint.
  */
 export interface EndpointData {
     glucose?: GlucoseModel[];
@@ -188,6 +193,9 @@ export interface EndpointData {
     food?: FoodModel[];
 }
 
+/**
+ * Promises for the data to retrieve from the endpoint.
+ */
 export interface EndpointPromises {
     glucose?: Promise<GlucoseModel[]>;
     exercise?: Promise<ExerciseModel[]>;
@@ -195,7 +203,6 @@ export interface EndpointPromises {
     mood?: Promise<MoodModel[]>;
     food?: Promise<FoodModel[]>;
 }
-
 
 /**
  * Parameters for the endpoint.

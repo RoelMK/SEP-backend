@@ -14,6 +14,7 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
     // [Optional] endDate formatted as dd-MM-yyyy
     // dataTypes, array of data types to retrieve, seperated by ',', choose from glucose,mood,exercise,insulin,food
     // [Optional] exerciseTypes, array of gamedescriptors, seperated by ','
+    // union, boolean, if true: return per timestamp all available data in one single object
 
     if (!req.query.startDate || !req.query.dataTypes) {
         return res.status(400).send();
@@ -50,7 +51,11 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
     try {
         const data = await dataEndpoint.retrieveData(dateSlice);
         // Return the data
-        res.status(200).json(data);
+        if (req.query.union) {
+            res.status(200).json(DataEndpoint.unionData(data));
+        } else {
+            res.status(200).json(data);
+        }
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 401) {

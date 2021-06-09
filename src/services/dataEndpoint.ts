@@ -51,6 +51,36 @@ export class DataEndpoint {
         return data;
     }
 
+    public static unionData(data: EndpointData): Array<any> {
+        const dict: Record<number, any> = {};
+        if (data.exercise) {
+            data.exercise.forEach((element) => {
+                dict[element.timestamp] = { ...element };
+            });
+        }
+        if (data.mood) {
+            data.mood.forEach((element) => {
+                dict[element.timestamp] = { ...element };
+            });
+        }
+        if (data.glucose) {
+            data.glucose.forEach((element) => {
+                dict[element.timestamp] = { ...element };
+            });
+        }
+        if (data.insulin) {
+            data.insulin.forEach((element) => {
+                dict[element.timestamp] = { ...element };
+            });
+        }
+        if (data.food) {
+            data.food.forEach((element) => {
+                dict[element.timestamp] = { ...element };
+            });
+        }
+        return Object.values(dict) as Array<any>;
+    }
+
     /**
      * Retrieves exercise data from GameBus.
      * @param dateSlice Timeframe to retrieve data for

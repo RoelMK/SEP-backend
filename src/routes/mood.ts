@@ -3,11 +3,12 @@ import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
+import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 
 const moodRouter = Router();
 
-moodRouter.post('/mood', (req: any, res: Response) => {
+moodRouter.post('/mood', checkJwt, (req: any, res: Response) => {
     // For now, the 'modify' parameter will be used to distinguish between POST and PUT
     // modify as boolean (only important if true)
 
@@ -49,7 +50,7 @@ moodRouter.post('/mood', (req: any, res: Response) => {
         };
         try {
             gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
-            res.send(moodModel);
+            res.sendStatus(201).send(moodModel);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Unauthorized -> 401
@@ -65,7 +66,7 @@ moodRouter.post('/mood', (req: any, res: Response) => {
     // POST
     try {
         gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
-        res.send(moodModel);
+        res.sendStatus(201).send(moodModel);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

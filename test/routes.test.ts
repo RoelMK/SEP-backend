@@ -90,9 +90,19 @@ describe('mood endpoint', () => {
             arousal: 1,
             valence: 1
         };
-        // TODO: route not working
         const response = await request(server).post('/mood').send(moodData);
-        expect(response.statusCode).toBe(404);
+        expect(response.statusCode).toBe(401);
+    });
+
+    test('PUT mood data', async () => {
+        const moodData: MoodModel = {
+            timestamp: 0,
+            arousal: 1,
+            valence: 1,
+            activityId: 1
+        };
+        const response = await request(server).post('/mood?modify=true').send(moodData);
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -104,9 +114,8 @@ describe('insulin endpoint', () => {
             insulinType: 0,
             activityId: 1
         };
-        // TODO: no idea how to test without authentication
         const response = await request(server).post('/insulin').send(insulin);
-        expect(response.statusCode).toBe(404);
+        expect(response.statusCode).toBe(401);
     });
 });
 

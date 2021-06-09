@@ -6,6 +6,7 @@ const cors = require('cors');
 import winston from 'winston';
 import expressWinston from 'express-winston';
 import { DBClient } from './db/dbClient';
+import bodyParser from 'body-parser';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -28,6 +29,15 @@ app.use(
         format: winston.format.combine(winston.format.colorize(), winston.format.prettyPrint())
     })
 );
+
+// Needed for POST requests JSON body
+// Ignore the deprecated warning: https://github.com/expressjs/body-parser/issues/428
+app.use(
+    bodyParser.urlencoded({
+        extended: false
+    })
+);
+app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(cors());

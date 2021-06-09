@@ -40,7 +40,6 @@
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
         "express-jwt": "^6.0.0",
-        "express-winston": "^4.1.0",
         "form-data": "^4.0.0",
         "fs": "*",
         "http": "*",
@@ -51,7 +50,6 @@
         "node-fetch": "^2.6.1",
         "papaparse": "^5.3.0",
         "ts-xor": "^1.0.8",
-        "winston": "^3.3.3",
         "xlsx": "^0.16.9",
         "xml2js": "^0.4.23",
         "yarn": "^1.22.10"

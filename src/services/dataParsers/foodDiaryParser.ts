@@ -1,9 +1,4 @@
-import {
-    DataParser,
-    DataSource,
-    InputError,
-    OutputDataType
-} from './dataParser';
+import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
 import { FoodSource } from '../food/foodParser';
 import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
@@ -20,11 +15,7 @@ import { GameBusToken } from '../../gb/auth/tokenHandler';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(
-        foodDiaryFile: string,
-        userInfo: GameBusToken,
-        protected oneDriveToken?: string
-    ) {
+    constructor(foodDiaryFile: string, userInfo: GameBusToken, protected oneDriveToken?: string) {
         super(DataSource.FOOD_DIARY, foodDiaryFile, userInfo, oneDriveToken, 'fooddiary');
     }
 

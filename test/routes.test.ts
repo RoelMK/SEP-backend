@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { MoodModel } from '../src/gb/models/moodModel';
 import { server } from '../src/server';
-import { mockRequest } from './testUtils/requestUtils';
 
 jest.mock('axios');
 
@@ -78,7 +77,7 @@ describe('GET files', () => {
     });
 });
 
-describe('POST files', () => {  
+describe('POST files', () => {
     test('POST Abbott file', async () => {
         const response = await request(server)
             .post('/upload?format=abbott')

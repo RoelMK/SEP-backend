@@ -1,8 +1,5 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
-import {
-    DataSource,
-    OutputDataType
-} from '../../src/services/dataParsers/dataParser';
+import { DataSource, OutputDataType } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';

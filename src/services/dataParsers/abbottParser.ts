@@ -10,6 +10,7 @@ import { InsulinSource } from '../insulin/insulinParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
+import { RecordType } from '../../gb/models/glucoseModel';
 
 
 /**
@@ -206,19 +207,4 @@ function AbbottDataGuard(object: any): object is AbbottData {
         object.correction_insulin__units_ !== undefined &&
         object.user_change_insulin__units_ !== undefined
     );
-}
-
-/**
- * Different record type meanings
- * Glucose levels (0 & 1) are in mmol/L
- * Insulin (4) includes both rapid-acting insulin and long-acting insulin (in units)
- * Carbohydrates are in grams
- */
-export enum RecordType {
-    HISTORIC_GLUCOSE_LEVEL = 0,
-    SCAN_GLUCOSE_LEVEL = 1,
-    STRIP_GLUCOSE_LEVEL = 2,
-    INSULIN = 4,
-    CARBOHYDRATES = 5,
-    NOTES = 6
 }

@@ -12,7 +12,7 @@ import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
 import MoodParser from '../mood/moodParser';
-import {DateFormat } from '../utils/dates';
+import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
 
 /**
@@ -149,12 +149,7 @@ export abstract class DataParser {
      */
     getData(
         outputType: OutputDataType
-    ):
-        | InsulinModel[]
-        | FoodModel[]
-        | GlucoseModel[]
-        | MoodModel[]
-        | undefined {
+    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | MoodModel[] | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;

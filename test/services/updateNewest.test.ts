@@ -11,6 +11,7 @@ import InsulinParser, { InsulinSource } from '../../src/services/insulin/insulin
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseEetmeter, parseFoodDiary } from '../testUtils/parseUtils';
 import fs from 'fs';
+import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 
 // database init
 beforeAll(() => {
@@ -255,11 +256,18 @@ describe('Tests if ModelParsers only process to newest data', () => {
             }
         ];
 
+        const dummyUserInfo: GameBusToken = {
+            playerId: '1',
+            accessToken: '12345',
+            refreshToken: '67890'
+        };
+
         // create parsers
         const foodParser: FoodParser = new FoodParser(
             rawDiaryData,
             FoodSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY,
+            dummyUserInfo,
             true,
             inbetweenTimestamp
         );
@@ -267,6 +275,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
             rawDiaryData,
             InsulinSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY,
+            dummyUserInfo,
             true,
             inbetweenTimestamp
         );
@@ -355,11 +364,18 @@ describe('Tests if ModelParsers only process to newest data', () => {
             }
         ];
 
+        const dummyUserInfo: GameBusToken = {
+            playerId: '1',
+            accessToken: '12345',
+            refreshToken: '67890'
+        };
+
         // create parser
         const glucoseParser: GlucoseParser = new GlucoseParser(
             abbott,
             GlucoseSource.ABBOTT,
             DateFormat.ABBOTT_EU,
+            dummyUserInfo,
             true,
             inbetweenTimestamp
         );

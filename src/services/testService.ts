@@ -3,7 +3,7 @@ import { DBClient } from '../db/dbClient';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
-import {OutputDataType } from './dataParsers/dataParser';
+import { OutputDataType } from './dataParsers/dataParser';
 import FoodDiaryParser from './dataParsers/foodDiaryParser';
 import NightscoutParser, {
     NightScoutEntryModel,
@@ -19,7 +19,10 @@ const dummyUserInfo: GameBusToken = {
 
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
-    const abbottParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv', dummyUserInfo);
+    const abbottParser: AbbottParser = new AbbottParser(
+        'test/services/data/abbott_eu.csv',
+        dummyUserInfo
+    );
     // const abbottParser: AbbottParser = new AbbottParser('test/services/data/foodDiary_standard_missing.xlsx');
     // Currently this step is required since reading the file is async
     await abbottParser.process();
@@ -121,14 +124,20 @@ async function testParseNewest() {
 
     // first run, so updated
     console.log('Should be filled');
-    let fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx', dummyUserInfo);
+    let fdParser = new FoodDiaryParser(
+        'test/services/data/foodDiary_standard_missing_table.xlsx',
+        dummyUserInfo
+    );
     fdParser.parseOnlyNewest(true);
     await fdParser.process();
     console.log(fdParser.getData(OutputDataType.FOOD));
 
     // second run with same file, no data should show up
     console.log('Should be empty');
-    fdParser = new FoodDiaryParser('test/services/data/foodDiary_standard_missing_table.xlsx', dummyUserInfo);
+    fdParser = new FoodDiaryParser(
+        'test/services/data/foodDiary_standard_missing_table.xlsx',
+        dummyUserInfo
+    );
     fdParser.parseOnlyNewest(true);
     await fdParser.process();
     console.log(fdParser.getData(OutputDataType.FOOD));

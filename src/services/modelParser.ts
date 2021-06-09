@@ -13,7 +13,9 @@ export abstract class ModelParser {
         private only_process_newest: boolean,
         private lastUpdated?: number
     ) {
-        if(lastUpdated === undefined){this.lastUpdated = 0}
+        if (lastUpdated === undefined) {
+            this.lastUpdated = 0;
+        }
         this.gbClient = new GameBusClient(
             //TODO optional, because it is not used?
             new TokenHandler(
@@ -51,7 +53,6 @@ export abstract class ModelParser {
      * @returns
      */
     protected filterAfterLastUpdate(entries: any[]) {
-        console.log(this.lastUpdated);
         if (!this.only_process_newest || this.lastUpdated == 0) return entries;
         return entries.filter((entry: any) => {
             return entry.timestamp > (this.lastUpdated as number);

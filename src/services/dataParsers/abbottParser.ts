@@ -1,9 +1,4 @@
-import {
-    DataParser,
-    DataSource,
-    InputError,
-    OutputDataType
-} from './dataParser';
+import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
 import { FoodSource } from '../food/foodParser';
 import { GlucoseSource } from '../glucose/glucoseParser';
 import { InsulinSource } from '../insulin/insulinParser';
@@ -11,7 +6,6 @@ import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { RecordType } from '../../gb/models/glucoseModel';
-
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers

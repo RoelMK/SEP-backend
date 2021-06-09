@@ -57,7 +57,6 @@ export default class InsulinParser extends ModelParser {
      * Posts the imported insulin data to GameBus
      */
     async post(): Promise<void> {
-        console.log(this.insulinData);
         if (this.insulinData && this.insulinData.length > 0)
             this.gbClient
                 .insulin()

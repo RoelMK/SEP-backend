@@ -384,7 +384,6 @@ describe('Tests if ModelParsers only process to newest data', () => {
         expect(glucoseParser.glucoseData).toStrictEqual(expectedGlucose);
     });
 
-
     test('Update newest on a ModelParser but no last update timestamp has been set', async () => {
         const rawDiaryData: FoodDiaryData[] = [
             {

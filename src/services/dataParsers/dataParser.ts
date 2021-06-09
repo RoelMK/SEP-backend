@@ -62,7 +62,6 @@ export abstract class DataParser {
         // retrieve when the file was parsed for the last time
         this.retrieveLastUpdate(getFileName(this.filePath));
 
-        console.log(this.lastUpdated);
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
         switch (extension) {

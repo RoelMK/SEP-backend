@@ -12,6 +12,7 @@ import FoodParser, { FoodInput, FoodSource } from '../../src/services/food/foodP
 import GlucoseParser, {
     GlucoseInput,
     GlucoseSource
+    
 } from '../../src/services/glucose/glucoseParser';
 import InsulinParser, {
     InsulinInput,

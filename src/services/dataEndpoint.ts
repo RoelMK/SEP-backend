@@ -35,19 +35,30 @@ export class DataEndpoint {
      */
     async retrieveData(dateSlice: DateSlice): Promise<EndpointData> {
         const data: EndpointData = {};
+        const promises: EndpointPromises = {};
+
         for (let i = 0; i < this.dataTypes.length; i++) {
             if (this.dataTypes[i] === DataType.EXERCISE) {
-                data.exercise = await this.retrieveExerciseData(dateSlice);
+                promises.exercise = this.retrieveExerciseData(dateSlice);
             } else if (this.dataTypes[i] === DataType.GLUCOSE) {
-                data.glucose = await this.retrieveGlucoseData(dateSlice);
+                promises.glucose = this.retrieveGlucoseData(dateSlice);
             } else if (this.dataTypes[i] === DataType.INSULIN) {
-                data.insulin = await this.retrieveInsulinData(dateSlice);
+                promises.insulin = this.retrieveInsulinData(dateSlice);
             } else if (this.dataTypes[i] === DataType.MOOD) {
-                data.mood = await this.retrieveMoodData(dateSlice);
+                promises.mood = this.retrieveMoodData(dateSlice);
             } else if (this.dataTypes[i] === DataType.FOOD) {
-                data.food = await this.retrieveFoodData(dateSlice);
+                promises.food = this.retrieveFoodData(dateSlice);
             }
         }
+        
+        // Make calls and copy results
+        Object.keys(promises).forEach((key) => {
+            promises[key].then((value: any) => {
+                data[key] = value;
+            });
+        });
+        await Promise.all(Object.values(promises));
+
         return data;
     }
 
@@ -55,27 +66,27 @@ export class DataEndpoint {
         const dict: Record<number, any> = {};
         if (data.exercise) {
             data.exercise.forEach((element) => {
-                dict[element.timestamp] = { ...element };
+                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
             });
         }
         if (data.mood) {
             data.mood.forEach((element) => {
-                dict[element.timestamp] = { ...element };
+                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
             });
         }
         if (data.glucose) {
             data.glucose.forEach((element) => {
-                dict[element.timestamp] = { ...element };
+                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
             });
         }
         if (data.insulin) {
             data.insulin.forEach((element) => {
-                dict[element.timestamp] = { ...element };
+                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
             });
         }
         if (data.food) {
             data.food.forEach((element) => {
-                dict[element.timestamp] = { ...element };
+                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
             });
         }
         return Object.values(dict) as Array<any>;
@@ -176,6 +187,15 @@ export interface EndpointData {
     mood?: MoodModel[];
     food?: FoodModel[];
 }
+
+export interface EndpointPromises {
+    glucose?: Promise<GlucoseModel[]>;
+    exercise?: Promise<ExerciseModel[]>;
+    insulin?: Promise<InsulinModel[]>;
+    mood?: Promise<MoodModel[]>;
+    food?: Promise<FoodModel[]>;
+}
+
 
 /**
  * Parameters for the endpoint.

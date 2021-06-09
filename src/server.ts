@@ -22,12 +22,12 @@ if (process.env.PORT) {
 }
 
 // This is so you can see every incoming request (from GameBus) in console
-app.use(
+/*app.use(
     expressWinston.logger({
         transports: [new winston.transports.Console()],
         format: winston.format.combine(winston.format.colorize(), winston.format.prettyPrint())
     })
-);
+);*/
 
 app.use(express.json());
 app.use(cors());

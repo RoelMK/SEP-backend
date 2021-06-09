@@ -62,6 +62,7 @@ export abstract class DataParser {
         // retrieve when the file was parsed for the last time
         this.retrieveLastUpdate(getFileName(this.filePath));
 
+        console.log(this.lastUpdated);
         // determine method of parsing by checking file extension
         const extension: string = getFileExtension(this.filePath);
         switch (extension) {
@@ -113,7 +114,8 @@ export abstract class DataParser {
                     dataSource,
                     this.dateFormat,
                     this.userInfo,
-                    this.only_parse_newest
+                    this.only_parse_newest,
+                    this.lastUpdated
                 );
                 return;
             case OutputDataType.MOOD:
@@ -126,7 +128,8 @@ export abstract class DataParser {
                     dataSource,
                     this.dateFormat,
                     this.userInfo,
-                    this.only_parse_newest
+                    this.only_parse_newest,
+                    this.lastUpdated
                 );
                 return;
             case OutputDataType.GLUCOSE:
@@ -135,7 +138,8 @@ export abstract class DataParser {
                     dataSource,
                     this.dateFormat,
                     this.userInfo,
-                    this.only_parse_newest
+                    this.only_parse_newest,
+                    this.lastUpdated
                 );
                 return;
             default:

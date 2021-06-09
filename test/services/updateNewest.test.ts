@@ -383,4 +383,102 @@ describe('Tests if ModelParsers only process to newest data', () => {
         expect(glucoseParser.glucoseData).toBeDefined();
         expect(glucoseParser.glucoseData).toStrictEqual(expectedGlucose);
     });
+
+
+    test('Update newest on a ModelParser but no last update timestamp has been set', async () => {
+        const rawDiaryData: FoodDiaryData[] = [
+            {
+                date: '08/05/21',
+                time: '13:12',
+                meal_type: MEAL_TYPE.UNDEFINED,
+                description: 'Pizza',
+                carbohydrates: '3',
+                glycemic_index: '2',
+                base_insulin: '4',
+                high_correction_insulin: '',
+                sports_correction_insulin: '',
+                total_insulin: '4'
+            }
+        ];
+        // define expected outcomes
+        const expectedFood: FoodModel[] = [
+            {
+                timestamp: parseDate(
+                    '08/05/21 13:12',
+                    DateFormat.FOOD_DIARY,
+                    new Date(),
+                    true
+                ) as number,
+                carbohydrates: 3,
+                glycemic_index: 2,
+                meal_type: MEAL_TYPE.UNDEFINED,
+                description: 'Pizza'
+            }
+        ];
+        const dummyUserInfo: GameBusToken = {
+            playerId: '1',
+            accessToken: '12345',
+            refreshToken: '67890'
+        };
+
+        // create parser without timestamp but with updating newest on
+        const foodParser: FoodParser = new FoodParser(
+            rawDiaryData,
+            FoodSource.FOOD_DIARY_EXCEL,
+            DateFormat.FOOD_DIARY,
+            dummyUserInfo,
+            true
+        );
+        expect(foodParser.foodData).toBeDefined();
+        expect(foodParser.foodData).toStrictEqual(expectedFood);
+    });
+
+    test('Update newest on a ModelParser but last update timestamp has been set to 0', async () => {
+        const rawDiaryData: FoodDiaryData[] = [
+            {
+                date: '08/05/21',
+                time: '13:12',
+                meal_type: MEAL_TYPE.UNDEFINED,
+                description: 'Pizza',
+                carbohydrates: '3',
+                glycemic_index: '2',
+                base_insulin: '4',
+                high_correction_insulin: '',
+                sports_correction_insulin: '',
+                total_insulin: '4'
+            }
+        ];
+        // define expected outcomes
+        const expectedFood: FoodModel[] = [
+            {
+                timestamp: parseDate(
+                    '08/05/21 13:12',
+                    DateFormat.FOOD_DIARY,
+                    new Date(),
+                    true
+                ) as number,
+                carbohydrates: 3,
+                glycemic_index: 2,
+                meal_type: MEAL_TYPE.UNDEFINED,
+                description: 'Pizza'
+            }
+        ];
+        const dummyUserInfo: GameBusToken = {
+            playerId: '1',
+            accessToken: '12345',
+            refreshToken: '67890'
+        };
+
+        // create parser without timestamp but with updating newest on
+        const foodParser: FoodParser = new FoodParser(
+            rawDiaryData,
+            FoodSource.FOOD_DIARY_EXCEL,
+            DateFormat.FOOD_DIARY,
+            dummyUserInfo,
+            true,
+            0
+        );
+        expect(foodParser.foodData).toBeDefined();
+        expect(foodParser.foodData).toStrictEqual(expectedFood);
+    });
 });

@@ -56,7 +56,6 @@ export class Food extends GameBusObject {
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
-        console.log(data);
         const response = await this.activity.postActivities(data, headers, query);
         return response;
     }

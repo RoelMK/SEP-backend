@@ -8,6 +8,7 @@ import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 import { checkJwt } from '../middlewares/checkJwt';
 import { GameBusToken } from '../gb/auth/tokenHandler';
+import axios from 'axios';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -95,9 +96,14 @@ async function uploadFile(req, res, dataParser: DataParser) {
 
     // parse the uploaded file and update response on failure
     try {
-        await parseFile(dataParser);
+        await dataParser.process();
     } catch (e) {
-        console.log(e);
+        if (axios.isAxiosError(e)) {
+            if (e.response?.status === 401) {
+                // Unauthorized
+                return res.status(401).send();
+            }
+        }
         switch (e.name) {
             case 'InputError':
                 res.status(400).send(
@@ -114,21 +120,6 @@ async function uploadFile(req, res, dataParser: DataParser) {
     // process has been completed
     res.status(200).send('File has been parsed.');
     console.log('upload succesful');
-}
-
-/**
- * Makes sure the uploaded file is parsed and processed correctly
- * @param dataParser DataParser object that handles the parsing of the file
- */
-async function parseFile(dataParser: DataParser): Promise<void> {
-    await dataParser.process();
-
-    // TODO just for testing, get some insulin data and send it back
-    //const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
-    //const foodData: any = dataParser.getData(OutputDataType.FOOD);
-
-    //console.log(insulinData);
-    //console.log(foodData);
 }
 
 module.exports = uploadRouter;

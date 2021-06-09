@@ -48,25 +48,7 @@ describe('GET data', () => {
     });
 });
 
-describe('GET files', () => {
-    //TODO remove these / redescribe, the gets are just for testing
-    test('GET Abbott file', async () => {
-        const response = await request(server).get('/upload/abbott');
-        expect(response.statusCode).toBe(200);
-        // TODO: more?
-    });
-
-    test('GET FoodDiary file', async () => {
-        const response = await request(server).get('/upload/fooddiary');
-        expect(response.statusCode).toBe(200);
-    });
-
-    test('GET Eetmeter file', async () => {
-        const response = await request(server).get('/upload/eetmeter');
-        expect(response.statusCode).toBe(200);
-    });
-});
-
+/** //TODO it just throws 401 errors, quite useless
 describe('POST files', () => {
     //TODO just expect 401? or how to do this?
     test('POST Abbott file', async () => {
@@ -116,7 +98,7 @@ describe('POST files', () => {
             .attach('file', 'test/services/data/eetmeter.xml');
         expect(response.statusCode).toBe(401);
     });
-});
+}); */
 
 describe('mood endpoint', () => {
     test('POST mood data', async () => {

@@ -1,7 +1,6 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import {
     DataSource,
-    GameBusToken,
     OutputDataType
 } from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
@@ -28,6 +27,7 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from '../../src/services/dataParsers/nightscoutParser';
+import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 
 const dummyUserInfo: GameBusToken = {
     playerId: '1',

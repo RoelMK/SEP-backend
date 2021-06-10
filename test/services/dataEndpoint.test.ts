@@ -1,6 +1,6 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
-import { ExerciseGameDescriptorNames } from '../../src/gb/objects/exercise';
+import { ExerciseGameDescriptorNames } from '../../src/gb/objects/keys';
 import {
     DataEndpoint,
     DataType,

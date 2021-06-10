@@ -9,6 +9,7 @@ import {
 } from '../models/gamebusModel';
 import { fromUnixMsTime } from '../../services/utils/dates';
 import FormData from 'form-data';
+import { ExerciseGameDescriptorNames, Keys } from './keys';
 
 /**
  * Class that is used to GET/POST to GameBus activities
@@ -127,7 +128,17 @@ export class Activity {
         const activity: ActivityGETData[] = await this.gamebus.get(
             `players/${playerId}/activities`,
             headers,
-            query,
+            // We want to get ALL activities, but the DETAIL activities have to be explicitly mentioned,
+            // so we add ALL game descriptor keys
+            {
+                gds: [
+                    Object.values(ExerciseGameDescriptorNames),
+                    Keys.foodTranslationKey,
+                    Keys.insulinTranslationKey,
+                    Keys.glucoseTranslationKey
+                ].join(','),
+                ...query
+            },
             this.authRequired
         );
         return activity;

@@ -15,7 +15,6 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
     // dataTypes, array of data types to retrieve, seperated by ',', choose from glucose,mood,exercise,insulin,food
     // [Optional] exerciseTypes, array of gamedescriptors, seperated by ','
     // union, boolean, if true: return per timestamp all available data in one single object
-
     if (!req.query.startDate || !req.query.dataTypes) {
         return res.status(400).send();
     }

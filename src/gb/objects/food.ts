@@ -25,6 +25,8 @@ export class Food extends GameBusObject {
      * Function that post a single model for a given player
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
+     * @param headers request headers
+     * @param query request query parameters
      */
     async postSingleFoodActivity(
         model: FoodModel,
@@ -38,9 +40,11 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * Function that posts multiple food models for a given player
+     * @param models models to be POSTed
      * @param playerID playerID of player for who this is posted
+     * @param headers request headers
+     * @param query request query
      */
     async postMultipleFoodActivities(
         models: FoodModel[],
@@ -58,6 +62,8 @@ export class Food extends GameBusObject {
 
     /**
      * Function that creates a POSTData from a model and playerID
+     * @param model FoodModel object
+     * @param playerID player ID of the user
      */
     public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
@@ -81,6 +87,8 @@ export class Food extends GameBusObject {
 
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
+     * @param model FoodModel object
+     * @param playerID player ID of the user
      */
     public toIDPOSTData(model: FoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
@@ -101,6 +109,9 @@ export class Food extends GameBusObject {
 
     /**
      * Function that returns all fooddata
+     * @param playerID player ID of the user
+     * @param headers request headers
+     * @param query request query parameters
      * @returns All food activities
      */
     async getAllFoodActivities(

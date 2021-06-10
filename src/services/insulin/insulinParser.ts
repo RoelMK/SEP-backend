@@ -6,10 +6,11 @@ import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { XOR } from 'ts-xor';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
+
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
  * Currently supported insulin sources:
- * - Abbott
  */
 export default class InsulinParser extends ModelParser {
     insulinData?: InsulinModel[];
@@ -26,11 +27,12 @@ export default class InsulinParser extends ModelParser {
         private readonly insulinInput: InsulinInput,
         private readonly insulinSource: InsulinSource,
         private readonly dateFormat: DateFormat,
+        userInfo: GameBusToken,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {
         // Process incoming insulinInput data
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         this.process();
     }
 
@@ -48,13 +50,27 @@ export default class InsulinParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.insulinData = this.filterAfterLastUpdate(this.insulinData);
+        //console.log(`Updating ${this.insulinData.length} insulin entries`);
     }
 
     /**
      * Posts the imported insulin data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the insulinData to GameBus
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.insulinData && this.insulinData.length > 0)
+                await this.gbClient
+                    .insulin()
+                    .postMultipleInsulinActivities(
+                        this.insulinData,
+                        parseInt(this.userInfo.playerId)
+                    );
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 /**

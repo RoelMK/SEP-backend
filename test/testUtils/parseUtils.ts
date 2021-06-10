@@ -24,6 +24,13 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from '../../src/services/dataParsers/nightscoutParser';
+import { GameBusToken } from '../../src/gb/auth/tokenHandler';
+
+const dummyUserInfo: GameBusToken = {
+    playerId: 'testing',
+    accessToken: '12345',
+    refreshToken: '67890'
+};
 
 /**
  * Helper function to parse an Abbott file through the AbbottParser and get the resulting data
@@ -39,7 +46,7 @@ export async function parseAbbott(
 ): Promise<
     InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined
 > {
-    const abbottEUParser: AbbottParser = new AbbottParser(filePath);
+    const abbottEUParser: AbbottParser = new AbbottParser(filePath, dummyUserInfo);
     if (only_parse_newest) abbottEUParser.parseOnlyNewest(true);
     await abbottEUParser.process();
     return abbottEUParser.getData(type);
@@ -59,7 +66,7 @@ export async function parseFoodDiary(
 ): Promise<
     InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined
 > {
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath);
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath, dummyUserInfo);
     if (only_parse_newest) foodDiaryParser.parseOnlyNewest(true);
     await foodDiaryParser.process();
     return foodDiaryParser.getData(type);
@@ -89,7 +96,7 @@ export async function parseEetmeter(
     filePath: string,
     only_parse_newest?: boolean
 ): Promise<FoodModel[] | undefined> {
-    const eetmeterParser: EetMeterParser = new EetMeterParser(filePath);
+    const eetmeterParser: EetMeterParser = new EetMeterParser(filePath, dummyUserInfo);
     if (only_parse_newest) eetmeterParser.parseOnlyNewest(true);
     await eetmeterParser.process();
     return eetmeterParser.getData();
@@ -127,7 +134,7 @@ export async function postFoodData(
     foodSource: FoodSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const foodParser = new FoodParser(foodInput, foodSource, dateFormat, false);
+    const foodParser = new FoodParser(foodInput, foodSource, dateFormat, dummyUserInfo, false);
     return await foodParser.post();
 }
 
@@ -143,7 +150,13 @@ export async function postGlucoseData(
     glucoseSource: GlucoseSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const glucoseParser = new GlucoseParser(glucoseInput, glucoseSource, dateFormat, false);
+    const glucoseParser = new GlucoseParser(
+        glucoseInput,
+        glucoseSource,
+        dateFormat,
+        dummyUserInfo,
+        false
+    );
     return await glucoseParser.post();
 }
 
@@ -159,7 +172,13 @@ export async function postInsulinData(
     insulinSource: InsulinSource,
     dateFormat: DateFormat
 ): Promise<void> {
-    const insulinParser = new InsulinParser(insulinInput, insulinSource, dateFormat, false);
+    const insulinParser = new InsulinParser(
+        insulinInput,
+        insulinSource,
+        dateFormat,
+        dummyUserInfo,
+        false
+    );
     return await insulinParser.post();
 }
 
@@ -169,7 +188,7 @@ export async function postInsulinData(
  * @returns Response of POST
  */
 export async function postMoodData(moodInput: MoodModel): Promise<void> {
-    const moodParser = new MoodParser(moodInput);
+    const moodParser = new MoodParser([moodInput], dummyUserInfo);
     return await moodParser.post();
 }
 
@@ -182,6 +201,7 @@ export async function parseNightScout(
 > {
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
+        dummyUserInfo,
         'rink-27f591f2e4730a68',
         testEntries,
         testTreatments

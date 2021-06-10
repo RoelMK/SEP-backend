@@ -1,11 +1,30 @@
+import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+
 export abstract class ModelParser {
     protected newestEntry = 0;
 
+    // client for posting to GameBus
+    protected gbClient: GameBusClient;
+
     constructor(
+        protected userInfo: GameBusToken,
         // whether to upload all input data, or only data after the last update
         private only_process_newest: boolean,
         private lastUpdated?: number
-    ) {}
+    ) {
+        if (lastUpdated === undefined) {
+            this.lastUpdated = 0;
+        }
+        this.gbClient = new GameBusClient(
+            //TODO optional, because it is not used?
+            new TokenHandler(
+                userInfo.accessToken,
+                userInfo.refreshToken as string,
+                userInfo.playerId
+            )
+        );
+    }
 
     /**
      * Calculates the most recent entry in the items array by checking
@@ -34,13 +53,13 @@ export abstract class ModelParser {
      * @returns
      */
     protected filterAfterLastUpdate(entries: any[]) {
-        if (!this.only_process_newest) return entries;
+        if (!this.only_process_newest || this.lastUpdated == 0) return entries;
         return entries.filter((entry: any) => {
             return entry.timestamp > (this.lastUpdated as number);
         });
     }
 
-    //process(): void;
+    //abstract process(): any;
 
-    //abstract post(): void;
+    abstract post(): void;
 }

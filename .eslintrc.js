@@ -16,7 +16,7 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module'
     },
-    plugins: ['@typescript-eslint', 'prettier'],
+    plugins: ['@typescript-eslint', 'prettier', 'import'],
     rules: {
         'prettier/prettier': [
             'error',
@@ -30,6 +30,9 @@ module.exports = {
         'max-len': ['warn', 120, 4, { ignoreUrls: true }],
         'no-unused-vars': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/no-unused-vars': ['error']
+        '@typescript-eslint/no-unused-vars': ['error'],
+        'import/no-cycle': [
+            1
+        ]
     }
 };

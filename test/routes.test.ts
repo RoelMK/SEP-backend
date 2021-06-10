@@ -3,6 +3,8 @@ import { InsulinModel } from '../src/gb/models/insulinModel';
 import { MoodModel } from '../src/gb/models/moodModel';
 import { server } from '../src/server';
 
+jest.mock('axios');
+
 // Everything is currently in 1 file since server.close() can only happen once
 afterAll((done) => {
     // Server must be closed so Jest can finish
@@ -47,31 +49,57 @@ describe('GET data', () => {
     });
 });
 
-describe('GET files', () => {
-    test('GET Abbott file', async () => {
-        const response = await request(server).get('/upload-abbott');
-        expect(response.statusCode).toBe(200);
-        // TODO: more?
-    });
-
-    test('GET FoodDiary file', async () => {
-        const response = await request(server).get('/upload-fooddiary');
-        expect(response.statusCode).toBe(200);
-    });
-});
-
+/** //TODO it just throws 401 errors, quite useless
 describe('POST files', () => {
-    // TODO: not sure how to post an entire file
+    //TODO just expect 401? or how to do this?
     test('POST Abbott file', async () => {
-        // const response = await request(server).post('/upload-abbott');
-        // expect(response.statusCode).toBe(201);
+        const response = await request(server)
+            .post('/upload?format=abbott')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/abbott_eu.csv');
+        expect(response.statusCode).toBe(401);
     });
 
     test('POST FoodDiary file', async () => {
-        // const response = await request(server).post('/upload-fooddiary');
-        // expect(response.statusCode).toBe(201);
+        const response = await request(server)
+            .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/foodDiary_standard_missing_table.xlsx');
+        expect(response.statusCode).toBe(401);
     });
-});
+
+    test('POST Eetmeter file', async () => {
+        const response = await request(server)
+            .post('/upload?format=eetmeter')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/eetmeter.xml');
+        expect(response.statusCode).toBe(401);
+    });
+
+    test('POST unsupported format', async () => {
+        const response = await request(server)
+            .post('/upload?format=story')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/eetmeter.xml');
+        expect(response.statusCode).toBe(401);
+    });
+
+    test('POST supported format, with unsupported file extension', async () => {
+        const response = await request(server)
+            .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/text.txt');
+        expect(response.statusCode).toBe(401);
+    });
+
+    test('POST supported format, with supported file extension but wrong file content', async () => {
+        const response = await request(server)
+            .post('/upload?format=fooddiary')
+            .set('Authentication', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI')
+            .attach('file', 'test/services/data/eetmeter.xml');
+        expect(response.statusCode).toBe(401);
+    });
+}); */
 
 describe('mood endpoint', () => {
     test('POST mood data', async () => {

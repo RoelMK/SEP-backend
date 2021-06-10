@@ -159,7 +159,6 @@ export class Glucose extends GameBusObject {
     private static convertGlucoseResponseToModel(response: ActivityGETData): GlucoseModel {
         // Get ActivityModels from response
         const activities = Activity.getActivityInfoFromActivity(response);
-        //console.log(activities);
         // We already know the date, glucose level will be 0 for now
         const glucose: GlucoseModel = {
             timestamp: response.date,

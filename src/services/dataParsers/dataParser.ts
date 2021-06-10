@@ -180,14 +180,10 @@ export abstract class DataParser {
 
     protected async postProcessedData(): Promise<void> {
         // post all data
-        try {
-            await this.foodParser?.post();
-            await this.glucoseParser?.post();
-            await this.insulinParser?.post();
-            await this.moodParser?.post();
-        } catch (e) {
-            console.log('Async kutzooi');
-        }
+        await this.foodParser?.post();
+        await this.glucoseParser?.post();
+        await this.insulinParser?.post();
+        await this.moodParser?.post();
     }
 
     /**

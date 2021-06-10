@@ -37,7 +37,6 @@ export default class GlucoseParser extends ModelParser {
         super(userInfo, only_process_newest, lastUpdated);
         // Process incoming glucoseInput data
         this.process();
-        this.post();
     }
 
     /**

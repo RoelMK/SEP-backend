@@ -109,7 +109,6 @@ export default class NightscoutParser extends DataParser {
         // create parsers
         this.createParser(OutputDataType.GLUCOSE, this.nightScoutEntries, GlucoseSource.NIGHTSCOUT);
 
-        console.log(this.nightScoutEntries);
         const foodTreatments: NightScoutTreatmentModel[] = this.filterFood();
         this.createParser(OutputDataType.FOOD, foodTreatments, FoodSource.NIGHTSCOUT);
 

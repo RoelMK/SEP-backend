@@ -16,7 +16,6 @@ export default class MoodParser extends ModelParser {
         super(userInfo, false);
         // Maybe process if needed in the future
         this.process();
-        this.post();
     }
 
     /**

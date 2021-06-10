@@ -44,6 +44,9 @@ export default class AbbottParser extends DataParser {
         const insulinData: AbbottData[] = this.filterInsulin();
         this.createParser(OutputDataType.INSULIN, insulinData, InsulinSource.ABBOTT);
 
+        // post data
+        await this.postProcessedData();
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }

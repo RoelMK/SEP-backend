@@ -106,7 +106,7 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
-        return this.request(
+        return await this.request(
             path,
             RequestMethod.POST,
             body,

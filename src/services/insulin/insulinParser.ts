@@ -34,7 +34,6 @@ export default class InsulinParser extends ModelParser {
         // Process incoming insulinInput data
         super(userInfo, only_process_newest, lastUpdated);
         this.process();
-        this.post();
     }
 
     /**
@@ -51,17 +50,27 @@ export default class InsulinParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.insulinData = this.filterAfterLastUpdate(this.insulinData);
-        console.log(`Updating ${this.insulinData.length} insulin entries`);
+        //console.log(`Updating ${this.insulinData.length} insulin entries`);
     }
 
     /**
      * Posts the imported insulin data to GameBus
      */
     async post(): Promise<void> {
-        if (this.insulinData && this.insulinData.length > 0)
-            this.gbClient
-                .insulin()
-                .postMultipleInsulinActivities(this.insulinData, parseInt(this.userInfo.playerId));
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.insulinData && this.insulinData.length > 0)
+                await this.gbClient
+                    .insulin()
+                    .postMultipleInsulinActivities(
+                        this.insulinData,
+                        parseInt(this.userInfo.playerId)
+                    );
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 /**

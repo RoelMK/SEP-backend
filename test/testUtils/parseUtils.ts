@@ -27,7 +27,7 @@ import NightscoutParser, {
 import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 
 const dummyUserInfo: GameBusToken = {
-    playerId: '1',
+    playerId: 'testing',
     accessToken: '12345',
     refreshToken: '67890'
 };

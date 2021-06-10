@@ -59,7 +59,7 @@ export default class GlucoseParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.glucoseData = this.filterAfterLastUpdate(this.glucoseData);
-        console.log(`Updating ${this.glucoseData.length} glucose entries`);
+        //console.log(`Updating ${this.glucoseData.length} glucose entries`);
     }
 
     /**
@@ -82,10 +82,20 @@ export default class GlucoseParser extends ModelParser {
      * Posts the imported glucose data to GameBus
      */
     async post(): Promise<void> {
-        if (this.glucoseData && this.glucoseData.length > 0)
-            this.gbClient
-                .glucose()
-                .postMultipleGlucoseActivities(this.glucoseData, parseInt(this.userInfo.playerId));
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.glucoseData && this.glucoseData.length > 0)
+                await this.gbClient
+                    .glucose()
+                    .postMultipleGlucoseActivities(
+                        this.glucoseData,
+                        parseInt(this.userInfo.playerId)
+                    );
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 /**

@@ -59,7 +59,7 @@ export abstract class ModelParser {
         });
     }
 
-    //process(): void;
+    //abstract process(): any;
 
-    //abstract post(): void;
+    abstract post(): void;
 }

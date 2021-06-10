@@ -39,7 +39,6 @@ export default class FoodParser extends ModelParser {
         super(userInfo, only_process_newest, lastUpdated);
         // Process incoming foodInput data
         this.process();
-        this.post();
     }
 
     /**
@@ -53,17 +52,24 @@ export default class FoodParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.foodData = this.filterAfterLastUpdate(this.foodData);
-        console.log(`Updating ${this.foodData.length} food entries`);
+        //console.log(`Updating ${this.foodData.length} food entries`);
     }
 
     /**
      * Posts the imported food data to GameBus
      */
     async post(): Promise<void> {
-        if (this.foodData && this.foodData.length > 0)
-            this.gbClient
-                .food()
-                .postMultipleFoodActivities(this.foodData, parseInt(this.userInfo.playerId));
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.foodData && this.foodData.length > 0)
+                await this.gbClient
+                    .food()
+                    .postMultipleFoodActivities(this.foodData, parseInt(this.userInfo.playerId));
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 

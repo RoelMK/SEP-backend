@@ -115,6 +115,9 @@ export default class NightscoutParser extends DataParser {
         const insulinTreatments: NightScoutTreatmentModel[] = this.filterInsulin();
         this.createParser(OutputDataType.INSULIN, insulinTreatments, InsulinSource.NIGHTSCOUT);
 
+        // post data
+        await this.postProcessedData();
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(this.nsClient.getNightscoutHost(), this.getLastProcessedTimestamp());
     }

@@ -30,9 +30,16 @@ export default class MoodParser extends ModelParser {
      * Posts mood data to GameBus
      */
     async post(): Promise<void> {
-        if (this.moodInput && this.moodInput.length > 0)
-            this.gbClient
-                .mood()
-                .postMultipleMoodActivities(this.moodInput, parseInt(this.userInfo.playerId));
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.moodInput && this.moodInput.length > 0)
+                await this.gbClient
+                    .mood()
+                    .postMultipleMoodActivities(this.moodInput, parseInt(this.userInfo.playerId));
+        } catch (e) {
+            /*continue*/
+        }
     }
 }

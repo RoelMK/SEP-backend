@@ -37,6 +37,9 @@ export class EetMeterParser extends DataParser {
         // create the food parser
         this.createParser(OutputDataType.FOOD, this.eetmeterConsumptionData, FoodSource.EETMETER);
 
+        // post data
+        await this.postProcessedData();
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }

@@ -257,7 +257,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
         ];
 
         const dummyUserInfo: GameBusToken = {
-            playerId: '1',
+            playerId: 'testing',
             accessToken: '12345',
             refreshToken: '67890'
         };
@@ -365,7 +365,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
         ];
 
         const dummyUserInfo: GameBusToken = {
-            playerId: '1',
+            playerId: 'testing',
             accessToken: '12345',
             refreshToken: '67890'
         };
@@ -415,7 +415,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
             }
         ];
         const dummyUserInfo: GameBusToken = {
-            playerId: '1',
+            playerId: 'testing',
             accessToken: '12345',
             refreshToken: '67890'
         };
@@ -463,7 +463,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
             }
         ];
         const dummyUserInfo: GameBusToken = {
-            playerId: '1',
+            playerId: 'testing',
             accessToken: '12345',
             refreshToken: '67890'
         };

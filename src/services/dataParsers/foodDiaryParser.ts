@@ -50,6 +50,9 @@ export default class FoodDiaryParser extends DataParser {
             InsulinSource.FOOD_DIARY_EXCEL
         );
 
+        // post data
+        await this.postProcessedData();
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }

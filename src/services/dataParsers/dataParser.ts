@@ -11,6 +11,7 @@ import XMLParser from '../fileParsers/xmlParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
+import { ModelParser } from '../modelParser';
 import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
@@ -37,6 +38,9 @@ export abstract class DataParser {
 
     // whether to parse all incoming data or only new data
     protected only_parse_newest = false;
+
+    // array containing all model parsers used for this data parser
+    private intializedParsers: ModelParser[] = [];
 
     /**
      * Constructor with file path and data source (provided by children)
@@ -116,10 +120,12 @@ export abstract class DataParser {
                     this.only_parse_newest,
                     this.lastUpdated
                 );
+                this.intializedParsers.push(this.foodParser);
                 return;
             case OutputDataType.MOOD:
                 //TODO
                 this.moodParser = new MoodParser(data, this.userInfo);
+                this.intializedParsers.push(this.moodParser);
                 return;
             case OutputDataType.INSULIN:
                 this.insulinParser = new InsulinParser(
@@ -130,6 +136,7 @@ export abstract class DataParser {
                     this.only_parse_newest,
                     this.lastUpdated
                 );
+                this.intializedParsers.push(this.insulinParser);
                 return;
             case OutputDataType.GLUCOSE:
                 this.glucoseParser = new GlucoseParser(
@@ -140,6 +147,7 @@ export abstract class DataParser {
                     this.only_parse_newest,
                     this.lastUpdated
                 );
+                this.intializedParsers.push(this.glucoseParser);
                 return;
             default:
                 throw Error('Output type is not implemented');
@@ -167,6 +175,18 @@ export abstract class DataParser {
             default:
                 // TODO this should not happen
                 return [];
+        }
+    }
+
+    protected async postProcessedData(): Promise<void> {
+        // post all data
+        try {
+            await this.foodParser?.post();
+            await this.glucoseParser?.post();
+            await this.insulinParser?.post();
+            await this.moodParser?.post();
+        } catch (e) {
+            console.log('Async kutzooi');
         }
     }
 

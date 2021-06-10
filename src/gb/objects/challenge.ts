@@ -44,9 +44,9 @@ export class Challenge {
     }
 
     async postCircleMembership(
-        circleId1:number,
-        circleId2:number,
-        challengeId:number,
+        circleId1: number,
+        circleId2: number,
+        challengeId: number,
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
@@ -60,5 +60,4 @@ export class Challenge {
         );
         return response;
     }
-    
 }

@@ -131,8 +131,8 @@ export class Activity {
             query,
             this.authRequired
         );
-        console.log('Time to do GetAllActivities' + (new Date().getTime() - t1));
-        console.log('Act length' + activity.length + ' QLimit ' + query?.limit);
+        //console.log('Time to do GetAllActivities' + (new Date().getTime() - t1));
+        //console.log('Act length' + activity.length + ' QLimit ' + query?.limit);
         return activity;
     }
 

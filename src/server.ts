@@ -20,14 +20,6 @@ if (process.env.PORT) {
     port = Number(process.env.PORT);
 }
 
-// This is so you can see every incoming request (from GameBus) in console
-app.use(
-    expressWinston.logger({
-        transports: [new winston.transports.Console()],
-        format: winston.format.combine(winston.format.colorize(), winston.format.prettyPrint())
-    })
-);
-
 // Needed for POST requests JSON body
 // Ignore the deprecated warning: https://github.com/expressjs/body-parser/issues/428
 app.use(

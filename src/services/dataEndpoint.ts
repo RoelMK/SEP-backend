@@ -111,8 +111,6 @@ export class DataEndpoint {
                     this.parameters.exerciseTypes,
                     dateSlice.startDate.getTime(),
                     dateSlice.endDate.getTime(),
-                    undefined,
-                    2000
                 );
         } else {
             return [];

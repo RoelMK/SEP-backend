@@ -1,14 +1,24 @@
 import axios from 'axios';
 import { Router } from 'express';
+import { GameBusToken } from '../gb/auth/tokenHandler';
+import { checkJwt } from '../middlewares/checkJwt';
 import NightscoutParser from '../services/dataParsers/nightscoutParser';
 
 const nightscoutRouter = Router();
-nightscoutRouter.get('/nightscout', async (req: any, res: any) => {
+nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
     if (!req.query.host) {
         res.status(400).send('Please specify the nightscout host');
         return;
     }
-    const nsParser: NightscoutParser = new NightscoutParser(req.query.host);
+
+    // retrieve user information
+    const userInfo: GameBusToken = {
+        playerId: req.user.playerId,
+        accessToken: req.user.accessToken,
+        refreshToken: req.user.refreshToken
+    };
+
+    const nsParser: NightscoutParser = new NightscoutParser(req.query.host, userInfo);
     nsParser.parseOnlyNewest(true);
     try {
         await nsParser.process();

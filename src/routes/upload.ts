@@ -19,6 +19,10 @@ const uploadRouter = Router();
  * format: one of eetmeter, abbott or fooddiary
  */
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
+    if (!req.query.format) {
+        res.status(400).send('Specify file format!');
+        return;
+    }
     // retrieve user information
     const userInfo: GameBusToken = {
         playerId: req.user.playerId,

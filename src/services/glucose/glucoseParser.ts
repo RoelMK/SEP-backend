@@ -1,4 +1,5 @@
 import { XOR } from 'ts-xor';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
 import { AbbottData } from '../dataParsers/abbottParser';
 import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
@@ -27,14 +28,16 @@ export default class GlucoseParser extends ModelParser {
         private readonly glucoseInput: GlucoseInput,
         private readonly glucoseSource: GlucoseSource = GlucoseSource.ABBOTT,
         private readonly dateFormat: DateFormat,
+        userInfo: GameBusToken,
         only_process_newest: boolean,
         lastUpdated?: number,
         // indicates in which unit the glucose levels are measured
         private glucoseUnit?: GlucoseUnit
     ) {
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         // Process incoming glucoseInput data
         this.process();
+        this.post();
     }
 
     /**
@@ -56,6 +59,7 @@ export default class GlucoseParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.glucoseData = this.filterAfterLastUpdate(this.glucoseData);
+        //console.log(`Updating ${this.glucoseData.length} glucose entries`);
     }
 
     /**
@@ -78,7 +82,20 @@ export default class GlucoseParser extends ModelParser {
      * Posts the imported glucose data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the glucoseData to GameBus
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.glucoseData && this.glucoseData.length > 0)
+                await this.gbClient
+                    .glucose()
+                    .postMultipleGlucoseActivities(
+                        this.glucoseData,
+                        parseInt(this.userInfo.playerId)
+                    );
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 /**

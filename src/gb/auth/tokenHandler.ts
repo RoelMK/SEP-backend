@@ -37,4 +37,5 @@ export class TokenHandler {
 export interface GameBusToken {
     playerId: string;
     accessToken: string;
+    refreshToken?: string;
 }

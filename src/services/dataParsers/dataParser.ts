@@ -1,4 +1,5 @@
 import { DBClient } from '../../db/dbClient';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { FoodModel } from '../../gb/models/foodModel';
 import { GlucoseModel } from '../../gb/models/glucoseModel';
 import { InsulinModel } from '../../gb/models/insulinModel';
@@ -10,10 +11,10 @@ import XMLParser from '../fileParsers/xmlParser';
 import FoodParser from '../food/foodParser';
 import GlucoseParser from '../glucose/glucoseParser';
 import InsulinParser from '../insulin/insulinParser';
+import { ModelParser } from '../modelParser';
 import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
-import { NightScoutEntryModel } from './nightscoutParser';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
@@ -35,6 +36,12 @@ export abstract class DataParser {
     // UNIX timestamp in ms that indicates when it was last parsed
     protected lastUpdated = 0;
 
+    // whether to parse all incoming data or only new data
+    protected only_parse_newest = false;
+
+    // array containing all model parsers used for this data parser
+    private intializedParsers: ModelParser[] = [];
+
     /**
      * Constructor with file path and data source (provided by children)
      * @param filePath Path to .csv file
@@ -42,10 +49,10 @@ export abstract class DataParser {
      */
     constructor(
         protected readonly dataSource: DataSource,
-        protected filePath?: string,
+        protected filePath: string,
+        protected userInfo: GameBusToken,
         protected oneDriveToken?: string,
-        protected tableName?: string, // for excel parsing
-        protected only_parse_newest = false
+        protected tableName?: string // for excel parsing
     ) {}
 
     /**
@@ -53,7 +60,7 @@ export abstract class DataParser {
      */
     protected async parse(): Promise<Record<string, string | number>[] | undefined> {
         if (!this.filePath) {
-            throw Error('File path is not set!');
+            throw new DeveloperError('File path is not set!');
         }
 
         // retrieve when the file was parsed for the last time
@@ -78,10 +85,9 @@ export abstract class DataParser {
                 );
 
             case 'xml':
-                if (this.dataSource == DataSource.EETMETER) {
-                    return await this.xmlParser.parse(this.filePath);
-                }
+                return await this.xmlParser.parse(this.filePath);
         }
+        throw new InputError(`Unsupported file type ${extension}`);
     }
 
     /**
@@ -91,9 +97,62 @@ export abstract class DataParser {
     setFilePath(path: string): void {
         this.filePath = path;
     }
+    getFilePath(): string {
+        return this.filePath;
+    }
 
     abstract process(): Promise<void>;
 
+    /**
+     * Creates parsers and allows easy non-duplicative class variable insertion
+     * @param type output datatype
+     * @param data array containing model objects
+     * @param dataSource FoodSource, GlucoseSource or InsulinSource object
+     */
+    protected createParser(type: OutputDataType, data: any[], dataSource: any): void {
+        switch (type) {
+            case OutputDataType.FOOD:
+                this.foodParser = new FoodParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest,
+                    this.lastUpdated
+                );
+                this.intializedParsers.push(this.foodParser);
+                return;
+            case OutputDataType.MOOD:
+                //TODO
+                this.moodParser = new MoodParser(data, this.userInfo);
+                this.intializedParsers.push(this.moodParser);
+                return;
+            case OutputDataType.INSULIN:
+                this.insulinParser = new InsulinParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest,
+                    this.lastUpdated
+                );
+                this.intializedParsers.push(this.insulinParser);
+                return;
+            case OutputDataType.GLUCOSE:
+                this.glucoseParser = new GlucoseParser(
+                    data,
+                    dataSource,
+                    this.dateFormat,
+                    this.userInfo,
+                    this.only_parse_newest,
+                    this.lastUpdated
+                );
+                this.intializedParsers.push(this.glucoseParser);
+                return;
+            default:
+                throw Error('Output type is not implemented');
+        }
+    }
     /**
      * To be called after processing, for retrieving processed data
      * @param outputType Glucose, Insulin or Food
@@ -101,13 +160,7 @@ export abstract class DataParser {
      */
     getData(
         outputType: OutputDataType
-    ):
-        | InsulinModel[]
-        | FoodModel[]
-        | GlucoseModel[]
-        | NightScoutEntryModel[]
-        | MoodModel[]
-        | undefined {
+    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | MoodModel[] | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -125,12 +178,20 @@ export abstract class DataParser {
         }
     }
 
+    protected async postProcessedData(): Promise<void> {
+        // post all data
+        await this.foodParser?.post();
+        await this.glucoseParser?.post();
+        await this.insulinParser?.post();
+        await this.moodParser?.post();
+    }
+
     /**
      * Returns the last timestamp when the file was parsed or the client was called for updates
      */
     protected retrieveLastUpdate(fileName: string): void {
         const dbClient: DBClient = new DBClient(false);
-        this.lastUpdated = dbClient.getLastUpdate('1', fileName);
+        this.lastUpdated = dbClient.getLastUpdate(this.userInfo.playerId, fileName);
         dbClient.close();
     }
 
@@ -140,7 +201,7 @@ export abstract class DataParser {
      */
     protected setLastUpdate(fileName: string, timestamp: number) {
         const dbClient: DBClient = new DBClient(false);
-        dbClient.registerFileParse('1', fileName, timestamp);
+        dbClient.registerFileParse(this.userInfo.playerId, fileName, timestamp);
         dbClient.close();
     }
 
@@ -185,4 +246,19 @@ export enum OutputDataType {
     INSULIN = 1,
     FOOD = 2,
     MOOD = 3
+}
+
+// custom errors
+export class InputError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'InputError';
+    }
+}
+
+class DeveloperError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'DeveloperError';
+    }
 }

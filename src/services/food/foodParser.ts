@@ -7,6 +7,7 @@ import { XOR } from 'ts-xor';
 import { Consumptie } from '../dataParsers/eetmeterParser';
 import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
@@ -31,10 +32,11 @@ export default class FoodParser extends ModelParser {
         private readonly foodInput: FoodInput,
         private readonly foodSource: FoodSource,
         private readonly dateFormat: DateFormat,
+        userInfo: GameBusToken,
         only_process_newest: boolean,
         lastUpdated?: number
     ) {
-        super(only_process_newest, lastUpdated);
+        super(userInfo, only_process_newest, lastUpdated);
         // Process incoming foodInput data
         this.process();
     }
@@ -44,20 +46,30 @@ export default class FoodParser extends ModelParser {
      */
     private process() {
         this.foodData = this.foodInput.map(FoodMapper.mapFood(this.foodSource, this.dateFormat));
-
         // retrieve the last time stamp in the glucoseData and set it as a threshold
         // to prevent double parsing in the future
         this.setNewestEntry(this.foodData);
 
         // filter on entries after the last update with this file for this person
         this.foodData = this.filterAfterLastUpdate(this.foodData);
+        //console.log(`Updating ${this.foodData.length} food entries`);
     }
 
     /**
      * Posts the imported food data to GameBus
      */
     async post(): Promise<void> {
-        // TODO: post the foodData (correctly formatted) to GameBus
+        if (this.userInfo.playerId == 'testing') {
+            return;
+        }
+        try {
+            if (this.foodData && this.foodData.length > 0)
+                await this.gbClient
+                    .food()
+                    .postMultipleFoodActivities(this.foodData, parseInt(this.userInfo.playerId));
+        } catch (e) {
+            /*continue*/
+        }
     }
 }
 

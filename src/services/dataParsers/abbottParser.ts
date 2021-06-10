@@ -1,22 +1,23 @@
-import { DataParser, DataSource } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
+import { FoodSource } from '../food/foodParser';
+import { GlucoseSource } from '../glucose/glucoseParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
+import { RecordType } from '../../gb/models/glucoseModel';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
 export default class AbbottParser extends DataParser {
     private abbottData: AbbottData[] = [];
-
     /**
      * DataParser construction with DataSource set
      * @param abbottFile file path of Abbott file
      */
-    constructor(private abbotFile?: string) {
-        super(DataSource.ABBOTT, abbotFile);
+    constructor(private abbotFile: string, userInfo: GameBusToken) {
+        super(DataSource.ABBOTT, abbotFile, userInfo);
     }
 
     /**
@@ -28,38 +29,23 @@ export default class AbbottParser extends DataParser {
 
         if (!AbbottDataGuard(this.abbottData[0])) {
             console.log(this.abbottData[0]);
-            throw Error('Wrong input data for processing Abbott data!');
+            throw new InputError('Wrong input data for processing Abbott data!');
         }
         // We must first determine whether we are dealing with an US file or an EU file (set dateFormat)
         this.getLocale();
 
         // We can filter the rawData to get separate glucose, food & insulin data and create their parsers
         const foodData: AbbottData[] = this.filterFood();
-        this.foodParser = new FoodParser(
-            foodData,
-            FoodSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.FOOD, foodData, FoodSource.ABBOTT);
 
         const glucoseData: AbbottData[] = this.filterGlucose();
-        this.glucoseParser = new GlucoseParser(
-            glucoseData,
-            GlucoseSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.GLUCOSE, glucoseData, GlucoseSource.ABBOTT);
 
         const insulinData: AbbottData[] = this.filterInsulin();
-        this.insulinParser = new InsulinParser(
-            insulinData,
-            InsulinSource.ABBOTT,
-            this.dateFormat,
-            this.only_parse_newest,
-            this.lastUpdated
-        );
+        this.createParser(OutputDataType.INSULIN, insulinData, InsulinSource.ABBOTT);
+
+        // post data
+        await this.postProcessedData();
 
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
@@ -198,6 +184,9 @@ export type AbbottData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function AbbottDataGuard(object: any): object is AbbottData {
+    if (object === undefined) {
+        return false;
+    }
     return (
         object.device !== undefined &&
         object.serial_number !== undefined &&
@@ -215,19 +204,4 @@ function AbbottDataGuard(object: any): object is AbbottData {
         object.correction_insulin__units_ !== undefined &&
         object.user_change_insulin__units_ !== undefined
     );
-}
-
-/**
- * Different record type meanings
- * Glucose levels (0 & 1) are in mmol/L
- * Insulin (4) includes both rapid-acting insulin and long-acting insulin (in units)
- * Carbohydrates are in grams
- */
-export enum RecordType {
-    HISTORIC_GLUCOSE_LEVEL = 0,
-    SCAN_GLUCOSE_LEVEL = 1,
-    STRIP_GLUCOSE_LEVEL = 2,
-    INSULIN = 4,
-    CARBOHYDRATES = 5,
-    NOTES = 6
 }

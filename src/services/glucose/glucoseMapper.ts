@@ -1,5 +1,4 @@
-import { GlucoseUnit, GlucoseModel } from '../../gb/models/glucoseModel';
-import { RecordType } from '../dataParsers/abbottParser';
+import { GlucoseUnit, GlucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import { DateFormat, parseDate } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
 import { GlucoseSource } from './glucoseParser';

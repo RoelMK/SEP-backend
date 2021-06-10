@@ -1,12 +1,13 @@
-import { DataParser, DataSource } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
+import { FoodSource } from '../food/foodParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
 import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
 import { getFileName } from '../utils/files';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 
 /**
  * Default class for parsing food diaries
@@ -14,8 +15,8 @@ import { getFileName } from '../utils/files';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private foodDiaryFile?: string, protected oneDriveToken?: string) {
-        super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken, 'fooddiary');
+    constructor(foodDiaryFile: string, userInfo: GameBusToken, protected oneDriveToken?: string) {
+        super(DataSource.FOOD_DIARY, foodDiaryFile, userInfo, oneDriveToken, 'fooddiary');
     }
 
     /**
@@ -27,7 +28,7 @@ export default class FoodDiaryParser extends DataParser {
 
         // check for erroneous input
         if (!FoodDiaryDataGuard(this.foodDiaryData[0])) {
-            throw Error('Wrong input data for processing food diary data!');
+            throw new InputError('Wrong input data for processing food diary data!');
         }
         //auto-fills empty cells in the Excel + other preprocessing
 
@@ -35,20 +36,23 @@ export default class FoodDiaryParser extends DataParser {
             this.foodDiaryData,
             await this.getMealTypeMap(this.filePath as string, oneDriveToken)
         );
-        this.foodParser = new FoodParser(
+
+        // set dateFormat and create parsers
+        this.dateFormat = DateFormat.FOOD_DIARY;
+        this.createParser(
+            OutputDataType.FOOD,
             preprocessedFoodDiaryData,
-            FoodSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY,
-            this.only_parse_newest,
-            this.lastUpdated
+            FoodSource.FOOD_DIARY_EXCEL
         );
-        this.insulinParser = new InsulinParser(
+        this.createParser(
+            OutputDataType.INSULIN,
             preprocessedFoodDiaryData,
-            InsulinSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY,
-            this.only_parse_newest,
-            this.lastUpdated
+            InsulinSource.FOOD_DIARY_EXCEL
         );
+
+        // post data
+        await this.postProcessedData();
+
         // update the timestamp of newest parsed entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
@@ -232,6 +236,9 @@ export type FoodDiaryData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function FoodDiaryDataGuard(object: any): object is FoodDiaryData {
+    if (object === undefined) {
+        return false;
+    }
     return (
         'date' in object &&
         'time' in object &&

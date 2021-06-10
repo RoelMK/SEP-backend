@@ -110,7 +110,7 @@ export class DataEndpoint {
                     this.playerId,
                     this.parameters.exerciseTypes,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
+                    dateSlice.endDate.getTime()
                 );
         } else {
             return [];

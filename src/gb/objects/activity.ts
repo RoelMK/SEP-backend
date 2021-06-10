@@ -82,31 +82,15 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
-        // amount of batching for asynchronous requests
-        const BATCH_AMOUNT = 1;
-        const batchSize = Math.floor(data.length / BATCH_AMOUNT);
-        const promises: Promise<ActivityGETData[]>[] = [];
-        for (let start = 0; start < data.length; start = start + batchSize) {
-            console.log(
-                start + ' - ' + (start + batchSize > data.length ? data.length : start + batchSize)
-            );
-            promises.push(
-                this.gamebus.post(
-                    'me/activities',
-                    data.slice(
-                        start,
-                        start + batchSize > data.length ? data.length : start + batchSize
-                    ),
-                    headers,
-                    { dryrun: 'false', bulk: 'true', ...query },
-                    true,
-                    false
-                )
-            );
-        }
-        const responses = await Promise.all(promises);
-        //TODO what to do
-        return responses[0];
+        const response = await this.gamebus.post(
+            'me/activities',
+            data,
+            headers,
+            { dryrun: 'false', bulk: 'true', ...query },
+            true,
+            false
+        );
+        return response;
     }
 
     /**
@@ -285,43 +269,19 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        // amount of full batches
-        const BATCH_AMOUNT = 1;
-
-        // size of one batch
-        const batchSize = Math.floor((endDate - startDate) / BATCH_AMOUNT);
-        const promises: Promise<ActivityGETData[]>[] = [];
-        console.log('Batchse of size ' + batchSize);
-        // loop over all batches of dates and add promises to array
-        for (
-            let startDateBatch = startDate;
-            startDateBatch < endDate;
-            startDateBatch = startDateBatch + batchSize
-        ) {
-            console.log(
-                startDateBatch +
-                    '-' +
-                    (startDateBatch + batchSize > endDate ? endDate : startDateBatch + batchSize)
-            );
-            promises.push(
-                this.getAllActivitiesBetweenUnix(
-                    playerId,
-                    startDateBatch,
-                    startDateBatch + batchSize > endDate ? endDate : startDateBatch + batchSize,
-                    order,
-                    limit,
-                    page,
-                    headers,
-                    {
-                        gds: gameDescriptors.join(','),
-                        ...query
-                    }
-                )
-            );
-        }
-        const resultData = await Promise.all(promises);
-        //console.log(resultData);
-        return resultData.reduce((acc, val) => acc.concat(val), []) as ActivityGETData[];
+        return await this.getAllActivitiesBetweenUnix(
+            playerId,
+            startDate,
+            endDate,
+            order,
+            limit,
+            page,
+            headers,
+            {
+                gds: gameDescriptors.join(','),
+                ...query
+            }
+        );
     }
 
     /**

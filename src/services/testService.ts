@@ -57,7 +57,7 @@ async function testOneDrive() {
 async function testNightScout() {
     const testEntry: NightScoutEntryModel = {
         type: 'sgv',
-        date: 1622383144021,
+        date: new Date().getTime(),
         sgv: 79,
         noise: 0,
         filtered: 0,
@@ -129,5 +129,5 @@ export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
-//testNightScout();
-testParseNewest();
+testNightScout();
+//testParseNewest();

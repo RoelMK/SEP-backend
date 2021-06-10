@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -5,11 +6,31 @@ import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const onedriveRouter = require('express').Router();
 
-onedriveRouter.get('update', async (req: any, res: any) => {
-    if (!req.query.oneDriveToken) {
+onedriveRouter.get('/onedrive', async (req: any, res: any) => {
+    if (!req.query.oneDriveToken || !req.query.filePath) {
         res.status(400).send('No token');
     }
-    new FoodDiaryParser()
+    const fdParser = new FoodDiaryParser(req.query.filePath, req.query.oneDriveToken);
+    fdParser.parseOnlyNewest(true);
+    try {
+        await fdParser.process();
+    } catch (e) {
+        if (axios.isAxiosError(e) && e.response?.status === 401) {
+            res.status(401).send();
+            return;
+        }
+        switch (e.name) {
+            case 'InputError':
+                res.status(400).send(
+                    `An erroneous data file was specified, cannot parse this as a food diary! Reason: ${e.message}`
+                );
+                break;
+            default:
+                console.log(e.message);
+                res.status(503).send('Something went wrong :(');
+        }
+        return;
+    }
 });
 
 onedriveRouter.get('/login', async (req: any, res: any) => {

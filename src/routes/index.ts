@@ -7,5 +7,6 @@ indexRouter.use('/onedrive', require('./onedrive'));
 indexRouter.use('/', require('./auth'));
 indexRouter.use('/', require('./upload'));
 indexRouter.use('/', require('./data'));
+indexRouter.use('/', require('./nightscout'));
 
 module.exports = indexRouter;

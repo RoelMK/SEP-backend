@@ -16,7 +16,8 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     const insulinType = req.body.insulinType as InsulinType;
     const activityId = req.body.activityId as number;
 
-    if (!validUnixTimestamp(insulinTime) || insulinAmount < 0 || !activityId) {
+    // Verify that we have a valid amount, an activityId, an insulinType and a valid timestamp
+    if (!validUnixTimestamp(insulinTime) || insulinAmount < 0 || !activityId || !insulinType) {
         // Bad request
         return res.sendStatus(400);
     }
@@ -36,7 +37,7 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         // PUT data
         await gbClient.insulin().putSingleInsulinActivity(insulinModel, req.user.playerId);
         // Send 200 and new model
-        res.status(200).send(insulinModel);
+        return res.status(200).send(insulinModel);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

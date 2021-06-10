@@ -4,7 +4,6 @@ import express from 'express';
 const errorhandler = require('errorhandler');
 const cors = require('cors');
 import { DBClient } from './db/dbClient';
-import bodyParser from 'body-parser';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -20,14 +19,12 @@ if (process.env.PORT) {
     port = Number(process.env.PORT);
 }
 
-// Needed for POST requests JSON body
-// Ignore the deprecated warning: https://github.com/expressjs/body-parser/issues/428
+// Needed for POSTing
 app.use(
-    bodyParser.urlencoded({
+    express.urlencoded({
         extended: false
     })
 );
-app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(cors());

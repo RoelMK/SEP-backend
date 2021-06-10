@@ -23,4 +23,8 @@ testRouter.get('/clean', async (req: any, res: any) => {
     res.send(result);
 });
 
+testRouter.post('/post', async (req: any, res: any) => {
+    res.sendStatus(201);
+});
+
 module.exports = testRouter;

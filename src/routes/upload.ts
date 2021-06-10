@@ -7,10 +7,8 @@ import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 import { checkJwt } from '../middlewares/checkJwt';
-import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusToken } from '../gb/auth/tokenHandler';
 import axios from 'axios';
-import { GameBusClient } from '../gb/gbClient';
-import { GlucoseModel } from '../gb/models/glucoseModel';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();

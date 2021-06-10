@@ -12,7 +12,6 @@ const dbClient: DBClient = new DBClient();
 dbClient.initialize();
 dbClient.close();
 
-
 // Create app object
 const app = express();
 let port = 8080;

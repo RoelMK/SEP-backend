@@ -86,7 +86,7 @@ export class Activity {
         const BATCH_AMOUNT = 1;
         const batchSize = Math.floor(data.length / BATCH_AMOUNT);
         const promises: Promise<ActivityGETData[]>[] = [];
-        for (var start = 0; start < data.length; start = start + batchSize) {
+        for (let start = 0; start < data.length; start = start + batchSize) {
             console.log(
                 start + ' - ' + (start + batchSize > data.length ? data.length : start + batchSize)
             );
@@ -104,13 +104,9 @@ export class Activity {
                 )
             );
         }
-        try {
-            const responses = await Promise.all(promises);
-            //TODO what to do
-            return responses[0];
-        } catch (e) {
-            throw e;
-        }
+        const responses = await Promise.all(promises);
+        //TODO what to do
+        return responses[0];
     }
 
     /**
@@ -298,7 +294,7 @@ export class Activity {
         console.log('Batchse of size ' + batchSize);
         // loop over all batches of dates and add promises to array
         for (
-            var startDateBatch = startDate;
+            let startDateBatch = startDate;
             startDateBatch < endDate;
             startDateBatch = startDateBatch + batchSize
         ) {

@@ -79,13 +79,13 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
  * @param dataParser DataParser object for parsing incoming files
  * @returns void if process needs to be terminated early due to errors
  */
-async function uploadFile(req, res, dataParser: DataParser) {
+async function uploadFile(req: any, res: any, dataParser: DataParser): Promise<void> {
     dataParser.parseOnlyNewest(true);
     //rename auto-generated file path to original name
     try {
         fs.renameSync(req.file.path, dataParser.getFilePath());
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
         try {
             fs.unlinkSync(req.file.path);
         } catch (e) {
@@ -102,7 +102,8 @@ async function uploadFile(req, res, dataParser: DataParser) {
         if (axios.isAxiosError(e)) {
             if (e.response?.status === 401) {
                 // Unauthorized
-                return res.status(401).send();
+                res.status(401).send();
+                return;
             }
         }
         switch (e.name) {
@@ -112,15 +113,15 @@ async function uploadFile(req, res, dataParser: DataParser) {
                 );
                 break;
             default:
-                console.log(e);
+                console.log(e.message);
                 res.status(503).send('Something went wrong :(');
         }
         return;
     }
 
-    console.log(dataParser.getFilePath());
     // process has been completed
     res.status(200).send('File has been parsed.');
+    console.log(dataParser.getFilePath());
     console.log('upload succesful');
 }
 

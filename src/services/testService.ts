@@ -142,11 +142,13 @@ async function testParseNewest() {
     console.log(fdParser.getData(OutputDataType.FOOD));
 }
 
+function cleanParses() {
+    new DBClient().cleanFileParseEvents();
+}
+
 export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
 //testNightScout();
 //testParseNewest();
-console.log([1, 2, 3, [4, 5, 6, 7], 8].reduce((acc, val) => (acc as number[]).concat(val), []));
-new DBClient().cleanFileParseEvents();

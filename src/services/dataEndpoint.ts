@@ -130,9 +130,7 @@ export class DataEndpoint {
             .getGlucoseActivitiesBetweenUnix(
                 this.playerId,
                 dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime(),
-                undefined,
-                2000
+                dateSlice.endDate.getTime()
             );
     }
 
@@ -148,9 +146,7 @@ export class DataEndpoint {
                 .getInsulinActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
-                    2000
+                    dateSlice.endDate.getTime()
                 )
         );
     }
@@ -167,9 +163,7 @@ export class DataEndpoint {
                 .getMoodActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
-                    2000
+                    dateSlice.endDate.getTime()
                 )
         );
     }
@@ -185,9 +179,7 @@ export class DataEndpoint {
             .getFoodActivitiesBetweenUnix(
                 this.playerId,
                 dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime(),
-                undefined,
-                2000
+                dateSlice.endDate.getTime()
             );
     }
 }

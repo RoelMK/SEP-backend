@@ -124,15 +124,12 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        //const t1 = new Date().getTime();
         const activity: ActivityGETData[] = await this.gamebus.get(
             `players/${playerId}/activities`,
             headers,
             query,
             this.authRequired
         );
-        //console.log('Time to do GetAllActivities' + (new Date().getTime() - t1));
-        //console.log('Act length' + activity.length + ' QLimit ' + query?.limit);
         return activity;
     }
 

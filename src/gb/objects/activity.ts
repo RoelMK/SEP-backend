@@ -124,7 +124,7 @@ export class Activity {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
-        const t1 = new Date().getTime();
+        //const t1 = new Date().getTime();
         const activity: ActivityGETData[] = await this.gamebus.get(
             `players/${playerId}/activities`,
             headers,

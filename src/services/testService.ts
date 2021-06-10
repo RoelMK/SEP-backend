@@ -9,7 +9,6 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
-import ExcelParser from './fileParsers/excelParser';
 
 const dummyUserInfo: GameBusToken = {
     playerId: '1',
@@ -148,4 +147,6 @@ export const testToken = '';
 //testExcel();
 //testOneDrive();
 //testNightScout();
-testParseNewest();
+//testParseNewest();
+console.log([1, 2, 3, [4, 5, 6, 7], 8].reduce((acc, val) => (acc as number[]).concat(val), []));
+new DBClient().cleanFileParseEvents();

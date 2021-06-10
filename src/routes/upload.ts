@@ -7,8 +7,10 @@ import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 import { checkJwt } from '../middlewares/checkJwt';
-import { GameBusToken } from '../gb/auth/tokenHandler';
+import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
 import axios from 'axios';
+import { GameBusClient } from '../gb/gbClient';
+import { GlucoseModel } from '../gb/models/glucoseModel';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -80,6 +82,7 @@ uploadRouter.get('/upload/eetmeter', function (req, res) {
  * @returns void if process needs to be terminated early due to errors
  */
 async function uploadFile(req, res, dataParser: DataParser) {
+    dataParser.parseOnlyNewest(true);
     //rename auto-generated file path to original name
     try {
         fs.renameSync(req.file.path, dataParser.getFilePath());
@@ -111,7 +114,8 @@ async function uploadFile(req, res, dataParser: DataParser) {
                 );
                 break;
             default:
-                res.status(500).send('Something went wrong :(');
+                console.log(e);
+                res.status(503).send('Something went wrong :(');
         }
         return;
     }

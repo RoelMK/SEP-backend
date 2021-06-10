@@ -59,6 +59,7 @@ export default class GlucoseParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.glucoseData = this.filterAfterLastUpdate(this.glucoseData);
+        console.log(`Updating ${this.glucoseData.length} glucose entries`);
     }
 
     /**

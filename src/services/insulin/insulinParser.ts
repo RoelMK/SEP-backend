@@ -51,6 +51,7 @@ export default class InsulinParser extends ModelParser {
 
         // filter on entries after the last update with this file for this person
         this.insulinData = this.filterAfterLastUpdate(this.insulinData);
+        console.log(`Updating ${this.insulinData.length} insulin entries`);
     }
 
     /**

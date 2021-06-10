@@ -1,12 +1,17 @@
+import axios from 'axios';
 import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
+import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 
 const moodRouter = Router();
 
-moodRouter.post('/mood', (req: any, res: Response) => {
+moodRouter.post('/mood', checkJwt, (req: any, res: Response) => {
+    // For now, the 'modify' parameter will be used to distinguish between POST and PUT
+    // modify as boolean (only important if true)
+
     // Call someone to aggregate and send data to gamebus
     console.log(req.body);
 
@@ -21,7 +26,7 @@ moodRouter.post('/mood', (req: any, res: Response) => {
         return;
     }
 
-    const moodModel: MoodModel = {
+    let moodModel: MoodModel = {
         timestamp: moodTime,
         valence: valence,
         arousal: arousal
@@ -31,9 +36,47 @@ moodRouter.post('/mood', (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+    // PUT
+    if (req.query.modify) {
+        if (!req.body.activityId) {
+            // Bad request, missing activity ID for PUT
+            res.sendStatus(400);
+        }
+        // Get activity ID
+        const activityId = req.body.activityId as number;
+        moodModel = {
+            ...moodModel,
+            activityId: activityId
+        };
+        try {
+            gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
+            res.sendStatus(201).send(moodModel);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                // Unauthorized -> 401
+                if (error.response?.status === 401) {
+                    return res.status(401).send();
+                }
+            }
+            // Unknown error -> 503
+            return res.status(503).send();
+        }
+    }
 
-    res.send(moodModel);
+    // POST
+    try {
+        gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+        res.sendStatus(201).send(moodModel);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            // Unauthorized -> 401
+            if (error.response?.status === 401) {
+                return res.status(401).send();
+            }
+        }
+        // Unknown error -> 503
+        return res.status(503).send();
+    }
 });
 
 module.exports = moodRouter;

@@ -63,7 +63,7 @@ export interface GameDescriptorReference {
     translationKey: string;
     image: string | null;
     type: string; //not sure if this is always there
-    miniGames?:any[];
+    miniGames?: any[];
     isAggregate: boolean | null; //not sure if this is alway there
 }
 
@@ -97,77 +97,7 @@ export interface SupportReference {
 
 //TODO add output interfaces for getPlayer and getUser
 
-
-export interface ChallengeGETData {
-    id: number;
-    name: string;
-    description: string | null;
-    image: string | null;
-    websiteURL: string | null;
-    maxCircleSize: any;
-    minCircleSize: any;
-    availableDate: number;
-    startDate: number;
-    endDate: number;
-    rewardDescription: any;
-    rewardInfo: any;
-    challengeType: any;
-    target: any;
-    contenders: any;
-    isPublic: any;
-    winnersAssigned: any;
-    renewAutomatically: any;
-    renewed: any;
-    withNudging: any;
-    creator: CreatorReference;
-    challengeRules: ChallengeRules[];
-    participations:any;
-    showChallengeRights: ChallengeRightsReference[];
-    rewards: any;
-    rewardConfig: any[];
-    lottery:any;
-}
-
-export interface CreatorReference{
-    id: number;
-    firstName: string;
-    lastName: string;
-    image: any;
-    player: PlayerReference;
-}
-
-export interface ChallengeRules {
-    id:number;
-    name: string;
-    description: null | string;
-    image: any;
-    imageRequired: any;
-    videoAllowed: any;
-    imageAllowed: any;
-    backendOnly: any;
-    maxTimesFired: any;
-    minDaysBetweenFire: any;
-    numberOfFiresInTimeWindow: any;
-    conditions: ConditionsReference[];
-    pointMappings: any[];
-    restrictedGameDescriptors: GameDescriptorReference[];
-    defaultGameDescriptor: GameDescriptorReference;
-
-}
-
-export interface ConditionsReference{
-    id: number;
-    rhsValue: any;
-    property: PropertyInstanceProperty;
-    operator: OperatorReference;
-}
-
-export interface OperatorReference{
-    id: number;
-    operator: string;
-}
-
-export interface PropertyPermissionsReference{
+export interface PropertyPermissionsReference {
     id: number;
     index: any;
     lastUpdate: any;
@@ -177,31 +107,10 @@ export interface PropertyPermissionsReference{
     allowedValues: any[];
 }
 
-export interface ChallengeRightsReference{
-    circle: CircleReference;
-}
-export interface CircleReference{
-    id: number;
-    name: string | null;
-    image: string | null;
-    isPrivate: any;
-    memberships: ChallengeMembership[];
-}
-
-export interface ChallengeMembership{
-    id:number;
-    state: string;
-    player: PlayerReference;
-}
-
-export interface PlayerReference{
-    id:number;
-}
-
 export interface CircleGETData {
     id: number;
     name: string;
-    image: string | null ;
+    image: string | null;
     type: string;
     description: string;
     isPrivate: boolean;
@@ -213,7 +122,7 @@ export interface CircleGETData {
     displayPersonalPointsToCircleMembers: boolean;
     withNudging: boolean;
     creator: UserReference;
-    memberships: MembershipReference[]; 
+    memberships: MembershipReference[];
     participations: any[];
     showChallengeRights: any[];
     chats: any[];
@@ -224,10 +133,10 @@ export interface MembershipReference {
     state: string;
     player: UserReference;
     initiatorOfMembership: UserReference;
-    initiatorOfLeadership: UserReference| null; //not sure
+    initiatorOfLeadership: UserReference | null; //not sure
 }
 
-export interface ChallengePOSTData{
+export interface ChallengePOSTData {
     name: string;
     description: null | string;
     image: null | string;
@@ -237,16 +146,16 @@ export interface ChallengePOSTData{
     availableDate: string | number;
     startDate: string | number;
     endDate: string | number;
-    rewardDescription
-    rewardInfo
-    target
-    contenders
-    withNudging
-    rules: ChallengeRulesPOSTData[]
+    rewardDescription: any;
+    rewardInfo: any;
+    target: any;
+    contenders: any;
+    withNudging: any;
+    rules: ChallengeRulesPOSTData[];
     circles: number[];
 }
 
-export interface ChallengeRulesPOSTData{
+export interface ChallengeRulesPOSTData {
     id: any;
     name: string;
     image: string | null;
@@ -258,12 +167,12 @@ export interface ChallengeRulesPOSTData{
     points: Points[];
 }
 
-export interface ChallengeConditionsPOSTData{
+export interface ChallengeConditionsPOSTData {
     property: number;
     operator: string;
     value: string;
 }
 
-export interface Points{
+export interface Points {
     dataProviders?: DataProviderReference;
 }

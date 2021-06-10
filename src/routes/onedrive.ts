@@ -1,8 +1,16 @@
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
+import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const onedriveRouter = require('express').Router();
+
+onedriveRouter.get('update', async (req: any, res: any) => {
+    if (!req.query.oneDriveToken) {
+        res.status(400).send('No token');
+    }
+    new FoodDiaryParser()
+});
 
 onedriveRouter.get('/login', async (req: any, res: any) => {
     // Try to login using given account id if possible

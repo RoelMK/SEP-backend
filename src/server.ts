@@ -3,8 +3,6 @@ require('dotenv').config();
 import express from 'express';
 const errorhandler = require('errorhandler');
 const cors = require('cors');
-import winston from 'winston';
-import expressWinston from 'express-winston';
 import { DBClient } from './db/dbClient';
 import bodyParser from 'body-parser';
 

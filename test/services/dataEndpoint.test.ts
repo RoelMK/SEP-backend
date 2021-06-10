@@ -4,6 +4,7 @@ import { ExerciseGameDescriptorNames } from '../../src/gb/objects/exercise';
 import {
     DataEndpoint,
     DataType,
+    EndpointData,
     parseDataTypes,
     parseExerciseTypes
 } from '../../src/services/dataEndpoint';
@@ -25,6 +26,117 @@ describe('with mocked requests get call', () => {
     // GameBusClient using mockToken
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
+
+    test('union single data timestamp', () => {
+        const data: EndpointData = {
+            exercise: [
+                {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1
+                }
+            ],
+            food: [
+                {
+                    timestamp: 1,
+                    carbohydrates: 21
+                }
+            ],
+            glucose: [
+                {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                }
+            ],
+            mood: [
+                {
+                    timestamp: 1,
+                    arousal: 1,
+                    valence: 2
+                }
+            ],
+            insulin: [
+                {
+                    timestamp: 1,
+                    insulinType: 2,
+                    insulinAmount: 12
+                }
+            ]
+        };
+        const union = DataEndpoint.unionData(data);
+        expect(union).toStrictEqual([
+            {
+                timestamp: 1,
+                name: 'ex1',
+                type: 'ex?',
+                heartrate: 1,
+                carbohydrates: 21,
+                glucoseLevel: 12,
+                arousal: 1,
+                valence: 2,
+                insulinType: 2,
+                insulinAmount: 12
+            }
+        ]);
+    });
+
+    test('union multiple data timestamps', () => {
+        const data: EndpointData = {
+            exercise: [
+                {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1
+                }
+            ],
+            food: [
+                {
+                    timestamp: 1,
+                    carbohydrates: 21
+                }
+            ],
+            glucose: [
+                {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                }
+            ],
+            mood: [
+                {
+                    timestamp: 2,
+                    arousal: 1,
+                    valence: 2
+                }
+            ],
+            insulin: [
+                {
+                    timestamp: 2,
+                    insulinType: 2,
+                    insulinAmount: 12
+                }
+            ]
+        };
+        const union = DataEndpoint.unionData(data);
+        expect(union).toStrictEqual([
+            {
+                timestamp: 1,
+                name: 'ex1',
+                type: 'ex?',
+                heartrate: 1,
+                carbohydrates: 21,
+                glucoseLevel: 12
+            },
+            {
+                timestamp: 2,
+                arousal: 1,
+                valence: 2,
+                insulinType: 2,
+                insulinAmount: 12
+            }
+        ]);
+    });
 
     test('empty request', async () => {
         const endpoint = new DataEndpoint(client, 0, [], {});

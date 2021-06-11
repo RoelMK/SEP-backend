@@ -43,6 +43,12 @@ export function getSupervisors(childEmail): any {
   return tokens;
 }
 
+export function getApproved(childEmail): any {
+  const dbClient: DBClient = new DBClient();
+  const tokens = dbClient.getApprovedSupervisors(childEmail);
+  return tokens;
+}
+
 export function getChildren(supervisorEmail): any {
   const dbClient: DBClient = new DBClient();
   const tokens = dbClient.getRequestedChildren(supervisorEmail);

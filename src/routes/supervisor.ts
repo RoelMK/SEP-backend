@@ -1,4 +1,4 @@
-import { logToken, request, getTokens, getSupervisors, getChildren, retractPermission } from '../utils/supervisorUtils';
+import { logToken, request, getTokens, getSupervisors, getChildren, retractPermission, getApproved } from '../utils/supervisorUtils';
 import Router from 'express';
 
 const supervisorRouter = Router();
@@ -15,12 +15,14 @@ supervisorRouter.post('/logToken', async (req: any, res: any) => {
 });
 
 supervisorRouter.post('/request', async (req: any, res: any) => {
-  let confirm = req.query.confirm;
+  let confirm = req.body.confirm;
   let success = false;
+  // console.log("query: " + req.query.supervisorEmail);
+  // console.log("body: " + req.body.supervisorEmail);
   if (confirm) {
-    success = await request(req.query.supervisorEmail, req.query.childEmail, confirm)
+    success = await request(req.body.supervisorEmail, req.body.childEmail, confirm)
   } else {
-    success = await request(req.query.supervisorEmail, req.query.childEmail);
+    success = await request(req.body.supervisorEmail, req.body.childEmail);
   }
   if (success) {
     return res.status(200).json({ success: true })
@@ -41,6 +43,12 @@ supervisorRouter.get('/getSupervisors', async (req: any, res:any) => {
   return res.status(200).json({ supervisors: supervisors });
 });
 
+supervisorRouter.get('/getApproved', async (req: any, res:any) => {
+  const supervisors = await getApproved(req.query.childEmail);
+
+  return res.status(200).json({ supervisors: supervisors });
+});
+
 supervisorRouter.get('/getChildren', async (req: any, res:any) => {
   const children = await getChildren(req.query.supervisorEmail);
 
@@ -48,7 +56,7 @@ supervisorRouter.get('/getChildren', async (req: any, res:any) => {
 });
 
 supervisorRouter.post('/retractPermission', async (req: any, res:any) => {
-  const success = await retractPermission(req.query.childEmail, req.query.supervisorEmail);
+  const success = await retractPermission(req.body.childEmail, req.body.supervisorEmail);
 
   if (success) {
     return res.status(200).json({ success: true });

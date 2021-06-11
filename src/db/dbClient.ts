@@ -220,7 +220,7 @@ export class DBClient {
         try {
             const tokens = this.db
                 .prepare('SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True')
-                .get(supervisorEmail)
+                .all(supervisorEmail)
             return tokens;
         } catch (e) {
             console.log(e);
@@ -277,7 +277,7 @@ export class DBClient {
         try {
             const supervisors = this.db
                 .prepare('SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False')
-                .get(childEmail)
+                .all(childEmail)
             return supervisors;
         } catch (e) {
             console.log(e);
@@ -289,12 +289,25 @@ export class DBClient {
         try {
             const children = this.db
                 .prepare('SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=False')
-                .get(supervisorEmail)
+                .all(supervisorEmail)
             return children;
         } catch (e) {
             console.log(e);
             return false;
         }
+    }
+
+    getApprovedSupervisors(childEmail) {
+        try {
+            const supervisors = this.db
+                .prepare('SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=True')
+                .all(childEmail)
+            return supervisors;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
     }
 
     retractPermission(childEmail,supervisorEmail) {

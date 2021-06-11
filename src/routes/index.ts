@@ -6,6 +6,6 @@ indexRouter.use('/', require('./test'));
 indexRouter.use('/onedrive', require('./onedrive'));
 indexRouter.use('/', require('./auth'));
 indexRouter.use('/', require('./upload'));
-indexRouter.use('/', require('./supervisor'));
+indexRouter.use('/supervisor', require('./supervisor'));
 
 module.exports = indexRouter;

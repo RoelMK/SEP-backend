@@ -7,6 +7,7 @@ import {
 } from '../../src/gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { InsulinPropertyKeys, Insulin } from '../../src/gb/objects/insulin';
+import { Keys } from '../../src/gb/objects/keys';
 
 import { mockRequest } from '../testUtils/requestUtils';
 
@@ -57,7 +58,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=LOG_INSULIN`
+                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&start=19-04-2021&end=21-04-2021&sort=-date`
             })
         );
         expect(insulin).toEqual([]);
@@ -72,7 +73,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=LOG_INSULIN`
+                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&start=19-04-2021&end=20-04-2021&sort=-date`
             })
         );
         expect(insulin).toEqual([]);
@@ -101,7 +102,7 @@ describe('with mocked insulin post call', () => {
             insulinType: InsulinType.RAPID
         };
         const POSTData: ActivityPOSTData = {
-            gameDescriptorTK: client.insulin().insulinTranslationKey,
+            gameDescriptorTK: Keys.insulinTranslationKey,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
@@ -144,7 +145,7 @@ describe('with mocked insulin post call', () => {
             insulinType: InsulinType.RAPID
         };
         const POSTData1: IDActivityPOSTData = {
-            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            gameDescriptor: Keys.insulinGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
@@ -161,7 +162,7 @@ describe('with mocked insulin post call', () => {
             players: [0]
         };
         const POSTData2: IDActivityPOSTData = {
-            gameDescriptor: client.insulin().insulinGameDescriptorID,
+            gameDescriptor: Keys.insulinGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',

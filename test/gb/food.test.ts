@@ -4,6 +4,7 @@ import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
 import { FoodPropertyKeys } from '../../src/gb/objects/food';
 import { mockRequest } from '../testUtils/requestUtils';
+import { Keys } from '../../src/gb/objects/keys';
 
 jest.mock('axios');
 
@@ -223,7 +224,7 @@ describe('with mocked food get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=Nutrition_Diary`
+                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&start=19-04-2021&end=21-04-2021&sort=-date`
             })
         );
         expect(exercises).toEqual(result);
@@ -254,7 +255,7 @@ describe('with mocked food get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=20-04-2021&sort=-date&gds=Nutrition_Diary`
+                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&start=19-04-2021&end=20-04-2021&sort=-date`
             })
         );
         expect(food).toEqual(result);
@@ -268,7 +269,7 @@ describe('with mocked food get call', () => {
             meal_type: MEAL_TYPE.BREAKFAST
         };
         const POSTData: ActivityPOSTData = {
-            gameDescriptorTK: client.food().foodGameDescriptor,
+            gameDescriptorTK: Keys.foodTranslationKey,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
@@ -335,7 +336,7 @@ describe('with mocked food get call', () => {
             description: 'desc2'
         };
         const POSTData1: IDActivityPOSTData = {
-            gameDescriptor: client.food().foodGameDescriptorID,
+            gameDescriptor: Keys.foodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
@@ -392,7 +393,7 @@ describe('with mocked food get call', () => {
             players: [0]
         };
         const POSTData2: IDActivityPOSTData = {
-            gameDescriptor: client.food().foodGameDescriptorID,
+            gameDescriptor: Keys.foodGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',

@@ -11,14 +11,12 @@ import {
 import { InsulinModel } from '../models/insulinModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+import { Keys } from './keys';
 
 /**
  * Class for insulin-specific functions
  */
 export class Insulin extends GameBusObject {
-    public insulinTranslationKey = 'LOG_INSULIN';
-    public insulinGameDescriptorID = 1075;
-
     /**
      * Function that returns all insulin activities
      * @param playerId ID of player
@@ -33,7 +31,7 @@ export class Insulin extends GameBusObject {
     ): Promise<ActivityGETData[]> {
         return await this.activity.getAllActivitiesWithGd(
             playerId,
-            [this.insulinTranslationKey],
+            [Keys.insulinTranslationKey],
             headers,
             query
         );
@@ -63,7 +61,7 @@ export class Insulin extends GameBusObject {
             playerId,
             startDate,
             endDate,
-            [this.insulinTranslationKey],
+            [Keys.insulinTranslationKey],
             order,
             limit,
             page,
@@ -93,7 +91,7 @@ export class Insulin extends GameBusObject {
         return await this.activity.getActivitiesOnUnixDateWithGd(
             playerId,
             date,
-            [this.insulinTranslationKey],
+            [Keys.insulinTranslationKey],
             order,
             limit,
             page,
@@ -223,7 +221,7 @@ export class Insulin extends GameBusObject {
      */
     public toPOSTData(model: InsulinModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: this.insulinTranslationKey,
+            gameDescriptorTK: Keys.insulinTranslationKey,
             dataProviderName: this.activity.dataProviderName,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -254,7 +252,7 @@ export class Insulin extends GameBusObject {
      */
     public toIDPOSTData(model: InsulinModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.insulinGameDescriptorID,
+            gameDescriptor: Keys.insulinGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
             image: '', //TODO add image?
             date: model.timestamp,

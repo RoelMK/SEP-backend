@@ -11,6 +11,7 @@ import {
 } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+import { Keys } from './keys';
 
 //const util = require('util')
 
@@ -18,9 +19,6 @@ import { GameBusObject } from './base';
  * Class for food-specific functions
  */
 export class Food extends GameBusObject {
-    public foodGameDescriptor = 'Nutrition_Diary';
-    public foodGameDescriptorID = 58;
-
     /**
      * Function that post a single model for a given player
      * @param model model to be POSTed
@@ -67,7 +65,7 @@ export class Food extends GameBusObject {
      */
     public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: this.foodGameDescriptor,
+            gameDescriptorTK: Keys.foodTranslationKey,
             dataProviderName: this.activity.dataProviderName,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -92,7 +90,7 @@ export class Food extends GameBusObject {
      */
     public toIDPOSTData(model: FoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.foodGameDescriptorID,
+            gameDescriptor: Keys.foodGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -121,7 +119,7 @@ export class Food extends GameBusObject {
     ): Promise<FoodModel[]> {
         const result = await this.activity.getAllActivitiesWithGd(
             playerId,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             headers,
             query
         );
@@ -153,7 +151,7 @@ export class Food extends GameBusObject {
             playerId,
             startDate,
             endDate,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             order,
             limit,
             page,
@@ -184,7 +182,7 @@ export class Food extends GameBusObject {
         const result = await this.activity.getActivitiesOnUnixDateWithGd(
             playerId,
             date,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             order,
             limit,
             page,

@@ -4,7 +4,7 @@ import { FoodModel } from '../gb/models/foodModel';
 import { GlucoseModel } from '../gb/models/glucoseModel';
 import { InsulinModel } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
-import { ExerciseGameDescriptorNames } from '../gb/objects/exercise';
+import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
 import { Insulin } from '../gb/objects/insulin';
 import { Mood } from '../gb/objects/mood';
 import { DateSlice } from './utils/dates';

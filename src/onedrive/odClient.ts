@@ -52,6 +52,11 @@ export class OneDriveClient {
 
     async getTableValues(): Promise<any[][]> {
         const result = await this.getTableResult(this.tableName);
+        if (result === undefined) {
+            console.log(`Table ${this.tableName} could not be found!`);
+            return [];
+        }
+
         const returnArray: any[][] = [];
         for (const entry of result?.data.value) {
             returnArray.push(entry.values[0]);

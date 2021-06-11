@@ -36,6 +36,7 @@ export class DBClient {
         );
 
         this.db.exec(
+            // eslint-disable-next-line max-len
             'CREATE TABLE IF NOT EXISTS tokens (player_email TEXT, player_token TEXT NOT NULL, primary key (player_email));'
         );
     }
@@ -214,9 +215,12 @@ export class DBClient {
     }
 
     /**
-     * Gets all tokens for a supervisor
+     * Get all children tokens for a supervisor user
+     * @param supervisorEmail Email of a supervisor user
+     * @returns Tokens of normal users supervised by the
+     * supervisor user associated with the supervisorEmail
      */
-    getChildTokens(supervisorEmail) {
+    getChildTokens(supervisorEmail: string) {
         try {
             const tokens = this.db
                 .prepare('SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True')
@@ -229,9 +233,12 @@ export class DBClient {
     }
 
     /**
-     * Logs a new token into the database
+     * Logs a new token for a user in the tokens table
+     * @param email Email of the user
+     * @param token Token of the user
+     * @returns
      */
-    logToken(email, token) {
+    logToken(email: string, token: string): boolean {
         try {
             const insrt = this.db.prepare(
                 `INSERT INTO tokens (player_email, player_token) 
@@ -239,14 +246,19 @@ export class DBClient {
             );
             insrt.run(email, token);
             return true;
-
         } catch (e) {
             console.log(e);
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
 
-    requestSupervisor(supervisorEmail, childEmail) {
+    /**
+     * Request supervisor role from a user
+     * @param supervisorEmail Email of the supervisor user
+     * @param childEmail Email of the normal user
+     * @returns
+     */
+    requestSupervisor(supervisorEmail: string, childEmail: string): boolean {
         try {
             const insrt = this.db.prepare(
                 `INSERT INTO supervisor (supervisor_email, player_email)
@@ -256,11 +268,17 @@ export class DBClient {
             return true;
         } catch (e) {
             console.log(e);
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
 
-    confirmSupervisor(supervisorEmail, childEmail) {
+    /**
+     * Confirm supervisor role for a user
+     * @param supervisorEmail Email of the supervisor user
+     * @param childEmail Email of the normal user
+     * @returns
+     */
+    confirmSupervisor(supervisorEmail: string, childEmail: string) {
         try {
             const cnfrm = this.db.prepare(
                 'UPDATE supervisor SET confirmed=True WHERE supervisor_email=? AND player_email=?'
@@ -269,11 +287,16 @@ export class DBClient {
             return true;
         } catch (e) {
             console.log(e);
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
 
-    getRequestedSupervisors(childEmail) {
+    /**
+     * Get a list of requested supervisors for a normal user
+     * @param childEmail Email of the normal user
+     * @returns List of requested supervisors
+     */
+    getRequestedSupervisors(childEmail: string) {
         try {
             const supervisors = this.db
                 .prepare('SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False')
@@ -281,11 +304,17 @@ export class DBClient {
             return supervisors;
         } catch (e) {
             console.log(e);
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
 
-    getRequestedChildren(supervisorEmail) {
+    /**
+     * Get a list of normal users requested supervisor role from a
+     * supervisor user
+     * @param supervisorEmail Email of the supervisor user
+     * @returns List of normal users requested supervisor role
+     */
+    getRequestedChildren(supervisorEmail: string) {
         try {
             const children = this.db
                 .prepare('SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=False')
@@ -293,7 +322,7 @@ export class DBClient {
             return children;
         } catch (e) {
             console.log(e);
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
 
@@ -310,17 +339,23 @@ export class DBClient {
 
     }
 
-    retractPermission(childEmail,supervisorEmail) {
+    /**
+     * Retract supervisor role for a user
+     * @param childEmail Email of the supervisor user
+     * @param supervisorEmail Email of the supervisor user
+     * @returns
+     */
+    retractPermission(childEmail: string, supervisorEmail: string): boolean {
         try {
-            const stmt = this.db.prepare('DELETE FROM supervisor WHERE player_email=? AND supervisor_email=?');
+            const stmt = this.db.prepare(
+                'DELETE FROM supervisor WHERE player_email=? AND supervisor_email=?'
+            );
             stmt.run(childEmail, supervisorEmail);
             return true;
         } catch (e) {
-            return false;
+            return false; // if an error occurs, return undefined
         }
     }
-
-
 
     /**
      * Closes the database connection.

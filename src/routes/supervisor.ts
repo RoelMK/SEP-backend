@@ -1,17 +1,25 @@
-import { logToken, request, getTokens, getSupervisors, getChildren, retractPermission, getApproved } from '../utils/supervisorUtils';
+import {
+    logToken,
+    request,
+    getTokens,
+    getSupervisors,
+    getChildren,
+    retractPermission
+} from '../utils/supervisorUtils';
 import Router from 'express';
 
 const supervisorRouter = Router();
 
-
 supervisorRouter.post('/logToken', async (req: any, res: any) => {
-  const success = await logToken(req.query.email, req.query.token);
-  
-  if (success) {
-    return res.status(200).json({ success: true, email: req.query.email });
-  } else {
-    return res.status(400).json({ success: false, message: "Something went wrong, please try again later"});
-  }
+    const success = await logToken(req.query.email, req.query.token);
+
+    if (success) {
+        return res.status(200).json({ success: true, email: req.query.email });
+    } else {
+        return res
+            .status(400)
+            .json({ success: false, message: 'Something went wrong, please try again later' });
+    }
 });
 
 supervisorRouter.post('/request', async (req: any, res: any) => {
@@ -31,16 +39,14 @@ supervisorRouter.post('/request', async (req: any, res: any) => {
   }
 });
 
-supervisorRouter.get('/getTokens', async (req: any, res:any) => {
-  const tokens = await getTokens(req.query.supervisorEmail);
-
-  return res.status(200).json({ tokens: tokens });
+supervisorRouter.get('/getTokens', async (req: any, res: any) => {
+    const tokens = await getTokens(req.query.supervisorEmail);
+    return res.status(200).json({ tokens: tokens });
 });
 
-supervisorRouter.get('/getSupervisors', async (req: any, res:any) => {
-  const supervisors = await getSupervisors(req.query.childEmail);
-
-  return res.status(200).json({ supervisors: supervisors });
+supervisorRouter.get('/getSupervisors', async (req: any, res: any) => {
+    const supervisors = await getSupervisors(req.query.childEmail);
+    return res.status(200).json({ supervisors: supervisors });
 });
 
 supervisorRouter.get('/getApproved', async (req: any, res:any) => {
@@ -58,11 +64,12 @@ supervisorRouter.get('/getChildren', async (req: any, res:any) => {
 supervisorRouter.post('/retractPermission', async (req: any, res:any) => {
   const success = await retractPermission(req.body.childEmail, req.body.supervisorEmail);
 
-  if (success) {
-    return res.status(200).json({ success: true });
-  }
-  return res.status(400).json({ success: false, message: "Something went wrong, please try again later"});
+    if (success) {
+        return res.status(200).json({ success: true });
+    }
+    return res
+        .status(400)
+        .json({ success: false, message: 'Something went wrong, please try again later' });
 });
-
 
 module.exports = supervisorRouter;

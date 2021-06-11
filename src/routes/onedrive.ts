@@ -1,8 +1,51 @@
+import axios from 'axios';
+import { GameBusToken } from '../gb/auth/tokenHandler';
+import { checkJwt } from '../middlewares/checkJwt';
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
+import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const onedriveRouter = require('express').Router();
+
+onedriveRouter.get('/onedrive', checkJwt, async (req: any, res: any) => {
+    if (!req.query.oneDriveToken || !req.query.filePath) {
+        res.status(400).send('No token');
+        return;
+    }
+
+    // retrieve user information
+    const userInfo: GameBusToken = {
+        playerId: req.user.playerId,
+        accessToken: req.user.accessToken,
+        refreshToken: req.user.refreshToken
+    };
+
+    const fdParser = new FoodDiaryParser(req.query.filePath, userInfo, req.query.oneDriveToken);
+    fdParser.parseOnlyNewest(true);
+    try {
+        await fdParser.process();
+    } catch (e) {
+        if (axios.isAxiosError(e) && e.response?.status === 401) {
+            res.status(401).send();
+            return;
+        }
+        switch (e.name) {
+            case 'InputError':
+                res.status(400).send(
+                    `An erroneous data file was specified, cannot parse this as a food diary! Reason: ${e.message}`
+                );
+                break;
+            default:
+                console.log(e);
+                res.status(503).send('Something went wrong :(');
+        }
+        return;
+    }
+
+    res.status(200).send('OneDrive food diary was successfuly imported');
+    console.log('OneDrive food diary was successfuly imported');
+});
 
 onedriveRouter.get('/login', async (req: any, res: any) => {
     // Try to login using given account id if possible

@@ -146,7 +146,7 @@ test('Register and update a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
-test('Register and update multple file parse events and retrieve it', () => {
+test('Register and update multiple file parse events and retrieve it', () => {
     const playerId1 = '443';
     const playerId2 = '444';
     const fooddiary = 'foodDiary.xlsx';

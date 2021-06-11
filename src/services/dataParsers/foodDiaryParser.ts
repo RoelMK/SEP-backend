@@ -4,7 +4,6 @@ import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
-import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
@@ -32,9 +31,10 @@ export default class FoodDiaryParser extends DataParser {
         }
         //auto-fills empty cells in the Excel + other preprocessing
 
+        console.log(this.oneDriveToken);
         const preprocessedFoodDiaryData: FoodDiaryData[] = FoodDiaryParser.preprocess(
             this.foodDiaryData,
-            await this.getMealTypeMap(this.filePath as string, oneDriveToken)
+            await this.getMealTypeMap(this.filePath as string, this.oneDriveToken)
         );
 
         // set dateFormat and create parsers
@@ -68,7 +68,6 @@ export default class FoodDiaryParser extends DataParser {
         oneDriveToken?: string
     ): Promise<Map<string, string>> {
         let mealTypeMap: Map<string, string>;
-
         // based on oneDrive token, determine oneDrive or local lookup
         if (oneDriveToken !== undefined && oneDriveToken !== '') {
             mealTypeMap = await OneDriveExcelParser.getMappingTableValues(

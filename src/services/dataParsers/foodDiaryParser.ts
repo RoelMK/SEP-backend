@@ -31,7 +31,6 @@ export default class FoodDiaryParser extends DataParser {
         }
         //auto-fills empty cells in the Excel + other preprocessing
 
-        console.log(this.oneDriveToken);
         const preprocessedFoodDiaryData: FoodDiaryData[] = FoodDiaryParser.preprocess(
             this.foodDiaryData,
             await this.getMealTypeMap(this.filePath as string, this.oneDriveToken)

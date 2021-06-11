@@ -39,7 +39,7 @@ nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
     }
 
     res.status(200).send('Nightscout data was updated correctly');
-    console.log('Nightscout data was updated correctly');
+    console.log('Nightscout data was updated successfully');
 });
 
 module.exports = nightscoutRouter;

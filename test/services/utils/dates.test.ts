@@ -147,6 +147,9 @@ test('Parsing excel time format (fraction of a day) to readable food diary forma
     expect(parseExcelTime(dayFraction)).toStrictEqual(correspondingTime);
 });
 
+/**
+ * UTP: DATE - 11
+ */
 test('test robustness of excel time parser', async () => {
     const dayFraction = -0.417361111;
     expect(() => {
@@ -154,6 +157,9 @@ test('test robustness of excel time parser', async () => {
     }).toThrow('Invalid day fraction!');
 });
 
+/**
+ * UTP: DATE - 12
+ */
 test('test robustness of excel date parser', async () => {
     const daysSince1900 = -44325;
     expect(() => {
@@ -162,11 +168,17 @@ test('test robustness of excel date parser', async () => {
 });
 
 describe('Checking valid unix timestamps', () => {
+    /**
+     * UTP: DATE - 13
+     */
     test('valid timestamp validity', () => {
         const timestamp = 1618876800000;
         expect(validUnixTimestamp(timestamp)).toBe(true);
     });
 
+    /**
+     * UTP: DATE - 14
+     */
     test('invalid timestamp validity', () => {
         const timestamp = 1618876800;
         expect(() => {

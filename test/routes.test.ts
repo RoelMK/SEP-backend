@@ -33,11 +33,17 @@ describe('test routes from test.ts', () => {
 });
 
 describe('GET data', () => {
+    /**
+     * UTP: DEP - 1
+     */
     test('no authorization header given', async () => {
         const response = await request(server).get('/data');
         expect(response.statusCode).toBe(401);
     });
 
+    /**
+     * UTP: DEP - 2
+     */
     test('no query parameters given', async () => {
         const response = await request(server)
             .get('/data')
@@ -49,6 +55,9 @@ describe('GET data', () => {
     });
 });
 
+/**
+ * UTP: FILEP 1 & 2
+ */
 /** //TODO it just throws 401 errors, quite useless
 describe('POST files', () => {
     //TODO just expect 401? or how to do this?
@@ -102,6 +111,9 @@ describe('POST files', () => {
 }); */
 
 describe('mood endpoint', () => {
+    /**
+     * UTP: MEP - 1
+     */
     test('POST mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
@@ -112,6 +124,9 @@ describe('mood endpoint', () => {
         expect(response.statusCode).toBe(401);
     });
 
+    /**
+     * UTP: MEP - 2
+     */
     test('PUT mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
@@ -125,6 +140,9 @@ describe('mood endpoint', () => {
 });
 
 describe('insulin endpoint', () => {
+    /**
+     * UTP: IEP - 1
+     */
     test('PUT insulin data', async () => {
         const insulin: InsulinModel = {
             timestamp: 0,

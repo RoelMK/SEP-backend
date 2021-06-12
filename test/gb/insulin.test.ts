@@ -30,7 +30,10 @@ describe('with mocked insulin get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
-    test('GET activities from type', async () => {
+    /**
+     * UTP: GB - 17
+     */
+    test('GET insulin activities', async () => {
         const insulin = await client.insulin().getInsulinActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
@@ -46,7 +49,10 @@ describe('with mocked insulin get call', () => {
         expect(insulin).toEqual([]);
     });
 
-    test('GET activities from type between dates', async () => {
+    /**
+     * UTP: GB - 18
+     */
+    test('GET insulin activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
         const insulin = await client
@@ -64,7 +70,10 @@ describe('with mocked insulin get call', () => {
         expect(insulin).toEqual([]);
     });
 
-    test('GET activities from type on date', async () => {
+    /**
+     * UTP: GB - 19
+     */
+    test('GET insulin activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const insulin = await client.insulin().getInsulinActivitiesOnUnixDate(0, unixTimestamp);
         expect(request).toHaveBeenCalledTimes(1);
@@ -95,6 +104,9 @@ describe('with mocked insulin post call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 31
+     */
     test('POST a single activity', async () => {
         const model: InsulinModel = {
             timestamp: 12,
@@ -133,6 +145,9 @@ describe('with mocked insulin post call', () => {
         );
     });
 
+    /**
+     * UTP: GB - 32
+     */
     test('POST a multiple activities', async () => {
         const model1: InsulinModel = {
             timestamp: 1,
@@ -209,6 +224,9 @@ describe('with mocked insulin put call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 33
+     */
     test('PUT a single insulin model', async () => {
         const insulin: InsulinModel = {
             timestamp: 1,
@@ -232,6 +250,9 @@ describe('with mocked insulin put call', () => {
         expect(response).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 33
+     */
     test('PUT a single insulin model without ID', async () => {
         const insulin: InsulinModel = {
             timestamp: 1,
@@ -246,6 +267,9 @@ describe('with mocked insulin put call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 28
+     */
     test('convert single response to single model with insulin type 0', () => {
         const response: ActivityGETData = {
             id: 0,

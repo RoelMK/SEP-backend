@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { QueryOrder } from '../../src/gb/objects/activity';
@@ -22,6 +23,9 @@ describe('with mocked activities get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 1
+     */
     test('GET activity by ID', async () => {
         // Get single activity from ID
         const activity = await client.activity().getActivityById(0);
@@ -39,6 +43,9 @@ describe('with mocked activities get call', () => {
         expect(activity).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 2
+     */
     test('GET activities on date', async () => {
         // Get activities from a date (as Date object)
         const activities = await client.activity().getActivitiesOnDate(0, new Date('2021-04-19'));
@@ -56,6 +63,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 3
+     */
     test('GET activities between dates', async () => {
         // Get activities between dates (as Date objects)
         const activities = await client
@@ -74,6 +84,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 3
+     */
     test('GET activities between dates with pagination', async () => {
         const activities = await client
             .activity()
@@ -98,6 +111,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 4
+     */
     test('GET activities on Unix date', async () => {
         // Get activity from (13-digit) unix timestamp
         const unixTimestamp = new Date('2021-04-19').getTime();
@@ -115,6 +131,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 5
+     */
     test('GET activities between Unix dates', async () => {
         // Get activities between (13-digit) unix timestamps
         const unixTimestampBefore = new Date('2021-04-19').getTime();
@@ -135,6 +154,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 6
+     */
     test('GET activities with game descriptor keys', async () => {
         const gds = ['WALK'];
         const activities = await client.activity().getAllActivitiesWithGd(0, gds);
@@ -151,6 +173,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 7
+     */
     test('GET activities with game descriptor keys between Unix dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -171,6 +196,9 @@ describe('with mocked activities get call', () => {
         expect(activities).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 8
+     */
     test('GET activities with game descriptor keys on Unix date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const gds = ['WALK'];

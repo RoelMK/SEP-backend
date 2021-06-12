@@ -8,6 +8,9 @@ import { parseAbbott, parseNightScout, postGlucoseData } from '../testUtils/pars
 import { NightScoutEntryModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott glucose', () => {
+    /**
+     * UTP: GLU - 1
+     */
     test('import Abbott EU glucose', async () => {
         const expectedResult: GlucoseModel[] = [
             {
@@ -43,6 +46,9 @@ describe('Abbott glucose', () => {
         ).toStrictEqual(expectedResult);
     });
 
+    /**
+     * UTP: GLU - 2
+     */
     test('import Abbott US glucose', async () => {
         const expectedResult: GlucoseModel = {
             glucoseLevel: convertMG_DLtoMMOL_L(82),
@@ -60,6 +66,9 @@ describe('Abbott glucose', () => {
 });
 
 describe('POST glucose', () => {
+    /**
+     * UTP: GEX - 1
+     */
     test('POSTing glucosemodels', async () => {
         const glucose: AbbottData[] = [
             {
@@ -95,6 +104,9 @@ describe('POST glucose', () => {
 });
 
 describe('Nightscout glucose', () => {
+    /**
+     * UTP: GLU - 3
+     */
     test('import mocked Nightscout response with glucose', async () => {
         const testNSGlucose: NightScoutEntryModel = {
             _id: '60b39a3a6e65983173dc66f4',

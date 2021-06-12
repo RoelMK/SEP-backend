@@ -17,12 +17,18 @@ afterAll(() => {
     }
 });
 
+/**
+ * UTP: DB - 1
+ */
 test('database initialization', () => {
     const dbClient = new DBClient();
     dbClient.initialize();
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 2
+ */
 test('database full login procedure', () => {
     const playerId = '1';
     const loginToken = 'a2';
@@ -49,6 +55,9 @@ test('database full login procedure', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 3
+ */
 test('database clean non-expired', () => {
     const playerId = '1266';
     const loginToken = 'a23454';
@@ -64,6 +73,9 @@ test('database clean non-expired', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 4
+ */
 test('database clean expired', () => {
     const playerId = '12';
     const loginToken = 'a23';
@@ -79,6 +91,9 @@ test('database clean expired', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 5
+ */
 test('database callback non-existing', () => {
     const playerId = '123';
     const accessToken = 'a12';
@@ -91,6 +106,9 @@ test('database callback non-existing', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 6
+ */
 test('database get undefined', () => {
     const playerId = '1234';
     const loginToken = 'adwd3r';
@@ -103,6 +121,9 @@ test('database get undefined', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 7
+ */
 test('database register double login attempt', () => {
     const playerId = '443';
 
@@ -115,6 +136,9 @@ test('database register double login attempt', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 8
+ */
 test('Register a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';
@@ -128,6 +152,9 @@ test('Register a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 9
+ */
 test('Register and update a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';
@@ -146,6 +173,9 @@ test('Register and update a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 10
+ */
 test('Register and update multiple file parse events and retrieve it', () => {
     const playerId1 = '443';
     const playerId2 = '444';
@@ -180,6 +210,9 @@ test('Register and update multiple file parse events and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 11
+ */
 test('Retrieve non existing parse event', () => {
     const playerId = '-1';
     const fileName = 'nonsense.xlsx';
@@ -188,6 +221,9 @@ test('Retrieve non existing parse event', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 12
+ */
 test('Execute methods while database does not exist', () => {
     try {
         fs.unlinkSync(process.env.DATABASE!); // Remove db file

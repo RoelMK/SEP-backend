@@ -26,6 +26,7 @@ afterAll(() => {
 
 /**
  * Purpose: Check if JWTs are created properly.
+ * UTP: AUTH - 1
  */
 test('creating JWT', () => {
     const token = createJWT('id1', 'a1', 'r1');
@@ -41,6 +42,7 @@ test('creating JWT', () => {
 
 /**
  * Purpose: Check if a normal login attempt works as expected.
+ * UTP: AUTH - 2, 3, 4
  */
 test('full login attempt', async () => {
     const playerId = '444';
@@ -69,6 +71,7 @@ test('full login attempt', async () => {
 
 /**
  * Purpose: Check if trying to start multiple login attempts is handled properly.
+ * UTP: AUTH - 2
  */
 test('start login attempt twice', async () => {
     const playerId = '445';
@@ -85,6 +88,7 @@ test('start login attempt twice', async () => {
 
 /**
  * Purpose: Check if trying to finish a non-existing login session is handled properly.
+ * UTP: AUTH - 3
  */
 test('finish login while not started', () => {
     const loginToken = 'werwerrw445';
@@ -95,6 +99,7 @@ test('finish login while not started', () => {
 
 /**
  * Purpose: Check if an unnecessary callback is handled properly.
+ * UTP: AUTH - 4
  */
 test('callback while no open login', async () => {
     const playerId = '34we';
@@ -107,6 +112,7 @@ test('callback while no open login', async () => {
 
 /**
  * Purpose: Check if a login attempt cannot be hijacked.
+ * UTP: AUTH - 4
  */
 test('start login again after callback', async () => {
     const playerId = '447';

@@ -4,6 +4,9 @@ import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { parseFoodDiary } from '../testUtils/parseUtils';
 import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
 
+/**
+ * UTP: XLSX - 2
+ */
 test('test robustness of food diary data parser', async () => {
     expect(async () => {
         (

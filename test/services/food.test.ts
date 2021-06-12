@@ -13,6 +13,9 @@ import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott food', () => {
+    /**
+     * UTP: FOOD - 1
+     */
     test('import Abbott EU food', async () => {
         const expectedResult: FoodModel = {
             carbohydrates: 101,
@@ -29,6 +32,9 @@ describe('Abbott food', () => {
         ).toStrictEqual([expectedResult]);
     });
 
+    /**
+     * UTP: FOOD - 2
+     */
     test('import Abbott US food', async () => {
         const expectedResult: FoodModel = {
             carbohydrates: 120,
@@ -47,6 +53,9 @@ describe('Abbott food', () => {
 });
 
 describe('Food Diary food', () => {
+    /**
+     * UTP: FOOD - 5
+     */
     test('import standardized food diary full', async () => {
         const expectedResult: FoodModel = {
             carbohydrates: 10,
@@ -70,6 +79,9 @@ describe('Food Diary food', () => {
         ).toStrictEqual(expectedResult);
     });
 
+    /**
+     * UTP: FOOD - 6
+     */
     test('import standardized food diary with missing values', async () => {
         const expectedResult: FoodModel = {
             carbohydrates: 3,
@@ -95,6 +107,9 @@ describe('Food Diary food', () => {
 });
 
 describe('Eetmeter', () => {
+    /**
+     * UTP: FOOD - 3
+     */
     test('import single Eetmeter entry', async () => {
         const expectedResult = [
             {
@@ -119,6 +134,9 @@ describe('Eetmeter', () => {
         expect(result).toStrictEqual(expectedResult);
     });
 
+    /**
+     * UTP: FOOD - 4
+     */
     test('import many Eetmeter entries', async () => {
         const expectedResult = [
             {
@@ -177,6 +195,9 @@ describe('Eetmeter', () => {
 });
 
 describe('POST food', () => {
+    /**
+     * UTP: FEX - 1
+     */
     // Covering the remaining FoodMapper functions (mapXXX) seems to be impossible
     test('POSTing foodmodels', async () => {
         const food: FoodDiaryData[] = [
@@ -204,6 +225,9 @@ describe('POST food', () => {
 });
 
 describe('Nightscout food', () => {
+    /**
+     * UTP: FOOD - 7
+     */
     test('import mocked Nightscout response data with carbs', async () => {
         const testNSFood: NightScoutTreatmentModel = {
             _id: '60b2727f6e65983173940135',
@@ -227,6 +251,9 @@ describe('Nightscout food', () => {
         );
     });
 
+    /**
+     * UTP: FOOD - 8
+     */
     test('import mocked Nightscout response data with several food properties', async () => {
         const testNSFood: NightScoutTreatmentModel = {
             _id: '60b2727f6e65983173940135',

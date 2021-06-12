@@ -673,6 +673,9 @@ describe('with mocked activities get call', () => {
     // Before each request, clear the count so we start at 0 again
     beforeEach(() => request.mockClear());
 
+    /**
+     * UTP: ONED - 2
+     */
     test('Get tableValues with non-existing table', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -702,6 +705,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 1
+     */
     test('Get tableValues', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -740,6 +746,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 3
+     */
     test('Get rangeValues', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -778,6 +787,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 4
+     */
     test('Get rangeText', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -816,6 +828,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 5
+     */
     test('Get tableList', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -861,6 +876,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 6
+     */
     test('Get file at root', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient('token', 'Book1.xlsx', undefined, 'fooddiary', 'Sheet1');
@@ -917,6 +935,9 @@ describe('with mocked activities get call', () => {
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 7
+     */
     test('Debug booleans TF', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -943,6 +964,10 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(false);
     });
+
+    /**
+     * UTP: ONED - 8
+     */
     test('Debug booleans FT', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -969,6 +994,10 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(true);
     });
+
+    /**
+     * UTP: ONED - 9
+     */
     test('Debug booleans TT', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(

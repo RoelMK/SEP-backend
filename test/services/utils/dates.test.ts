@@ -9,6 +9,9 @@ import {
     validUnixTimestamp
 } from '../../../src/services/utils/dates';
 
+/**
+ * UTP: DATE - 1
+ */
 describe('getting date format from string', () => {
     test('Getting date format from normal string', () => {
         const dateStringEU = '25/01/2020 14:53';
@@ -19,6 +22,9 @@ describe('getting date format from string', () => {
     });
 });
 
+/**
+ * UTP: DATE - 2
+ */
 describe('parsing date from string', () => {
     test('Parsing date string with date format to UNIX', () => {
         const dateStringEU = '25/01/2020 14:53';
@@ -57,6 +63,9 @@ describe('parsing date from string', () => {
     });
 });
 
+/**
+ * UTP: DATE - 3
+ */
 describe('converting from unix milliseconds to date', () => {
     test('Going from 13-digit unix timestamp to date', () => {
         const unixTimestamp = 1618876800000;

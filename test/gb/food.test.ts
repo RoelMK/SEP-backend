@@ -164,6 +164,9 @@ describe('with mocked food get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '524'));
 
+    /**
+     * UTP: GB - 20
+     */
     test('GET all food activities', async () => {
         const food = await client.food().getAllFoodActivities(0);
         const result: FoodModel[] = [
@@ -196,6 +199,9 @@ describe('with mocked food get call', () => {
         expect(food).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 21
+     */
     test('GET food activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -230,6 +236,9 @@ describe('with mocked food get call', () => {
         expect(exercises).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 22
+     */
     test('GET food activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const food = await client.food().getFoodActivitiesOnUnixDate(0, unixTimestamp);
@@ -261,6 +270,9 @@ describe('with mocked food get call', () => {
         expect(food).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 34
+     */
     test('POST a single activity', async () => {
         const model: FoodModel = {
             timestamp: 12,
@@ -304,6 +316,9 @@ describe('with mocked food get call', () => {
         );
     });
 
+    /**
+     * UTP: GB - 35
+     */
     test('POST a multiple activities', async () => {
         const model1: FoodModel = {
             timestamp: 1,

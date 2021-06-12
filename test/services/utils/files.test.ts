@@ -1,5 +1,8 @@
 import { getFileDirectory, getFileExtension, getFileName } from '../../../src/services/utils/files';
 
+/**
+ * UTP: FILE - 1
+ */
 test('Get extension from a file path', () => {
     const filePath = 'random/path/to/file.csv';
     const filePath2 = 'file.xlsx';
@@ -7,6 +10,9 @@ test('Get extension from a file path', () => {
     expect(getFileExtension(filePath2)).toBe('xlsx');
 });
 
+/**
+ * UTP: FILE - 1
+ */
 test('Get extension from a file path, robustness', () => {
     const filePath = 'random/path/to/randomnothin';
     const filePath2 = 'file';
@@ -16,6 +22,9 @@ test('Get extension from a file path, robustness', () => {
     expect(getFileExtension(filePath3)).toBe('');
 });
 
+/**
+ * UTP: FILE - 2
+ */
 test('Getting directory from file path', () => {
     const filePath = 'random/path/to/file.csv';
     const filePath2 = 'random\\path\\to\\file.csv';
@@ -26,6 +35,9 @@ test('Getting directory from file path', () => {
     expect(getFileDirectory(filePath3)).toBe('');
 });
 
+/**
+ * UTP: FILE - 3
+ */
 test('Getting file name from file path', () => {
     const filePath = 'random/path/to/file.csv';
     const filePath2 = 'random\\path\\to\\file.csv';

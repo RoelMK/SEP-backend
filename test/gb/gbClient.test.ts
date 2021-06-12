@@ -93,6 +93,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GB - 39
+     */
     test('Unauthorized request without TokenHandler', async () => {
         expect(async () => {
             await unauthorizedClient.request(
@@ -108,6 +111,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GB - 40
+     */
     test('Unauthorized request with empty TokenHandler', async () => {
         expect(async () => {
             await unauthorizedClientWithToken.request(

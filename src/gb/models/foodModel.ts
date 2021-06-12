@@ -5,17 +5,17 @@
 export interface FoodModel {
     timestamp: number;
     carbohydrates: number;
-    calories?: number;
-    meal_type?: MEAL_TYPE; // indicates breakfast, lunch, snack etc.
-    glycemic_index?: number;
-    fat?: number;
-    saturatedFat?: number;
-    proteins?: number;
-    fibers?: number;
-    salt?: number;
-    water?: number;
-    sugars?: number;
-    description?: string;
+    calories?: number | null;
+    meal_type?: MEAL_TYPE | null; // indicates breakfast, lunch, snack etc.
+    glycemic_index?: number | null;
+    fat?: number | null;
+    saturatedFat?: number | null;
+    proteins?: number | null;
+    fibers?: number | null;
+    salt?: number | null;
+    water?: number | null;
+    sugars?: number | null;
+    description?: string | null;
     activityId?: number; // ID of GameBus activity
 }
 

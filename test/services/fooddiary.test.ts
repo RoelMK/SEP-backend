@@ -5,7 +5,7 @@ import { parseFoodDiary } from '../testUtils/parseUtils';
 import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
 
 /**
- * UTP: XLSX - 2
+ * UTP: FD - 1
  */
 test('test robustness of food diary data parser', async () => {
     expect(async () => {
@@ -18,6 +18,9 @@ test('test robustness of food diary data parser', async () => {
     }).rejects.toThrow('Wrong input data for processing food diary data!');
 });
 
+/**
+ * UTP: FD - 2
+ */
 test('test automatic date + total insulin fill', async () => {
     const rawFoodData: FoodDiaryData[] = [
         {
@@ -75,6 +78,9 @@ test('test automatic date + total insulin fill', async () => {
     expect(await FoodDiaryParser.preprocess(rawFoodData)).toStrictEqual(preprocessedFoodData);
 });
 
+/**
+ * UTP: FD - 3
+ */
 test('test automatic date + total insulin + time fill', async () => {
     const rawFoodData: FoodDiaryData[] = [
         {
@@ -161,6 +167,9 @@ test('test automatic date + total insulin + time fill', async () => {
     );
 });
 
+/**
+ * UTP: FD - 4
+ */
 test('test missing first date', async () => {
     const rawFoodData: FoodDiaryData[] = [
         {

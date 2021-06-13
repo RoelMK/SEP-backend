@@ -205,7 +205,19 @@ export class Food extends GameBusObject {
         const model: FoodModel = {
             timestamp: activities[0].timestamp,
             carbohydrates: 0,
-            activityId: response.id
+            activityId: response.id,
+            // For graphing activities it's easier if the missing properties are set to null, so we do that here
+            calories: null,
+            meal_type: null,
+            glycemic_index: null,
+            fat: null,
+            saturatedFat: null,
+            proteins: null,
+            fibers: null,
+            salt: null,
+            water: null,
+            sugars: null,
+            description: null
         };
         //console.log(response)
         //console.log(activities)

@@ -65,7 +65,7 @@ export function getApproved(childEmail): any {
 
 export function getChildren(supervisorEmail): any {
   const dbClient: DBClient = new DBClient();
-  const tokens = dbClient.getRequestedChildren(supervisorEmail);
+  const tokens = dbClient.getChildren(supervisorEmail);
   return tokens;
 }
 
@@ -80,4 +80,10 @@ export function retractPermission(childEmail: string, supervisorEmail: string): 
     const dbClient: DBClient = new DBClient();
     const success = dbClient.retractPermission(childEmail, supervisorEmail);
     return success;
+}
+
+export function checkSupervisor(email): any {
+    const dbClient: DBClient = new DBClient();
+    const supervisor = dbClient.checkRole(email);
+    return supervisor;
 }

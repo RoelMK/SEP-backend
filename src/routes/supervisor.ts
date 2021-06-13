@@ -4,7 +4,9 @@ import {
     getTokens,
     getSupervisors,
     getChildren,
-    retractPermission
+    retractPermission,
+    getApproved,
+    checkSupervisor
 } from '../utils/supervisorUtils';
 import Router from 'express';
 
@@ -70,6 +72,12 @@ supervisorRouter.post('/retractPermission', async (req: any, res:any) => {
     return res
         .status(400)
         .json({ success: false, message: 'Something went wrong, please try again later' });
+});
+
+supervisorRouter.get('/role', async (req: any, res:any) => {
+    const sup = await checkSupervisor(req.query.email);
+
+    return res.status(200).json({ supervisor: sup });
 });
 
 module.exports = supervisorRouter;

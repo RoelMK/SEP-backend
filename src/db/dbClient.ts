@@ -314,10 +314,10 @@ export class DBClient {
      * @param supervisorEmail Email of the supervisor user
      * @returns List of normal users requested supervisor role
      */
-    getRequestedChildren(supervisorEmail: string) {
+    getChildren(supervisorEmail: string) {
         try {
             const children = this.db
-                .prepare('SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=False')
+                .prepare('SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=True')
                 .all(supervisorEmail)
             return children;
         } catch (e) {
@@ -336,7 +336,19 @@ export class DBClient {
             console.log(e);
             return false;
         }
+    }
 
+    checkRole(email) {
+        try {
+            const supervisor = this.db
+                .prepare('SELECT supervisor_email FROM supervisor WHERE supervisor_email=?')
+                .get(email);
+            console.log(supervisor);
+            return supervisor.supervisor_email === email;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 
     /**

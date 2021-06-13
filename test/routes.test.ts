@@ -14,18 +14,26 @@ afterAll((done) => {
 
 // These tests are solely to get familiar with supertest, not for actual test coverage
 describe('test routes from test.ts', () => {
+    /**
+     * UTP: SERV - 1
+     */
     test('/', async () => {
         const response = await request(server).get('/');
         expect(response.text).toBe('Hello World!');
     });
 
+    /**
+     * UTP: SERV - 2
+     */
     test('/test', async () => {
         const response = await request(server).get('/test');
         expect(response.text).toBe('Hi, this was a success!');
     });
 
     // TODO: not sure how to test the '/jwt-test' endpoint
-
+    /**
+     * UTP: SERV - 3
+     */
     test('/clean', async () => {
         const response = await request(server).get('/clean');
         expect(response.statusCode).toBe(200);

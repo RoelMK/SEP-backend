@@ -32,7 +32,7 @@ describe('with mocked glucose POST call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: GB - 29
+     * UTP: GB - 31
      */
     test('POST a single activity', async () => {
         const model: GlucoseModel = {
@@ -68,9 +68,9 @@ describe('with mocked glucose POST call', () => {
     });
 
     /**
-     * UTP: GB - 30
+     * UTP: GB - 32
      */
-    test('POST a multiple activities', async () => {
+    test('POST multiple activities', async () => {
         const model1: GlucoseModel = {
             timestamp: 1,
             glucoseLevel: 2

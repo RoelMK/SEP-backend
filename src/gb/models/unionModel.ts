@@ -3,7 +3,6 @@ import { InsulinType } from './insulinModel';
 
 export interface UnionModel {
     timestamp: number | null;
-    activityId?: number | null; // ID of GameBus activity
     // exercise
     name: string | null; // sensible name of activity (regex of type)
     type: string | null; // activity type

@@ -69,7 +69,7 @@ export class DataEndpoint {
      * @returns Union of given data
      */
     public static unionData(data: EndpointData): Array<any> {
-        let unionDict: Record<number, UnionModel> = {};
+        const unionDict: Record<number, UnionModel> = {};
         if (data.exercise) {
             data.exercise.forEach((exercise: ExerciseModel) => {
                 this.addValues(unionDict, DataType.EXERCISE, exercise);

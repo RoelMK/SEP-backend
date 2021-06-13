@@ -72,7 +72,7 @@ export class DataEndpoint {
         let unionDict: Record<number, UnionModel> = {};
         if (data.exercise) {
             data.exercise.forEach((exercise: ExerciseModel) => {
-                unionDict = this.addValues(unionDict, DataType.EXERCISE, exercise);
+                this.addValues(unionDict, DataType.EXERCISE, exercise);
             });
         }
         if (data.mood) {
@@ -106,7 +106,7 @@ export class DataEndpoint {
         unionDict: Record<number, UnionModel>,
         dataType: DataType,
         data: any
-    ): Record<number, UnionModel> {
+    ): void {
         // create a new UnionModel if it does not exist at the timestamp
         if (unionDict[data.timestamp] === undefined) {
             unionDict[data.timestamp] = { ...nullUnion }; // copy a null-filled unionModel
@@ -127,7 +127,6 @@ export class DataEndpoint {
             // otherwise set value
             unionModel[dataKey] = value;
         });
-        return unionDict;
     }
 
     /**

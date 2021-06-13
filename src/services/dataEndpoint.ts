@@ -113,7 +113,7 @@ export class DataEndpoint {
         const skippedKeys = ['activityId'];
 
         // add all known values to the UnionModel
-        let unionModel: UnionModel = unionDict[data.timestamp];
+        const unionModel: UnionModel = unionDict[data.timestamp];
         Object.keys(data).forEach((dataKey) => {
             if (skippedKeys.includes(dataKey)) return;
             unionModel[dataKey] = data[dataKey];

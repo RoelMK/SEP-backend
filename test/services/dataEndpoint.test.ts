@@ -34,13 +34,15 @@ describe('with mocked requests get call', () => {
                     timestamp: 1,
                     name: 'ex1',
                     type: 'ex?',
-                    heartrate: 1
+                    heartrate: 1,
+                    calories: 20
                 }
             ],
             food: [
                 {
                     timestamp: 1,
-                    carbohydrates: 21
+                    carbohydrates: 21,
+                    calories: 40
                 }
             ],
             glucose: [
@@ -74,7 +76,7 @@ describe('with mocked requests get call', () => {
                 duration: null, // in seconds
                 steps: null, // in amount
                 distance: null, // in meters
-                caloriesBurnt: null, // in kcal //TODO changed name
+                caloriesBurnt: 20, // in kcal //TODO changed name
                 groupSize: null, // in amount (0 - inf)
                 penalty: null, // in amount (0 - 100), only relevant for air hockey
                 score: null, // in amount, only relevant for air hockey
@@ -86,7 +88,7 @@ describe('with mocked requests get call', () => {
                 heartrate: 1, // in bpm, currently unused but can be used at a later date
                 // food
                 carbohydrates: 21,
-                calories: null,
+                calories: 40,
                 meal_type: null, // indicates breakfast, lunch, snack etc.
                 glycemic_index: null,
                 fat: null,
@@ -116,13 +118,15 @@ describe('with mocked requests get call', () => {
                     timestamp: 1,
                     name: 'ex1',
                     type: 'ex?',
-                    heartrate: 1
+                    heartrate: 1,
+                    calories: 20
                 }
             ],
             food: [
                 {
                     timestamp: 1,
-                    carbohydrates: 21
+                    carbohydrates: 21,
+                    calories: 40
                 }
             ],
             glucose: [
@@ -156,7 +160,7 @@ describe('with mocked requests get call', () => {
                 duration: null, // in seconds
                 steps: null, // in amount
                 distance: null, // in meters
-                caloriesBurnt: null, // in kcal //TODO changed name
+                caloriesBurnt: 20, // in kcal //TODO changed name
                 groupSize: null, // in amount (0 - inf)
                 penalty: null, // in amount (0 - 100), only relevant for air hockey
                 score: null, // in amount, only relevant for air hockey
@@ -168,7 +172,7 @@ describe('with mocked requests get call', () => {
                 heartrate: 1, // in bpm, currently unused but can be used at a later date
                 // food
                 carbohydrates: 21,
-                calories: null,
+                calories: 40,
                 meal_type: null, // indicates breakfast, lunch, snack etc.
                 glycemic_index: null,
                 fat: null,

@@ -72,27 +72,27 @@ export class DataEndpoint {
         let unionDict: Record<number, UnionModel> = {};
         if (data.exercise) {
             data.exercise.forEach((exercise: ExerciseModel) => {
-                unionDict = this.addValues(unionDict, exercise);
+                unionDict = this.addValues(unionDict, DataType.EXERCISE, exercise);
             });
         }
         if (data.mood) {
             data.mood.forEach((mood: MoodModel) => {
-                this.addValues(unionDict, mood);
+                this.addValues(unionDict, DataType.MOOD, mood);
             });
         }
         if (data.glucose) {
             data.glucose.forEach((glucose: GlucoseModel) => {
-                this.addValues(unionDict, glucose);
+                this.addValues(unionDict, DataType.GLUCOSE, glucose);
             });
         }
         if (data.insulin) {
             data.insulin.forEach((insulin: InsulinModel) => {
-                this.addValues(unionDict, insulin);
+                this.addValues(unionDict, DataType.INSULIN, insulin);
             });
         }
         if (data.food) {
             data.food.forEach((food: FoodModel) => {
-                this.addValues(unionDict, food);
+                this.addValues(unionDict, DataType.FOOD, food);
             });
         }
         return Object.values(unionDict) as Array<any>;
@@ -104,19 +104,28 @@ export class DataEndpoint {
      */
     private static addValues(
         unionDict: Record<number, UnionModel>,
+        dataType: DataType,
         data: any
     ): Record<number, UnionModel> {
         // create a new UnionModel if it does not exist at the timestamp
         if (unionDict[data.timestamp] === undefined) {
             unionDict[data.timestamp] = { ...nullUnion }; // copy a null-filled unionModel
         }
-        const skippedKeys = ['activityId'];
 
         // add all known values to the UnionModel
         const unionModel: UnionModel = unionDict[data.timestamp];
         Object.keys(data).forEach((dataKey) => {
-            if (skippedKeys.includes(dataKey)) return;
-            unionModel[dataKey] = data[dataKey];
+            const value = data[dataKey];
+
+            // some keys had to be renamed due to duplicate conflicts
+            if (Object.keys(unionRenamed[dataType]).includes(dataKey)) {
+                unionModel[unionRenamed[dataType][dataKey]] = value;
+            }
+            // only recover wanted information
+            else if (!Object.keys(nullUnion).includes(dataKey)) return;
+
+            // otherwise set value
+            unionModel[dataKey] = value;
         });
         return unionDict;
     }
@@ -281,3 +290,17 @@ export enum DataType {
     FOOD,
     EXERCISE
 }
+
+/**
+ * Mapping between datatype and another mapping between keys in the original
+ * data model and the union model.
+ */
+export const unionRenamed: Record<DataType, any> = {
+    [DataType.GLUCOSE]: {},
+    [DataType.INSULIN]: {},
+    [DataType.MOOD]: {},
+    [DataType.FOOD]: {},
+    [DataType.EXERCISE]: {
+        calories: 'caloriesBurnt'
+    }
+};

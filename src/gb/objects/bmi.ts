@@ -43,7 +43,13 @@ export class BMI extends GameBusObject {
     ): Promise<BMIModel> {
         const response = await this.getBMIActivities(playerId, headers, query);
         if (response.length === 0) {
-            return {} as BMIModel;
+            return {
+                timestamp: -1,
+                activityId: -1,
+                weight: null,
+                length: null,
+                age: null
+            } as BMIModel;
         }
         return response[0];
     }

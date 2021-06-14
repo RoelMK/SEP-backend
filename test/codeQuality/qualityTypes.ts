@@ -1,10 +1,10 @@
 // object that contains all quality ranks of the ISO 25010 maintainability attributes
 export interface QualityReport {
-    [qAttributes.MODULARITY]: number;
-    [qAttributes.REUSABILITY]: number;
-    [qAttributes.ANALYZABILITY]: number;
-    [qAttributes.MODIFIABILITY]: number;
-    [qAttributes.TESTABILITY]: number;
+    [qAttributes.MODULARITY]: { rank; metricsInvolved };
+    [qAttributes.REUSABILITY]: { rank; metricsInvolved };
+    [qAttributes.ANALYZABILITY]: { rank; metricsInvolved };
+    [qAttributes.MODIFIABILITY]: { rank; metricsInvolved };
+    [qAttributes.TESTABILITY]: { rank; metricsInvolved };
 }
 export interface MetricReport {
     [metric.SLOC]: number;
@@ -20,24 +20,24 @@ export interface MetricReport {
 
 // ISO 25010 maintainability attributes
 export enum qAttributes {
-    MODULARITY,
-    REUSABILITY,
-    ANALYZABILITY,
-    MODIFIABILITY,
-    TESTABILITY
+    MODULARITY = 'MODULARITY',
+    REUSABILITY = 'REUSABILITY',
+    ANALYZABILITY = 'ANALYZABILITY',
+    MODIFIABILITY = 'MODIFIABILITY',
+    TESTABILITY = 'TESTABILITY'
 }
 
 export enum metric {
-    SLOC,
-    AVG_COMPLEXITY,
-    METHOD_COMPLEXITY,
-    METHODS_CLASS, //OO
-    FUNCTIONS_MODULE, //non-OO
+    SLOC = 'SLOC',
+    AVG_COMPLEXITY = 'AVG_COMPLEXITY',
+    METHOD_COMPLEXITY = 'METHOD_COMPLEXITY',
+    METHODS_CLASS = 'METHODS_CLASS', //OO
+    FUNCTIONS_MODULE = 'FUNCTIONS_MODULE', //non-OO
     //internal duplication is left out for now
-    COMMENT_RATIO,
-    CYCLIC_DEPENDENCIES,
-    CLASS_COUPLING,
-    FANOUT
+    COMMENT_RATIO = 'COMMENT_RATIO',
+    CYCLIC_DEPENDENCIES = 'CYCLIC_DEPENDENCIES',
+    CLASS_COUPLING = 'CLASS_COUPLING',
+    FANOUT = 'FANOUT'
     //external duplication is left out for now
 }
 // which (m)etrics are involved in determining the ranks of which attributes
@@ -69,11 +69,11 @@ export const mInvolvedIn = {
 };
 
 export const initQReport: QualityReport = {
-    [qAttributes.MODULARITY]: 0,
-    [qAttributes.REUSABILITY]: 0,
-    [qAttributes.ANALYZABILITY]: 0,
-    [qAttributes.MODIFIABILITY]: 0,
-    [qAttributes.TESTABILITY]: 0
+    [qAttributes.MODULARITY]: { rank: 0, metricsInvolved: 0 },
+    [qAttributes.REUSABILITY]: { rank: 0, metricsInvolved: 0 },
+    [qAttributes.ANALYZABILITY]: { rank: 0, metricsInvolved: 0 },
+    [qAttributes.MODIFIABILITY]: { rank: 0, metricsInvolved: 0 },
+    [qAttributes.TESTABILITY]: { rank: 0, metricsInvolved: 0 }
 };
 
 export const initMReport: MetricReport = {

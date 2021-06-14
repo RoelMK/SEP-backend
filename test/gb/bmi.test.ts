@@ -111,7 +111,15 @@ describe('with mocked BMI get call', () => {
                 url: `${endpoint}/players/0/activities?gds=BODY_MASS_INDEX&sort=-date`
             })
         );
-        expect(bmi).toEqual({});
+
+        const expectedResult: BMIModel = {
+            timestamp: -1,
+            activityId: -1,
+            weight: null,
+            length: null,
+            age: null
+        };
+        expect(bmi).toEqual(expectedResult);
     });
 });
 

@@ -10,5 +10,6 @@ indexRouter.use('/', require('./data'));
 indexRouter.use('/', require('./nightscout'));
 indexRouter.use('/', require('./mood'));
 indexRouter.use('/', require('./insulin'));
+indexRouter.use('/', require('./profile'));
 
 module.exports = indexRouter;

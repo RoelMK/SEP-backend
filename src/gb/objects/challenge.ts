@@ -6,9 +6,8 @@ export class Challenge {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
 
     /**
-     * PUTs an activity using given data on given activity ID
-     * @param data Activity data to replace current activity with
-     * @param activityId Activity ID to replace
+     * POST a challenge
+     * @param data Challenge data
      */
     async postChallenge(
         data: ChallengePOSTData,

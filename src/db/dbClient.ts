@@ -27,6 +27,7 @@ export class DBClient {
         );
 
         this.db.exec(
+            // eslint-disable-next-line max-len
             'CREATE TABLE IF NOT EXISTS file_parse_events (player_id TEXT, file_name TEXT NOT NULL, time_stamp bigint NOT NULL, primary key (player_id, file_name));'
         );
 
@@ -226,6 +227,7 @@ export class DBClient {
         try {
             const tokens = this.db
                 .prepare(
+                    // eslint-disable-next-line max-len
                     'SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True'
                 )
                 .all(supervisorEmail);
@@ -282,7 +284,7 @@ export class DBClient {
      * @param childEmail Email of the normal user
      * @returns
      */
-    confirmSupervisor(supervisorEmail: string, childEmail: string) {
+    confirmSupervisor(supervisorEmail: string, childEmail: string): boolean {
         try {
             const cnfrm = this.db.prepare(
                 'UPDATE supervisor SET confirmed=True WHERE supervisor_email=? AND player_email=?'
@@ -358,7 +360,7 @@ export class DBClient {
      * @param email Email of the user
      * @returns Email of the supervisor user
      */
-    checkRole(email: string) {
+    checkRole(email: string): boolean {
         try {
             const supervisor = this.db
                 .prepare('SELECT supervisor_email FROM supervisor WHERE supervisor_email=?')

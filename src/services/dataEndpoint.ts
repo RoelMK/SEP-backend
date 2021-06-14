@@ -15,7 +15,7 @@ export class DataEndpoint {
     private readonly MAX_PAGES = 1000;
 
     // maximum number of entries that are requested per page
-    private readonly PAGE_LIMIT = 250;
+    private readonly PAGE_LIMIT = 500;
 
     /**
      * Constructs the endpoint object.
@@ -63,6 +63,8 @@ export class DataEndpoint {
             });
         });
         await Promise.all(Object.values(promises));
+        //console.log(data.glucose?.length);
+        //console.log(data.food?.length);
         return data;
     }
 
@@ -152,8 +154,8 @@ export class DataEndpoint {
                         this.PAGE_LIMIT,
                         page
                     );
-                if (pageModels.length == 0) break;
                 models = models.concat(pageModels);
+                if (pageModels.length < this.PAGE_LIMIT) break;
             }
             return models;
         } else {
@@ -179,8 +181,8 @@ export class DataEndpoint {
                     this.PAGE_LIMIT,
                     page
                 );
-            if (pageModels.length == 0) break;
             models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
         }
         return models;
     }
@@ -203,8 +205,8 @@ export class DataEndpoint {
                     this.PAGE_LIMIT,
                     page
                 );
-            if (pageModels.length == 0) break;
             models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
         }
         return models;
     }
@@ -227,8 +229,8 @@ export class DataEndpoint {
                     this.PAGE_LIMIT,
                     page
                 );
-            if (pageModels.length == 0) break;
             models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
         }
         return models;
     }
@@ -251,8 +253,8 @@ export class DataEndpoint {
                     this.PAGE_LIMIT,
                     page
                 );
-            if (pageModels.length == 0) break;
             models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
         }
         return models;
     }

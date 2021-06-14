@@ -8,6 +8,7 @@ import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
 import { Insulin } from '../gb/objects/insulin';
 import { Mood } from '../gb/objects/mood';
 import { DateSlice } from './utils/dates';
+import { nullUnion, UnionModel } from '../gb/models/unionModel';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve
@@ -68,33 +69,64 @@ export class DataEndpoint {
      * @returns Union of given data
      */
     public static unionData(data: EndpointData): Array<any> {
-        const dict: Record<number, any> = {};
+        const unionDict: Record<number, UnionModel> = {};
         if (data.exercise) {
-            data.exercise.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.exercise.forEach((exercise: ExerciseModel) => {
+                this.addValues(unionDict, DataType.EXERCISE, exercise);
             });
         }
         if (data.mood) {
-            data.mood.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.mood.forEach((mood: MoodModel) => {
+                this.addValues(unionDict, DataType.MOOD, mood);
             });
         }
         if (data.glucose) {
-            data.glucose.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.glucose.forEach((glucose: GlucoseModel) => {
+                this.addValues(unionDict, DataType.GLUCOSE, glucose);
             });
         }
         if (data.insulin) {
-            data.insulin.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.insulin.forEach((insulin: InsulinModel) => {
+                this.addValues(unionDict, DataType.INSULIN, insulin);
             });
         }
         if (data.food) {
-            data.food.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.food.forEach((food: FoodModel) => {
+                this.addValues(unionDict, DataType.FOOD, food);
             });
         }
-        return Object.values(dict) as Array<any>;
+        return Object.values(unionDict) as Array<any>;
+    }
+    /**
+     * Helper function that adds all known keys of a model to a union model object in the dictionary
+     * @param unionDict dictionary that contains all unionModels with timestamp as key
+     * @param data data (e.g. FoodModel, ExerciseModel etc.)
+     */
+    private static addValues(
+        unionDict: Record<number, UnionModel>,
+        dataType: DataType,
+        data: any
+    ): void {
+        // create a new UnionModel if it does not exist at the timestamp
+        if (unionDict[data.timestamp] === undefined) {
+            unionDict[data.timestamp] = { ...nullUnion }; // copy a null-filled unionModel
+        }
+
+        // add all known values to the UnionModel
+        const unionModel: UnionModel = unionDict[data.timestamp];
+        Object.keys(data).forEach((dataKey) => {
+            const value = data[dataKey];
+
+            // some keys had to be renamed due to duplicate conflicts
+            if (Object.keys(unionRenamed[dataType]).includes(dataKey)) {
+                unionModel[unionRenamed[dataType][dataKey]] = value;
+            }
+            // only recover wanted information
+            else if (!Object.keys(nullUnion).includes(dataKey)) return;
+
+            // otherwise set value
+            unionModel[dataKey] = value;
+        });
     }
 
     /**
@@ -257,3 +289,17 @@ export enum DataType {
     FOOD,
     EXERCISE
 }
+
+/**
+ * Mapping between datatype and another mapping between keys in the original
+ * data model and the union model.
+ */
+export const unionRenamed: Record<DataType, any> = {
+    [DataType.GLUCOSE]: {},
+    [DataType.INSULIN]: {},
+    [DataType.MOOD]: {},
+    [DataType.FOOD]: {},
+    [DataType.EXERCISE]: {
+        calories: 'caloriesBurnt'
+    }
+};

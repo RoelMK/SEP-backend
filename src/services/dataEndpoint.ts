@@ -63,7 +63,6 @@ export class DataEndpoint {
             });
         });
         await Promise.all(Object.values(promises));
-        //console.log(data['glucose']?.length);
         return data;
     }
 

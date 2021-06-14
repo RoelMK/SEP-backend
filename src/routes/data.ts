@@ -30,7 +30,7 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
 
     // Create GameBus client
     const gbClient = new GameBusClient(
-        new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerID)
+        new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
     // Get data types to retrieve

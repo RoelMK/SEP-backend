@@ -44,9 +44,15 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
  * Endpoint for posting profile data to gamebus
  */
 profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
-    if (!req.query.weight || !req.query.length || !req.query.age) {
-        res.status(400).send();
-        return;
+    if (
+        !req.query.weight ||
+        !req.query.length ||
+        !req.query.age ||
+        parseFloat(req.query.weight) <= 0 ||
+        parseFloat(req.query.length) <= 0 ||
+        parseFloat(req.query.age) < 0
+    ) {
+        return res.status(400).send();
     }
 
     // use user info to create a GameBus client

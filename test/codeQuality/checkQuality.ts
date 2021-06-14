@@ -42,7 +42,6 @@ class QualityCheck {
         this.calculateMAXCycloRank(understandExport);
         this.calculateMethodsClassRank(understandExport);
         this.calculateFunctionsModuleRank(understandExport);
-
         console.log(this.mReport);
 
         this.generateQualityReport();
@@ -60,11 +59,16 @@ class QualityCheck {
             });
         });
 
+        // Calculate rank by dividing sum of metrics by the amount of involved metrics
         Object.values(this.qReport).forEach((value) => {
             value.rank = value.rank / value.metricsInvolved;
         });
     }
 
+    /**
+     * Calculates the metric rank for the SLOC metric
+     * @param understandExport Understand Export array
+     */
     private calculateSLOCRank(understandExport: UnderstandExport[]) {
         const moduleExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'Class' || metric.kind == 'File'
@@ -82,6 +86,10 @@ class QualityCheck {
         this.mReport[metric.SLOC] = this.ratioToRank(faultyModules.length / moduleExports.length);
     }
 
+    /**
+     * Calculates the metric rank for the comment ratio metric
+     * @param understandExport Understand Export array
+     */
     private calculateCommentRatioRank(understandExport: UnderstandExport[]) {
         const fileExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'File'
@@ -102,12 +110,16 @@ class QualityCheck {
         );
     }
 
+    /**
+     * Calculates the metric rank for the average cylcomatic complexity in a fle or class metric
+     * @param understandExport Understand Export array
+     */
     private calculateAVGCycloRank(understandExport: UnderstandExport[]) {
         const moduleExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'Class' || metric.kind == 'File'
         );
         const faultyModules: UnderstandExport[] = [];
-        // identify faulty modules that have too many Software lines of Code
+        // identify faulty classes that have too much avg cyclomatic complexity
         moduleExports.forEach((undExport) => {
             if (undExport.avgcyclomatic >= MAX_AVG_COMPLEXITY) faultyModules.push(undExport);
         });
@@ -115,18 +127,23 @@ class QualityCheck {
         console.log('Too much average complexity in');
         console.log(faultyModules);
 
-        // Calculate software line of code rank by dividing faulty modules by evaluated modules
+        // Calculate avg cyclomatic complexity rank by dividing faulty modules by evaluated modules
         this.mReport[metric.AVG_COMPLEXITY] = this.ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
 
+    /**
+     * Calculates the metric rank for the metric that measures
+     * maximum cyclomatic complexity of a method in a file of class
+     * @param understandExport Understand Export array
+     */
     private calculateMAXCycloRank(understandExport: UnderstandExport[]) {
         const moduleExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'Class' || metric.kind == 'File'
         );
         const faultyModules: UnderstandExport[] = [];
-        // identify faulty modules that have too many Software lines of Code
+        // identify faulty classes that have a method with too large cyclomatic complexity
         moduleExports.forEach((undExport) => {
             if (undExport.maxcyclomatic >= MAX_METHOD_COMPLEXITY) faultyModules.push(undExport);
         });
@@ -134,18 +151,23 @@ class QualityCheck {
         console.log('Method with too much complexity in');
         console.log(faultyModules);
 
-        // Calculate software line of code rank by dividing faulty modules by evaluated modules
+        // Calculate max method cyclomatic complexity rank by dividing faulty modules by evaluated modules
         this.mReport[metric.METHOD_COMPLEXITY] = this.ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
 
+    /**
+     * Calculates the metric rank for the metric that measures
+     * the amount of methods in a class
+     * @param understandExport Understand Export array
+     */
     private calculateMethodsClassRank(understandExport: UnderstandExport[]) {
         const moduleExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'Class'
         );
         const faultyModules: UnderstandExport[] = [];
-        // identify faulty modules that have too many Software lines of Code
+        // identify faulty classes that have too many methods
         moduleExports.forEach((undExport) => {
             if (undExport.countdeclmethod >= MAX_METHODS_CLASS) faultyModules.push(undExport);
         });
@@ -153,18 +175,23 @@ class QualityCheck {
         console.log('Classes with too many methods');
         console.log(faultyModules);
 
-        // Calculate software line of code rank by dividing faulty modules by evaluated modules
+        // Calculate methods per class rank by dividing faulty modules by evaluated modules
         this.mReport[metric.METHODS_CLASS] = this.ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
 
+    /**
+     * Calculates the metric rank for the metric that measures
+     * the amount of functions in a module
+     * @param understandExport Understand Export array
+     */
     private calculateFunctionsModuleRank(understandExport: UnderstandExport[]) {
         const moduleExports: UnderstandExport[] = understandExport.filter(
             (metric) => metric.kind == 'File'
         );
         const faultyModules: UnderstandExport[] = [];
-        // identify faulty modules that have too many Software lines of Code
+        // identify faulty files that have too many functions
         moduleExports.forEach((undExport) => {
             if (undExport.countdeclfunction >= MAX_FUNCTIONS_MODULE) faultyModules.push(undExport);
         });
@@ -172,7 +199,7 @@ class QualityCheck {
         console.log('Modules with too many functions');
         console.log(faultyModules);
 
-        // Calculate software line of code rank by dividing faulty modules by evaluated modules
+        // Calculate functions per file rank by dividing faulty modules by evaluated modules
         this.mReport[metric.FUNCTIONS_MODULE] = this.ratioToRank(
             faultyModules.length / moduleExports.length
         );

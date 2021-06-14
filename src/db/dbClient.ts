@@ -45,7 +45,9 @@ export class DBClient {
      * Removes all entries from the database.
      */
     reset(): void {
-        this.db.exec('DROP TABLE IF EXISTS login_attempts');
+        this.db.exec(
+            'DROP TABLE IF EXISTS login_attempts; DROP TABLE IF EXISTS file_parse_events;'
+        );
         this.db.exec('DROP TABLE IF EXISTS supervisor');
         this.db.exec('DROP TABLE IF EXISTS tokens');
         this.initialize();

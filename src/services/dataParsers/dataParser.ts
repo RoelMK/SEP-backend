@@ -185,9 +185,6 @@ export abstract class DataParser {
         if (this.glucoseParser) promises.push(this.glucoseParser.post());
         if (this.insulinParser) promises.push(this.insulinParser.post());
         if (this.moodParser) promises.push(this.moodParser.post());
-        promises.forEach((element) => {
-            element.then(() => console.log('Done posting for one datatype'));
-        });
         await Promise.all(promises);
     }
 

@@ -85,6 +85,7 @@ export default class GlucoseParser extends ModelParser {
             return;
         }
         try {
+            console.log(this.glucoseData?.length);
             if (this.glucoseData && this.glucoseData.length > 0)
                 await this.gbClient
                     .glucose()

@@ -145,6 +145,33 @@ export class GameBusClient {
     }
 
     /**
+     * DELETE request
+     * @param path Endpoint URL (without base in {endpoint})
+     * @param headers Extra headers
+     * @param query Any query options
+     * @param authRequired Whether authentication is required for the request
+     * @param fullResponse Returns response + headers instead of just data
+     * @returns Response
+     */
+     async delete(
+        path: string,
+        headers?: Headers,
+        query?: Query,
+        authRequired?: boolean,
+        fullResponse?: boolean
+    ): Promise<any> {
+        return this.request(
+            path,
+            RequestMethod.DELETE,
+            undefined,
+            headers,
+            query,
+            authRequired,
+            fullResponse
+        );
+    }
+
+    /**
      * Generic request method
      * @param path Endpoint URL (without base in {endpoint})
      * @param method Request method (GET, POST, PUT, DELETE)
@@ -269,7 +296,8 @@ export class GameBusClient {
 export enum RequestMethod {
     GET = 'GET',
     POST = 'POST',
-    PUT = 'PUT'
+    PUT = 'PUT',
+    DELETE = 'DELETE'
 }
 
 /**

@@ -386,6 +386,27 @@ export class Activity {
     }
 
     /**
+     * Deletes an activity with activity ID
+     * @param activityId Activity ID
+     * @param headers Any extra headers
+     * @param query Any queries
+     * @returns Activity associated to given ID
+     */
+     async deleteActivityById(
+        activityId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        const resp = await this.gamebus.delete(
+            `activities/${activityId}`,
+            headers,
+            query,
+            this.authRequired
+        );
+        return resp;
+    }
+
+    /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels
      * @param activity Response from GET activity request
      * @returns List of ActivityModels corresponding to the response from the GET

@@ -408,26 +408,6 @@ export class Activity {
         });
         return activityModels;
     }
-
-    /**
-     * Get Supervisor activities for a player
-     * @param playerId Id of the player
-     * @returns All Supervisor activities
-     */
-    async getAllActivitiesForToken(
-        playerId: number,
-        headers?: Headers,
-        query?: Query
-    ): Promise<ActivityGETData[]> {
-        const activities: ActivityGETData[] = await this.getAllActivities(playerId, headers, query);
-        const tokenActivities: ActivityGETData[] = [];
-        activities.forEach((activity: ActivityGETData) => {
-            if (activity.gameDescriptor.translationKey === 'CHALLENGE_FEEDBACK') {
-                tokenActivities.push(activity);
-            }
-        });
-        return tokenActivities;
-    }
 }
 
 export enum QueryOrder {

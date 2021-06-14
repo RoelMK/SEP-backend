@@ -57,16 +57,26 @@ export function getSupervisors(childEmail: string): any {
     return tokens;
 }
 
-export function getApproved(childEmail): any {
-  const dbClient: DBClient = new DBClient();
-  const tokens = dbClient.getApprovedSupervisors(childEmail);
-  return tokens;
+/**
+ * Get approved supervisors for a user
+ * @param childEmail Email of the normal user
+ * @returns Approved supervisors
+ */
+export function getApproved(childEmail: string): any {
+    const dbClient: DBClient = new DBClient();
+    const tokens = dbClient.getApprovedSupervisors(childEmail);
+    return tokens;
 }
 
-export function getChildren(supervisorEmail): any {
-  const dbClient: DBClient = new DBClient();
-  const tokens = dbClient.getChildren(supervisorEmail);
-  return tokens;
+/**
+ * Get the normal users for a supervisor
+ * @param supervisorEmail Email of the supervisor user
+ * @returns Normal users(children) for a supervisor
+ */
+export function getChildren(supervisorEmail: string): any {
+    const dbClient: DBClient = new DBClient();
+    const tokens = dbClient.getChildren(supervisorEmail);
+    return tokens;
 }
 
 /**
@@ -82,7 +92,12 @@ export function retractPermission(childEmail: string, supervisorEmail: string): 
     return success;
 }
 
-export function checkSupervisor(email): any {
+/**
+ * Check if user is a supervisor
+ * @param email Email of the  user
+ * @returns If the user is a supervisor
+ */
+export function checkSupervisor(email: string): any {
     const dbClient: DBClient = new DBClient();
     const supervisor = dbClient.checkRole(email);
     return supervisor;

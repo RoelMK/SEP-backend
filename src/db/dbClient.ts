@@ -223,8 +223,10 @@ export class DBClient {
     getChildTokens(supervisorEmail: string) {
         try {
             const tokens = this.db
-                .prepare('SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True')
-                .all(supervisorEmail)
+                .prepare(
+                    'SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True'
+                )
+                .all(supervisorEmail);
             return tokens;
         } catch (e) {
             console.log(e);
@@ -248,7 +250,7 @@ export class DBClient {
             return true;
         } catch (e) {
             console.log(e);
-            return false; // if an error occurs, return undefined
+            return false;
         }
     }
 
@@ -268,7 +270,7 @@ export class DBClient {
             return true;
         } catch (e) {
             console.log(e);
-            return false; // if an error occurs, return undefined
+            return false;
         }
     }
 
@@ -287,7 +289,7 @@ export class DBClient {
             return true;
         } catch (e) {
             console.log(e);
-            return false; // if an error occurs, return undefined
+            return false;
         }
     }
 
@@ -299,38 +301,10 @@ export class DBClient {
     getRequestedSupervisors(childEmail: string) {
         try {
             const supervisors = this.db
-                .prepare('SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False')
-                .all(childEmail)
-            return supervisors;
-        } catch (e) {
-            console.log(e);
-            return false; // if an error occurs, return undefined
-        }
-    }
-
-    /**
-     * Get a list of normal users requested supervisor role from a
-     * supervisor user
-     * @param supervisorEmail Email of the supervisor user
-     * @returns List of normal users requested supervisor role
-     */
-    getChildren(supervisorEmail: string) {
-        try {
-            const children = this.db
-                .prepare('SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=True')
-                .all(supervisorEmail)
-            return children;
-        } catch (e) {
-            console.log(e);
-            return false; // if an error occurs, return undefined
-        }
-    }
-
-    getApprovedSupervisors(childEmail) {
-        try {
-            const supervisors = this.db
-                .prepare('SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=True')
-                .all(childEmail)
+                .prepare(
+                    'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False'
+                )
+                .all(childEmail);
             return supervisors;
         } catch (e) {
             console.log(e);
@@ -338,12 +312,55 @@ export class DBClient {
         }
     }
 
-    checkRole(email) {
+    /**
+     * Get a list of normal users for a supervisor
+     * @param supervisorEmail Email of the supervisor user
+     * @returns List of normal users for a supervisor
+     */
+    getChildren(supervisorEmail: string) {
+        try {
+            const children = this.db
+                .prepare(
+                    'SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=True'
+                )
+                .all(supervisorEmail);
+            return children;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Get a list of supervisors which role is approved
+     * by the normal users
+     * @param childEmail Email of the normal user
+     * @returns List of supervisors which role is approved
+     */
+    getApprovedSupervisors(childEmail: string) {
+        try {
+            const supervisors = this.db
+                .prepare(
+                    'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=True'
+                )
+                .all(childEmail);
+            return supervisors;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Check if the user is a supervisor
+     * @param email Email of the user
+     * @returns Email of the supervisor user
+     */
+    checkRole(email: string) {
         try {
             const supervisor = this.db
                 .prepare('SELECT supervisor_email FROM supervisor WHERE supervisor_email=?')
                 .get(email);
-            console.log(supervisor);
             return supervisor.supervisor_email === email;
         } catch (e) {
             console.log(e);
@@ -365,7 +382,7 @@ export class DBClient {
             stmt.run(childEmail, supervisorEmail);
             return true;
         } catch (e) {
-            return false; // if an error occurs, return undefined
+            return false;
         }
     }
 

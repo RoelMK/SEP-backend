@@ -25,20 +25,21 @@ supervisorRouter.post('/logToken', async (req: any, res: any) => {
 });
 
 supervisorRouter.post('/request', async (req: any, res: any) => {
-  let confirm = req.body.confirm;
-  let success = false;
-  // console.log("query: " + req.query.supervisorEmail);
-  // console.log("body: " + req.body.supervisorEmail);
-  if (confirm) {
-    success = await request(req.body.supervisorEmail, req.body.childEmail, confirm)
-  } else {
-    success = await request(req.body.supervisorEmail, req.body.childEmail);
-  }
-  if (success) {
-    return res.status(200).json({ success: true })
-  } else {
-    return res.status(400).json({ success: false, message: "Something went wrong, please try again later" });
-  }
+    const confirm = req.body.confirm;
+    let success = false;
+
+    if (confirm) {
+        success = await request(req.body.supervisorEmail, req.body.childEmail, confirm);
+    } else {
+        success = await request(req.body.supervisorEmail, req.body.childEmail);
+    }
+    if (success) {
+        return res.status(200).json({ success: true });
+    } else {
+        return res
+            .status(400)
+            .json({ success: false, message: 'Something went wrong, please try again later' });
+    }
 });
 
 supervisorRouter.get('/getTokens', async (req: any, res: any) => {
@@ -51,20 +52,20 @@ supervisorRouter.get('/getSupervisors', async (req: any, res: any) => {
     return res.status(200).json({ supervisors: supervisors });
 });
 
-supervisorRouter.get('/getApproved', async (req: any, res:any) => {
-  const supervisors = await getApproved(req.query.childEmail);
+supervisorRouter.get('/getApproved', async (req: any, res: any) => {
+    const supervisors = await getApproved(req.query.childEmail);
 
-  return res.status(200).json({ supervisors: supervisors });
+    return res.status(200).json({ supervisors: supervisors });
 });
 
-supervisorRouter.get('/getChildren', async (req: any, res:any) => {
-  const children = await getChildren(req.query.supervisorEmail);
+supervisorRouter.get('/getChildren', async (req: any, res: any) => {
+    const children = await getChildren(req.query.supervisorEmail);
 
-  return res.status(200).json({ children: children });
+    return res.status(200).json({ children: children });
 });
 
-supervisorRouter.post('/retractPermission', async (req: any, res:any) => {
-  const success = await retractPermission(req.body.childEmail, req.body.supervisorEmail);
+supervisorRouter.post('/retractPermission', async (req: any, res: any) => {
+    const success = await retractPermission(req.body.childEmail, req.body.supervisorEmail);
 
     if (success) {
         return res.status(200).json({ success: true });
@@ -74,7 +75,7 @@ supervisorRouter.post('/retractPermission', async (req: any, res:any) => {
         .json({ success: false, message: 'Something went wrong, please try again later' });
 });
 
-supervisorRouter.get('/role', async (req: any, res:any) => {
+supervisorRouter.get('/role', async (req: any, res: any) => {
     const sup = await checkSupervisor(req.query.email);
 
     return res.status(200).json({ supervisor: sup });

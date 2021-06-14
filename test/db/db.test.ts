@@ -136,19 +136,11 @@ test('Get a list of requested supervisors for a normal user', () => {
     const childEmail = 'child@gmail.com';
 
     const dbClient = new DBClient();
-    expect(dbClient.getRequestedSupervisors(childEmail)).toEqual({
-        supervisor_email: 'supervisor@gmail.com'
-    });
-    dbClient.close();
-});
-
-test('Get a list of normal users requested supervisor role from a supervisor', () => {
-    const supervisorEmail = 'supervisor@gmail.com';
-
-    const dbClient = new DBClient();
-    expect(dbClient.getRequestedChildren(supervisorEmail)).toEqual({
-        player_email: 'child@gmail.com'
-    });
+    expect(dbClient.getRequestedSupervisors(childEmail)).toEqual([
+        {
+            supervisor_email: 'supervisor@gmail.com'
+        }
+    ]);
     dbClient.close();
 });
 
@@ -161,13 +153,53 @@ test('Confirm supervisor', () => {
     dbClient.close();
 });
 
+test('Get a list of supervisors which role is approved', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.getApprovedSupervisors(childEmail)).toEqual([
+        {
+            supervisor_email: 'supervisor@gmail.com'
+        }
+    ]);
+    dbClient.close();
+});
+
+test('Check if user is a supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.checkRole(supervisorEmail)).toBeTruthy();
+    dbClient.close();
+});
+
+test('Get a list of normal users requested supervisor role from a supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.getChildren(supervisorEmail)).toEqual([
+        {
+            player_email: 'child@gmail.com'
+        }
+    ]);
+    dbClient.close();
+});
+
 test('Get child token', () => {
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
-    expect(dbClient.getChildTokens(supervisorEmail)).toEqual({
-        player_token: '123'
-    });
+    expect(dbClient.getChildTokens(supervisorEmail)).toEqual([
+        {
+            player_token: '123'
+        }
+    ]);
     dbClient.close();
 });
 
@@ -177,6 +209,6 @@ test('Retract supervisor permission', () => {
 
     const dbClient = new DBClient();
     expect(dbClient.retractPermission(childEmail, supervisorEmail)).toBeTruthy();
-    expect(dbClient.getChildTokens(supervisorEmail)).toEqual(undefined);
+    expect(dbClient.getChildTokens(supervisorEmail)).toEqual([]);
     dbClient.close();
 });

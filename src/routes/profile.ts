@@ -18,7 +18,7 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
 
     try {
         const profileData: BMIModel = await gbClient.bmi().getLatestBMIActivity(req.user.playerId);
-        return res.status(200).json(profileData).send('Successfully retrieved profile information');
+        return res.status(200).json(profileData);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 401) {
@@ -26,17 +26,15 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
                 return res.status(401).send();
             }
         }
+        console.log(error);
         // We cannot handle this specific request, no data for the user.
-        return res
-            .status(503)
-            .json({
-                timestamp: -1,
-                activityId: -1,
-                weight: null,
-                length: null,
-                age: null
-            })
-            .send();
+        return res.status(200).json({
+            timestamp: -1,
+            activityId: -1,
+            weight: null,
+            length: null,
+            age: null
+        });
     }
 });
 

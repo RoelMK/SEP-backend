@@ -39,4 +39,3 @@ export const MAX_FANOUT = 16;
 
 /* Module external duplication */
 // Percentage of duplicated of duplicated lines of code/SLOC between different modules
-

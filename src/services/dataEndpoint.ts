@@ -15,7 +15,7 @@ export class DataEndpoint {
     private readonly MAX_PAGES = 1000;
 
     // maximum number of entries that are requested per page
-    private readonly PAGE_LIMIT = 100;
+    private readonly PAGE_LIMIT = 250;
 
     /**
      * Constructs the endpoint object.

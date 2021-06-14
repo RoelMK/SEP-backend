@@ -1,11 +1,12 @@
-import { DataParser, DataSource } from './dataParser';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
+import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
+import { FoodSource } from '../food/foodParser';
+import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
-import { oneDriveToken } from '../../gb/usersExport';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
+import { getFileName } from '../utils/files';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 
 /**
  * Default class for parsing food diaries
@@ -13,8 +14,8 @@ import { MEAL_TYPE } from '../../gb/models/foodModel';
 export default class FoodDiaryParser extends DataParser {
     private foodDiaryData: FoodDiaryData[] = [];
 
-    constructor(private foodDiaryFile?: string, protected oneDriveToken?: string) {
-        super(DataSource.FOOD_DIARY, foodDiaryFile, oneDriveToken, 'fooddiary');
+    constructor(foodDiaryFile: string, userInfo: GameBusToken, protected oneDriveToken?: string) {
+        super(DataSource.FOOD_DIARY, foodDiaryFile, userInfo, oneDriveToken, 'fooddiary');
     }
 
     /**
@@ -26,24 +27,33 @@ export default class FoodDiaryParser extends DataParser {
 
         // check for erroneous input
         if (!FoodDiaryDataGuard(this.foodDiaryData[0])) {
-            throw Error('Wrong input data for processing food diary data!');
+            throw new InputError('Wrong input data for processing food diary data!');
         }
         //auto-fills empty cells in the Excel + other preprocessing
 
         const preprocessedFoodDiaryData: FoodDiaryData[] = FoodDiaryParser.preprocess(
             this.foodDiaryData,
-            await this.getMealTypeMap(this.filePath as string, oneDriveToken)
+            await this.getMealTypeMap(this.filePath as string, this.oneDriveToken)
         );
-        this.foodParser = new FoodParser(
+
+        // set dateFormat and create parsers
+        this.dateFormat = DateFormat.FOOD_DIARY;
+        this.createParser(
+            OutputDataType.FOOD,
             preprocessedFoodDiaryData,
-            FoodSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            FoodSource.FOOD_DIARY_EXCEL
         );
-        this.insulinParser = new InsulinParser(
+        this.createParser(
+            OutputDataType.INSULIN,
             preprocessedFoodDiaryData,
-            InsulinSource.FOOD_DIARY_EXCEL,
-            DateFormat.FOOD_DIARY
+            InsulinSource.FOOD_DIARY_EXCEL
         );
+
+        // post data
+        await this.postProcessedData();
+
+        // update the timestamp of newest parsed entry to this file
+        this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 
     /**
@@ -57,7 +67,6 @@ export default class FoodDiaryParser extends DataParser {
         oneDriveToken?: string
     ): Promise<Map<string, string>> {
         let mealTypeMap: Map<string, string>;
-
         // based on oneDrive token, determine oneDrive or local lookup
         if (oneDriveToken !== undefined && oneDriveToken !== '') {
             mealTypeMap = await OneDriveExcelParser.getMappingTableValues(
@@ -91,7 +100,6 @@ export default class FoodDiaryParser extends DataParser {
         rawData: FoodDiaryData[],
         mealTimeMap?: Map<string, string>
     ): FoodDiaryData[] {
-        //TODO for excel uploads this can be included during read, but not for onedrive excels
         // filter out empty rows
         rawData = rawData.filter((entry: FoodDiaryData) => {
             return (
@@ -169,14 +177,15 @@ export default class FoodDiaryParser extends DataParser {
             mealTimeMap.get(entry.meal_type) != undefined
         ) {
             entry.time = mealTimeMap.get(entry.meal_type) as string;
-        } else if (entry.time == '') {
+            return [entry, lastTime];
+        }
+        if (entry.time == '') {
             // if no mapping can be done, use last known time or midnight
             entry.time = lastTime == '' ? '00:00' : lastTime;
-        } else {
-            // update last known time
-            lastTime = entry.time;
+            return [entry, lastTime];
         }
-        return [entry, lastTime];
+        // update last known time
+        return [entry, entry.time];
     }
 
     /**
@@ -225,6 +234,9 @@ export type FoodDiaryData = {
  * @returns whether the object is part of the interface AbbottData
  */
 function FoodDiaryDataGuard(object: any): object is FoodDiaryData {
+    if (object === undefined) {
+        return false;
+    }
     return (
         'date' in object &&
         'time' in object &&

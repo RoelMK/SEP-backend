@@ -4,6 +4,8 @@ import { GameBusClient } from '../gb/gbClient';
 import { ChallengePOSTData } from '../gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
+import { DBClient } from '../db/dbClient';
+import { GameBusToken } from '../gb/auth/tokenHandler';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -13,9 +15,18 @@ import NightscoutParser, {
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
 
+const dummyUserInfo: GameBusToken = {
+    playerId: 'testing',
+    accessToken: '12345',
+    refreshToken: '67890'
+};
+
 async function testAbbott() {
     //const abbottParser: AbbottParser = new AbbottParser('src/services/glucose/glucose_data_abbott_eu.csv');
-    const abbottParser: AbbottParser = new AbbottParser('test/services/data/abbott_eu.csv');
+    const abbottParser: AbbottParser = new AbbottParser(
+        'test/services/data/abbott_eu.csv',
+        dummyUserInfo
+    );
     // const abbottParser: AbbottParser = new AbbottParser('test/services/data/foodDiary_standard_missing.xlsx');
     // Currently this step is required since reading the file is async
     await abbottParser.process();
@@ -30,14 +41,14 @@ async function testExcel() {
     const wrongTestPath = 'test/services/data/abbott_eu.csv';
 
     try {
-        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(wrongTestPath);
+        const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(wrongTestPath, dummyUserInfo);
         await foodDiaryParser.process();
         console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
         console.log(foodDiaryParser.getData(OutputDataType.FOOD));
     } catch (e) {
         console.log(e.message);
     }
-    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath);
+    const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(testPath, dummyUserInfo);
     await foodDiaryParser.process();
 
     console.log(foodDiaryParser.getData(OutputDataType.INSULIN));
@@ -50,6 +61,7 @@ async function testOneDrive() {
 
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(
         'Documents/DeepFolder/diary.xlsx',
+        dummyUserInfo,
         testToken
     );
     await foodDiaryParser.process();
@@ -60,7 +72,7 @@ async function testOneDrive() {
 async function testNightScout() {
     const testEntry: NightScoutEntryModel = {
         type: 'sgv',
-        date: 1622383144021,
+        date: new Date().getTime(),
         sgv: 79,
         noise: 0,
         filtered: 0,
@@ -99,6 +111,7 @@ async function testNightScout() {
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
+        dummyUserInfo,
         '' // TODO why don't you need a token to get entry data??
     );
     await nsParser.process();
@@ -148,9 +161,42 @@ async function testGb() {
     const response = await client.challenge().postChallenge(challenge);
     console.log(response);
 }
+async function testParseNewest() {
+    const client = new DBClient();
+    client.initialize();
+    client.cleanFileParseEvents();
+    client.close();
+
+    // first run, so updated
+    console.log('Should be filled');
+    let fdParser = new FoodDiaryParser(
+        'test/services/data/foodDiary_standard_missing_table.xlsx',
+        dummyUserInfo
+    );
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));
+
+    // second run with same file, no data should show up
+    console.log('Should be empty');
+    fdParser = new FoodDiaryParser(
+        'test/services/data/foodDiary_standard_missing_table.xlsx',
+        dummyUserInfo
+    );
+    fdParser.parseOnlyNewest(true);
+    await fdParser.process();
+    console.log(fdParser.getData(OutputDataType.FOOD));
+}
+
+function cleanParses() {
+    new DBClient().cleanFileParseEvents();
+}
 
 export const testToken = '';
 //testAbbott();
+//testExcel();
 //testOneDrive();
 //testNightScout();
 //testGb();
+testNightScout();
+//testParseNewest();

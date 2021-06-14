@@ -10,6 +10,7 @@ import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { GlucosePropertyKeys, Glucose } from '../../src/gb/objects/glucose';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { mockRequest } from '../testUtils/requestUtils';
+import { Keys } from '../../src/gb/objects/keys';
 
 jest.mock('axios');
 
@@ -36,7 +37,7 @@ describe('with mocked glucose POST call', () => {
             glucoseLevel: 34
         };
         const POSTData: ActivityPOSTData = {
-            gameDescriptorTK: client.glucose().glucoseTranslationKey,
+            gameDescriptorTK: Keys.glucoseTranslationKey,
             dataProviderName: client.activity().dataProviderName,
             date: 12,
             image: '',
@@ -73,7 +74,7 @@ describe('with mocked glucose POST call', () => {
             glucoseLevel: 12
         };
         const POSTData1: IDActivityPOSTData = {
-            gameDescriptor: client.glucose().glucoseGameDescriptorID,
+            gameDescriptor: Keys.glucoseGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 1,
             image: '',
@@ -86,7 +87,7 @@ describe('with mocked glucose POST call', () => {
             players: [0]
         };
         const POSTData2: IDActivityPOSTData = {
-            gameDescriptor: client.glucose().glucoseGameDescriptorID,
+            gameDescriptor: Keys.glucoseGameDescriptorID,
             dataProvider: client.activity().dataProviderID,
             date: 11,
             image: '',
@@ -157,7 +158,7 @@ describe('with mocked glucose get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?start=19-04-2021&end=21-04-2021&sort=-date&gds=BLOOD_GLUCOSE_MSMT`
+                url: `${endpoint}/players/0/activities?gds=BLOOD_GLUCOSE_MSMT&start=19-04-2021&end=21-04-2021&sort=-date`
             })
         );
         expect(glucose).toEqual([]);

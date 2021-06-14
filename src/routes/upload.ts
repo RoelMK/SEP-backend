@@ -1,73 +1,132 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser, OutputDataType } from '../services/dataParsers/dataParser';
+import { DataParser } from '../services/dataParsers/dataParser';
 import fs from 'fs';
-import { getFileExtension } from '../services/utils/files';
+import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
+import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
+import { checkJwt } from '../middlewares/checkJwt';
+import { GameBusToken } from '../gb/auth/tokenHandler';
+import axios from 'axios';
 
-const upload = multer({ dest: 'uploads/abbott/' });
+const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
 
-uploadRouter.post('/upload-abbott', upload.single('file'), function (req, res) {
-    uploadFile(req, res, new AbbottParser());
+/**
+ * Endpoint for uploading files for parsing
+ * Parameters:
+ * format: one of eetmeter, abbott or fooddiary
+ */
+uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
+    if (!req.query.format) {
+        res.status(400).send('Specify file format!');
+        return;
+    }
+    // retrieve user information
+    const userInfo: GameBusToken = {
+        playerId: req.user.playerId,
+        accessToken: req.user.accessToken,
+        refreshToken: req.user.refreshToken
+    };
+
+    // filename is not transferred automatically with the file, meaning the file is named as '0133dsdf'-like
+    // use original filename to create a more readable file path
+    const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname;
+    let promise: Promise<void>;
+    switch (req.query.format) {
+        case 'eetmeter':
+            promise = uploadFile(req, res, new EetMeterParser(filePath, userInfo));
+            break;
+        case 'abbott':
+            promise = uploadFile(req, res, new AbbottParser(filePath, userInfo));
+            break;
+        case 'fooddiary':
+            promise = uploadFile(req, res, new FoodDiaryParser(filePath, userInfo));
+            break;
+        default:
+            res.status(400).send('This data format is not supported');
+            try {
+                fs.unlinkSync(req.file.path);
+            } catch (e) {
+                console.log(e.message);
+            }
+            return;
+    }
+    // When an upload is done, remove the file from the server
+    promise.then(() => {
+        try {
+            fs.unlinkSync(filePath);
+        } catch (e) {
+            console.log(e.message);
+        }
+    });
 });
-uploadRouter.get('/upload-abbott', function (req, res) {
+
+// test get requests for file uploads //TODO remove
+uploadRouter.get('/upload/abbott', function (req, res) {
     res.sendFile(__dirname + '/testHTMLabbott.html');
 });
 
-uploadRouter.post('/upload-fooddiary', upload.single('file'), function (req, res) {
-    uploadFile(req, res, new FoodDiaryParser());
-});
-uploadRouter.get('/upload-fooddiary', function (req, res) {
+uploadRouter.get('/upload/fooddiary', function (req, res) {
     res.sendFile(__dirname + '/testHTMLfooddiary.html');
 });
 
-async function uploadFile(req, res, dataParser: DataParser) {
-    // prepare file path with extension
-    const originalExtension: string = getFileExtension(req.file.originalname);
-    const filePath: string = req.file.path + '.' + originalExtension; // extension is not transferred automatically
-    dataParser.setFilePath(filePath);
+uploadRouter.get('/upload/eetmeter', function (req, res) {
+    res.sendFile(__dirname + '/testHTMLeetmeter.html');
+});
 
-    //rename file path to include extension
-    fs.rename(req.file.path, filePath, async function (err) {
-        // if renaming fails for some reason, send error // TODO
-        if (err) {
-            console.log('ERROR: ' + err);
-            res.status(500).send('Could not store file!'); // TODO
-            return;
+/**
+ *
+ * @param req Post request, containing file path of uploaded file and more
+ * @param res Query response object, for determining response to frontend
+ * @param dataParser DataParser object for parsing incoming files
+ * @returns void if process needs to be terminated early due to errors
+ */
+async function uploadFile(req: any, res: any, dataParser: DataParser): Promise<void> {
+    dataParser.parseOnlyNewest(true);
+    //rename auto-generated file path to original name
+    try {
+        fs.renameSync(req.file.path, dataParser.getFilePath());
+    } catch (e) {
+        console.log(e.message);
+        try {
+            fs.unlinkSync(req.file.path);
+        } catch (e) {
+            console.log(e.message);
         }
+        res.status(500).send('Could not rename file!');
+        return;
+    }
 
-        // rest of the function is included in this function to synchronize the control flow
+    // parse the uploaded file and update response on failure
+    try {
         await dataParser.process();
-
-        // TODO just for testing, get some insulin data and send it back
-        const insulinData: any = dataParser.getData(OutputDataType.INSULIN);
-
-        res.send(
-            'Success, read ' +
-                insulinData.length +
-                ' entries.' +
-                '\nFirst entry: ' +
-                insulinData[0].timestamp +
-                ', ' +
-                insulinData[0].insulinAmount
-        );
-
-        // check if file still exists (must be the case)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        fs.stat(filePath, function (err, stats) {
-            if (err) {
-                res.status(500).send('Could not remove file, it does not exist!'); // TODO
+    } catch (e) {
+        if (axios.isAxiosError(e)) {
+            if (e.response?.status === 401) {
+                // Unauthorized
+                res.status(401).send();
+                return;
             }
+        }
+        switch (e.name) {
+            case 'InputError':
+                res.status(400).send(
+                    `An erroneous file was uploaded for the selected format, check if you have selected the correct file! Reason: ${e.message}`
+                );
+                break;
+            default:
+                console.log(e.message);
+                res.status(503).send('Something went wrong :(');
+        }
+        return;
+    }
 
-            // remove the temporary file
-            fs.unlink(filePath, function (err) {
-                if (err) res.status(500).send('Could not remove file!'); // TODO
-            });
-        });
-        console.log('Upload succesful');
-    });
+    // process has been completed
+    res.status(200).send('File has been parsed.');
+    console.log(dataParser.getFilePath());
+    console.log('upload succesful');
 }
 
 module.exports = uploadRouter;

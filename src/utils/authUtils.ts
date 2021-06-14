@@ -90,19 +90,23 @@ async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
     const clientAccessCode = await getClientAccessToken();
     if (clientAccessCode) {
         const gbClient: GameBusClient = new GameBusClient(undefined, true);
-        const response = await gbClient.get(
-            'users',
-            { Authorization: 'Bearer ' + clientAccessCode },
-            { q: email }
-        );
-        if (
-            response &&
-            Array.isArray(response) &&
-            response.length > 0 &&
-            response[0].player &&
-            response[0].player.id
-        ) {
-            return response[0].player.id.toString();
+        try {
+            const response = await gbClient.get(
+                'users',
+                { Authorization: 'Bearer ' + clientAccessCode },
+                { q: email }
+            );
+            if (
+                response &&
+                Array.isArray(response) &&
+                response.length > 0 &&
+                response[0].player &&
+                response[0].player.id
+            ) {
+                return response[0].player.id.toString();
+            }
+        } catch (error) {
+            return undefined;
         }
     }
     return undefined;
@@ -117,14 +121,17 @@ async function getClientAccessToken(): Promise<string | undefined> {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
-
-    const response = await gbClient.post('oauth/token', params.toString(), {
-        Authorization: gbClientAuthHeader,
-        'Content-Type': 'application/x-www-form-urlencoded'
-    });
-    if (response && response.access_token) {
-        return response.access_token as string;
-    } else {
+    try {
+        const response = await gbClient.post('oauth/token', params.toString(), {
+            Authorization: gbClientAuthHeader,
+            'content-type': 'application/x-www-form-urlencoded'
+        });
+        if (response && response.access_token) {
+            return response.access_token as string;
+        } else {
+            return undefined;
+        }
+    } catch (error) {
         return undefined;
     }
 }

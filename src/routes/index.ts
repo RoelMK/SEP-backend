@@ -7,5 +7,9 @@ indexRouter.use('/onedrive', require('./onedrive'));
 indexRouter.use('/', require('./auth'));
 indexRouter.use('/', require('./upload'));
 indexRouter.use('/supervisor', require('./supervisor'));
+indexRouter.use('/', require('./data'));
+indexRouter.use('/', require('./nightscout'));
+indexRouter.use('/', require('./mood'));
+indexRouter.use('/', require('./insulin'));
 
 module.exports = indexRouter;

@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
 import { Activity } from './objects/activity';
 import { Exercise } from './objects/exercise';
@@ -179,7 +180,8 @@ export class GameBusClient {
     ): Promise<any> {
         // Current authentication is done via a pre-defined token
         if (authRequired) {
-            if (!this.tokenHandler) {
+            // We have to check both if the handler exists and if there's at least something there as a token
+            if (!this.tokenHandler || !this.tokenHandler.getToken().accessToken) {
                 throw new Error(`You must be authorized to access this path: ${endpoint + path}`);
             }
         }
@@ -198,24 +200,30 @@ export class GameBusClient {
             void (body && console.log(body));
         }
 
-        // Make request with method, url, headers and body
-        const response = await this.client.request({
-            method: method,
-            url: url,
-            headers: requestHeaders,
-            data: body
-        });
+        try {
+            // Make request with method, url, headers and body
+            const response = await this.client.request({
+                method: method,
+                url: url,
+                headers: requestHeaders,
+                data: body
+            });
+            // If full response is needed, return it
+            if (fullResponse) {
+                return response;
+            }
 
-        // Error handling is already included in Axios,
-        // so unless you need to check for a correct status code outside of the
-
-        // If full response is needed, return it
-        if (fullResponse) {
-            return response;
+            // Return response data
+            return response.data;
+        } catch (err: unknown | AxiosError) {
+            if (axios.isAxiosError(err)) {
+                // If the error is from Axios, throw it (as AxiosError)
+                throw err as AxiosError;
+            } else {
+                // If not, show it
+                console.error(err);
+            }
         }
-
-        // Return response data
-        return response.data;
     }
 
     /**

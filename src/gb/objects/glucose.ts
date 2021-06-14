@@ -11,15 +11,12 @@ import { GlucoseModel } from '../models/glucoseModel';
 import { ActivityModel } from '../models/activityModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+import { Keys } from './keys';
 
 /**
  * Class for glucose-specific functions
  */
 export class Glucose extends GameBusObject {
-    // Translation key of GameBus game descriptor for glucose data
-    public glucoseTranslationKey = 'BLOOD_GLUCOSE_MSMT';
-    public glucoseGameDescriptorID = 61;
-
     /**
      * Function that returns all glucose activities
      * @param playerId ID of player
@@ -32,7 +29,7 @@ export class Glucose extends GameBusObject {
     ): Promise<GlucoseModel[]> {
         const response = await this.activity.getAllActivitiesWithGd(
             playerId,
-            [this.glucoseTranslationKey],
+            [Keys.glucoseTranslationKey],
             headers,
             query
         );
@@ -79,7 +76,7 @@ export class Glucose extends GameBusObject {
      */
     public toPOSTData(model: GlucoseModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: this.glucoseTranslationKey,
+            gameDescriptorTK: Keys.glucoseTranslationKey,
             dataProviderName: this.activity.dataProviderName,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -102,7 +99,7 @@ export class Glucose extends GameBusObject {
      */
     public toIDPOSTData(model: GlucoseModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.glucoseGameDescriptorID,
+            gameDescriptor: Keys.glucoseGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -141,7 +138,7 @@ export class Glucose extends GameBusObject {
             playerId,
             startDate,
             endDate,
-            [this.glucoseTranslationKey],
+            [Keys.glucoseTranslationKey],
             order,
             limit,
             page,
@@ -159,7 +156,6 @@ export class Glucose extends GameBusObject {
     private static convertGlucoseResponseToModel(response: ActivityGETData): GlucoseModel {
         // Get ActivityModels from response
         const activities = Activity.getActivityInfoFromActivity(response);
-        //console.log(activities);
         // We already know the date, glucose level will be 0 for now
         const glucose: GlucoseModel = {
             timestamp: response.date,
@@ -201,10 +197,17 @@ export class Glucose extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of GlucoseModels
      */
-    static convertResponseToGlucoseModels(response: ActivityGETData[]): GlucoseModel[] {
-        return response.map((response: ActivityGETData) => {
-            return this.convertGlucoseResponseToModel(response);
-        });
+    static convertResponseToGlucoseModels(response: ActivityGETData[] | undefined): GlucoseModel[] {
+        if (!response) {
+            return [];
+        }
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertGlucoseResponseToModel(response);
+            });
     }
 }
 

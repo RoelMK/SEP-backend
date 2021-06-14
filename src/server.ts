@@ -2,8 +2,7 @@
 require('dotenv').config();
 import express from 'express';
 const errorhandler = require('errorhandler');
-import winston from 'winston';
-import expressWinston from 'express-winston';
+const cors = require('cors');
 import { DBClient } from './db/dbClient';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -15,17 +14,20 @@ dbClient.close();
 
 // Create app object
 const app = express();
-const port = 8080;
+let port = 8080;
+if (process.env.PORT) {
+    port = Number(process.env.PORT);
+}
 
-// This is so you can see every incoming request (from GameBus) in console
+// Needed for POSTing
 app.use(
-    expressWinston.logger({
-        transports: [new winston.transports.Console()],
-        format: winston.format.combine(winston.format.colorize(), winston.format.prettyPrint())
+    express.urlencoded({
+        extended: false
     })
 );
 
 app.use(express.json());
+app.use(cors());
 
 // ---- Do not add routes above this line! ----
 app.use(require('./routes'));

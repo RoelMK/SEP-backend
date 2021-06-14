@@ -1,10 +1,12 @@
 import { XOR } from 'ts-xor';
+import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseUnit } from '../../gb/models/glucoseModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
-import FoodParser, { FoodSource } from '../food/foodParser';
-import GlucoseParser, { GlucoseSource } from '../glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../insulin/insulinParser';
-import { DataParser, DataSource } from './dataParser';
+import { FoodSource } from '../food/foodParser';
+import { GlucoseSource } from '../glucose/glucoseParser';
+import { InsulinSource } from '../insulin/insulinParser';
+
+import { DataParser, DataSource, OutputDataType } from './dataParser';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -26,11 +28,12 @@ export default class NightscoutParser extends DataParser {
      */
     constructor(
         nightScoutHost: string,
+        userInfo: GameBusToken,
         token?: string,
         private testEntries?: NightScoutEntryModel[],
         private testTreatments?: NightScoutTreatmentModel[]
     ) {
-        super(DataSource.NIGHTSCOUT, '');
+        super(DataSource.NIGHTSCOUT, '', userInfo);
         this.nsClient = new NightScoutClient(nightScoutHost, token);
     }
 
@@ -87,6 +90,9 @@ export default class NightscoutParser extends DataParser {
      * Function that is called (async) that creates the parsers and filters the data to the correct parsers
      */
     async process() {
+        // retrieve when the file was parsed for the last time
+        this.retrieveLastUpdate(this.nsClient.getNightscoutHost());
+
         if (this.testEntries === undefined || this.testTreatments === undefined) {
             // TODO note to self use parse with parameter or just individual funtions as below
             // does not matter for result and below needs less overhead
@@ -100,22 +106,20 @@ export default class NightscoutParser extends DataParser {
             this.nightScoutTreatments = this.testTreatments;
         }
 
-        this.glucoseParser = new GlucoseParser(
-            this.nightScoutEntries,
-            GlucoseSource.NIGHTSCOUT,
-            this.dateFormat,
-            this.glucoseUnit
-        );
+        // create parsers
+        this.createParser(OutputDataType.GLUCOSE, this.nightScoutEntries, GlucoseSource.NIGHTSCOUT);
 
         const foodTreatments: NightScoutTreatmentModel[] = this.filterFood();
-        this.foodParser = new FoodParser(foodTreatments, FoodSource.NIGHTSCOUT, this.dateFormat);
+        this.createParser(OutputDataType.FOOD, foodTreatments, FoodSource.NIGHTSCOUT);
 
         const insulinTreatments: NightScoutTreatmentModel[] = this.filterInsulin();
-        this.insulinParser = new InsulinParser(
-            insulinTreatments,
-            InsulinSource.NIGHTSCOUT,
-            this.dateFormat
-        );
+        this.createParser(OutputDataType.INSULIN, insulinTreatments, InsulinSource.NIGHTSCOUT);
+
+        // post data
+        await this.postProcessedData();
+
+        // update the timestamp of newest parsed entry to this file
+        this.setLastUpdate(this.nsClient.getNightscoutHost(), this.getLastProcessedTimestamp());
     }
 
     /**

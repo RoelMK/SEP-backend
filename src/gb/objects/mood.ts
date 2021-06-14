@@ -26,10 +26,17 @@ export class Mood extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of MoodModels
      */
-    static convertResponseToMoodModels(response: ActivityGETData[]): MoodModel[] {
-        return response.map((response: ActivityGETData) => {
-            return this.convertMoodResponseToModel(response);
-        });
+    static convertResponseToMoodModels(response: ActivityGETData[] | undefined): MoodModel[] {
+        if (!response) {
+            return [];
+        }
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertMoodResponseToModel(response);
+            });
     }
 
     /**
@@ -185,7 +192,7 @@ export class Mood extends GameBusObject {
      * @param model New model (with ID of old model), must have activityId
      * @param playerId ID of player
      */
-    async putSingleMoodActivity(
+    public async putSingleMoodActivity(
         model: MoodModel,
         playerId: number,
         headers?: Headers,

@@ -11,6 +11,7 @@ import {
 } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
+import { Keys } from './keys';
 
 //const util = require('util')
 
@@ -18,13 +19,12 @@ import { GameBusObject } from './base';
  * Class for food-specific functions
  */
 export class Food extends GameBusObject {
-    public foodGameDescriptor = 'Nutrition_Diary';
-    public foodGameDescriptorID = 58;
-
     /**
      * Function that post a single model for a given player
      * @param model model to be POSTed
      * @param playerID playerID of player for who this is posted
+     * @param headers request headers
+     * @param query request query parameters
      */
     async postSingleFoodActivity(
         model: FoodModel,
@@ -38,9 +38,11 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * Function that posts multiple food models for a given player
+     * @param models models to be POSTed
      * @param playerID playerID of player for who this is posted
+     * @param headers request headers
+     * @param query request query
      */
     async postMultipleFoodActivities(
         models: FoodModel[],
@@ -58,10 +60,12 @@ export class Food extends GameBusObject {
 
     /**
      * Function that creates a POSTData from a model and playerID
+     * @param model FoodModel object
+     * @param playerID player ID of the user
      */
     public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: this.foodGameDescriptor,
+            gameDescriptorTK: Keys.foodTranslationKey,
             dataProviderName: this.activity.dataProviderName,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -81,10 +85,12 @@ export class Food extends GameBusObject {
 
     /**
      * Function that creates a POSTData from a model and playerID with ID's instead of TK's
+     * @param model FoodModel object
+     * @param playerID player ID of the user
      */
     public toIDPOSTData(model: FoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.foodGameDescriptorID,
+            gameDescriptor: Keys.foodGameDescriptorID,
             dataProvider: this.activity.dataProviderID,
             image: '', //TODO add image?
             date: model.timestamp,
@@ -101,6 +107,9 @@ export class Food extends GameBusObject {
 
     /**
      * Function that returns all fooddata
+     * @param playerID player ID of the user
+     * @param headers request headers
+     * @param query request query parameters
      * @returns All food activities
      */
     async getAllFoodActivities(
@@ -110,7 +119,7 @@ export class Food extends GameBusObject {
     ): Promise<FoodModel[]> {
         const result = await this.activity.getAllActivitiesWithGd(
             playerId,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             headers,
             query
         );
@@ -142,7 +151,7 @@ export class Food extends GameBusObject {
             playerId,
             startDate,
             endDate,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             order,
             limit,
             page,
@@ -173,7 +182,7 @@ export class Food extends GameBusObject {
         const result = await this.activity.getActivitiesOnUnixDateWithGd(
             playerId,
             date,
-            [this.foodGameDescriptor],
+            [Keys.foodTranslationKey],
             order,
             limit,
             page,
@@ -196,7 +205,19 @@ export class Food extends GameBusObject {
         const model: FoodModel = {
             timestamp: activities[0].timestamp,
             carbohydrates: 0,
-            activityId: response.id
+            activityId: response.id,
+            // For graphing activities it's easier if the missing properties are set to null, so we do that here
+            calories: null,
+            meal_type: null,
+            glycemic_index: null,
+            fat: null,
+            saturatedFat: null,
+            proteins: null,
+            fibers: null,
+            salt: null,
+            water: null,
+            sugars: null,
+            description: null
         };
         //console.log(response)
         //console.log(activities)
@@ -215,10 +236,17 @@ export class Food extends GameBusObject {
      * @param response Array of ActivityGETData (response)
      * @returns Array of GlucoseModels
      */
-    static convertResponseToFoodModels(response: ActivityGETData[]): FoodModel[] {
-        return response.map((response: ActivityGETData) => {
-            return this.convertResponseToFoodModel(response);
-        });
+    static convertResponseToFoodModels(response: ActivityGETData[] | undefined): FoodModel[] {
+        if (!response) {
+            return [];
+        }
+        return response
+            .filter((response: ActivityGETData) => {
+                return response.propertyInstances.length > 0;
+            })
+            .map((response: ActivityGETData) => {
+                return this.convertResponseToFoodModel(response);
+            });
     }
 }
 

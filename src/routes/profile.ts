@@ -27,7 +27,16 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
             }
         }
         // We cannot handle this specific request, no data for the user.
-        return res.status(503).send();
+        return res
+            .status(503)
+            .json({
+                timestamp: -1,
+                activityId: -1,
+                weight: null,
+                length: null,
+                age: null
+            })
+            .send();
     }
 });
 
@@ -49,8 +58,8 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
     const bmi: BMIModel = {
         // necessary properties
         timestamp: new Date().getTime(),
-        weight: parseInt(req.query.weight),
-        length: parseInt(req.query.length),
+        weight: parseFloat(req.query.weight),
+        length: parseFloat(req.query.length),
         age: parseInt(req.query.age),
         // optional properties are added when specified
         ...(req.query.gender && { gender: req.query.gender }),

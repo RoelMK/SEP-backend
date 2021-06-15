@@ -8,6 +8,8 @@ import { Glucose } from './objects/glucose';
 import { Insulin } from './objects/insulin';
 import { Mood } from './objects/mood';
 import FormData from 'form-data';
+import { Circle } from './objects/circle';
+import { Challenge } from './objects/challenge';
 import { BMI } from './objects/bmi';
 import { User } from './objects/user';
 const endpoint = 'https://api3.gamebus.eu/v2/';
@@ -22,6 +24,8 @@ export class GameBusClient {
     private gamebusGlucose: Glucose;
     private gamebusInsulin: Insulin;
     private gamebusMood: Mood;
+    private gamebusCircle: Circle;
+    private gamebusChallenge: Challenge;
     private gamebusBMI: BMI;
     private gamebusUser: User;
 
@@ -36,6 +40,8 @@ export class GameBusClient {
         this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
         this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
         this.gamebusMood = new Mood(this.gamebusActivity, true);
+        this.gamebusCircle = new Circle(this, true);
+        this.gamebusChallenge = new Challenge(this, true);
         this.gamebusBMI = new BMI(this.gamebusActivity, true);
         this.gamebusUser = new User(this, true);
     }
@@ -63,6 +69,14 @@ export class GameBusClient {
 
     mood(): Mood {
         return this.gamebusMood;
+    }
+
+    circle(): Circle {
+        return this.gamebusCircle;
+    }
+
+    challenge(): Challenge {
+        return this.gamebusChallenge;
     }
 
     bmi(): BMI {

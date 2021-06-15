@@ -63,7 +63,8 @@ export interface GameDescriptorReference {
     translationKey: string;
     image: string | null;
     type: string; //not sure if this is always there
-    isAggregate: boolean; //not sure if this is alway there
+    miniGames?: any[];
+    isAggregate: boolean | null; //not sure if this is alway there
 }
 
 export interface DataProviderReference {
@@ -85,7 +86,7 @@ export interface PropertyInstanceProperty {
     baseUnit: string;
     inputType: string;
     aggregationStrategy: string;
-    propertyPermissions: any[]; // Probably not needed
+    propertyPermissions: PropertyPermissionsReference[]; // Probably not needed
 }
 
 export interface SupportReference {
@@ -124,3 +125,83 @@ export interface NotificationParams {
 }
 
 //TODO add output interfaces for getPlayer and getUser
+
+export interface PropertyPermissionsReference {
+    id: number;
+    index: any;
+    lastUpdate: any;
+    decisionNote: any;
+    state: any;
+    gameDescriptor: GameDescriptorReference;
+    allowedValues: any[];
+}
+
+export interface CircleGETData {
+    id: number;
+    name: string;
+    image: string | null;
+    type: string;
+    description: string;
+    isPrivate: boolean;
+    removed: boolean;
+    leadersCanLogActivities: boolean;
+    leadersCanSignUpPlayers: boolean;
+    autoAcceptMembershipRequests: boolean;
+    displayPersonalPointsToCircleMembersInMutualChallenges: boolean;
+    displayPersonalPointsToCircleMembers: boolean;
+    withNudging: boolean;
+    creator: UserReference;
+    memberships: MembershipReference[];
+    participations: any[];
+    showChallengeRights: any[];
+    chats: any[];
+}
+
+export interface MembershipReference {
+    id: number;
+    state: string;
+    player: UserReference;
+    initiatorOfMembership: UserReference;
+    initiatorOfLeadership: UserReference | null; //not sure
+}
+
+export interface ChallengePOSTData {
+    name: string;
+    description: null | string;
+    image: null | string;
+    websiteURL: null | string;
+    minCircleSize: number;
+    maxCircleSize: number;
+    availableDate: string | number;
+    startDate: string | number;
+    endDate: string | number;
+    rewardDescription: any;
+    rewardInfo: any;
+    target: any;
+    contenders: any;
+    withNudging: any;
+    rules: ChallengeRulesPOSTData[];
+    circles: number[];
+}
+
+export interface ChallengeRulesPOSTData {
+    id: any;
+    name: string;
+    image: string | null;
+    imageRequired: boolean;
+    gameDescriptors: any;
+    maxTimesFired: any;
+    minDaysBetweenFire: any;
+    conditions: ChallengeConditionsPOSTData[];
+    points: Points[];
+}
+
+export interface ChallengeConditionsPOSTData {
+    property: number;
+    operator: string;
+    value: string;
+}
+
+export interface Points {
+    dataProviders?: DataProviderReference;
+}

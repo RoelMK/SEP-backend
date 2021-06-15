@@ -191,25 +191,12 @@ test('Get a list of normal users requested supervisor role from a supervisor', (
     dbClient.close();
 });
 
-test('Get child token', () => {
-    const supervisorEmail = 'supervisor@gmail.com';
-
-    const dbClient = new DBClient();
-    expect(dbClient.getChildTokens(supervisorEmail)).toEqual([
-        {
-            player_token: '123'
-        }
-    ]);
-    dbClient.close();
-});
-
 test('Retract supervisor permission', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
     expect(dbClient.retractPermission(childEmail, supervisorEmail)).toBeTruthy();
-    expect(dbClient.getChildTokens(supervisorEmail)).toEqual([]);
     dbClient.close();
 });
 

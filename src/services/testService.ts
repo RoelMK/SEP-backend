@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DBClient } from '../db/dbClient';
-import { GameBusToken } from '../gb/auth/tokenHandler';
+import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+import { ExerciseModel } from '../gb/models/exerciseModel';
+import { MoodModel } from '../gb/models/moodModel';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -9,6 +12,7 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
+import { DateFormat, parseDate } from './utils/dates';
 
 const dummyUserInfo: GameBusToken = {
     playerId: 'testing',
@@ -146,9 +150,171 @@ function cleanParses() {
     new DBClient().cleanFileParseEvents();
 }
 
+function addActivities(pId: string, gbAccessToken: string) {
+    const moods: MoodModel[] = [
+        {
+            timestamp: parseDate(
+                '15-06-2021 08:14',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 14:11',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 18:24',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 20:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 11:10',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 15:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 19:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 10:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 13:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 21:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 07:45',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 14:47',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 18:12',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '19-06-2021 11:21',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '19-06-2021 15:34',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 3
+        }
+    ];
+
+    const gbClient: GameBusClient = new GameBusClient(new TokenHandler(gbAccessToken, '', pId));
+    gbClient.mood().postMultipleMoodActivities(moods, parseInt(pId));
+}
+
 export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
-testNightScout();
+//testNightScout();
 //testParseNewest();
+
+const pId = '';
+const accessToken = '';
+//addActivities(pId, accessToken);

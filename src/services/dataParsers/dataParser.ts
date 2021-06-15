@@ -204,7 +204,7 @@ export abstract class DataParser {
                         this.insulinParser.insulinData.length > 0
                             ? this.insulinParser.insulinData
                             : null,
-                    mood: this.moodParser && this.moodParser.mood ? this.moodParser.mood : null
+                    mood: this.moodParser && this.moodParser.mood ? [this.moodParser.mood] : null
                 } as CombinedDataParserOutput;
 
             default:

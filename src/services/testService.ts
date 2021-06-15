@@ -60,7 +60,7 @@ async function testOneDrive() {
     //console.log(await new OneDriveExcelParser().parse(testPath, DataSource.FOOD_DIARY, 'token'))
 
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(
-        'Documents/DeepFolder/diary.xlsx',
+        'foodDiary_AT.xlsx',
         dummyUserInfo,
         testToken
     );
@@ -197,5 +197,4 @@ export const testToken = '';
 //testOneDrive();
 //testNightScout();
 //testGb();
-//testNightScout();
 //testParseNewest();

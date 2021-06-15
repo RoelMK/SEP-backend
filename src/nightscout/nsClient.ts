@@ -128,7 +128,19 @@ export class NightScoutClient {
         }
     }
 
+    /**
+     * Helper function to retrieve nightscout host
+     * @returns the website URL of the nightscout instance
+     */
     getNightscoutHost(): string {
         return this.nightScoutHost;
+    }
+
+    /**
+     * Helper function to retrieve the maximum amount of entries or treatments
+     * @returns the maximum amount of entries or treatments that are retrieved
+     */
+    getMaxRetrieved(): number {
+        return this.MAX_NIGHTSCOUT;
     }
 }

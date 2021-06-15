@@ -4,7 +4,7 @@ import {
     logToken,
     request,
     getSupervisors,
-    getTokens,
+    getToken,
     getApproved,
     getChildren,
     checkSupervisor,
@@ -28,9 +28,9 @@ afterAll(() => {
 });
 
 /**
- * Purpose: Check if trying to start multiple login attempts is handled properly.
+ * Purpose: Check full supervisor functionality.
  */
-test('check full supervisor request', async () => {
+test('check full supervisor functionality', async () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
@@ -43,11 +43,12 @@ test('check full supervisor request', async () => {
         }
     ]);
     expect(await request(supervisorEmail, childEmail, true)).toBeTruthy();
-    expect(await getTokens(supervisorEmail)).toEqual([
-        {
-            player_token: '1'
-        }
-    ]);
+    expect(await getToken(childEmail, supervisorEmail)).toEqual({
+        confirmed: 1,
+        player_email: 'child@gmail.com',
+        player_token: '1',
+        supervisor_email: 'supervisor@gmail.com'
+    });
     expect(await getApproved(childEmail)).toEqual([
         {
             supervisor_email: 'supervisor@gmail.com'

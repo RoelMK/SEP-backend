@@ -1,7 +1,11 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import { DataParser } from '../services/dataParsers/dataParser';
+import {
+    CombinedDataParserOutput,
+    DataParser,
+    OutputDataType
+} from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -9,6 +13,7 @@ import { EetMeterParser } from '../services/dataParsers/eetmeterParser';
 import { checkJwt } from '../middlewares/checkJwt';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import axios from 'axios';
+import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -124,7 +129,11 @@ async function uploadFile(req: any, res: any, dataParser: DataParser): Promise<v
     }
 
     // process has been completed
-    res.status(200).send('File has been parsed.');
+    const parsedData: CombinedDataParserOutput = dataParser.getData(
+        OutputDataType.ALL
+    ) as CombinedDataParserOutput;
+
+    res.json(DataEndpoint.unionData(parsedData as EndpointData));
     console.log(dataParser.getFilePath());
     console.log('upload succesful');
 }

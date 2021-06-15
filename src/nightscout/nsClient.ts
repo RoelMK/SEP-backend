@@ -9,6 +9,9 @@ export class NightScoutClient {
     // Axios client
     private readonly client: AxiosInstance;
 
+    // maximum amount of nightscout instances returned per request
+    private readonly MAX_NIGHTSCOUT = 10000;
+
     constructor(private nightScoutHost: string, private token?: string) {
         this.client = axios.create();
     }
@@ -78,7 +81,7 @@ export class NightScoutClient {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/entries/sgv.json?token=${this.token}`,
+                url: `${this.nightScoutHost}/api/v1/entries/sgv.json?find[date][$gte]=0&count=${this.MAX_NIGHTSCOUT}`,
                 data: {}
             };
             const response = await this.client.request(config);
@@ -96,7 +99,7 @@ export class NightScoutClient {
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
-                url: `${this.nightScoutHost}/api/v1/treatments?token=${this.token}`,
+                url: `${this.nightScoutHost}/api/v1/treatments?find[created_at][$gte]=1970-01-01&count=${this.MAX_NIGHTSCOUT}`,
                 data: {}
             };
             const response = await this.client.request(config);

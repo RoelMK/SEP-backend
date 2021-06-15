@@ -138,17 +138,19 @@ export class Mood extends GameBusObject {
         page?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityGETData[]> {
-        return await this.activity.getAllActivitiesBetweenUnixWithGd(
-            playerId,
-            startDate,
-            endDate,
-            [this.moodTranslationKey],
-            order,
-            limit,
-            page,
-            headers,
-            query
+    ): Promise<MoodModel[]> {
+        return Mood.convertResponseToMoodModels(
+            await this.activity.getAllActivitiesBetweenUnixWithGd(
+                playerId,
+                startDate,
+                endDate,
+                [this.moodTranslationKey],
+                order,
+                limit,
+                page,
+                headers,
+                query
+            )
         );
     }
 

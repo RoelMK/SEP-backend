@@ -10,6 +10,7 @@ import { Mood } from './objects/mood';
 import FormData from 'form-data';
 import { Circle } from './objects/circle';
 import { Challenge } from './objects/challenge';
+import { BMI } from './objects/bmi';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
@@ -24,6 +25,7 @@ export class GameBusClient {
     private gamebusMood: Mood;
     private gamebusCircle: Circle;
     private gamebusChallenge: Challenge;
+    private gamebusBMI: BMI;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
@@ -38,6 +40,7 @@ export class GameBusClient {
         this.gamebusMood = new Mood(this.gamebusActivity, true);
         this.gamebusCircle = new Circle(this, true);
         this.gamebusChallenge = new Challenge(this, true);
+        this.gamebusBMI = new BMI(this.gamebusActivity, true);
     }
 
     // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
@@ -71,6 +74,10 @@ export class GameBusClient {
 
     challenge(): Challenge {
         return this.gamebusChallenge;
+    }
+    
+    bmi(): BMI {
+        return this.gamebusBMI;
     }
 
     /**
@@ -202,12 +209,14 @@ export class GameBusClient {
 
         try {
             // Make request with method, url, headers and body
+            //const t1 = new Date().getTime();
             const response = await this.client.request({
                 method: method,
                 url: url,
                 headers: requestHeaders,
                 data: body
             });
+            //console.log(url + ' took ms: ' + (new Date().getTime() - t1));
             // If full response is needed, return it
             if (fullResponse) {
                 return response;

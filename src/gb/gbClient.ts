@@ -75,7 +75,7 @@ export class GameBusClient {
     challenge(): Challenge {
         return this.gamebusChallenge;
     }
-    
+
     bmi(): BMI {
         return this.gamebusBMI;
     }

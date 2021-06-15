@@ -82,19 +82,19 @@ async function testNightScout() {
 
     const testTreatmentInsulin: NightScoutTreatmentModel = {
         eventType: 'Correction Bolus',
-        created_at: '2021-05-29',
+        created_at: '2021-06-14',
         insulin: 4,
-        notes: 'BlablaTest',
+        notes: 'insulin treatment',
         enteredBy: 'Frans'
     };
 
     const testTreatmentFood: NightScoutTreatmentModel = {
         eventType: 'Carb correction',
-        created_at: '2021-05-29',
+        created_at: '2021-06-14',
         carbs: 20,
         protein: 20,
         fat: 20,
-        notes: 'BlablaTestFood',
+        notes: 'food treatment',
         enteredBy: 'Jan'
     };
 
@@ -102,17 +102,16 @@ async function testNightScout() {
         'https://nightscout-sep.herokuapp.com',
         'rink-27f591f2e4730a68'
     );
-    await nsClient.postEntry(testEntry);
-    await nsClient.postTreatment(testTreatmentFood);
+    //await nsClient.postEntry(testEntry);
+    //await nsClient.postTreatment(testTreatmentFood);
 
-    console.log(await nsClient.getEntries());
-    //console.log(await nsClient.getTreatments());
-    console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
+    //console.log(await nsClient.getEntries());
+    console.log(await nsClient.getTreatments());
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
         dummyUserInfo,
-        '' // TODO why don't you need a token to get entry data??
+        ''
     );
     await nsParser.process();
     console.log(nsParser.getData(OutputDataType.FOOD));
@@ -198,5 +197,5 @@ export const testToken = '';
 //testOneDrive();
 //testNightScout();
 //testGb();
-testNightScout();
+//testNightScout();
 //testParseNewest();

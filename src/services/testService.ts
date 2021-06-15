@@ -101,17 +101,15 @@ async function testNightScout() {
         'https://nightscout-sep.herokuapp.com',
         'rink-27f591f2e4730a68'
     );
-    await nsClient.postEntry(testEntry);
-    await nsClient.postTreatment(testTreatmentFood);
 
-    console.log(await nsClient.getEntries());
+    //console.log(await nsClient.getEntries());
     //console.log(await nsClient.getTreatments());
-    console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
+    //console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
         dummyUserInfo,
-        '' // TODO why don't you need a token to get entry data??
+        ''
     );
     await nsParser.process();
     console.log(nsParser.getData(OutputDataType.FOOD));
@@ -150,7 +148,7 @@ function cleanParses() {
     new DBClient().cleanFileParseEvents();
 }
 
-function addActivities(pId: string, gbAccessToken: string) {
+function addMoods(pId: string, gbAccessToken: string) {
     const moods: MoodModel[] = [
         {
             timestamp: parseDate(
@@ -308,13 +306,191 @@ function addActivities(pId: string, gbAccessToken: string) {
     gbClient.mood().postMultipleMoodActivities(moods, parseInt(pId));
 }
 
+function addNightScout(check: boolean) {
+    if (!check) {
+        console.log('turn on')
+        return;
+    }
+    const entries: NightScoutEntryModel[] = [
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 79,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:05',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 81,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:10',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 85,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:15',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 86,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:20',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 84,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:25',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 83,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:30',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 81,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:35',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 78,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:40',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 76,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:45',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 73,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        }
+    ];
+
+    const insulin: NightScoutTreatmentModel[] = [
+        {
+            eventType: 'Correction Bolus',
+            created_at: '2021-06-14T12:01:00',
+            insulin: 4,
+            notes: 'before lunch',
+            enteredBy: 'Frans'
+        },
+        {
+            eventType: 'Correction Bolus',
+            created_at: '2021-06-14T13:15:00',
+            insulin: 2,
+            notes: 'correction',
+            enteredBy: 'Frans'
+        }
+    ];
+
+    const nsClient = new NightScoutClient(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68'
+    );
+
+    entries.forEach((entry) => {
+        nsClient.postEntry(entry);
+    });
+    insulin.forEach((insulin) => {
+        nsClient.postTreatment(insulin);
+    });
+}
+
 export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
-//testNightScout();
+testNightScout();
+//addNightScout(false); // set to true to add, prevents accidental double adding
 //testParseNewest();
-
 const pId = '';
 const accessToken = '';
-//addActivities(pId, accessToken);
+//addMoods(pId, accessToken);

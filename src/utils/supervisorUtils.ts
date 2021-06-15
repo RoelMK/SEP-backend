@@ -40,10 +40,10 @@ export function request(supervisorEmail: string, childEmail: string, confirmed?:
  * @param supervisorEmail Email of the supervisor user
  * @returns Tokens of children for a supervisor user
  */
-export function getTokens(supervisorEmail: string): any {
+export function getToken(childEmail, supervisorEmail: string): any {
     const dbClient: DBClient = new DBClient();
-    const tokens = dbClient.getChildTokens(supervisorEmail);
-    return tokens;
+    const token = dbClient.getToken(supervisorEmail, childEmail);
+    return token;
 }
 
 /**

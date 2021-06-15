@@ -144,7 +144,17 @@ export class DataEndpoint {
                     dateSlice.startDate.getTime(),
                     dateSlice.endDate.getTime()
                 );
-        } else {
+        }
+        try {
+            return await this.gbClient
+                .exercise()
+                .getExerciseActivityFromGdBetweenUnix(
+                    this.playerId,
+                    Object.values(ExerciseGameDescriptorNames),
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime()
+                );
+        } catch (e) {
             return [];
         }
     }

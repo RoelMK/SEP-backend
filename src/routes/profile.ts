@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { BMIModel } from '../gb/models/bmiModels';
+import { GameBusUser, Notification } from '../gb/models/gamebusModel';
 import { checkJwt } from '../middlewares/checkJwt';
 
 const profileRouter = Router();
@@ -17,7 +18,9 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
     );
 
     try {
-        const profileData: BMIModel = await gbClient.bmi().getLatestBMIActivity(req.user.playerId);
+        const bmiData: BMIModel = await gbClient.bmi().getLatestBMIActivity(req.user.playerId);
+        const userData: GameBusUser = await gbClient.user().getCurrentUser();
+        const profileData: UserProfile = { ...bmiData, ...userData };
         return res.status(200).json(profileData);
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -42,15 +45,15 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
  * Endpoint for posting profile data to gamebus
  */
 profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
+    if (!req.body.weight || !req.body.length || !req.body.age) {
+        return res.status(400).send('Weight, length or age is not specified');
+    }
     if (
-        !req.query.weight ||
-        !req.query.length ||
-        !req.query.age ||
-        parseFloat(req.query.weight) <= 0 ||
-        parseFloat(req.query.length) <= 0 ||
-        parseFloat(req.query.age) < 0
+        parseFloat(req.body.weight) <= 0 ||
+        parseFloat(req.body.length) <= 0 ||
+        parseFloat(req.body.age) < 0
     ) {
-        return res.status(400).send();
+        return res.status(400).send('Weight, length or age is invalid');
     }
 
     // use user info to create a GameBus client
@@ -62,13 +65,13 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
     const bmi: BMIModel = {
         // necessary properties
         timestamp: new Date().getTime(),
-        weight: parseFloat(req.query.weight),
-        length: parseFloat(req.query.length),
-        age: parseInt(req.query.age),
+        weight: parseFloat(req.body.weight),
+        length: parseFloat(req.body.length),
+        age: parseInt(req.body.age),
         // optional properties are added when specified
-        ...(req.query.gender && { gender: req.query.gender }),
-        ...(req.query.waistCircumference && { waistCircumference: req.query.waistCircumference }),
-        ...(req.query.bmi && { bmi: req.query.bmi })
+        ...(req.body.gender && { gender: req.body.gender }),
+        ...(req.body.waistCircumference && { waistCircumference: req.body.waistCircumference }),
+        ...(req.body.bmi && { bmi: req.body.bmi })
     };
 
     try {
@@ -87,4 +90,26 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
     }
 });
 
+interface UserProfile extends GameBusUser, BMIModel {
+    timestamp: number;
+    activityId?: number; // ID of GameBus activity
+    weight: number | null; // weight in kg, should not be optional since we POST it
+    length: number | null; // height in cm
+    age: number | null; // age in years
+    gender?: string | null; // Either m, f or o, optional since we don't really need it
+    waistCircumference?: number | null; // in cm, optional since we don't really need it
+    bmi?: number | null; // in kg/m^2, optional since we don't really need it
+    id: number; // user ID
+    email: string;
+    firstName: string;
+    lastName: string;
+    image: string | null; // null if no image
+    registrationDate: number; // Unix timestamp in ms
+    isActivated: boolean; // email verified
+    language: string; // 'en' for English, 'nl' for Dutch
+    player: {
+        id: number; // player ID (as opposed to user ID)
+    };
+    notifications: Notification[];
+}
 module.exports = profileRouter;

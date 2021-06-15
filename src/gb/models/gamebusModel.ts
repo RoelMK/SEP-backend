@@ -94,4 +94,33 @@ export interface SupportReference {
     supporter: UserReference;
 }
 
+export interface GameBusUser {
+    id: number; // user ID
+    email: string;
+    firstName: string;
+    lastName: string;
+    image: string | null; // null if no image
+    registrationDate: number; // Unix timestamp in ms
+    isActivated: boolean; // email verified
+    language: string; // 'en' for English, 'nl' for Dutch
+    player: {
+        id: number; // player ID (as opposed to user ID)
+    };
+    notifications: Notification[];
+}
+
+export interface Notification {
+    id: number; // Notification ID
+    date: number; // Unix timestamp in ms
+    translationKey: string;
+    isRead: boolean;
+    overrideImportance: null | boolean;
+    params: NotificationParams[];
+}
+
+export interface NotificationParams {
+    paramKey: string;
+    paramValue: string | null;
+}
+
 //TODO add output interfaces for getPlayer and getUser

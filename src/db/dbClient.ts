@@ -223,15 +223,15 @@ export class DBClient {
      * @returns Tokens of normal users supervised by the
      * supervisor user associated with the supervisorEmail
      */
-    getChildTokens(supervisorEmail: string) {
+    getToken(supervisorEmail: string, childEmail: string) {
         try {
-            const tokens = this.db
+            const token = this.db
                 .prepare(
                     // eslint-disable-next-line max-len
-                    'SELECT player_token FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.supervisor_email=? AND s.confirmed=True'
+                    'SELECT * FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.player_email=? AND s.supervisor_email=? AND s.confirmed=True'
                 )
-                .all(supervisorEmail);
-            return tokens;
+                .get(childEmail, supervisorEmail);
+            return token;
         } catch (e) {
             console.log(e);
             return undefined; // if an error occurs, return undefined
@@ -247,8 +247,13 @@ export class DBClient {
     logToken(email: string, token: string): boolean {
         try {
             const insrt = this.db.prepare(
-                `INSERT INTO tokens (player_email, player_token) 
-                                    VALUES(?, ?)`
+                // `INSERT INTO tokens (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE    
+                // name="A", age=19
+                // `
+
+                // `INSERT INTO tokens (player_email, player_token) 
+                //                     VALUES(?, ?)`
+                `REPLACE into tokens (player_email, player_token) values(?, ?)`
             );
             insrt.run(email, token);
             return true;

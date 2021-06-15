@@ -1,7 +1,7 @@
 import {
     logToken,
     request,
-    getTokens,
+    getToken,
     getSupervisors,
     getChildren,
     retractPermission,
@@ -30,7 +30,7 @@ supervisorRouter.post('/logToken', (req: any, res: any) => {
 });
 
 supervisorRouter.post('/request', (req: any, res: any) => {
-    if (!req.query.supervisorEmail || !req.query.childEmail) {
+    if (!req.body.supervisorEmail || !req.body.childEmail) {
         return res
             .status(404)
             .json({ success: false, message: 'Please provide supervisor email and child email' });
@@ -52,12 +52,12 @@ supervisorRouter.post('/request', (req: any, res: any) => {
     }
 });
 
-supervisorRouter.get('/getTokens', (req: any, res: any) => {
-    if (!req.query.supervisorEmail) {
-        return res.status(404).json({ success: false, message: 'Please provide supervisor email' });
+supervisorRouter.get('/getToken', (req: any, res: any) => {
+    if (!req.query.supervisorEmail || !req.query.childEmail) {
+        return res.status(404).json({ success: false, message: 'Please provide both emails' });
     }
-    const tokens = getTokens(req.query.supervisorEmail);
-    return res.status(200).json({ tokens: tokens });
+    const token = getToken(req.query.childEmail, req.query.supervisorEmail);
+    return res.status(200).json({ token: token });
 });
 
 supervisorRouter.get('/getSupervisors', (req: any, res: any) => {

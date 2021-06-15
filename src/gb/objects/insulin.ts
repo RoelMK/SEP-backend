@@ -56,17 +56,19 @@ export class Insulin extends GameBusObject {
         page?: number,
         headers?: Headers,
         query?: Query
-    ): Promise<ActivityGETData[]> {
-        return await this.activity.getAllActivitiesBetweenUnixWithGd(
-            playerId,
-            startDate,
-            endDate,
-            [Keys.insulinTranslationKey],
-            order,
-            limit,
-            page,
-            headers,
-            query
+    ): Promise<InsulinModel[]> {
+        return Insulin.convertResponseToInsulinModels(
+            await this.activity.getAllActivitiesBetweenUnixWithGd(
+                playerId,
+                startDate,
+                endDate,
+                [Keys.insulinTranslationKey],
+                order,
+                limit,
+                page,
+                headers,
+                query
+            )
         );
     }
 

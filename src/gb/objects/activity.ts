@@ -199,14 +199,14 @@ export class Activity {
             // Add rest of query
             ...query
         };
-        if (limit) {
+        if (limit !== undefined) {
             dateQuery = {
                 ...dateQuery,
                 // Use the given limit only if specified
                 limit: limit.toString()
             };
         }
-        if (page) {
+        if (page !== undefined) {
             dateQuery = {
                 ...dateQuery,
                 // Use page number only if specified

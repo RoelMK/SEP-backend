@@ -5,13 +5,17 @@ import { GlucoseModel } from '../gb/models/glucoseModel';
 import { InsulinModel } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
 import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
-import { Insulin } from '../gb/objects/insulin';
-import { Mood } from '../gb/objects/mood';
 import { DateSlice } from './utils/dates';
 import { nullUnion, UnionModel } from '../gb/models/unionModel';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve
+
+    // maximum number of pages that are requested
+    private readonly MAX_PAGES = 1000;
+
+    // maximum number of entries that are requested per page
+    private readonly PAGE_LIMIT = 500;
 
     /**
      * Constructs the endpoint object.
@@ -59,7 +63,8 @@ export class DataEndpoint {
             });
         });
         await Promise.all(Object.values(promises));
-
+        //console.log(data.glucose?.length);
+        //console.log(data.food?.length);
         return data;
     }
 
@@ -136,14 +141,23 @@ export class DataEndpoint {
      */
     private async retrieveExerciseData(dateSlice: DateSlice): Promise<ExerciseModel[]> {
         if (this.parameters.exerciseTypes) {
-            return await this.gbClient
-                .exercise()
-                .getExerciseActivityFromGdBetweenUnix(
-                    this.playerId,
-                    this.parameters.exerciseTypes,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
-                );
+            let models: ExerciseModel[] = [];
+            for (let page = 0; page < this.MAX_PAGES; page++) {
+                const pageModels: ExerciseModel[] = await this.gbClient
+                    .exercise()
+                    .getExerciseActivityFromGdBetweenUnix(
+                        this.playerId,
+                        this.parameters.exerciseTypes,
+                        dateSlice.startDate.getTime(),
+                        dateSlice.endDate.getTime(),
+                        undefined,
+                        this.PAGE_LIMIT,
+                        page
+                    );
+                models = models.concat(pageModels);
+                if (pageModels.length < this.PAGE_LIMIT) break;
+            }
+            return models;
         } else {
             return [];
         }
@@ -155,13 +169,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved glucose data
      */
     private async retrieveGlucoseData(dateSlice: DateSlice): Promise<GlucoseModel[]> {
-        return await this.gbClient
-            .glucose()
-            .getGlucoseActivitiesBetweenUnix(
-                this.playerId,
-                dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime()
-            );
+        let models: GlucoseModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: GlucoseModel[] = await this.gbClient
+                .glucose()
+                .getGlucoseActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -170,15 +193,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved insulin data
      */
     private async retrieveInsulinData(dateSlice: DateSlice): Promise<InsulinModel[]> {
-        return Insulin.convertResponseToInsulinModels(
-            await this.gbClient
+        let models: InsulinModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: InsulinModel[] = await this.gbClient
                 .insulin()
                 .getInsulinActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
-                )
-        );
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -187,15 +217,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved mood data
      */
     private async retrieveMoodData(dateSlice: DateSlice): Promise<MoodModel[]> {
-        return Mood.convertResponseToMoodModels(
-            await this.gbClient
+        let models: MoodModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: MoodModel[] = await this.gbClient
                 .mood()
                 .getMoodActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
-                )
-        );
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -204,13 +241,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved food data
      */
     private async retrieveFoodData(dateSlice: DateSlice): Promise<FoodModel[]> {
-        return await this.gbClient
-            .food()
-            .getFoodActivitiesBetweenUnix(
-                this.playerId,
-                dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime()
-            );
+        let models: FoodModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: FoodModel[] = await this.gbClient
+                .food()
+                .getFoodActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 }
 

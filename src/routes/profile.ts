@@ -45,13 +45,13 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
  * Endpoint for posting profile data to gamebus
  */
 profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
-    if (!req.query.weight || !req.query.length || !req.query.age) {
+    if (!req.body.weight || !req.body.length || !req.body.age) {
         return res.status(400).send('Weight, length or age is not specified');
     }
     if (
-        parseFloat(req.query.weight) <= 0 ||
-        parseFloat(req.query.length) <= 0 ||
-        parseFloat(req.query.age) < 0
+        parseFloat(req.body.weight) <= 0 ||
+        parseFloat(req.body.length) <= 0 ||
+        parseFloat(req.body.age) < 0
     ) {
         return res.status(400).send('Weight, length or age is invalid');
     }
@@ -65,13 +65,13 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
     const bmi: BMIModel = {
         // necessary properties
         timestamp: new Date().getTime(),
-        weight: parseFloat(req.query.weight),
-        length: parseFloat(req.query.length),
-        age: parseInt(req.query.age),
+        weight: parseFloat(req.body.weight),
+        length: parseFloat(req.body.length),
+        age: parseInt(req.body.age),
         // optional properties are added when specified
-        ...(req.query.gender && { gender: req.query.gender }),
-        ...(req.query.waistCircumference && { waistCircumference: req.query.waistCircumference }),
-        ...(req.query.bmi && { bmi: req.query.bmi })
+        ...(req.body.gender && { gender: req.body.gender }),
+        ...(req.body.waistCircumference && { waistCircumference: req.body.waistCircumference }),
+        ...(req.body.bmi && { bmi: req.body.bmi })
     };
 
     try {

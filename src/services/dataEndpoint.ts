@@ -136,31 +136,53 @@ export class DataEndpoint {
 
     /**
      * Retrieves exercise data from GameBus.
+     * If no exercise types are specified, all exercise types are retrieved
      * @param dateSlice Timeframe to retrieve data for
      * @returns Awaitable array of retrieved exercise data
      */
     private async retrieveExerciseData(dateSlice: DateSlice): Promise<ExerciseModel[]> {
         if (this.parameters.exerciseTypes) {
-            let models: ExerciseModel[] = [];
-            for (let page = 0; page < this.MAX_PAGES; page++) {
-                const pageModels: ExerciseModel[] = await this.gbClient
-                    .exercise()
-                    .getExerciseActivityFromGdBetweenUnix(
-                        this.playerId,
-                        this.parameters.exerciseTypes,
-                        dateSlice.startDate.getTime(),
-                        dateSlice.endDate.getTime(),
-                        undefined,
-                        this.PAGE_LIMIT,
-                        page
-                    );
-                models = models.concat(pageModels);
-                if (pageModels.length < this.PAGE_LIMIT) break;
-            }
-            return models;
-        } else {
+            // retrieve specified exercise types
+            return await this.retrieveExercisePages(dateSlice, this.parameters.exerciseTypes);
+        }
+        try {
+            // retrieve all exercise types
+            return await this.retrieveExercisePages(
+                dateSlice,
+                Object.values(ExerciseGameDescriptorNames)
+            );
+        } catch (e) {
             return [];
         }
+    }
+
+    /**
+     *
+     * @param dateSlice Timeframe to retrieve data for
+     * @param exerciseTypes array of exercise types
+     * @returns exercise models
+     */
+    private async retrieveExercisePages(
+        dateSlice: DateSlice,
+        exerciseTypes: ExerciseGameDescriptorNames[]
+    ): Promise<ExerciseModel[]> {
+        let models: ExerciseModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: ExerciseModel[] = await this.gbClient
+                .exercise()
+                .getExerciseActivityFromGdBetweenUnix(
+                    this.playerId,
+                    exerciseTypes,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**

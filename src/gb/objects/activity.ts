@@ -410,7 +410,7 @@ export class Activity {
      * Deletes all activities
      * @param playerID playerID
      */
-    async deleteAllActivities(playerID: number) {
+    async deleteAllActivities(playerID: number): Promise<void> {
         const activities: ActivityGETData[] = await this.getAllActivities(playerID);
         for (const act of activities) {
             await this.deleteActivityById(act.id);

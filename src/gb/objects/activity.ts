@@ -392,7 +392,7 @@ export class Activity {
      * @param query Any queries
      * @returns The response
      */
-     async deleteActivityById(
+    async deleteActivityById(
         activityId: number,
         headers?: Headers,
         query?: Query
@@ -410,15 +410,12 @@ export class Activity {
      * Deletes all activities
      * @param playerID playerID
      */
-     async deleteAllActivities(
-        playerID: number,
-    ){
-        let activities : ActivityGETData[]= await this.getAllActivities(playerID)
-        for(let act of activities) {
-            await this.deleteActivityById(act.id)
+    async deleteAllActivities(playerID: number) {
+        const activities: ActivityGETData[] = await this.getAllActivities(playerID);
+        for (const act of activities) {
+            await this.deleteActivityById(act.id);
         }
     }
-        
 
     /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels

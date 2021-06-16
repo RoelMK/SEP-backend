@@ -247,7 +247,7 @@ export class DBClient {
     logToken(email: string, token: string): boolean {
         try {
             const insrt = this.db.prepare(
-                `REPLACE into tokens (player_email, player_token) values(?, ?)`
+                'REPLACE into tokens (player_email, player_token) values(?, ?)'
             );
             insrt.run(email, token);
             return true;

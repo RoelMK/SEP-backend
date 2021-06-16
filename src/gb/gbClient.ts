@@ -181,7 +181,7 @@ export class GameBusClient {
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
      */
-     async delete(
+    async delete(
         path: string,
         headers?: Headers,
         query?: Query,

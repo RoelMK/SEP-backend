@@ -9,7 +9,7 @@ import { Keys } from '../gb/objects/keys';
  * @param gamebusClient Client authenticated as user
  * @param playerId ID of player from which to remove all activities
  */
-export async function flush(gamebusClient?: GameBusClient, playerId?: number): void {
+export async function flush(gamebusClient?: GameBusClient, playerId?: number): Promise<void> {
     // Clean the database
     const dbClient = new DBClient();
     dbClient.reset();

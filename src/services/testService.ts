@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TokenHandler } from '../gb/auth/tokenHandler';
-import { GameBusClient } from '../gb/gbClient';
+import { GameBusClient, GameBusClient } from '../gb/gbClient';
 import { ChallengePOSTData } from '../gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
-import { MoodModel } from '../gb/models/moodModel';
+import { MoodModel, MoodModel } from '../gb/models/moodModel';
 import { DBClient } from '../db/dbClient';
-import { GameBusToken } from '../gb/auth/tokenHandler';
+import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
+
+import { ExerciseModel } from '../gb/models/exerciseModel';
+
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';
@@ -14,6 +17,7 @@ import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from './dataParsers/nightscoutParser';
+import { DateFormat, parseDate } from './utils/dates';
 
 const dummyUserInfo: GameBusToken = {
     playerId: 'testing',
@@ -102,11 +106,10 @@ async function testNightScout() {
         'https://nightscout-sep.herokuapp.com',
         'rink-27f591f2e4730a68'
     );
-    //await nsClient.postEntry(testEntry);
-    //await nsClient.postTreatment(testTreatmentFood);
 
     //console.log(await nsClient.getEntries());
-    console.log(await nsClient.getTreatments());
+    //console.log(await nsClient.getTreatments());
+    //console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
@@ -191,10 +194,349 @@ function cleanParses() {
     new DBClient().cleanFileParseEvents();
 }
 
+function addMoods(pId: string, gbAccessToken: string) {
+    const moods: MoodModel[] = [
+        {
+            timestamp: parseDate(
+                '15-06-2021 08:14',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 14:11',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 18:24',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 20:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 11:10',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 15:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '16-06-2021 19:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 10:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 13:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '17-06-2021 21:23',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 3,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 07:45',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 1
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 14:47',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 18:12',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 2
+        },
+        {
+            timestamp: parseDate(
+                '19-06-2021 11:21',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 1,
+            arousal: 3
+        },
+        {
+            timestamp: parseDate(
+                '19-06-2021 15:34',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            valence: 2,
+            arousal: 3
+        }
+    ];
+
+    const gbClient: GameBusClient = new GameBusClient(new TokenHandler(gbAccessToken, '', pId));
+    gbClient.mood().postMultipleMoodActivities(moods, parseInt(pId));
+}
+
+function addNightScout(check: boolean) {
+    if (!check) {
+        console.log('turn on');
+        return;
+    }
+    const entries: NightScoutEntryModel[] = [
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 79,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:05',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 81,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:10',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 85,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:15',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 86,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:20',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 84,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:25',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 83,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:30',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 81,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:35',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 78,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:40',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 76,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        },
+        {
+            type: 'sgv',
+            date: parseDate(
+                '14-06-2021 13:45',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            sgv: 73,
+            noise: 0,
+            filtered: 0,
+            unfiltered: 0,
+            rssi: 0
+        }
+    ];
+
+    const insulin: NightScoutTreatmentModel[] = [
+        {
+            eventType: 'Correction Bolus',
+            created_at: '2021-06-14T12:01:00',
+            insulin: 4,
+            notes: 'before lunch',
+            enteredBy: 'Frans'
+        },
+        {
+            eventType: 'Correction Bolus',
+            created_at: '2021-06-14T13:15:00',
+            insulin: 2,
+            notes: 'correction',
+            enteredBy: 'Frans'
+        }
+    ];
+
+    const nsClient = new NightScoutClient(
+        'https://nightscout-sep.herokuapp.com',
+        'rink-27f591f2e4730a68'
+    );
+
+    entries.forEach((entry) => {
+        nsClient.postEntry(entry);
+    });
+    insulin.forEach((insulin) => {
+        nsClient.postTreatment(insulin);
+    });
+}
+
 export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
 //testNightScout();
-//testGb();
+//addNightScout(false); // set to true to add, prevents accidental double adding
 //testParseNewest();
+const pId = '';
+const accessToken = '';
+//addMoods(pId, accessToken);

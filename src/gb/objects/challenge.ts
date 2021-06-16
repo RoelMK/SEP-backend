@@ -27,7 +27,7 @@ export class Challenge {
         };
 
         // URL can be created here as well
-        const gamebusUrl = this.gamebus.createURL(`challenges`, {
+        const gamebusUrl = this.gamebus.createURL('challenges', {
             dryrun: 'false',
             ...query
         });

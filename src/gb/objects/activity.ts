@@ -412,9 +412,13 @@ export class Activity {
      */
     async deleteAllActivities(playerID: number): Promise<void> {
         const activities: ActivityGETData[] = await this.getAllActivities(playerID);
+        if(activities.length === 0) {
+            return;
+        }
         for (const act of activities) {
             await this.deleteActivityById(act.id);
         }
+        await this.deleteAllActivities(playerID)
     }
 
     /**

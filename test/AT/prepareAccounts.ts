@@ -30,8 +30,10 @@ class AccountPreparation {
 
         // add data
         try {
+            // TODO: check dates sent in backend-discussion to make sure the data is on the correct dates
             await addMoods(this.gbAccessToken, this.playerId);
             console.log('mood added to the profile');
+            // TODO: addExercises
             await this.addGlucoseInsulin();
             console.log('glucose and insulin added to the profile');
             await this.addFood();

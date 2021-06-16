@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { TokenHandler } from '../gb/auth/tokenHandler';
+import { GameBusClient } from '../gb/gbClient';
+import { ChallengePOSTData } from '../gb/models/gamebusModel';
+import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
+import { MoodModel } from '../gb/models/moodModel';
 import { DBClient } from '../db/dbClient';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import { NightScoutClient } from '../nightscout/nsClient';
@@ -55,7 +60,7 @@ async function testOneDrive() {
     //console.log(await new OneDriveExcelParser().parse(testPath, DataSource.FOOD_DIARY, 'token'))
 
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(
-        'Documents/DeepFolder/diary.xlsx',
+        'foodDiary_AT.xlsx',
         dummyUserInfo,
         testToken
     );
@@ -77,19 +82,19 @@ async function testNightScout() {
 
     const testTreatmentInsulin: NightScoutTreatmentModel = {
         eventType: 'Correction Bolus',
-        created_at: '2021-05-29',
+        created_at: '2021-06-14',
         insulin: 4,
-        notes: 'BlablaTest',
+        notes: 'insulin treatment',
         enteredBy: 'Frans'
     };
 
     const testTreatmentFood: NightScoutTreatmentModel = {
         eventType: 'Carb correction',
-        created_at: '2021-05-29',
+        created_at: '2021-06-14',
         carbs: 20,
         protein: 20,
         fat: 20,
-        notes: 'BlablaTestFood',
+        notes: 'food treatment',
         enteredBy: 'Jan'
     };
 
@@ -97,17 +102,16 @@ async function testNightScout() {
         'https://nightscout-sep.herokuapp.com',
         'rink-27f591f2e4730a68'
     );
-    await nsClient.postEntry(testEntry);
-    await nsClient.postTreatment(testTreatmentFood);
+    //await nsClient.postEntry(testEntry);
+    //await nsClient.postTreatment(testTreatmentFood);
 
-    console.log(await nsClient.getEntries());
-    //console.log(await nsClient.getTreatments());
-    console.log('Glucose in the unit: ' + (await nsClient.getGlucoseUnit()));
+    //console.log(await nsClient.getEntries());
+    console.log(await nsClient.getTreatments());
 
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',
         dummyUserInfo,
-        '' // TODO why don't you need a token to get entry data??
+        ''
     );
     await nsParser.process();
     console.log(nsParser.getData(OutputDataType.FOOD));
@@ -115,6 +119,47 @@ async function testNightScout() {
     console.log(nsParser.getData(OutputDataType.GLUCOSE));
 }
 
+async function testGb() {
+    const client = new GameBusClient(new TokenHandler('', '', ''));
+    const challenge: ChallengePOSTData = {
+        name: 'challenge name 11',
+        description: null,
+        image: null,
+        websiteURL: 'https://www.google.com/',
+        minCircleSize: 1,
+        maxCircleSize: 1,
+        availableDate: '2021-06-06T00:00:00.000+02:00',
+        startDate: '2021-06-07T13:00:00.000+02:00',
+        endDate: '2021-07-05T23:59:59.999+02:00',
+        rewardDescription: null,
+        rewardInfo: null,
+        target: 0,
+        contenders: 1,
+        withNudging: false,
+        rules: [
+            {
+                id: null,
+                name: 'rule 1',
+                image: null,
+                imageRequired: false,
+                gameDescriptors: [1, 2, 3, 4, 5],
+                maxTimesFired: 1,
+                minDaysBetweenFire: 0,
+                conditions: [
+                    {
+                        property: 1,
+                        operator: 'STRICTLY_GREATER',
+                        value: '1'
+                    }
+                ],
+                points: []
+            }
+        ],
+        circles: [0]
+    };
+    const response = await client.challenge().postChallenge(challenge);
+    console.log(response);
+}
 async function testParseNewest() {
     const client = new DBClient();
     client.initialize();
@@ -150,5 +195,6 @@ export const testToken = '';
 //testAbbott();
 //testExcel();
 //testOneDrive();
-testNightScout();
+//testNightScout();
+//testGb();
 //testParseNewest();

@@ -27,7 +27,18 @@ export class DBClient {
         );
 
         this.db.exec(
+            // eslint-disable-next-line max-len
             'CREATE TABLE IF NOT EXISTS file_parse_events (player_id TEXT, file_name TEXT NOT NULL, time_stamp bigint NOT NULL, primary key (player_id, file_name));'
+        );
+
+        this.db.exec(
+            // eslint-disable-next-line max-len
+            'CREATE TABLE IF NOT EXISTS supervisor (player_email TEXT, supervisor_email TEXT NOT NULL, confirmed BOOLEAN DEFAULT False, primary key (player_email, supervisor_email));'
+        );
+
+        this.db.exec(
+            // eslint-disable-next-line max-len
+            'CREATE TABLE IF NOT EXISTS tokens (player_email TEXT, player_token TEXT NOT NULL, primary key (player_email));'
         );
     }
 
@@ -38,6 +49,8 @@ export class DBClient {
         this.db.exec(
             'DROP TABLE IF EXISTS login_attempts; DROP TABLE IF EXISTS file_parse_events;'
         );
+        this.db.exec('DROP TABLE IF EXISTS supervisor');
+        this.db.exec('DROP TABLE IF EXISTS tokens');
         this.initialize();
     }
 
@@ -201,6 +214,178 @@ export class DBClient {
             deleteAll.run();
         } catch (e) {
             return undefined; // if an error occurs, return undefined
+        }
+    }
+
+    /**
+     * Get all children tokens for a supervisor user
+     * @param supervisorEmail Email of a supervisor user
+     * @returns Tokens of normal users supervised by the
+     * supervisor user associated with the supervisorEmail
+     */
+    getToken(supervisorEmail: string, childEmail: string) {
+        try {
+            const token = this.db
+                .prepare(
+                    // eslint-disable-next-line max-len
+                    'SELECT * FROM tokens as t, supervisor as s WHERE t.player_email=s.player_email AND s.player_email=? AND s.supervisor_email=? AND s.confirmed=True'
+                )
+                .get(childEmail, supervisorEmail);
+            return token;
+        } catch (e) {
+            console.log(e);
+            return undefined; // if an error occurs, return undefined
+        }
+    }
+
+    /**
+     * Logs a new token for a user in the tokens table
+     * @param email Email of the user
+     * @param token Token of the user
+     * @returns
+     */
+    logToken(email: string, token: string): boolean {
+        try {
+            const insrt = this.db.prepare(
+                `REPLACE into tokens (player_email, player_token) values(?, ?)`
+            );
+            insrt.run(email, token);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Request supervisor role from a user
+     * @param supervisorEmail Email of the supervisor user
+     * @param childEmail Email of the normal user
+     * @returns
+     */
+    requestSupervisor(supervisorEmail: string, childEmail: string): boolean {
+        try {
+            const insrt = this.db.prepare(
+                `INSERT INTO supervisor (supervisor_email, player_email)
+                                        VALUES(?,?)`
+            );
+            insrt.run(supervisorEmail, childEmail);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Confirm supervisor role for a user
+     * @param supervisorEmail Email of the supervisor user
+     * @param childEmail Email of the normal user
+     * @returns
+     */
+    confirmSupervisor(supervisorEmail: string, childEmail: string): boolean {
+        try {
+            const cnfrm = this.db.prepare(
+                'UPDATE supervisor SET confirmed=True WHERE supervisor_email=? AND player_email=?'
+            );
+            cnfrm.run(supervisorEmail, childEmail);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Get a list of requested supervisors for a normal user
+     * @param childEmail Email of the normal user
+     * @returns List of requested supervisors
+     */
+    getRequestedSupervisors(childEmail: string) {
+        try {
+            const supervisors = this.db
+                .prepare(
+                    'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False'
+                )
+                .all(childEmail);
+            return supervisors;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Get a list of normal users for a supervisor
+     * @param supervisorEmail Email of the supervisor user
+     * @returns List of normal users for a supervisor
+     */
+    getChildren(supervisorEmail: string) {
+        try {
+            const children = this.db
+                .prepare(
+                    'SELECT player_email FROM supervisor WHERE supervisor_email=? AND confirmed=True'
+                )
+                .all(supervisorEmail);
+            return children;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Get a list of supervisors which role is approved
+     * by the normal users
+     * @param childEmail Email of the normal user
+     * @returns List of supervisors which role is approved
+     */
+    getApprovedSupervisors(childEmail: string) {
+        try {
+            const supervisors = this.db
+                .prepare(
+                    'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=True'
+                )
+                .all(childEmail);
+            return supervisors;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Check if the user is a supervisor
+     * @param email Email of the user
+     * @returns Email of the supervisor user
+     */
+    checkRole(email: string): boolean {
+        try {
+            const supervisor = this.db
+                .prepare('SELECT supervisor_email FROM supervisor WHERE supervisor_email=?')
+                .get(email);
+            return supervisor.supervisor_email === email;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+     * Retract supervisor role for a user
+     * @param childEmail Email of the supervisor user
+     * @param supervisorEmail Email of the supervisor user
+     * @returns
+     */
+    retractPermission(childEmail: string, supervisorEmail: string): boolean {
+        try {
+            const stmt = this.db.prepare(
+                'DELETE FROM supervisor WHERE player_email=? AND supervisor_email=?'
+            );
+            stmt.run(childEmail, supervisorEmail);
+            return true;
+        } catch (e) {
+            return false;
         }
     }
 

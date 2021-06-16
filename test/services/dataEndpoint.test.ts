@@ -272,7 +272,9 @@ describe('with mocked requests get call', () => {
     });
 
     test('request exercise with parameters', async () => {
-        const endpoint = new DataEndpoint(client, 0, ['exercise'], { exerciseTypes: [] });
+        const endpoint = new DataEndpoint(client, 0, ['exercise'], {
+            exerciseTypes: [ExerciseGameDescriptorNames.RUN]
+        });
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ exercise: [] });
     });
@@ -282,7 +284,7 @@ describe('with mocked requests get call', () => {
             client,
             0,
             ['food', 'mood', 'glucose', 'insulin', 'exercise'],
-            {}
+            { exerciseTypes: [ExerciseGameDescriptorNames.RUN] }
         );
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ food: [], mood: [], glucose: [], insulin: [], exercise: [] });

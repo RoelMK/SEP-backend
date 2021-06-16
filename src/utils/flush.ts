@@ -27,7 +27,7 @@ export async function flushActivities(
  *
  * Can be used to prepare for AT test
  */
-export async function flushDB(gamebusClient: GameBusClient, playerId: number): Promise<void> {
+export async function flushDB(): Promise<void> {
     // Clean the database
     console.log('Cleaning database...');
     const dbClient = new DBClient();
@@ -35,8 +35,8 @@ export async function flushDB(gamebusClient: GameBusClient, playerId: number): P
     dbClient.close();
 }
 
-export async function disconnectDataProvider(gamebusClient: GameBusClient, playerId: number){
-        // Disconnect our data provider
-        console.log('Disconnecting data provider...');
-        await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
+export async function disconnectDataProvider(gamebusClient: GameBusClient, playerId: number) {
+    // Disconnect our data provider
+    console.log('Disconnecting data provider...');
+    await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
 }

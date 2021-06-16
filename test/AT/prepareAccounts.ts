@@ -25,11 +25,8 @@ class AccountPreparation {
      * Needs to be connected to the dataprovider
      */
     async fillAccount() {
-        const gbClient: GameBusClient = new GameBusClient(
-            new TokenHandler(this.gbAccessToken, '', this.playerId)
-        );
         // flush db to ensure all data is uploaded
-        flushDB(gbClient, parseInt(this.playerId));
+        flushDB();
 
         // add data
         try {
@@ -83,7 +80,7 @@ class AccountPreparation {
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
         // flush db afterwards to make sure not only newest data is uploaded
-        flushDB(gbClient, parseInt(this.playerId));
+        flushDB();
 
         // disconnect the data provider for testing environment
         disconnectDataProvider(gbClient, parseInt(this.playerId));
@@ -100,4 +97,7 @@ const prep: AccountPreparation = new AccountPreparation(
     '00867a4a-5818-4f6f-80c8-74777a04a5cb',
     '601'
 );
+
+// make sure to be connected to the dataprovider BEFORE doing this
+// afterwards you are automatically disconnected
 prepareTestUser(prep);

@@ -43,6 +43,8 @@ export enum ExerciseGameDescriptorNames {
 
 // To prevent cyclic dependencies, these translation keys and IDs are put here
 export abstract class Keys {
+    static readonly dataProviderId = 18;
+
     static readonly foodTranslationKey = 'Nutrition_Diary';
     static readonly foodGameDescriptorID = 58;
 
@@ -51,6 +53,9 @@ export abstract class Keys {
 
     static readonly glucoseTranslationKey = 'BLOOD_GLUCOSE_MSMT';
     static readonly glucoseGameDescriptorID = 61;
+
+    static readonly moodTranslationKey = 'LOG_MOOD';
+    static readonly moodGameDescriptorID = 1062;
 
     static readonly bmiTranslationKey = 'BODY_MASS_INDEX';
     static readonly bmiGameDescriptorID = 1078;

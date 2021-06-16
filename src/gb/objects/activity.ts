@@ -418,6 +418,22 @@ export class Activity {
     }
 
     /**
+     * Function to check whether the specified activity is of the correct type (correct game descriptor)
+     * @param activityId ID of activity to check
+     * @param expectedTranslationKey Expected translation key of activity's game descriptor
+     * @returns true if the activity's game descriptor matches the expected game descriptor
+     */
+    async checkActivityType(
+        activityId: number,
+        expectedTranslationKey: string,
+        headers?: Headers,
+        query?: Query
+    ): Promise<boolean> {
+        const activity: ActivityGETData = await this.getActivityById(activityId, headers, query);
+        return activity.gameDescriptor.translationKey === expectedTranslationKey;
+    }
+
+    /**
      * Example method that converts the ActivityGETData to (multiple) ActivityModels
      * @param activity Response from GET activity request
      * @returns List of ActivityModels corresponding to the response from the GET

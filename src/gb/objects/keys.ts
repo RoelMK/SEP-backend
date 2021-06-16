@@ -54,6 +54,9 @@ export abstract class Keys {
     static readonly glucoseTranslationKey = 'BLOOD_GLUCOSE_MSMT';
     static readonly glucoseGameDescriptorID = 61;
 
+    static readonly moodTranslationKey = 'LOG_MOOD';
+    static readonly moodGameDescriptorID = 1062;
+
     static readonly bmiTranslationKey = 'BODY_MASS_INDEX';
     static readonly bmiGameDescriptorID = 1078;
 }

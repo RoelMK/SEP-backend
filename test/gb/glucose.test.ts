@@ -158,7 +158,7 @@ describe('with mocked glucose get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=BLOOD_GLUCOSE_MSMT&start=19-04-2021&end=21-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=BLOOD_GLUCOSE_MSMT&end=21-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(glucose).toEqual([]);

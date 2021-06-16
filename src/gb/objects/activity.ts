@@ -1,5 +1,5 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
-import { format, addDays } from 'date-fns';
+import { format, addDays, addYears } from 'date-fns';
 import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import {
     ActivityGETData,
@@ -136,8 +136,12 @@ export class Activity {
                     Keys.foodTranslationKey,
                     Keys.insulinTranslationKey,
                     Keys.glucoseTranslationKey,
+                    Keys.moodTranslationKey,
                     Keys.bmiTranslationKey
                 ].join(','),
+                // This is done because of an issue in GameBus where the default /activities endpoint
+                // does not return all activities
+                end: format(addYears(new Date(), 10), queryDateFormat),
                 ...query
             },
             this.authRequired

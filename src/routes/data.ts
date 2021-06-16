@@ -22,6 +22,9 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
         req.query.endDate = req.query.startDate;
     }
 
+    console.log(req.user.playerId);
+    console.log(req.user.accessToken);
+
     // Get date slices to retrieve data for
     const dateSlice: DateSlice = {
         startDate: parseDate(req.query.startDate, DateFormat.ENDPOINT_DATE) as Date,

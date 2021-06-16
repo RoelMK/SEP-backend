@@ -135,7 +135,8 @@ export class Activity {
                     Object.values(ExerciseGameDescriptorNames),
                     Keys.foodTranslationKey,
                     Keys.insulinTranslationKey,
-                    Keys.glucoseTranslationKey
+                    Keys.glucoseTranslationKey,
+                    Keys.bmiTranslationKey
                 ].join(','),
                 ...query
             },

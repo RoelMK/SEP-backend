@@ -25,8 +25,6 @@ export default class FoodDiaryParser extends DataParser {
         // specify the type of parsed data
         this.foodDiaryData = (await this.parse()) as FoodDiaryData[];
 
-        console.log('Parsing food is okay');
-
         // check for erroneous input
         if (!FoodDiaryDataGuard(this.foodDiaryData[0])) {
             throw new InputError('Wrong input data for processing food diary data!');

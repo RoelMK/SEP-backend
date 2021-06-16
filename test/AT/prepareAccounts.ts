@@ -2,29 +2,54 @@ import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
-import { flush } from '../../src/utils/flush';
+import { disconnectDataProvider, flushActivities, flushDB } from '../../src/utils/flush';
 import { addMoods } from './prepareMoods';
 
 class AccountPreparation {
-    constructor(private gbAccessToken: string, private playerId: string) {}
+    constructor(private gbAccessToken: string, private playerId: string) {
+        console.log(`Preparing account ${this.playerId}`);
+    }
 
+    /**
+     * Clears all data from an account
+     */
     cleanUpAccount() {
         const gbClient: GameBusClient = new GameBusClient(
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
-        console.log(this.playerId + ':' + this.gbAccessToken);
-        flush(gbClient, parseInt(this.playerId));
+        flushActivities(gbClient, parseInt(this.playerId));
     }
 
+    /**
+     * Fills a test account with relevant data
+     * Needs to be connected to the dataprovider
+     */
     async fillAccount() {
-        await addMoods(this.gbAccessToken, this.playerId);
-        console.log('mood done');
-        await this.addGlucoseInsulin();
-        console.log('glucose done');
-        await this.addFood();
-        console.log('food done');
+        const gbClient: GameBusClient = new GameBusClient(
+            new TokenHandler(this.gbAccessToken, '', this.playerId)
+        );
+        // flush db to ensure all data is uploaded
+        flushDB(gbClient, parseInt(this.playerId));
+
+        // add data
+        try {
+            await addMoods(this.gbAccessToken, this.playerId);
+            console.log('mood added to the profile');
+            await this.addGlucoseInsulin();
+            console.log('glucose and insulin added to the profile');
+            await this.addFood();
+            console.log('food added to the profile');
+        } catch (e) {
+            console.log(e.message);
+            console.log(
+                'You have entered invalid credentials OR did not connect to the data provider, please do so'
+            );
+        }
     }
 
+    /**
+     * Adds glucose and insulin to a test account
+     */
     private async addGlucoseInsulin() {
         const userInfo: GameBusToken = {
             playerId: this.playerId,
@@ -36,6 +61,9 @@ class AccountPreparation {
         ).process();
     }
 
+    /**
+     * Adds food to a test account
+     */
     private async addFood() {
         const userInfo: GameBusToken = {
             playerId: this.playerId,
@@ -46,11 +74,30 @@ class AccountPreparation {
             userInfo
         ).process();
     }
+
+    /**
+     * Empties the database before a test
+     */
+    prepareEnvironment() {
+        const gbClient: GameBusClient = new GameBusClient(
+            new TokenHandler(this.gbAccessToken, '', this.playerId)
+        );
+        // flush db afterwards to make sure not only newest data is uploaded
+        flushDB(gbClient, parseInt(this.playerId));
+
+        // disconnect the data provider for testing environment
+        disconnectDataProvider(gbClient, parseInt(this.playerId));
+        console.log('Environment prepared - good to go!');
+    }
 }
 
+async function prepareTestUser(prep: AccountPreparation) {
+    prep.cleanUpAccount();
+    await prep.fillAccount();
+    prep.prepareEnvironment();
+}
 const prep: AccountPreparation = new AccountPreparation(
     '00867a4a-5818-4f6f-80c8-74777a04a5cb',
     '601'
 );
-//prep.cleanUpAccount();
-prep.fillAccount();
+prepareTestUser(prep);

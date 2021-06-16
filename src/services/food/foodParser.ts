@@ -63,7 +63,6 @@ export default class FoodParser extends ModelParser {
             return;
         }
         try {
-            console.log(this.userInfo);
             if (this.foodData && this.foodData.length > 0)
                 await this.gbClient
                     .food()

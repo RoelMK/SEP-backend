@@ -1,30 +1,42 @@
 import { DBClient } from '../db/dbClient';
 import { GameBusClient } from '../gb/gbClient';
 import { Keys } from '../gb/objects/keys';
-
 /**
- * Function that will both clear the database and can also clear a given user's GameBus account from activities
+ * Function that will clear a given user's GameBus account from activities
  *
  * Can be used to prepare for AT test
  * @param gamebusClient Client authenticated as user
  * @param playerId ID of player from which to remove all activities
  */
-export async function flush(gamebusClient?: GameBusClient, playerId?: number): Promise<void> {
-    // Clean the database
-    console.log('Cleaning database...');
-    const dbClient = new DBClient();
-    dbClient.reset();
-    dbClient.close();
-
+export async function flushActivities(
+    gamebusClient?: GameBusClient,
+    playerId?: number
+): Promise<void> {
     // If client and player ID provided, clear the account
     if (gamebusClient && playerId) {
         // Delete all user activities
         console.log('Deleting GameBus activities...');
         await gamebusClient.activity().deleteAllActivities(playerId);
-        // Disconnect our data provider
-        console.log('Disconnecting data provider...');
-        await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
     }
 
     console.log('Flush complete!');
+}
+
+/**
+ * Function that will clear a given user's database and disconnect from our dataprovider
+ *
+ * Can be used to prepare for AT test
+ */
+export async function flushDB(gamebusClient: GameBusClient, playerId: number): Promise<void> {
+    // Clean the database
+    console.log('Cleaning database...');
+    const dbClient = new DBClient();
+    dbClient.reset();
+    dbClient.close();
+}
+
+export async function disconnectDataProvider(gamebusClient: GameBusClient, playerId: number){
+        // Disconnect our data provider
+        console.log('Disconnecting data provider...');
+        await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
 }

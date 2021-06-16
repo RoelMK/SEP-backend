@@ -13,15 +13,15 @@ import Router from 'express';
 const supervisorRouter = Router();
 
 supervisorRouter.post('/logToken', (req: any, res: any) => {
-    if (!req.query.email || !req.query.token) {
+    if (!req.body.email || !req.body.token) {
         return res
             .status(404)
             .json({ success: false, message: 'Please provide email address and token' });
     }
-    const success = logToken(req.query.email, req.query.token);
+    const success = logToken(req.body.email, req.body.token);
 
     if (success) {
-        return res.status(200).json({ success: true, email: req.query.email });
+        return res.status(200).json({ success: true, email: req.body.email });
     } else {
         return res
             .status(400)
@@ -87,7 +87,7 @@ supervisorRouter.get('/getChildren', (req: any, res: any) => {
 });
 
 supervisorRouter.post('/retractPermission', (req: any, res: any) => {
-    if (!req.query.supervisorEmail || !req.query.childEmail) {
+    if (!req.body.supervisorEmail || !req.body.childEmail) {
         return res
             .status(404)
             .json({ success: false, message: 'Please provide supervisor email and child email' });

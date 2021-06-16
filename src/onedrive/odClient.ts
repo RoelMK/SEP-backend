@@ -27,7 +27,7 @@ export class OneDriveClient {
         this.client = axios.create();
         this.token = token;
         this.fileName = fileName;
-        this.folderPath = folderPath;
+        this.folderPath = folderPath != '' ? folderPath : undefined;
         this.tableName = tableName ?? 'fooddiary'; //Default values
         this.sheetName = sheetName ?? 'Sheet1'; //Default value
         this.doPrint = doPrint ?? false;

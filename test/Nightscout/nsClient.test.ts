@@ -70,7 +70,10 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: nightscoutUrl + '/api/v1/entries/sgv.json?token=' + token
+                url:
+                    nightscoutUrl +
+                    '/api/v1/entries/sgv.json?find[date][$gte]=0&count=' +
+                    client.getMaxRetrieved()
             })
         );
     });
@@ -82,7 +85,10 @@ describe('GameBusClient requests', () => {
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
-                url: nightscoutUrl + '/api/v1/treatments?token=' + token
+                url:
+                    nightscoutUrl +
+                    '/api/v1/treatments?find[created_at][$gte]=1970-01-01&count=' +
+                    client.getMaxRetrieved()
             })
         );
     });

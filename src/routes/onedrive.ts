@@ -3,6 +3,8 @@ import { GameBusToken } from '../gb/auth/tokenHandler';
 import { checkJwt } from '../middlewares/checkJwt';
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
+import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParser';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -43,7 +45,12 @@ onedriveRouter.get('/onedrive', checkJwt, async (req: any, res: any) => {
         return;
     }
 
-    res.status(200).send('OneDrive food diary was successfuly imported');
+    // process has been completed
+    const parsedData: CombinedDataParserOutput = fdParser.getData(
+        OutputDataType.ALL
+    ) as CombinedDataParserOutput;
+
+    res.json(DataEndpoint.unionData(parsedData as EndpointData));
     console.log('OneDrive food diary was successfuly imported');
 });
 

@@ -2,6 +2,8 @@ import axios from 'axios';
 import { Router } from 'express';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import { checkJwt } from '../middlewares/checkJwt';
+import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParser';
 import NightscoutParser from '../services/dataParsers/nightscoutParser';
 
 const nightscoutRouter = Router();
@@ -38,7 +40,12 @@ nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
         return;
     }
 
-    res.status(200).send('Nightscout data was updated correctly');
+    // process has been completed
+    const parsedData: CombinedDataParserOutput = nsParser.getData(
+        OutputDataType.ALL
+    ) as CombinedDataParserOutput;
+
+    res.json(DataEndpoint.unionData(parsedData as EndpointData));
     console.log('Nightscout data was updated successfully');
 });
 

@@ -3,11 +3,21 @@ import { GameBusClient } from '../../src/gb/gbClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import { disconnectDataProvider, flushActivities, flushDB } from '../../src/utils/flush';
+import { request } from '../../src/utils/supervisorUtils';
 import { addMoods } from './prepareMoods';
 
 class AccountPreparation {
     constructor(private gbAccessToken: string, private playerId: string) {
         console.log(`Preparing account ${this.playerId}`);
+    }
+
+    /**
+     * Prepares the current user for the ATP
+     */
+    async prepare() {
+        this.cleanUpAccount();
+        await this.fillAccount();
+        this.prepareEnvironment();
     }
 
     /**
@@ -88,16 +98,28 @@ class AccountPreparation {
     }
 }
 
-async function prepareTestUser(prep: AccountPreparation) {
-    prep.cleanUpAccount();
-    await prep.fillAccount();
-    prep.prepareEnvironment();
+async function prepareATPusers() {
+    const prepNormal: AccountPreparation = new AccountPreparation(
+        '5e16bdbe-b2ce-45b2-a027-52d7cab0c94a',
+        '600'
+    );
+    await prepNormal.prepare();
+
+    const prepSupervisor1: AccountPreparation = new AccountPreparation(
+        '00867a4a-5818-4f6f-80c8-74777a04a5cb',
+        '601'
+    );
+    await prepSupervisor1.prepare();
+    request('atp@supervisor.nl', 'atp@user.nl', false);
+
+    const prepSupervisor2: AccountPreparation = new AccountPreparation(
+        '4eae250a-8691-4ebb-81e5-07f7feaacdd1',
+        '603'
+    );
+    await prepSupervisor2.prepare();
+    request('atp@supervisor2.nl', 'atp@user.nl', true);
 }
-const prep: AccountPreparation = new AccountPreparation(
-    '00867a4a-5818-4f6f-80c8-74777a04a5cb',
-    '601'
-);
 
 // make sure to be connected to the dataprovider BEFORE doing this
 // afterwards you are automatically disconnected
-prepareTestUser(prep);
+prepareATPusers();

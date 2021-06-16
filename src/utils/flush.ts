@@ -11,6 +11,7 @@ import { Keys } from '../gb/objects/keys';
  */
 export async function flush(gamebusClient?: GameBusClient, playerId?: number): Promise<void> {
     // Clean the database
+    console.log('Cleaning database...');
     const dbClient = new DBClient();
     dbClient.reset();
     dbClient.close();
@@ -18,8 +19,12 @@ export async function flush(gamebusClient?: GameBusClient, playerId?: number): P
     // If client and player ID provided, clear the account
     if (gamebusClient && playerId) {
         // Delete all user activities
+        console.log('Deleting GameBus activities...');
         await gamebusClient.activity().deleteAllActivities(playerId);
         // Disconnect our data provider
+        console.log('Disconnecting data provider...');
         await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
     }
+
+    console.log('Flush complete!');
 }

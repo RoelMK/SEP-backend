@@ -119,19 +119,24 @@ export class DataEndpoint {
 
         // add all known values to the UnionModel
         const unionModel: UnionModel = unionDict[data.timestamp];
-        Object.keys(data).forEach((dataKey) => {
-            const value = data[dataKey];
-
-            // some keys had to be renamed due to duplicate conflicts
-            if (Object.keys(unionRenamed[dataType]).includes(dataKey)) {
-                unionModel[unionRenamed[dataType][dataKey]] = value;
-            }
-            // only recover wanted information
-            else if (!Object.keys(nullUnion).includes(dataKey)) return;
-
-            // otherwise set value
-            unionModel[dataKey] = value;
-        });
+        unionModel.timestamp = data.timestamp;
+        switch (dataType) {
+            case DataType.FOOD:
+                unionModel.food = data;
+                break;
+            case DataType.MOOD:
+                unionModel.mood = data;
+                break;
+            case DataType.GLUCOSE:
+                unionModel.glucose = data;
+                break;
+            case DataType.INSULIN:
+                unionModel.insulin = data;
+                break;
+            case DataType.EXERCISE:
+                unionModel.exercise = data;
+                break;
+        }
     }
 
     /**

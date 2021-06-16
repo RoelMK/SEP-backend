@@ -27,7 +27,8 @@ export class User {
         await this.gamebus.delete(
             `players/${playerId}/data-providers/${dataProviderId}`,
             headers,
-            query
+            query,
+            this.authRequired
         );
     }
 }

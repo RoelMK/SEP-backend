@@ -5,7 +5,7 @@ import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../mode
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames } from './keys';
+import { ExerciseGameDescriptorNames, Keys } from './keys';
 
 /**
  * Class for exercise-specific functions
@@ -29,7 +29,8 @@ export class Exercise extends GameBusObject {
     public toPOSTData(model: ExerciseModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: ExerciseGameDescriptorNames[model.type],
-            dataProviderName: "Mibida",
+            // We post as Mibida since they have all permissions
+            dataProviderName: Keys.mibidaDataProviderTK,
             image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],

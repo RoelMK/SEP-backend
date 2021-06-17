@@ -59,4 +59,8 @@ export abstract class Keys {
 
     static readonly bmiTranslationKey = 'BODY_MASS_INDEX';
     static readonly bmiGameDescriptorID = 1078;
+
+    // For posting activities
+    static readonly mibidaDataProviderTK = 'Mibida';
+    static readonly mibidaDataProviderId = 10;
 }

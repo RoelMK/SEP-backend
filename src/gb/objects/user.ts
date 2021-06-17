@@ -31,4 +31,19 @@ export class User {
             this.authRequired
         );
     }
+
+    async connectDataProvider(
+        playerId: number,
+        dataProviderId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        await this.gamebus.post(
+            `players/${playerId}/data-providers/${dataProviderId}`,
+            undefined,
+            headers,
+            query,
+            this.authRequired
+        );
+    }
 }

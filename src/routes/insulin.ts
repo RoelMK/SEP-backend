@@ -77,7 +77,7 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         const response = await gbClient
             .insulin()
             .postSingleInsulinActivity(insulinModel, req.user.playerId);
-        res.status(201).json(response);
+        return res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

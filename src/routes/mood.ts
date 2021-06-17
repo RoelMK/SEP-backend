@@ -17,11 +17,10 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
     // Check if given timestamps are valid
     if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
         // Bad request
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: 'Mood model provided is formatted incorrectly'
         });
-        return;
     }
 
     // Create initial model
@@ -60,7 +59,7 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
                 .mood()
                 .putSingleMoodActivity(moodModel, req.user.playerId);
             // Send 201 and new model
-            res.status(201).json(response);
+            return res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Unauthorized -> 401
@@ -77,7 +76,7 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
     try {
         // POST model
         const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
-        res.status(201).json(response);
+        return res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

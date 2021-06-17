@@ -31,7 +31,7 @@ export class Activity {
         activityId: number,
         headers?: Headers,
         query?: Query
-    ): Promise<unknown> {
+    ): Promise<ActivityGETData[]> {
         // PUT uses form-data, so we convert data to string and send as form data
         const body = new FormData();
         body.append('activity', JSON.stringify(data));
@@ -57,7 +57,7 @@ export class Activity {
             headers: gamebusHeaders,
             data: body
         });
-        return response.data;
+        return response.data as ActivityGETData[];
     }
 
     /**

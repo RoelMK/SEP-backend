@@ -24,7 +24,7 @@ const uploadRouter = Router();
  * format: one of eetmeter, abbott or fooddiary
  */
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
-    if (!req.query.format) {
+    if (!req.body.format) {
         res.status(400).send('Specify file format!');
         return;
     }
@@ -39,7 +39,7 @@ uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any
     // use original filename to create a more readable file path
     const filePath: string = getFileDirectory(req.file.path, false) + '\\' + req.file.originalname;
     let promise: Promise<void>;
-    switch (req.query.format) {
+    switch (req.body.format) {
         case 'eetmeter':
             promise = uploadFile(req, res, new EetMeterParser(filePath, userInfo));
             break;

@@ -98,16 +98,6 @@ export function addMoods(gbAccessToken: string, pId: string) {
         },
         {
             timestamp: parseDate(
-                '17-06-2021 21:23',
-                DateFormat.ENDPOINT_DATETIME,
-                new Date(),
-                true
-            ) as number,
-            valence: 3,
-            arousal: 1
-        },
-        {
-            timestamp: parseDate(
                 '18-06-2021 07:45',
                 DateFormat.ENDPOINT_DATETIME,
                 new Date(),
@@ -115,46 +105,6 @@ export function addMoods(gbAccessToken: string, pId: string) {
             ) as number,
             valence: 1,
             arousal: 1
-        },
-        {
-            timestamp: parseDate(
-                '18-06-2021 14:47',
-                DateFormat.ENDPOINT_DATETIME,
-                new Date(),
-                true
-            ) as number,
-            valence: 1,
-            arousal: 2
-        },
-        {
-            timestamp: parseDate(
-                '18-06-2021 18:12',
-                DateFormat.ENDPOINT_DATETIME,
-                new Date(),
-                true
-            ) as number,
-            valence: 1,
-            arousal: 2
-        },
-        {
-            timestamp: parseDate(
-                '19-06-2021 11:21',
-                DateFormat.ENDPOINT_DATETIME,
-                new Date(),
-                true
-            ) as number,
-            valence: 1,
-            arousal: 3
-        },
-        {
-            timestamp: parseDate(
-                '19-06-2021 15:34',
-                DateFormat.ENDPOINT_DATETIME,
-                new Date(),
-                true
-            ) as number,
-            valence: 2,
-            arousal: 3
         }
     ];
 

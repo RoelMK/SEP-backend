@@ -29,7 +29,7 @@ export class Exercise extends GameBusObject {
     public toPOSTData(model: ExerciseModel, playerID: number): ActivityPOSTData {
         const obj = {
             gameDescriptorTK: ExerciseGameDescriptorNames[model.type],
-            dataProviderName: this.activity.dataProviderName,
+            dataProviderName: "Mibida",
             image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],

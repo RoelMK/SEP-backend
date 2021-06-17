@@ -1,10 +1,10 @@
 require('dotenv').config();
-import { DBClient } from '../../src/db/dbClient';
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
+import { Keys } from '../../src/gb/objects/keys';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
-import { disconnectDataProvider, flushActivities, flushDB } from '../../src/utils/flush';
+import { flushActivities, flushDB } from '../../src/utils/flush';
 import { request } from '../../src/utils/supervisorUtils';
 import { addExercises } from './prepareExercises';
 import { addMoods } from './prepareMoods';
@@ -17,19 +17,21 @@ class AccountPreparation {
      */
     async prepare() {
         console.log(`Preparing account ${this.playerId}`);
-        await this.cleanUpAccount();
+        await this.setupEmptyAccount();
         await this.fillAccount();
-        await this.prepareEnvironment();
+        await this.prepareEnvironmentForAT();
     }
 
     /**
      * Clears all data from an account
      */
-    async cleanUpAccount() {
+    async setupEmptyAccount() {
         const gbClient: GameBusClient = new GameBusClient(
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
         await flushActivities(gbClient, parseInt(this.playerId));
+        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.dataProviderId);
+        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.gbDataProviderId);
     }
 
     /**
@@ -93,7 +95,7 @@ class AccountPreparation {
     /**
      * Empties the database before a test
      */
-    async prepareEnvironment() {
+    async prepareEnvironmentForAT() {
         const gbClient: GameBusClient = new GameBusClient(
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
@@ -101,7 +103,11 @@ class AccountPreparation {
         await flushDB();
 
         // disconnect the data provider for testing environment
-        await disconnectDataProvider(gbClient, parseInt(this.playerId));
+        console.log('Disconnecting data providers...');
+        await gbClient.user().disconnectDataProvider(parseInt(this.playerId), Keys.dataProviderId);
+        await gbClient
+            .user()
+            .disconnectDataProvider(parseInt(this.playerId), Keys.gbDataProviderId);
         console.log('Environment prepared - good to go!');
     }
 }
@@ -117,11 +123,11 @@ async function prepareATPusers() {
     );
     await prepNormal.prepare();
 
-    const prepSupervisor: AccountPreparation = new AccountPreparation(
-        '00867a4a-5818-4f6f-80c8-74777a04a5cb',
-        '601'
-    );
-    await prepSupervisor.prepare();
+    // const prepSupervisor: AccountPreparation = new AccountPreparation(
+    //     '00867a4a-5818-4f6f-80c8-74777a04a5cb',
+    //     '601'
+    // );
+    // await prepSupervisor.prepare();
 
     const prepSupervisor2: AccountPreparation = new AccountPreparation(
         '4eae250a-8691-4ebb-81e5-07f7feaacdd1',

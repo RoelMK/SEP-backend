@@ -30,7 +30,7 @@ export class Exercise extends GameBusObject {
         const obj = {
             gameDescriptorTK: ExerciseGameDescriptorNames[model.type],
             // We post as Mibida since they have all permissions
-            dataProviderName: Keys.mibidaDataProviderTK,
+            dataProviderName: Keys.gbDataProviderTK,
             image: '', //TODO add image?
             date: model.timestamp,
             propertyInstances: [] as PropertyInstancePOST[],

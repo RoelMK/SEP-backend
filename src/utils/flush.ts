@@ -1,6 +1,5 @@
 import { DBClient } from '../db/dbClient';
 import { GameBusClient } from '../gb/gbClient';
-import { Keys } from '../gb/objects/keys';
 /**
  * Function that will clear a given user's GameBus account from activities
  *
@@ -33,10 +32,4 @@ export async function flushDB(): Promise<void> {
     const dbClient = new DBClient();
     dbClient.reset();
     dbClient.close();
-}
-
-export async function disconnectDataProvider(gamebusClient: GameBusClient, playerId: number) {
-    // Disconnect our data provider
-    console.log('Disconnecting data provider...');
-    await gamebusClient.user().disconnectDataProvider(playerId, Keys.dataProviderId);
 }

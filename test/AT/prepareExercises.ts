@@ -18,7 +18,20 @@ export function addExercises(gbAccessToken: string, pId: string) {
             type: ExerciseGameDescriptorNames.RUN,
             duration: 3000,
             calories: 450,
-            heartrate: 110
+            heartrate: null
+        },
+        {
+            timestamp: parseDate(
+                '15-06-2021 17:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            name: 'Ice hockey',
+            type: ExerciseGameDescriptorNames.ICE_HOCKEY,
+            duration: 3600,
+            calories: 380,
+            heartrate: null
         },
         {
             timestamp: parseDate(
@@ -31,7 +44,7 @@ export function addExercises(gbAccessToken: string, pId: string) {
             type: ExerciseGameDescriptorNames.WALK,
             duration: 1200,
             calories: 95,
-            heartrate: 75
+            heartrate: null
         },
         {
             timestamp: parseDate(
@@ -48,16 +61,29 @@ export function addExercises(gbAccessToken: string, pId: string) {
         },
         {
             timestamp: parseDate(
+                '17-06-2021 15:00',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            name: 'Lacrosse',
+            type: ExerciseGameDescriptorNames.LACROSSE,
+            duration: 2500,
+            calories: 400,
+            heartrate: null
+        },
+        {
+            timestamp: parseDate(
                 '17-06-2021 21:00',
                 DateFormat.ENDPOINT_DATETIME,
                 new Date(),
                 true
             ) as number,
-            name: 'Soccer',
-            type: ExerciseGameDescriptorNames.SOCCER,
+            name: 'Basketball',
+            type: ExerciseGameDescriptorNames.BASKETBALL,
             duration: 5400,
             calories: 800,
-            heartrate: 110
+            heartrate: null
         },
         {
             timestamp: parseDate(
@@ -71,12 +97,24 @@ export function addExercises(gbAccessToken: string, pId: string) {
             duration: 1200,
             calories: 56,
             heartrate: null
+        },
+        {
+            timestamp: parseDate(
+                '18-06-2021 14:30',
+                DateFormat.ENDPOINT_DATETIME,
+                new Date(),
+                true
+            ) as number,
+            name: 'AT',
+            type: ExerciseGameDescriptorNames.MARTIAL_ARTS,
+            duration: 3600,
+            calories: 200,
+            heartrate: null
         }
     ];
 
     // post all activities
     exercises.forEach(async (exercise) => {
-        console.log(exercise);
-        await gbClient.exercise().postSingleExerciseActivity(exercises[0], parseInt(pId));
+        await gbClient.exercise().postSingleExerciseActivity(exercise, parseInt(pId));
     });
 }

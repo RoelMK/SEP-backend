@@ -10,9 +10,6 @@ import { validUnixTimestamp } from '../services/utils/dates';
 const insulinRouter = Router();
 
 insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
-    // For now, the 'modify' parameter will be used to distinguish between POST and PUT
-    // modify as boolean (only important if true)
-
     const insulinTime = req.body.timestamp as number;
     const insulinAmount = req.body.insulinAmount as number;
     const insulinType = req.body.insulinType as InsulinType;
@@ -37,12 +34,8 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT
-    if (req.query.modify) {
-        if (!req.body.activityId) {
-            // Bad request, missing activity ID for PUT
-            res.status(400).json({ success: false, message: 'Missing activity ID' });
-        }
+    // PUT request if activityId is present
+    if (req.body.activityId) {
         // Get activity ID
         const activityId = req.body.activityId as number;
         // Check whether given ID is an insulin activity
@@ -64,7 +57,7 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
             const response = await gbClient
                 .insulin()
                 .putSingleInsulinActivity(insulinModel, req.user.playerId);
-            // Send 200 and new model
+            // Send 201 and new model
             return res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -81,10 +74,10 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     // POST
     try {
         // POST model
-        const response = gbClient
+        const response = await gbClient
             .insulin()
             .postSingleInsulinActivity(insulinModel, req.user.playerId);
-        res.sendStatus(201).json(response);
+        res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

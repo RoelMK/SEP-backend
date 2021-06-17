@@ -10,12 +10,6 @@ import { validUnixTimestamp } from '../services/utils/dates';
 const moodRouter = Router();
 
 moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
-    // For now, the 'modify' parameter will be used to distinguish between POST and PUT
-    // modify as boolean (only important if true)
-
-    // Call someone to aggregate and send data to gamebus
-    console.log(req.body);
-
     const moodTime = req.body.timestamp as number;
     const valence = req.body.valence as number;
     const arousal = req.body.arousal as number;
@@ -42,12 +36,8 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT
-    if (req.query.modify) {
-        if (!req.body.activityId) {
-            // Bad request, missing activity ID for PUT
-            return res.status(400).json({ success: false, message: 'Missing activity ID' });
-        }
+    // PUT request if activityId is present
+    if (req.body.activityId) {
         // Get activity ID
         const activityId = req.body.activityId as number;
         // Check whether given ID is a mood activity
@@ -66,7 +56,10 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
         };
         try {
             // PUT Data
-            const response = gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
+            const response = await gbClient
+                .mood()
+                .putSingleMoodActivity(moodModel, req.user.playerId);
+            // Send 201 and new model
             res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -83,7 +76,7 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
     // POST
     try {
         // POST model
-        const response = gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+        const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
         res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {

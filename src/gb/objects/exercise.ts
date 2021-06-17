@@ -5,13 +5,12 @@ import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../mode
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames, Keys } from './keys';
+import { ExerciseGameDescriptorNames } from './keys';
 
 /**
  * Class for exercise-specific functions
  */
 export class Exercise extends GameBusObject {
-
     async postSingleExerciseActivity(
         model: ExerciseModel,
         playerID: number,
@@ -46,7 +45,6 @@ export class Exercise extends GameBusObject {
         }
         return obj;
     }
-
 
     /**
      * Function that returns ALL exercise activities

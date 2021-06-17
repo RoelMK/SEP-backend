@@ -1,24 +1,25 @@
-//import { DBClient } from '../../src/db/dbClient';
+require('dotenv').config();
+import { DBClient } from '../../src/db/dbClient';
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import { disconnectDataProvider, flushActivities, flushDB } from '../../src/utils/flush';
-//import { request } from '../../src/utils/supervisorUtils';
+import { request } from '../../src/utils/supervisorUtils';
+import { addExercises } from './prepareExercises';
 import { addMoods } from './prepareMoods';
 
 class AccountPreparation {
-    constructor(private gbAccessToken: string, private playerId: string) {
-        console.log(`Preparing account ${this.playerId}`);
-    }
+    constructor(private gbAccessToken: string, private playerId: string) {}
 
     /**
      * Prepares the current user for the ATP
      */
-    async prepare(doDisconnect: boolean) {
+    async prepare() {
+        console.log(`Preparing account ${this.playerId}`);
         await this.cleanUpAccount();
         await this.fillAccount();
-        if (doDisconnect) await this.prepareEnvironment();
+        await this.prepareEnvironment();
     }
 
     /**
@@ -42,11 +43,15 @@ class AccountPreparation {
         // add data
         try {
             // TODO: check dates sent in backend-discussion to make sure the data is on the correct dates
-            await addMoods(this.gbAccessToken, this.playerId);
+            addMoods(this.gbAccessToken, this.playerId);
             console.log('mood added to the profile');
-            // TODO: addExercises
+
+            addExercises(this.gbAccessToken, this.playerId);
+            console.log('exercise added to the profile');
+
             await this.addGlucoseInsulin();
             console.log('glucose and insulin added to the profile');
+
             await this.addFood();
             console.log('food added to the profile');
         } catch (e) {
@@ -105,33 +110,29 @@ class AccountPreparation {
  * Prepares several users that are used for the AT
  * @param doDisconnect Whether to disconnect from the data provider (annoying to reconnect every time)
  */
-async function prepareATPusers(doDisconnect: boolean) {
+async function prepareATPusers() {
     const prepNormal: AccountPreparation = new AccountPreparation(
         '5e16bdbe-b2ce-45b2-a027-52d7cab0c94a',
         '600'
     );
-    await prepNormal.prepare(doDisconnect);
+    await prepNormal.prepare();
 
-    const prepSupervisor1: AccountPreparation = new AccountPreparation(
+    const prepSupervisor: AccountPreparation = new AccountPreparation(
         '00867a4a-5818-4f6f-80c8-74777a04a5cb',
         '601'
     );
-    await prepSupervisor1.prepare(doDisconnect);
+    await prepSupervisor.prepare();
 
     const prepSupervisor2: AccountPreparation = new AccountPreparation(
         '4eae250a-8691-4ebb-81e5-07f7feaacdd1',
         '603'
     );
-    await prepSupervisor2.prepare(doDisconnect);
-    //const dbClient: DBClient = new DBClient();
-    // dbClient.initialize();
-    // dbClient.confirmSupervisor('atp@supervisor.nl', 'atp@user.nl');
-    // dbClient.requestSupervisor('atp@supervisor2.nl', 'atp@user.nl');
-    // request('atp@supervisor.nl', 'atp@user.nl', false);
-    // request('atp@supervisor2.nl', 'atp@user.nl', true);
-    // dbClient.close();
+    await prepSupervisor2.prepare();
+
+    request('atp@supervisor.nl', 'atp@user.nl', false);
+    request('atp@supervisor2.nl', 'atp@user.nl', true);
 }
 
 // make sure to be connected to the dataprovider BEFORE doing this
 // afterwards you are automatically disconnected
-prepareATPusers(false);
+prepareATPusers();

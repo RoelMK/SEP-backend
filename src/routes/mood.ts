@@ -66,8 +66,8 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
         };
         try {
             // PUT Data
-            gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
-            res.status(201).json(moodModel);
+            const response = gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
+            res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Unauthorized -> 401
@@ -83,8 +83,8 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
     // POST
     try {
         // POST model
-        gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
-        res.status(201).json(moodModel);
+        const response = gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+        res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

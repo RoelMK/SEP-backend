@@ -63,15 +63,19 @@ export class Activity {
     /**
      * Posts an activity using the given data
      */
-    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<unknown> {
-        const response = await this.gamebus.post(
+    async postActivity(
+        data: ActivityPOSTData,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        const response = (await this.gamebus.post(
             'me/activities',
             data,
             headers,
             { dryrun: 'false', ...query },
             true,
             false
-        );
+        )) as ActivityGETData[];
         return response;
     }
 

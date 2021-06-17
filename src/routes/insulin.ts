@@ -61,9 +61,11 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         };
         try {
             // PUT data
-            await gbClient.insulin().putSingleInsulinActivity(insulinModel, req.user.playerId);
+            const response = await gbClient
+                .insulin()
+                .putSingleInsulinActivity(insulinModel, req.user.playerId);
             // Send 200 and new model
-            return res.status(201).json(insulinModel);
+            return res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Unauthorized -> 401
@@ -79,8 +81,10 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     // POST
     try {
         // POST model
-        gbClient.insulin().postSingleInsulinActivity(insulinModel, req.user.playerId);
-        res.sendStatus(201).json(insulinModel);
+        const response = gbClient
+            .insulin()
+            .postSingleInsulinActivity(insulinModel, req.user.playerId);
+        res.sendStatus(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

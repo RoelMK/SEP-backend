@@ -18,7 +18,7 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     const insulinType = req.body.insulinType as InsulinType;
 
     // Verify that we have a valid amount, an activityId, an insulinType and a valid timestamp
-    if (!validUnixTimestamp(insulinTime) || insulinAmount < 0 || !insulinType) {
+    if (!validUnixTimestamp(insulinTime) || insulinAmount < 0 || insulinType < 0) {
         // Bad request
         return res
             .status(400)

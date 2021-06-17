@@ -228,7 +228,7 @@ describe('with mocked mood put call', () => {
                 })
             })
         );
-        expect(response).toEqual([]);
+        expect(response).toEqual({});
     });
 
     test('PUT a single mood model withoud ID', async () => {

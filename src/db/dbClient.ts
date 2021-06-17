@@ -364,7 +364,11 @@ export class DBClient {
             const supervisor = this.db
                 .prepare('SELECT supervisor_email FROM supervisor WHERE supervisor_email=?')
                 .get(email);
-            return supervisor.supervisor_email === email;
+            if (supervisor) {
+                return supervisor.supervisor_email === email;
+            } else {
+                return false;
+            }
         } catch (e) {
             console.log(e);
             return false;

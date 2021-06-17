@@ -4,6 +4,7 @@ import { MoodModel } from '../../src/gb/models/moodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 
 export function addMoods(gbAccessToken: string, pId: string) {
+    const gbClient: GameBusClient = new GameBusClient(new TokenHandler(gbAccessToken, '', pId));
     const moods: MoodModel[] = [
         {
             timestamp: parseDate(
@@ -157,6 +158,5 @@ export function addMoods(gbAccessToken: string, pId: string) {
         }
     ];
 
-    const gbClient: GameBusClient = new GameBusClient(new TokenHandler(gbAccessToken, '', pId));
     gbClient.mood().postMultipleMoodActivities(moods, parseInt(pId));
 }

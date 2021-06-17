@@ -1,9 +1,10 @@
+//import { DBClient } from '../../src/db/dbClient';
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import { disconnectDataProvider, flushActivities, flushDB } from '../../src/utils/flush';
-import { request } from '../../src/utils/supervisorUtils';
+//import { request } from '../../src/utils/supervisorUtils';
 import { addMoods } from './prepareMoods';
 
 class AccountPreparation {
@@ -14,20 +15,20 @@ class AccountPreparation {
     /**
      * Prepares the current user for the ATP
      */
-    async prepare() {
-        this.cleanUpAccount();
+    async prepare(doDisconnect: boolean) {
+        await this.cleanUpAccount();
         await this.fillAccount();
-        this.prepareEnvironment();
+        if (doDisconnect) await this.prepareEnvironment();
     }
 
     /**
      * Clears all data from an account
      */
-    cleanUpAccount() {
+    async cleanUpAccount() {
         const gbClient: GameBusClient = new GameBusClient(
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
-        flushActivities(gbClient, parseInt(this.playerId));
+        await flushActivities(gbClient, parseInt(this.playerId));
     }
 
     /**
@@ -85,41 +86,50 @@ class AccountPreparation {
     /**
      * Empties the database before a test
      */
-    prepareEnvironment() {
+    async prepareEnvironment() {
         const gbClient: GameBusClient = new GameBusClient(
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
         // flush db afterwards to make sure not only newest data is uploaded
-        flushDB();
+        await flushDB();
 
         // disconnect the data provider for testing environment
-        disconnectDataProvider(gbClient, parseInt(this.playerId));
+        await disconnectDataProvider(gbClient, parseInt(this.playerId));
         console.log('Environment prepared - good to go!');
     }
 }
 
-async function prepareATPusers() {
+/**
+ * Prepares several users that are used for the AT
+ * @param doDisconnect Whether to disconnect from the data provider (annoying to reconnect every time)
+ */
+async function prepareATPusers(doDisconnect: boolean) {
     const prepNormal: AccountPreparation = new AccountPreparation(
         '5e16bdbe-b2ce-45b2-a027-52d7cab0c94a',
         '600'
     );
-    await prepNormal.prepare();
+    await prepNormal.prepare(doDisconnect);
 
     const prepSupervisor1: AccountPreparation = new AccountPreparation(
         '00867a4a-5818-4f6f-80c8-74777a04a5cb',
         '601'
     );
-    await prepSupervisor1.prepare();
-    request('atp@supervisor.nl', 'atp@user.nl', false);
+    await prepSupervisor1.prepare(doDisconnect);
 
     const prepSupervisor2: AccountPreparation = new AccountPreparation(
         '4eae250a-8691-4ebb-81e5-07f7feaacdd1',
         '603'
     );
-    await prepSupervisor2.prepare();
-    request('atp@supervisor2.nl', 'atp@user.nl', true);
+    await prepSupervisor2.prepare(doDisconnect);
+    //const dbClient: DBClient = new DBClient();
+    // dbClient.initialize();
+    // dbClient.confirmSupervisor('atp@supervisor.nl', 'atp@user.nl');
+    // dbClient.requestSupervisor('atp@supervisor2.nl', 'atp@user.nl');
+    // request('atp@supervisor.nl', 'atp@user.nl', false);
+    // request('atp@supervisor2.nl', 'atp@user.nl', true);
+    // dbClient.close();
 }
 
 // make sure to be connected to the dataprovider BEFORE doing this
 // afterwards you are automatically disconnected
-prepareATPusers();
+prepareATPusers(false);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
@@ -9,7 +9,7 @@ import { validUnixTimestamp } from '../services/utils/dates';
 
 const moodRouter = Router();
 
-moodRouter.post('/mood', checkJwt, async (req: any, res: any) => {
+moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
     const moodTime = req.body.timestamp as number;
     const valence = req.body.valence as number;
     const arousal = req.body.arousal as number;

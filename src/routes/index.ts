@@ -13,5 +13,6 @@ indexRouter.use('/', require('./mood'));
 indexRouter.use('/', require('./insulin'));
 indexRouter.use('/', require('./activity'));
 indexRouter.use('/', require('./profile'));
+indexRouter.use('/', require('./flushDB'));
 
 module.exports = indexRouter;

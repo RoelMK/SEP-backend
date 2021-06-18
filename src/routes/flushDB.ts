@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { DBClient } from '../db/dbClient';
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
 const router = Router();

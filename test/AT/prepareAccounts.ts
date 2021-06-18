@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';

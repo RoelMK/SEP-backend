@@ -4,7 +4,7 @@ import { GameBusClient } from '../gb/gbClient';
 import crypto from 'crypto';
 
 const gbClientAuthHeader = ('Basic ' + process.env.GAMEBUS_CLIENT_AUTH_HEADER) as string;
-const loginAttemptValidityInMinutes = 1;
+const loginAttemptValidityInMinutes = 5;
 
 /**
  * Finishes a login attempt and generates a JWT with credentials.

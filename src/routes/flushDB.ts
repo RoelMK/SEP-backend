@@ -15,9 +15,9 @@ router.post('/flushDB', function (req: any, res) {
     dbClient.reset();
     dbClient.close();
 
-    request('atp@supervisor.nl', 'atp@user.nl', false);
     request('atp@supervisor2.nl', 'atp@user.nl', false);
-    request('atp@supervisor2.nl', 'atp@user.nl', true);
+    request('atp@supervisor.nl', 'atp@user.nl', false);
+    request('atp@supervisor.nl', 'atp@user.nl', true);
 
     res.status(200).send('Db flushed');
 });

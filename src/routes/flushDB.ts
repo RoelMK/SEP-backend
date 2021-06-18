@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { DBClient } from '../db/dbClient';
+import { request } from '../utils/supervisorUtils';
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
@@ -13,6 +14,10 @@ router.post('/flushDB', function (req: any, res) {
     const dbClient = new DBClient();
     dbClient.reset();
     dbClient.close();
+
+    request('atp@supervisor.nl', 'atp@user.nl', false);
+    request('atp@supervisor2.nl', 'atp@user.nl', true);
+
     res.status(200).send('Db flushed');
 });
 

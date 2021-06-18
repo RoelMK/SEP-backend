@@ -27,11 +27,12 @@ app.use(
 );
 
 app.use(express.json());
-app.use(cors({
-    methods: true,
-    credentials: true,
-    exposedHeaders: ['x-access-token', 'Authorization', 'Content-Type'],
-    origin: true
+app.use(
+    cors({
+        methods: true,
+        credentials: true,
+        exposedHeaders: ['x-access-token', 'Authorization', 'Content-Type'],
+        origin: true
     })
 );
 

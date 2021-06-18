@@ -32,8 +32,6 @@ class AccountPreparation {
             new TokenHandler(this.gbAccessToken, '', this.playerId)
         );
         await flushActivities(gbClient, parseInt(this.playerId));
-        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.dataProviderId);
-        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.gbDataProviderId);
     }
 
     /**
@@ -43,6 +41,10 @@ class AccountPreparation {
     async fillAccount() {
         // flush db to ensure all data is uploaded
         flushDB();
+
+        const gbClient = new GameBusClient(new TokenHandler(this.gbAccessToken, '', this.playerId));
+        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.dataProviderId);
+        gbClient.user().connectDataProvider(parseInt(this.playerId), Keys.gbDataProviderId);
 
         // add data
         try {
@@ -120,7 +122,7 @@ class AccountPreparation {
                 calories: 250
             }
         ];
-        gbClient.food().postMultipleFoodActivities(calorieFoods, parseInt(this.playerId));
+        await gbClient.food().postMultipleFoodActivities(calorieFoods, parseInt(this.playerId));
     }
 
     /**
@@ -149,7 +151,7 @@ class AccountPreparation {
  */
 async function prepareATPusers() {
     const prepNormal: AccountPreparation = new AccountPreparation(
-        '5e16bdbe-b2ce-45b2-a027-52d7cab0c94a',
+        '049bcef0-48a1-4c10-9b9b-65d8932e0a5c',
         '600'
     );
     await prepNormal.prepare();

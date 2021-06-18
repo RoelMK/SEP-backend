@@ -1,9 +1,11 @@
 require('dotenv').config();
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
+import { FoodModel } from '../../src/gb/models/foodModel';
 import { Keys } from '../../src/gb/objects/keys';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
+import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { flushActivities, flushDB } from '../../src/utils/flush';
 import { request } from '../../src/utils/supervisorUtils';
 import { addExercises } from './prepareExercises';
@@ -90,6 +92,35 @@ class AccountPreparation {
             'test/AT/User-build_beforeAT/foodDiary_AT.xlsx',
             userInfo
         ).process();
+
+        const gbClient = new GameBusClient(new TokenHandler(this.gbAccessToken, '', this.playerId));
+        const calorieFoods: FoodModel[] = [
+            {
+                timestamp: parseDate(
+                    '18-06-2021 14:15',
+                    DateFormat.ENDPOINT_DATETIME,
+                    new Date(),
+                    true
+                ) as number,
+                description: 'Worstenbroodje',
+                carbohydrates: 60,
+                glycemic_index: 75,
+                calories: 600
+            },
+            {
+                timestamp: parseDate(
+                    '18-06-2021 14:00',
+                    DateFormat.ENDPOINT_DATETIME,
+                    new Date(),
+                    true
+                ) as number,
+                description: 'Milk',
+                carbohydrates: 15,
+                glycemic_index: 37,
+                calories: 250
+            }
+        ];
+        gbClient.food().postMultipleFoodActivities(calorieFoods, parseInt(this.playerId));
     }
 
     /**
@@ -123,11 +154,11 @@ async function prepareATPusers() {
     );
     await prepNormal.prepare();
 
-    // const prepSupervisor: AccountPreparation = new AccountPreparation(
-    //     '00867a4a-5818-4f6f-80c8-74777a04a5cb',
-    //     '601'
-    // );
-    // await prepSupervisor.prepare();
+    const prepSupervisor: AccountPreparation = new AccountPreparation(
+        '00867a4a-5818-4f6f-80c8-74777a04a5cb',
+        '601'
+    );
+    await prepSupervisor.prepare();
 
     const prepSupervisor2: AccountPreparation = new AccountPreparation(
         '4eae250a-8691-4ebb-81e5-07f7feaacdd1',

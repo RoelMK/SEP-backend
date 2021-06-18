@@ -40,7 +40,7 @@ const config: msal.Configuration = {
 };
 const cca = new msal.ConfidentialClientApplication(config);
 const msalTokenCache = cca.getTokenCache();
-const redirectUri = 'http://localhost:8080/onedrive/redirect'; // TODO: this should not be hardcoded here...
+const redirectUri = 'https://squaretablestudios.com/redirect.php'; // TODO: this should not be hardcoded here...
 const scopes = ['user.read', 'Files.Read'];
 
 /**

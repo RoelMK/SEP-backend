@@ -4,21 +4,8 @@ import express from 'express';
 const errorhandler = require('errorhandler');
 const cors = require('cors');
 import { DBClient } from './db/dbClient';
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-// Certificate
-const privateKey = fs.readFileSync('privkey.pem', 'utf8');
-const certificate = fs.readFileSync('cert.pem', 'utf8');
-const ca = fs.readFileSync('chain.pem', 'utf8');
-const credentials = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
-};
 
 // Initialize database
 const dbClient: DBClient = new DBClient();
@@ -55,12 +42,6 @@ if (!isProduction) {
 }
 
 // Launch
-/*export const server = app.listen(port, () => {
+export const server = app.listen(port, () => {
     console.log('Listening on port ' + port);
-});*/
-//const httpServer = http.createServer(app);
-
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(port, () => {
-	console.log('HTTPS Server running on port ' + port);
 });

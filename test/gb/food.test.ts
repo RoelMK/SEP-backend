@@ -260,7 +260,7 @@ describe('with mocked food get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&start=19-04-2021&end=21-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&end=21-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(exercises).toEqual(result);
@@ -309,7 +309,7 @@ describe('with mocked food get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&start=19-04-2021&end=20-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=Nutrition_Diary&end=20-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(food).toEqual(result);

@@ -57,7 +57,7 @@ describe('with mocked moods get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=LOG_MOOD&start=19-04-2021&end=21-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=LOG_MOOD&end=21-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(moods).toEqual([]);
@@ -73,7 +73,7 @@ describe('with mocked moods get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=LOG_MOOD&start=19-04-2021&end=20-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=LOG_MOOD&end=20-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(moods).toEqual([]);

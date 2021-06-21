@@ -18,7 +18,7 @@
       <Energie Code="01001" Eenheid="kcal" WaardePer100Gram="169.00">126.75</Energie>
       <Vet Code="03001" Eenheid="g" WaardePer100Gram="6.30">4.72</Vet>
       <VerzadigdVet Code="03003" Eenheid="g" WaardePer100Gram="0.70">0.52</VerzadigdVet>
-      <Koolhydraten Code="05001" Eenheid="g" WaardePer100Gram="9.30">6.98</Koolhydraten>
+      <Koolhydraten Code="05001" Eenheid="g" WaardePer100Gram="9.30">35</Koolhydraten>
       <Eiwit Code="02002" Eenheid="g" WaardePer100Gram="17.10">12.83</Eiwit>
       <Vezels Code="06001" Eenheid="g" WaardePer100Gram="3.20">2.40</Vezels>
       <Zout Code="09012" Eenheid="g" WaardePer100Gram="1.75">1.31</Zout>

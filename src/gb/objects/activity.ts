@@ -1,5 +1,5 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
-import { format, addDays } from 'date-fns';
+import { format, addDays, addYears } from 'date-fns';
 import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import {
     ActivityGETData,
@@ -139,8 +139,13 @@ export class Activity {
                     Object.values(ExerciseGameDescriptorNames),
                     Keys.foodTranslationKey,
                     Keys.insulinTranslationKey,
-                    Keys.glucoseTranslationKey
+                    Keys.glucoseTranslationKey,
+                    Keys.moodTranslationKey,
+                    Keys.bmiTranslationKey
                 ].join(','),
+                // This is done because of an issue in GameBus where the default /activities endpoint
+                // does not return all activities
+                end: format(addYears(new Date(), 10), queryDateFormat),
                 ...query
             },
             this.authRequired
@@ -416,9 +421,13 @@ export class Activity {
      */
     async deleteAllActivities(playerID: number): Promise<void> {
         const activities: ActivityGETData[] = await this.getAllActivities(playerID);
+        if (activities.length === 0) {
+            return;
+        }
         for (const act of activities) {
             await this.deleteActivityById(act.id);
         }
+        await this.deleteAllActivities(playerID);
     }
 
     /**

@@ -31,7 +31,7 @@ export class Activity {
         activityId: number,
         headers?: Headers,
         query?: Query
-    ): Promise<unknown> {
+    ): Promise<ActivityGETData[]> {
         // PUT uses form-data, so we convert data to string and send as form data
         const body = new FormData();
         body.append('activity', JSON.stringify(data));
@@ -57,21 +57,25 @@ export class Activity {
             headers: gamebusHeaders,
             data: body
         });
-        return response.data;
+        return response.data as ActivityGETData[];
     }
 
     /**
      * Posts an activity using the given data
      */
-    async postActivity(data: ActivityPOSTData, headers?: Headers, query?: Query): Promise<unknown> {
-        const response = await this.gamebus.post(
+    async postActivity(
+        data: ActivityPOSTData,
+        headers?: Headers,
+        query?: Query
+    ): Promise<ActivityGETData[]> {
+        const response = (await this.gamebus.post(
             'me/activities',
             data,
             headers,
             { dryrun: 'false', ...query },
             true,
             false
-        );
+        )) as ActivityGETData[];
         return response;
     }
 
@@ -199,14 +203,14 @@ export class Activity {
             // Add rest of query
             ...query
         };
-        if (limit) {
+        if (limit !== undefined) {
             dateQuery = {
                 ...dateQuery,
                 // Use the given limit only if specified
                 limit: limit.toString()
             };
         }
-        if (page) {
+        if (page !== undefined) {
             dateQuery = {
                 ...dateQuery,
                 // Use page number only if specified
@@ -383,6 +387,54 @@ export class Activity {
             gds: gameDescriptors.join(','),
             ...query
         });
+    }
+
+    /**
+     * Deletes an activity with activity ID
+     * @param activityId Activity ID
+     * @param headers Any extra headers
+     * @param query Any queries
+     * @returns The response
+     */
+    async deleteActivityById(
+        activityId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        const resp = await this.gamebus.delete(
+            `activities/${activityId}`,
+            headers,
+            query,
+            this.authRequired
+        );
+        return resp;
+    }
+
+    /**
+     * Deletes all activities
+     * @param playerID playerID
+     */
+    async deleteAllActivities(playerID: number): Promise<void> {
+        const activities: ActivityGETData[] = await this.getAllActivities(playerID);
+        for (const act of activities) {
+            await this.deleteActivityById(act.id);
+        }
+    }
+
+    /**
+     * Function to check whether the specified activity is of the correct type (correct game descriptor)
+     * @param activityId ID of activity to check
+     * @param expectedTranslationKey Expected translation key of activity's game descriptor
+     * @returns true if the activity's game descriptor matches the expected game descriptor
+     */
+    async checkActivityType(
+        activityId: number,
+        expectedTranslationKey: string,
+        headers?: Headers,
+        query?: Query
+    ): Promise<boolean> {
+        const activity: ActivityGETData = await this.getActivityById(activityId, headers, query);
+        return activity.gameDescriptor.translationKey === expectedTranslationKey;
     }
 
     /**

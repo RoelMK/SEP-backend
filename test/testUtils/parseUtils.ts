@@ -1,5 +1,9 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
-import { DataSource, OutputDataType } from '../../src/services/dataParsers/dataParser';
+import {
+    CombinedDataParserOutput,
+    DataSource,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
@@ -44,7 +48,13 @@ export async function parseAbbott(
     type: OutputDataType,
     only_parse_newest?: boolean
 ): Promise<
-    InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined
+    | InsulinModel[]
+    | FoodModel[]
+    | GlucoseModel[]
+    | NightScoutEntryModel[]
+    | MoodModel[]
+    | CombinedDataParserOutput
+    | undefined
 > {
     const abbottEUParser: AbbottParser = new AbbottParser(filePath, dummyUserInfo);
     if (only_parse_newest) abbottEUParser.parseOnlyNewest(true);
@@ -64,7 +74,13 @@ export async function parseFoodDiary(
     type: OutputDataType,
     only_parse_newest?: boolean
 ): Promise<
-    InsulinModel[] | FoodModel[] | GlucoseModel[] | NightScoutEntryModel[] | MoodModel[] | undefined
+    | InsulinModel[]
+    | FoodModel[]
+    | GlucoseModel[]
+    | NightScoutEntryModel[]
+    | MoodModel[]
+    | CombinedDataParserOutput
+    | undefined
 > {
     const foodDiaryParser: FoodDiaryParser = new FoodDiaryParser(filePath, dummyUserInfo);
     if (only_parse_newest) foodDiaryParser.parseOnlyNewest(true);
@@ -197,7 +213,13 @@ export async function parseNightScout(
     testTreatments: NightScoutTreatmentModel[],
     outputDataType: OutputDataType
 ): Promise<
-    NightScoutEntryModel[] | InsulinModel[] | FoodModel[] | GlucoseModel[] | MoodModel[] | undefined
+    | NightScoutEntryModel[]
+    | InsulinModel[]
+    | FoodModel[]
+    | GlucoseModel[]
+    | MoodModel[]
+    | CombinedDataParserOutput
+    | undefined
 > {
     const nsParser: NightscoutParser = new NightscoutParser(
         'https://nightscout-sep.herokuapp.com',

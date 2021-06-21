@@ -175,14 +175,32 @@ describe('with mocked food get call', () => {
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27130
+                activityId: 27130,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27131
+                activityId: 27131,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             }
         ];
 
@@ -214,14 +232,32 @@ describe('with mocked food get call', () => {
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27130
+                activityId: 27130,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27131
+                activityId: 27131,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             }
         ];
         expect(request).toHaveBeenCalledTimes(1);
@@ -248,14 +284,32 @@ describe('with mocked food get call', () => {
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27130
+                activityId: 27130,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             },
             {
                 timestamp: 1622832285000,
                 carbohydrates: 400,
                 fibers: 34,
                 description: 'desc',
-                activityId: 27131
+                activityId: 27131,
+                calories: null,
+                meal_type: null,
+                glycemic_index: null,
+                fat: null,
+                saturatedFat: null,
+                proteins: null,
+                salt: null,
+                water: null,
+                sugars: null
             }
         ];
         expect(request).toHaveBeenCalledTimes(1);

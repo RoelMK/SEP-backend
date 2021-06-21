@@ -155,12 +155,18 @@ export abstract class DataParser {
     }
     /**
      * To be called after processing, for retrieving processed data
-     * @param outputType Glucose, Insulin or Food
-     * @returns Glucose, Insulin or FoodModel object
+     * @param outputType Glucose, Insulin, Food, Mood or All
+     * @returns Glucose, Insulin, Food, Mood or Combined models
      */
     getData(
         outputType: OutputDataType
-    ): InsulinModel[] | FoodModel[] | GlucoseModel[] | MoodModel[] | undefined {
+    ):
+        | InsulinModel[]
+        | FoodModel[]
+        | GlucoseModel[]
+        | MoodModel[]
+        | CombinedDataParserOutput
+        | undefined {
         switch (outputType) {
             case OutputDataType.GLUCOSE:
                 return this.glucoseParser?.glucoseData;
@@ -168,9 +174,38 @@ export abstract class DataParser {
                 return this.insulinParser?.insulinData;
             case OutputDataType.FOOD:
                 return this.foodParser?.foodData;
-
             case OutputDataType.MOOD:
                 return [this.moodParser?.mood as MoodModel];
+            case OutputDataType.ALL:
+                // Should return all of the types (if they are present)
+                return {
+                    /** For every type we check:
+                     * If the parser is defined
+                     * If the parser has any data
+                     * If the data has any entries
+                     *
+                     * If any of these properties do not hold, we set as null
+                     */
+                    food:
+                        this.foodParser &&
+                        this.foodParser.foodData &&
+                        this.foodParser.foodData.length > 0
+                            ? this.foodParser.foodData
+                            : null,
+                    glucose:
+                        this.glucoseParser &&
+                        this.glucoseParser.glucoseData &&
+                        this.glucoseParser.glucoseData.length > 0
+                            ? this.glucoseParser.glucoseData
+                            : null,
+                    insulin:
+                        this.insulinParser &&
+                        this.insulinParser.insulinData &&
+                        this.insulinParser.insulinData.length > 0
+                            ? this.insulinParser.insulinData
+                            : null,
+                    mood: this.moodParser && this.moodParser.mood ? [this.moodParser.mood] : null
+                } as CombinedDataParserOutput;
 
             default:
                 // TODO this should not happen
@@ -179,11 +214,13 @@ export abstract class DataParser {
     }
 
     protected async postProcessedData(): Promise<void> {
+        const promises: Promise<any>[] = [];
         // post all data
-        await this.foodParser?.post();
-        await this.glucoseParser?.post();
-        await this.insulinParser?.post();
-        await this.moodParser?.post();
+        if (this.foodParser) promises.push(this.foodParser.post());
+        if (this.glucoseParser) promises.push(this.glucoseParser.post());
+        if (this.insulinParser) promises.push(this.insulinParser.post());
+        if (this.moodParser) promises.push(this.moodParser.post());
+        await Promise.all(promises);
     }
 
     /**
@@ -245,20 +282,29 @@ export enum OutputDataType {
     GLUCOSE = 0,
     INSULIN = 1,
     FOOD = 2,
-    MOOD = 3
+    MOOD = 3,
+    ALL = 4
 }
 
 // custom errors
 export class InputError extends Error {
-    constructor(message) {
+    constructor(message: string) {
         super(message);
         this.name = 'InputError';
     }
 }
 
 class DeveloperError extends Error {
-    constructor(message) {
+    constructor(message: string) {
         super(message);
         this.name = 'DeveloperError';
     }
+}
+
+// Interface used if getData(ALL) is called
+export interface CombinedDataParserOutput {
+    food: FoodModel[] | null;
+    glucose: GlucoseModel[] | null;
+    insulin: InsulinModel[] | null;
+    mood: MoodModel[] | null;
 }

@@ -27,7 +27,14 @@ app.use(
 );
 
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+        methods: true,
+        credentials: true,
+        exposedHeaders: ['x-access-token', 'Authorization', 'Content-Type'],
+        origin: true
+    })
+);
 
 // ---- Do not add routes above this line! ----
 app.use(require('./routes'));

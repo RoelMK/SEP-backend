@@ -200,7 +200,19 @@ export class Exercise extends GameBusObject {
             // the translation key (of the game descriptor) will be the same for all properties
             type: activities[0].translationKey,
             activityId: response.id,
-            // Set it to null for now, might be added later
+            // For graphing activities it's easier if the missing properties are set to null, so we do that here
+            duration: null,
+            steps: null,
+            distance: null,
+            calories: null,
+            groupSize: null,
+            penalty: null,
+            score: null,
+            maxSpeed: null,
+            avgSpeed: null,
+            maxHeartrate: null,
+            avgHeartrate: null,
+            minHeartrate: null,
             heartrate: null
         };
         // Now we have to map the translationKey to the right key in the ExerciseModel

@@ -247,7 +247,7 @@ describe('with mocked insulin put call', () => {
                 })
             })
         );
-        expect(response).toEqual([]);
+        expect(response).toEqual({});
     });
 
     /**

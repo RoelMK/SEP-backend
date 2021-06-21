@@ -3,18 +3,13 @@ import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
+import { Keys } from '../gb/objects/keys';
 import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 
 const moodRouter = Router();
 
-moodRouter.post('/mood', checkJwt, (req: any, res: Response) => {
-    // For now, the 'modify' parameter will be used to distinguish between POST and PUT
-    // modify as boolean (only important if true)
-
-    // Call someone to aggregate and send data to gamebus
-    console.log(req.body);
-
+moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
     const moodTime = req.body.timestamp as number;
     const valence = req.body.valence as number;
     const arousal = req.body.arousal as number;
@@ -22,35 +17,49 @@ moodRouter.post('/mood', checkJwt, (req: any, res: Response) => {
     // Check if given timestamps are valid
     if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
         // Bad request
-        res.sendStatus(400);
-        return;
+        return res.status(400).json({
+            success: false,
+            message: 'Mood model provided is formatted incorrectly'
+        });
     }
 
+    // Create initial model
     let moodModel: MoodModel = {
         timestamp: moodTime,
         valence: valence,
         arousal: arousal
     };
 
+    // Initialize client
     const gbClient = new GameBusClient(
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT
-    if (req.query.modify) {
-        if (!req.body.activityId) {
-            // Bad request, missing activity ID for PUT
-            res.sendStatus(400);
-        }
+    // PUT request if activityId is present
+    if (req.body.activityId) {
         // Get activity ID
         const activityId = req.body.activityId as number;
+        // Check whether given ID is a mood activity
+        const moodActivity = await gbClient
+            .activity()
+            .checkActivityType(activityId, Keys.moodTranslationKey);
+        if (!moodActivity) {
+            return res
+                .status(400)
+                .json({ success: false, message: 'Given Activity ID is not a mood activity' });
+        }
+        // Add activity ID
         moodModel = {
             ...moodModel,
             activityId: activityId
         };
         try {
-            gbClient.mood().putSingleMoodActivity(moodModel, req.user.playerId);
-            res.sendStatus(201).send(moodModel);
+            // PUT Data
+            const response = await gbClient
+                .mood()
+                .putSingleMoodActivity(moodModel, req.user.playerId);
+            // Send 201 and new model
+            return res.status(201).json(response);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Unauthorized -> 401
@@ -65,8 +74,9 @@ moodRouter.post('/mood', checkJwt, (req: any, res: Response) => {
 
     // POST
     try {
-        gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
-        res.sendStatus(201).send(moodModel);
+        // POST model
+        const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
+        return res.status(201).json(response);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401

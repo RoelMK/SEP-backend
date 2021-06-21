@@ -246,7 +246,7 @@ describe('with mocked mood put call', () => {
                 })
             })
         );
-        expect(response).toEqual([]);
+        expect(response).toEqual({});
     });
 
     /**

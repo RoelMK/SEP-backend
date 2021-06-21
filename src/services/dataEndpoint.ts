@@ -5,12 +5,17 @@ import { GlucoseModel } from '../gb/models/glucoseModel';
 import { InsulinModel } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
 import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
-import { Insulin } from '../gb/objects/insulin';
-import { Mood } from '../gb/objects/mood';
 import { DateSlice } from './utils/dates';
+import { nullUnion, UnionModel } from '../gb/models/unionModel';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve
+
+    // maximum number of pages that are requested
+    private readonly MAX_PAGES = 1000;
+
+    // maximum number of entries that are requested per page
+    private readonly PAGE_LIMIT = 500;
 
     /**
      * Constructs the endpoint object.
@@ -58,7 +63,8 @@ export class DataEndpoint {
             });
         });
         await Promise.all(Object.values(promises));
-
+        //console.log(data.glucose?.length);
+        //console.log(data.food?.length);
         return data;
     }
 
@@ -68,53 +74,120 @@ export class DataEndpoint {
      * @returns Union of given data
      */
     public static unionData(data: EndpointData): Array<any> {
-        const dict: Record<number, any> = {};
+        const unionDict: Record<number, UnionModel> = {};
         if (data.exercise) {
-            data.exercise.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.exercise.forEach((exercise: ExerciseModel) => {
+                this.addValues(unionDict, DataType.EXERCISE, exercise);
             });
         }
         if (data.mood) {
-            data.mood.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.mood.forEach((mood: MoodModel) => {
+                this.addValues(unionDict, DataType.MOOD, mood);
             });
         }
         if (data.glucose) {
-            data.glucose.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.glucose.forEach((glucose: GlucoseModel) => {
+                this.addValues(unionDict, DataType.GLUCOSE, glucose);
             });
         }
         if (data.insulin) {
-            data.insulin.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.insulin.forEach((insulin: InsulinModel) => {
+                this.addValues(unionDict, DataType.INSULIN, insulin);
             });
         }
         if (data.food) {
-            data.food.forEach((element) => {
-                dict[element.timestamp] = { ...dict[element.timestamp], ...element };
+            data.food.forEach((food: FoodModel) => {
+                this.addValues(unionDict, DataType.FOOD, food);
             });
         }
-        return Object.values(dict) as Array<any>;
+        return Object.values(unionDict) as Array<any>;
+    }
+    /**
+     * Helper function that adds all known keys of a model to a union model object in the dictionary
+     * @param unionDict dictionary that contains all unionModels with timestamp as key
+     * @param data data (e.g. FoodModel, ExerciseModel etc.)
+     */
+    private static addValues(
+        unionDict: Record<number, UnionModel>,
+        dataType: DataType,
+        data: any
+    ): void {
+        // create a new UnionModel if it does not exist at the timestamp
+        if (unionDict[data.timestamp] === undefined) {
+            unionDict[data.timestamp] = { ...nullUnion }; // copy a null-filled unionModel
+        }
+
+        // add all known values to the UnionModel
+        const unionModel: UnionModel = unionDict[data.timestamp];
+        unionModel.timestamp = data.timestamp;
+        switch (dataType) {
+            case DataType.FOOD:
+                unionModel.food = data;
+                break;
+            case DataType.MOOD:
+                unionModel.mood = data;
+                break;
+            case DataType.GLUCOSE:
+                unionModel.glucose = data;
+                break;
+            case DataType.INSULIN:
+                unionModel.insulin = data;
+                break;
+            case DataType.EXERCISE:
+                unionModel.exercise = data;
+                break;
+        }
     }
 
     /**
      * Retrieves exercise data from GameBus.
+     * If no exercise types are specified, all exercise types are retrieved
      * @param dateSlice Timeframe to retrieve data for
      * @returns Awaitable array of retrieved exercise data
      */
     private async retrieveExerciseData(dateSlice: DateSlice): Promise<ExerciseModel[]> {
         if (this.parameters.exerciseTypes) {
-            return await this.gbClient
+            // retrieve specified exercise types
+            return await this.retrieveExercisePages(dateSlice, this.parameters.exerciseTypes);
+        }
+        try {
+            // retrieve all exercise types
+            return await this.retrieveExercisePages(
+                dateSlice,
+                Object.values(ExerciseGameDescriptorNames)
+            );
+        } catch (e) {
+            return [];
+        }
+    }
+
+    /**
+     *
+     * @param dateSlice Timeframe to retrieve data for
+     * @param exerciseTypes array of exercise types
+     * @returns exercise models
+     */
+    private async retrieveExercisePages(
+        dateSlice: DateSlice,
+        exerciseTypes: ExerciseGameDescriptorNames[]
+    ): Promise<ExerciseModel[]> {
+        let models: ExerciseModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: ExerciseModel[] = await this.gbClient
                 .exercise()
                 .getExerciseActivityFromGdBetweenUnix(
                     this.playerId,
-                    this.parameters.exerciseTypes,
+                    exerciseTypes,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
                 );
-        } else {
-            return [];
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        return models;
     }
 
     /**
@@ -123,13 +196,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved glucose data
      */
     private async retrieveGlucoseData(dateSlice: DateSlice): Promise<GlucoseModel[]> {
-        return await this.gbClient
-            .glucose()
-            .getGlucoseActivitiesBetweenUnix(
-                this.playerId,
-                dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime()
-            );
+        let models: GlucoseModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: GlucoseModel[] = await this.gbClient
+                .glucose()
+                .getGlucoseActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -138,15 +220,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved insulin data
      */
     private async retrieveInsulinData(dateSlice: DateSlice): Promise<InsulinModel[]> {
-        return Insulin.convertResponseToInsulinModels(
-            await this.gbClient
+        let models: InsulinModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: InsulinModel[] = await this.gbClient
                 .insulin()
                 .getInsulinActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
-                )
-        );
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -155,15 +244,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved mood data
      */
     private async retrieveMoodData(dateSlice: DateSlice): Promise<MoodModel[]> {
-        return Mood.convertResponseToMoodModels(
-            await this.gbClient
+        let models: MoodModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: MoodModel[] = await this.gbClient
                 .mood()
                 .getMoodActivitiesBetweenUnix(
                     this.playerId,
                     dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime()
-                )
-        );
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 
     /**
@@ -172,13 +268,22 @@ export class DataEndpoint {
      * @returns Awaitable array of retrieved food data
      */
     private async retrieveFoodData(dateSlice: DateSlice): Promise<FoodModel[]> {
-        return await this.gbClient
-            .food()
-            .getFoodActivitiesBetweenUnix(
-                this.playerId,
-                dateSlice.startDate.getTime(),
-                dateSlice.endDate.getTime()
-            );
+        let models: FoodModel[] = [];
+        for (let page = 0; page < this.MAX_PAGES; page++) {
+            const pageModels: FoodModel[] = await this.gbClient
+                .food()
+                .getFoodActivitiesBetweenUnix(
+                    this.playerId,
+                    dateSlice.startDate.getTime(),
+                    dateSlice.endDate.getTime(),
+                    undefined,
+                    this.PAGE_LIMIT,
+                    page
+                );
+            models = models.concat(pageModels);
+            if (pageModels.length < this.PAGE_LIMIT) break;
+        }
+        return models;
     }
 }
 
@@ -257,3 +362,17 @@ export enum DataType {
     FOOD,
     EXERCISE
 }
+
+/**
+ * Mapping between datatype and another mapping between keys in the original
+ * data model and the union model.
+ */
+export const unionRenamed: Record<DataType, any> = {
+    [DataType.GLUCOSE]: {},
+    [DataType.INSULIN]: {},
+    [DataType.MOOD]: {},
+    [DataType.FOOD]: {},
+    [DataType.EXERCISE]: {
+        calories: 'caloriesBurnt'
+    }
+};

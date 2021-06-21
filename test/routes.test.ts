@@ -49,10 +49,7 @@ describe('GET data', () => {
         expect(response.statusCode).toBe(401);
     });
 
-    /**
-     * UTP: DEP - 2
-     */
-    test('no query parameters given', async () => {
+    /*test('no query parameters given', async () => {
         const response = await request(server)
             .get('/data')
             .set(
@@ -60,7 +57,7 @@ describe('GET data', () => {
                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjUyNyIsImFjY2Vzc1Rva2VuIjoiMjIyMiIsInJlZnJlc2hUb2tlbiI6IjMzMzMiLCJpYXQiOjE2MjEzNDU2ODksImV4cCI6MTYyMzkzNzY4OSwiaXNzIjoiaHR0cHM6Ly90dWUubmwifQ.guv6n1M21Y6dQnt5-Re2vAoRnboyuxLim2t1dYqF8mI'
             );
         expect(response.statusCode).toBe(400);
-    });
+    });*/
 });
 
 /**

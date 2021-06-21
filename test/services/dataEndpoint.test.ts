@@ -37,13 +37,15 @@ describe('with mocked requests get call', () => {
                     timestamp: 1,
                     name: 'ex1',
                     type: 'ex?',
-                    heartrate: 1
+                    heartrate: 1,
+                    calories: 20
                 }
             ],
             food: [
                 {
                     timestamp: 1,
-                    carbohydrates: 21
+                    carbohydrates: 21,
+                    calories: 40
                 }
             ],
             glucose: [
@@ -71,15 +73,32 @@ describe('with mocked requests get call', () => {
         expect(union).toStrictEqual([
             {
                 timestamp: 1,
-                name: 'ex1',
-                type: 'ex?',
-                heartrate: 1,
-                carbohydrates: 21,
-                glucoseLevel: 12,
-                arousal: 1,
-                valence: 2,
-                insulinType: 2,
-                insulinAmount: 12
+                exercise: {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1,
+                    calories: 20
+                },
+                food: {
+                    timestamp: 1,
+                    carbohydrates: 21,
+                    calories: 40
+                },
+                glucose: {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                },
+                mood: {
+                    timestamp: 1,
+                    arousal: 1,
+                    valence: 2
+                },
+                insulin: {
+                    timestamp: 1,
+                    insulinType: 2,
+                    insulinAmount: 12
+                }
             }
         ]);
     });
@@ -94,13 +113,15 @@ describe('with mocked requests get call', () => {
                     timestamp: 1,
                     name: 'ex1',
                     type: 'ex?',
-                    heartrate: 1
+                    heartrate: 1,
+                    calories: 20
                 }
             ],
             food: [
                 {
                     timestamp: 1,
-                    carbohydrates: 21
+                    carbohydrates: 21,
+                    calories: 40
                 }
             ],
             glucose: [
@@ -128,18 +149,40 @@ describe('with mocked requests get call', () => {
         expect(union).toStrictEqual([
             {
                 timestamp: 1,
-                name: 'ex1',
-                type: 'ex?',
-                heartrate: 1,
-                carbohydrates: 21,
-                glucoseLevel: 12
+                insulin: null,
+                mood: null,
+                exercise: {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1,
+                    calories: 20
+                },
+                food: {
+                    timestamp: 1,
+                    carbohydrates: 21,
+                    calories: 40
+                },
+                glucose: {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                }
             },
             {
                 timestamp: 2,
-                arousal: 1,
-                valence: 2,
-                insulinType: 2,
-                insulinAmount: 12
+                mood: {
+                    timestamp: 2,
+                    arousal: 1,
+                    valence: 2
+                },
+                insulin: {
+                    timestamp: 2,
+                    insulinType: 2,
+                    insulinAmount: 12
+                },
+                exercise: null,
+                food: null,
+                glucose: null
             }
         ]);
     });
@@ -202,7 +245,9 @@ describe('with mocked requests get call', () => {
      * UTP: DEP - 10
      */
     test('request exercise with parameters', async () => {
-        const endpoint = new DataEndpoint(client, 0, ['exercise'], { exerciseTypes: [] });
+        const endpoint = new DataEndpoint(client, 0, ['exercise'], {
+            exerciseTypes: [ExerciseGameDescriptorNames.RUN]
+        });
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ exercise: [] });
     });
@@ -215,7 +260,7 @@ describe('with mocked requests get call', () => {
             client,
             0,
             ['food', 'mood', 'glucose', 'insulin', 'exercise'],
-            {}
+            { exerciseTypes: [ExerciseGameDescriptorNames.RUN] }
         );
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ food: [], mood: [], glucose: [], insulin: [], exercise: [] });

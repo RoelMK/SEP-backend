@@ -89,7 +89,7 @@ export async function startLoginAttempt(
 async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
     const clientAccessCode = await getClientAccessToken();
     if (clientAccessCode) {
-        const gbClient: GameBusClient = new GameBusClient(undefined, true);
+        const gbClient: GameBusClient = new GameBusClient();
         try {
             const response = await gbClient.get(
                 'users',

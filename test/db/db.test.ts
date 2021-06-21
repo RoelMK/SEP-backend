@@ -136,9 +136,91 @@ test('database register double login attempt', () => {
     dbClient.close();
 });
 
-/**
- * UTP: DB - 8
- */
+test('log child token', () => {
+    const childEmail = 'child@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.logToken(childEmail, '123')).toBeTruthy();
+    dbClient.close();
+});
+
+test('request supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.requestSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    dbClient.close();
+});
+
+test('Get a list of requested supervisors for a normal user', () => {
+    const childEmail = 'child@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.getRequestedSupervisors(childEmail)).toEqual([
+        {
+            supervisor_email: 'supervisor@gmail.com'
+        }
+    ]);
+    dbClient.close();
+});
+
+test('Confirm supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    dbClient.close();
+});
+
+test('Get a list of supervisors which role is approved', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.getApprovedSupervisors(childEmail)).toEqual([
+        {
+            supervisor_email: 'supervisor@gmail.com'
+        }
+    ]);
+    dbClient.close();
+});
+
+test('Check if user is a supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.checkRole(supervisorEmail)).toBeTruthy();
+    dbClient.close();
+});
+
+test('Get a list of normal users requested supervisor role from a supervisor', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
+    expect(dbClient.getChildren(supervisorEmail)).toEqual([
+        {
+            player_email: 'child@gmail.com'
+        }
+    ]);
+    dbClient.close();
+});
+
+test('Retract supervisor permission', () => {
+    const childEmail = 'child@gmail.com';
+    const supervisorEmail = 'supervisor@gmail.com';
+
+    const dbClient = new DBClient();
+    expect(dbClient.retractPermission(childEmail, supervisorEmail)).toBeTruthy();
+    dbClient.close();
+});
+
 test('Register a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';

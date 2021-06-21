@@ -6,9 +6,13 @@ indexRouter.use('/', require('./test'));
 indexRouter.use('/onedrive', require('./onedrive'));
 indexRouter.use('/', require('./auth'));
 indexRouter.use('/', require('./upload'));
+indexRouter.use('/supervisor', require('./supervisor'));
 indexRouter.use('/', require('./data'));
 indexRouter.use('/', require('./nightscout'));
 indexRouter.use('/', require('./mood'));
 indexRouter.use('/', require('./insulin'));
+indexRouter.use('/', require('./activity'));
+indexRouter.use('/', require('./profile'));
+indexRouter.use('/', require('./flushDB'));
 
 module.exports = indexRouter;

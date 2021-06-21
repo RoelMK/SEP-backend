@@ -229,7 +229,7 @@ describe('with mocked insulin put call', () => {
                 })
             })
         );
-        expect(response).toEqual([]);
+        expect(response).toEqual({});
     });
 
     test('PUT a single insulin model without ID', async () => {

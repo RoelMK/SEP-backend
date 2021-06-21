@@ -70,43 +70,32 @@ describe('with mocked requests get call', () => {
         expect(union).toStrictEqual([
             {
                 timestamp: 1,
-                // exercise
-                name: 'ex1', // sensible name of activity (regex of type)
-                type: 'ex?', // activity type
-                duration: null, // in seconds
-                steps: null, // in amount
-                distance: null, // in meters
-                caloriesBurnt: 20, // in kcal //TODO changed name
-                groupSize: null, // in amount (0 - inf)
-                penalty: null, // in amount (0 - 100), only relevant for air hockey
-                score: null, // in amount, only relevant for air hockey
-                maxSpeed: null, // in m/s, only relevant for (detail) activities
-                avgSpeed: null, // in m/s, only relevant for (detail) activities
-                maxHeartrate: null, // in bpm, only relevant for (detail) activities
-                avgHeartrate: null, // in bpm, only relevant for (detail) activities
-                minHeartrate: null, // in bpm, only relevant for (detail) activities
-                heartrate: 1, // in bpm, currently unused but can be used at a later date
-                // food
-                carbohydrates: 21,
-                calories: 40,
-                meal_type: null, // indicates breakfast, lunch, snack etc.
-                glycemic_index: null,
-                fat: null,
-                saturatedFat: null,
-                proteins: null,
-                fibers: null,
-                salt: null,
-                water: null,
-                sugars: null,
-                description: null,
-                // glucose
-                glucoseLevel: 12,
-                // insulin
-                insulinAmount: 12,
-                insulinType: 2,
-                // mood
-                arousal: 1,
-                valence: 2
+                exercise: {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1,
+                    calories: 20
+                },
+                food: {
+                    timestamp: 1,
+                    carbohydrates: 21,
+                    calories: 40
+                },
+                glucose: {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                },
+                mood: {
+                    timestamp: 1,
+                    arousal: 1,
+                    valence: 2
+                },
+                insulin: {
+                    timestamp: 1,
+                    insulinType: 2,
+                    insulinAmount: 12
+                }
             }
         ]);
     });
@@ -154,83 +143,40 @@ describe('with mocked requests get call', () => {
         expect(union).toStrictEqual([
             {
                 timestamp: 1,
-                // exercise
-                name: 'ex1', // sensible name of activity (regex of type)
-                type: 'ex?', // activity type
-                duration: null, // in seconds
-                steps: null, // in amount
-                distance: null, // in meters
-                caloriesBurnt: 20, // in kcal //TODO changed name
-                groupSize: null, // in amount (0 - inf)
-                penalty: null, // in amount (0 - 100), only relevant for air hockey
-                score: null, // in amount, only relevant for air hockey
-                maxSpeed: null, // in m/s, only relevant for (detail) activities
-                avgSpeed: null, // in m/s, only relevant for (detail) activities
-                maxHeartrate: null, // in bpm, only relevant for (detail) activities
-                avgHeartrate: null, // in bpm, only relevant for (detail) activities
-                minHeartrate: null, // in bpm, only relevant for (detail) activities
-                heartrate: 1, // in bpm, currently unused but can be used at a later date
-                // food
-                carbohydrates: 21,
-                calories: 40,
-                meal_type: null, // indicates breakfast, lunch, snack etc.
-                glycemic_index: null,
-                fat: null,
-                saturatedFat: null,
-                proteins: null,
-                fibers: null,
-                salt: null,
-                water: null,
-                sugars: null,
-                description: null,
-                // glucose
-                glucoseLevel: 12,
-                // insulin
-                insulinAmount: null,
-                insulinType: null,
-                // mood
-                arousal: null,
-                valence: null
+                insulin: null,
+                mood: null,
+                exercise: {
+                    timestamp: 1,
+                    name: 'ex1',
+                    type: 'ex?',
+                    heartrate: 1,
+                    calories: 20
+                },
+                food: {
+                    timestamp: 1,
+                    carbohydrates: 21,
+                    calories: 40
+                },
+                glucose: {
+                    timestamp: 1,
+                    glucoseLevel: 12
+                }
             },
             {
                 timestamp: 2,
-                // exercise
-                name: null, // sensible name of activity (regex of type)
-                type: null, // activity type
-                duration: null, // in seconds
-                steps: null, // in amount
-                distance: null, // in meters
-                caloriesBurnt: null, // in kcal //TODO changed name
-                groupSize: null, // in amount (0 - inf)
-                penalty: null, // in amount (0 - 100), only relevant for air hockey
-                score: null, // in amount, only relevant for air hockey
-                maxSpeed: null, // in m/s, only relevant for (detail) activities
-                avgSpeed: null, // in m/s, only relevant for (detail) activities
-                maxHeartrate: null, // in bpm, only relevant for (detail) activities
-                avgHeartrate: null, // in bpm, only relevant for (detail) activities
-                minHeartrate: null, // in bpm, only relevant for (detail) activities
-                heartrate: null, // in bpm, currently unused but can be used at a later date
-                // food
-                carbohydrates: null,
-                calories: null,
-                meal_type: null, // indicates breakfast, lunch, snack etc.
-                glycemic_index: null,
-                fat: null,
-                saturatedFat: null,
-                proteins: null,
-                fibers: null,
-                salt: null,
-                water: null,
-                sugars: null,
-                description: null,
-                // glucose
-                glucoseLevel: null,
-                // insulin
-                insulinAmount: 12,
-                insulinType: 2,
-                // mood
-                arousal: 1,
-                valence: 2
+                mood: {
+                    timestamp: 2,
+                    arousal: 1,
+                    valence: 2
+                },
+                insulin: {
+                    timestamp: 2,
+                    insulinType: 2,
+                    insulinAmount: 12
+                },
+                exercise: null,
+                food: null,
+                glucose: null
             }
         ]);
     });
@@ -272,7 +218,9 @@ describe('with mocked requests get call', () => {
     });
 
     test('request exercise with parameters', async () => {
-        const endpoint = new DataEndpoint(client, 0, ['exercise'], { exerciseTypes: [] });
+        const endpoint = new DataEndpoint(client, 0, ['exercise'], {
+            exerciseTypes: [ExerciseGameDescriptorNames.RUN]
+        });
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ exercise: [] });
     });
@@ -282,7 +230,7 @@ describe('with mocked requests get call', () => {
             client,
             0,
             ['food', 'mood', 'glucose', 'insulin', 'exercise'],
-            {}
+            { exerciseTypes: [ExerciseGameDescriptorNames.RUN] }
         );
         const data = await endpoint.retrieveData({ startDate: new Date(), endDate: new Date() });
         expect(data).toStrictEqual({ food: [], mood: [], glucose: [], insulin: [], exercise: [] });

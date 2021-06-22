@@ -348,6 +348,7 @@ Public Method,"Mood.toIDPOSTData",SEP-backend\src\gb\objects\mood.ts,,16,,,,
 Public Method,"Mood.toPOSTData",SEP-backend\src\gb\objects\mood.ts,,19,,,,
 Enum,"MoodDataProviderNames",SEP-backend\src\gb\objects\mood.ts,,3,,,,
 Enum,"MoodGameDescriptorNames",SEP-backend\src\gb\objects\mood.ts,,3,,,,
+Class,"MoodMapper",SEP-backend\src\services\mood\moodMapper.ts,0,2,0,,0,
 Interface,"MoodModel",SEP-backend\src\gb\models\moodModel.ts,,6,,,,
 Class,"MoodParser",SEP-backend\src\services\mood\moodParser.ts,2,21,4,,3,
 Public Method,"MoodParser.constructor",SEP-backend\src\services\mood\moodParser.ts,,4,,,,
@@ -476,7 +477,7 @@ File,"SEP-backend\src\services\glucose\glucoseParser.ts",SEP-backend\src\service
 File,"SEP-backend\src\services\insulin\insulinMapper.ts",SEP-backend\src\services\insulin\insulinMapper.ts,2,74,4,"0.31",,5
 File,"SEP-backend\src\services\insulin\insulinParser.ts",SEP-backend\src\services\insulin\insulinParser.ts,2,51,4,"0.59",,3
 File,"SEP-backend\src\services\modelParser.ts",SEP-backend\src\services\modelParser.ts,1,38,2,"0.50",,5
-File,"SEP-backend\src\services\mood\moodMapper.ts",SEP-backend\src\services\mood\moodMapper.ts,0,0,0,"0.00",,0
+File,"SEP-backend\src\services\mood\moodMapper.ts",SEP-backend\src\services\mood\moodMapper.ts,0,2,0,"3.00",,0
 File,"SEP-backend\src\services\mood\moodParser.ts",SEP-backend\src\services\mood\moodParser.ts,2,24,4,"0.71",,3
 File,"SEP-backend\src\services\utils\dates.ts",SEP-backend\src\services\utils\dates.ts,2,132,5,"0.58",,1
 File,"SEP-backend\src\services\utils\files.ts",SEP-backend\src\services\utils\files.ts,4,21,5,"0.90",,0

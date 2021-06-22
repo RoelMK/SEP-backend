@@ -104,6 +104,8 @@ export interface UnderstandDependencies {
     from_file: string; // the file that is using another file
     to_file: string; // the other file that is used
     references: string;
+    from_entities: string;
+    to_entities: string;
 }
 
 export interface UnderstandDependenciesMatrix {

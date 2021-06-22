@@ -1,6 +1,7 @@
 // Important: Only files under the src directory in this project need to be analyzed
 // (We should not forget to clearly mention this)
 
+import { ParseConfig } from 'papaparse';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import { ratioToRank, simplifyKinds } from './qualityHelpers';
 import {
@@ -54,8 +55,15 @@ class QualityCheck {
         )) as unknown as UnderstandDependencies[];
         this.calculateFanout(fileDependencies);
 
-        // parse csv for dependenciess
-        const fileDependenciesMatrix: UnderstandDependenciesMatrix[] = (await csvParser.parse(
+        // parse csv for dependencies in cycles
+        const config: ParseConfig = {
+            header: true,
+            worker: true,
+            skipEmptyLines: true
+        };
+        const fileDependenciesMatrix: UnderstandDependenciesMatrix[] = (await new CSVParser(
+            config
+        ).parse(
             'test/codeQuality/fileDependencyMatrix.csv'
         )) as unknown as UnderstandDependenciesMatrix[];
         this.calculateCyclicDependencies(fileDependenciesMatrix);
@@ -223,18 +231,22 @@ class QualityCheck {
     }
 
     private calculateFanout(fDependencies: UnderstandDependencies[]) {
-        const fanout: Record<string, number> = {};
+        const fanout: Record<string, { count; sum }> = {};
+        // loop over all files and count fanout (amount of objects used from other classes)
         fDependencies.forEach((dep) => {
-            if (fanout[dep.from_file] === undefined) fanout[dep.from_file] = 0;
-            fanout[dep.from_file] += parseInt(dep.references);
+            if (fanout[dep.from_file] === undefined) fanout[dep.from_file] = { count: 0, sum: 0 };
+            // Serguei said to use the to_entities property
+            fanout[dep.from_file].sum += parseInt(dep.to_entities);
+            fanout[dep.from_file].count++;
         });
 
         const faultyFiles: string[] = [];
         const evaluatedFiles = Object.keys(fanout);
         evaluatedFiles.forEach((key) => {
-            if (fanout[key] >= MAX_FANOUT) {
+            if (fanout[key].sum >= MAX_FANOUT) {
                 console.log(
-                    `File: ${key} uses to many items of other files, namely ${fanout[key]}`
+                    // eslint-disable-next-line max-len
+                    `File: ${key} uses to many items of ${fanout[key].count} amount of other files, namely ${fanout[key].sum}`
                 );
                 faultyFiles.push(key);
             }
@@ -243,9 +255,43 @@ class QualityCheck {
         this.mReport[metric.FANOUT] = ratioToRank(faultyFiles.length / evaluatedFiles.length);
     }
 
+    /**
+     * According to Serguei, only symmetric / direct dependencies so no inbetween classes matter
+     * @param fileDependenciesMatrix matrix with dependencies
+     */
     private calculateCyclicDependencies(fileDependenciesMatrix: UnderstandDependenciesMatrix[]) {
-        console.log('Dependency matrix to be implemented (how tho)');
-        console.log(fileDependenciesMatrix[0]);
+        const adjacencyList: Record<string, Array<string>> = {};
+
+        // go over all files + dependencies
+        fileDependenciesMatrix.forEach((dep) => {
+            const file = dep['Dependent File'];
+            console.log(file);
+            if (adjacencyList[file] === undefined) adjacencyList[file] = [];
+            console.log(adjacencyList[file]);
+            // loop over keys
+            Object.keys(dep).forEach((otherFile) => {
+                const dependenciesWithOtherfile = dep[otherFile];
+                if (otherFile == 'Dependent File') return;
+                if (dependenciesWithOtherfile != '') adjacencyList[file].push(otherFile);
+            });
+        });
+        let countCycles = 0;
+        Object.keys(adjacencyList).forEach((file) => {
+            const neighbours = adjacencyList[file];
+            neighbours.forEach((neighbourFile) => {
+                if (
+                    adjacencyList[neighbourFile] !== undefined &&
+                    adjacencyList[neighbourFile].includes(file)
+                ) {
+                    console.log(`Cycle with \n${file}\n${neighbourFile}\n`);
+                    countCycles++;
+                }
+            });
+        });
+
+        this.mReport[metric.CYCLIC_DEPENDENCIES] = ratioToRank(
+            countCycles / fileDependenciesMatrix.length
+        );
     }
 }
 

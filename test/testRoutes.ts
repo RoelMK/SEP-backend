@@ -1,5 +1,5 @@
-import { DBClient } from '../db/dbClient';
-import { checkJwt } from '../middlewares/checkJwt';
+import { DBClient } from '../src/db/dbClient';
+import { checkJwt } from '../src/middlewares/checkJwt';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const testRouter = require('express').Router();

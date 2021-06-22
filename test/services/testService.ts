@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { DBClient } from '../db/dbClient';
-import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
-import { GameBusClient } from '../gb/gbClient';
-import { ChallengePOSTData } from '../gb/models/gamebusModel';
-import { MoodModel } from '../gb/models/moodModel';
-import { NightScoutClient } from '../nightscout/nsClient';
-import AbbottParser from './dataParsers/abbottParser';
-import { OutputDataType } from './dataParsers/dataParser';
-import FoodDiaryParser from './dataParsers/foodDiaryParser';
+import { DBClient } from '../../src/db/dbClient';
+import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
+import { GameBusClient } from '../../src/gb/gbClient';
+import { ChallengePOSTData } from '../../src/gb/models/gamebusModel';
+import { MoodModel } from '../../src/gb/models/moodModel';
+import { NightScoutClient } from '../../src/nightscout/nsClient';
+import AbbottParser from '../../src/services/dataParsers/abbottParser';
+import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import NightscoutParser, {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from './dataParsers/nightscoutParser';
-import { DateFormat, parseDate } from './utils/dates';
+} from '../../src/services/dataParsers/nightscoutParser';
+import { DateFormat, parseDate } from '../../src/services/utils/dates';
 
 const dummyUserInfo: GameBusToken = {
     playerId: 'testing',

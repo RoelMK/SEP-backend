@@ -1,30 +1,25 @@
 Kind,Name,File,AvgCyclomatic,CountLineCode,MaxCyclomatic,RatioCommentToCode,CountDeclMethod,CountDeclFunction
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\profile.ts,,25,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\mood.ts,,58,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\activity.ts,,20,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\flushDB.ts,,10,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\data.ts,,42,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\insulin.ts,,59,,,,
 Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\auth.ts,,21,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\test.ts,,3,,,,
-Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\supervisor.ts,,15,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\mood.ts,,58,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\data.ts,,42,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\flushDB.ts,,10,,,,
 Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\upload.ts,,39,,,,
 Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\onedrive.ts,,37,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\activity.ts,,20,,,,
 Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\nightscout.ts,,35,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\insulin.ts,,59,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\profile.ts,,25,,,,
+Unnamed Function,"(unnamed_function_1)",SEP-backend\src\routes\supervisor.ts,,15,,,,
 Unnamed Function,"(unnamed_function_1).(unnamed_function_2)",SEP-backend\src\routes\upload.ts,,7,,,,
+Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\auth.ts,,15,,,,
+Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\onedrive.ts,,14,,,,
 Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\profile.ts,,35,,,,
 Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\supervisor.ts,,21,,,,
-Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\auth.ts,,15,,,,
-Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\test.ts,,3,,,,
-Unnamed Function,"(unnamed_function_2)",SEP-backend\src\routes\onedrive.ts,,14,,,,
-Unnamed Function,"(unnamed_function_3)",SEP-backend\src\routes\supervisor.ts,,7,,,,
-Unnamed Function,"(unnamed_function_3)",SEP-backend\src\routes\test.ts,,3,,,,
 Unnamed Function,"(unnamed_function_3)",SEP-backend\src\routes\onedrive.ts,,12,,,,
-Unnamed Function,"(unnamed_function_4)",SEP-backend\src\routes\supervisor.ts,,7,,,,
-Unnamed Function,"(unnamed_function_4)",SEP-backend\src\routes\test.ts,,6,,,,
+Unnamed Function,"(unnamed_function_3)",SEP-backend\src\routes\supervisor.ts,,7,,,,
 Unnamed Function,"(unnamed_function_4)",SEP-backend\src\routes\onedrive.ts,,8,,,,
+Unnamed Function,"(unnamed_function_4)",SEP-backend\src\routes\supervisor.ts,,7,,,,
 Unnamed Function,"(unnamed_function_5)",SEP-backend\src\routes\supervisor.ts,,7,,,,
-Unnamed Function,"(unnamed_function_5)",SEP-backend\src\routes\test.ts,,3,,,,
 Unnamed Function,"(unnamed_function_6)",SEP-backend\src\routes\supervisor.ts,,7,,,,
 Unnamed Function,"(unnamed_function_7)",SEP-backend\src\routes\supervisor.ts,,14,,,,
 Unnamed Function,"(unnamed_function_8)",SEP-backend\src\routes\supervisor.ts,,7,,,,
@@ -97,8 +92,8 @@ Public Method,"Circle.getPlayersForAGivenCircle",SEP-backend\src\gb\objects\circ
 Interface,"CircleGETData",SEP-backend\src\gb\models\gamebusModel.ts,,20,,,,
 Interface,"CombinedDataParserOutput",SEP-backend\src\services\dataParsers\dataParser.ts,,6,,,,
 Interface,"ConnectionData",SEP-backend\src\gb\models\gamebusModel.ts,,5,,,,
-Interface,"Consumpties",SEP-backend\src\gb\models\eetmeterModel.ts,,4,,,,
 Interface,"Consumpties",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,4,,,,
+Interface,"Consumpties",SEP-backend\src\gb\models\eetmeterModel.ts,,4,,,,
 Class,"DBClient",SEP-backend\src\db\dbClient.ts,2,230,3,,22,
 Public Method,"DBClient.checkRole",SEP-backend\src\db\dbClient.ts,,15,,,,
 Public Method,"DBClient.cleanFileParseEvents",SEP-backend\src\db\dbClient.ts,,8,,,,
@@ -158,8 +153,8 @@ Enum,"DataSource",SEP-backend\src\services\dataParsers\dataParser.ts,,6,,,,
 Enum,"DataType",SEP-backend\src\services\dataEndpoint.ts,,7,,,,
 Enum,"DateFormat",SEP-backend\src\services\utils\dates.ts,,9,,,,
 Interface,"DateSlice",SEP-backend\src\services\utils\dates.ts,,4,,,,
-Interface,"Datum",SEP-backend\src\gb\models\eetmeterModel.ts,,5,,,,
 Interface,"Datum",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,5,,,,
+Interface,"Datum",SEP-backend\src\gb\models\eetmeterModel.ts,,5,,,,
 Interface,"DecodedJWT",SEP-backend\src\utils\authUtils.ts,,8,,,,
 Class,"DeveloperError",SEP-backend\src\services\dataParsers\dataParser.ts,1,6,1,,1,
 Public Method,"DeveloperError.constructor",SEP-backend\src\services\dataParsers\dataParser.ts,,4,,,,
@@ -167,13 +162,13 @@ Class,"EetMeterParser",SEP-backend\src\services\dataParsers\eetmeterParser.ts,1,
 Public Method,"EetMeterParser.constructor",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
 Public Method,"EetMeterParser.getData",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
 Public Method,"EetMeterParser.process",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,10,,,,
-Interface,"EetmeterData",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"EetmeterData",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"EetmeterData",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"EndpointData",SEP-backend\src\services\dataEndpoint.ts,,7,,,,
 Interface,"EndpointParameters",SEP-backend\src\services\dataEndpoint.ts,,3,,,,
 Interface,"EndpointPromises",SEP-backend\src\services\dataEndpoint.ts,,7,,,,
-Interface,"Energie",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Energie",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Energie",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Class,"ExcelParser",SEP-backend\src\services\fileParsers\excelParser.ts,1,39,4,,3,
 Public Method,"ExcelParser.constructor",SEP-backend\src\services\fileParsers\excelParser.ts,,3,,,,
 Public Static Method,"ExcelParser.getMappingTableValues",SEP-backend\src\services\fileParsers\excelParser.ts,,23,,,,
@@ -328,8 +323,8 @@ Enum,"InsulinPropertyKeys",SEP-backend\src\gb\objects\insulin.ts,,4,,,,
 Enum,"InsulinSource",SEP-backend\src\services\insulin\insulinParser.ts,,5,,,,
 Enum,"InsulinType",SEP-backend\src\gb\models\insulinModel.ts,,4,,,,
 Class,"Keys",SEP-backend\src\gb\objects\keys.ts,0,15,0,,0,
-Interface,"Koolhydraten",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Koolhydraten",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Koolhydraten",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"LoginAttemptToken",SEP-backend\src\utils\authUtils.ts,,4,,,,
 Enum,"MEAL_TYPE",SEP-backend\src\gb\models\foodModel.ts,,7,,,,
 Interface,"MembershipReference",SEP-backend\src\gb\models\gamebusModel.ts,,7,,,,
@@ -387,8 +382,8 @@ Private Method,"NightscoutParser.parseTreatment",SEP-backend\src\services\dataPa
 Public Method,"NightscoutParser.process",SEP-backend\src\services\dataParsers\nightscoutParser.ts,,18,,,,
 Interface,"Notification",SEP-backend\src\gb\models\gamebusModel.ts,,8,,,,
 Interface,"NotificationParams",SEP-backend\src\gb\models\gamebusModel.ts,,4,,,,
-Interface,"Nutrienten",SEP-backend\src\gb\models\eetmeterModel.ts,,9,,,,
 Interface,"Nutrienten",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,9,,,,
+Interface,"Nutrienten",SEP-backend\src\gb\models\eetmeterModel.ts,,9,,,,
 Class,"OneDriveClient",SEP-backend\src\onedrive\odClient.ts,1,238,3,,14,
 Public Method,"OneDriveClient.constructor",SEP-backend\src\onedrive\odClient.ts,,18,,,,
 Private Method,"OneDriveClient.getExcelSession",SEP-backend\src\onedrive\odClient.ts,,21,,,,
@@ -414,11 +409,11 @@ Unnamed Function,"OneDriveExcelParser.getMappingTableValues.(unnamed_function_1)
 Public Method,"OneDriveExcelParser.parse",SEP-backend\src\services\fileParsers\oneDriveExcelParser.ts,,23,,,,
 Interface,"OneDriveTokenModel",SEP-backend\src\onedrive\models\onedriveTokenModel.ts,,5,,,,
 Enum,"OutputDataType",SEP-backend\src\services\dataParsers\dataParser.ts,,7,,,,
-Interface,"Periode",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Periode",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Periode",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Points",SEP-backend\src\gb\models\gamebusModel.ts,,3,,,,
-Interface,"Product",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Product",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Product",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"PropertyInstancePOST",SEP-backend\src\gb\models\gamebusModel.ts,,4,,,,
 Interface,"PropertyInstanceProperty",SEP-backend\src\gb\models\gamebusModel.ts,,8,,,,
 Interface,"PropertyInstanceReference",SEP-backend\src\gb\models\gamebusModel.ts,,5,,,,
@@ -462,17 +457,16 @@ File,"SEP-backend\src\onedrive\models\onedriveTokenModel.ts",SEP-backend\src\one
 File,"SEP-backend\src\onedrive\odClient.ts",SEP-backend\src\onedrive\odClient.ts,1,240,3,"0.35",,14
 File,"SEP-backend\src\onedrive\test.ts",SEP-backend\src\onedrive\test.ts,1,164,2,"1.07",,8
 File,"SEP-backend\src\routes\activity.ts",SEP-backend\src\routes\activity.ts,3,27,5,"0.19",,0
-File,"SEP-backend\src\routes\auth.ts",SEP-backend\src\routes\auth.ts,3,40,5,"0.05",,0
+File,"SEP-backend\src\routes\auth.ts",SEP-backend\src\routes\auth.ts,3,40,5,"0.50",,0
 File,"SEP-backend\src\routes\data.ts",SEP-backend\src\routes\data.ts,4,52,8,"0.25",,0
 File,"SEP-backend\src\routes\flushDB.ts",SEP-backend\src\routes\flushDB.ts,1,16,1,"0.25",,1
-File,"SEP-backend\src\routes\index.ts",SEP-backend\src\routes\index.ts,1,14,1,"0.07",,0
+File,"SEP-backend\src\routes\index.ts",SEP-backend\src\routes\index.ts,1,14,1,"0.86",,0
 File,"SEP-backend\src\routes\insulin.ts",SEP-backend\src\routes\insulin.ts,5,69,10,"0.23",,0
 File,"SEP-backend\src\routes\mood.ts",SEP-backend\src\routes\mood.ts,5,68,10,"0.24",,0
-File,"SEP-backend\src\routes\nightscout.ts",SEP-backend\src\routes\nightscout.ts,3,44,5,"0.05",,0
-File,"SEP-backend\src\routes\onedrive.ts",SEP-backend\src\routes\onedrive.ts,2,96,5,"0.13",,1
+File,"SEP-backend\src\routes\nightscout.ts",SEP-backend\src\routes\nightscout.ts,3,44,5,"0.25",,0
+File,"SEP-backend\src\routes\onedrive.ts",SEP-backend\src\routes\onedrive.ts,2,96,5,"0.36",,1
 File,"SEP-backend\src\routes\profile.ts",SEP-backend\src\routes\profile.ts,3,91,6,"0.32",,0
-File,"SEP-backend\src\routes\supervisor.ts",SEP-backend\src\routes\supervisor.ts,2,98,4,"0.00",,0
-File,"SEP-backend\src\routes\test.ts",SEP-backend\src\routes\test.ts,1,22,1,"0.05",,0
+File,"SEP-backend\src\routes\supervisor.ts",SEP-backend\src\routes\supervisor.ts,2,98,4,"0.45",,0
 File,"SEP-backend\src\routes\testHTMLabbott.html",SEP-backend\src\routes\testHTMLabbott.html,0,0,0,"0.00",,0
 File,"SEP-backend\src\routes\testHTMLeetmeter.html",SEP-backend\src\routes\testHTMLeetmeter.html,0,0,0,"0.00",,0
 File,"SEP-backend\src\routes\testHTMLfooddiary.html",SEP-backend\src\routes\testHTMLfooddiary.html,0,0,0,"0.00",,0
@@ -499,7 +493,6 @@ File,"SEP-backend\src\services\insulin\insulinParser.ts",SEP-backend\src\service
 File,"SEP-backend\src\services\modelParser.ts",SEP-backend\src\services\modelParser.ts,1,38,2,"0.50",,5
 File,"SEP-backend\src\services\mood\moodMapper.ts",SEP-backend\src\services\mood\moodMapper.ts,0,0,0,"0.00",,0
 File,"SEP-backend\src\services\mood\moodParser.ts",SEP-backend\src\services\mood\moodParser.ts,2,24,4,"0.71",,3
-File,"SEP-backend\src\services\testService.ts",SEP-backend\src\services\testService.ts,1,489,2,"0.04",,9
 File,"SEP-backend\src\services\utils\dates.ts",SEP-backend\src\services\utils\dates.ts,2,132,5,"0.58",,1
 File,"SEP-backend\src\services\utils\files.ts",SEP-backend\src\services\utils\files.ts,4,21,5,"0.90",,0
 File,"SEP-backend\src\services\utils\interfaceKeys.ts",SEP-backend\src\services\utils\interfaceKeys.ts,1,46,3,"0.39",,3
@@ -507,8 +500,8 @@ File,"SEP-backend\src\services\utils\units.ts",SEP-backend\src\services\utils\un
 File,"SEP-backend\src\utils\authUtils.ts",SEP-backend\src\utils\authUtils.ts,2,129,4,"0.44",,7
 File,"SEP-backend\src\utils\flush.ts",SEP-backend\src\utils\flush.ts,1,18,2,"0.83",,2
 File,"SEP-backend\src\utils\supervisorUtils.ts",SEP-backend\src\utils\supervisorUtils.ts,1,48,2,"0.96",,8
-Interface,"Suikers",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Suikers",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Suikers",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"SupportReference",SEP-backend\src\gb\models\gamebusModel.ts,,5,,,,
 Class,"TokenHandler",SEP-backend\src\gb\auth\tokenHandler.ts,1,13,1,,2,
 Public Method,"TokenHandler.constructor",SEP-backend\src\gb\auth\tokenHandler.ts,,5,,,,
@@ -521,25 +514,20 @@ Public Method,"User.disconnectDataProvider",SEP-backend\src\gb\objects\user.ts,,
 Public Method,"User.getCurrentUser",SEP-backend\src\gb\objects\user.ts,,4,,,,
 Interface,"UserProfile",SEP-backend\src\routes\profile.ts,,22,,,,
 Interface,"UserReference",SEP-backend\src\gb\models\gamebusModel.ts,,9,,,,
-Interface,"VerzadigdVet",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"VerzadigdVet",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
-Interface,"Vet",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
+Interface,"VerzadigdVet",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Vet",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
-Interface,"Water",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
+Interface,"Vet",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Water",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
+Interface,"Water",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Class,"XMLParser",SEP-backend\src\services\fileParsers\xmlParser.ts,1,13,1,,2,
 Public Method,"XMLParser.constructor",SEP-backend\src\services\fileParsers\xmlParser.ts,,3,,,,
 Public Method,"XMLParser.parse",SEP-backend\src\services\fileParsers\xmlParser.ts,,8,,,,
 Unnamed Function,"XMLParser.parse.(unnamed_function_1)",SEP-backend\src\services\fileParsers\xmlParser.ts,,5,,,,
 Unnamed Function,"XMLParser.parse.(unnamed_function_1).(unnamed_function_2)",SEP-backend\src\services\fileParsers\xmlParser.ts,,3,,,,
-Interface,"Zout",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Interface,"Zout",SEP-backend\src\services\dataParsers\eetmeterParser.ts,,3,,,,
-Function,"addMoods",SEP-backend\src\services\testService.ts,,156,,,,
-Function,"addNightScout",SEP-backend\src\services\testService.ts,,173,,,,
-Unnamed Function,"addNightScout.(unnamed_function_1)",SEP-backend\src\services\testService.ts,,3,,,,
-Unnamed Function,"addNightScout.(unnamed_function_2)",SEP-backend\src\services\testService.ts,,3,,,,
+Interface,"Zout",SEP-backend\src\gb\models\eetmeterModel.ts,,3,,,,
 Function,"checkSupervisor",SEP-backend\src\utils\supervisorUtils.ts,,5,,,,
-Function,"cleanParses",SEP-backend\src\services\testService.ts,,3,,,,
 Public Method,"config.system.loggerOptions.loggerCallback",SEP-backend\src\onedrive\auth.ts,,3,,,,
 Unnamed Function,"convertExcelDateTimes.(unnamed_function_5)",SEP-backend\src\services\utils\dates.ts,,14,,,,
 Unnamed Function,"convertExcelDateTimes.(unnamed_function_5).(unnamed_function_6)",SEP-backend\src\services\utils\dates.ts,,8,,,,
@@ -555,7 +543,7 @@ Function,"execute",SEP-backend\src\onedrive\test.ts,,30,,,,
 Function,"execute2",SEP-backend\src\onedrive\test.ts,,17,,,,
 Function,"execute3",SEP-backend\src\onedrive\test.ts,,17,,,,
 Function,"execute4",SEP-backend\src\onedrive\test.ts,,20,,,,
-Namespace,"exports",SEP-backend\src\routes\index.ts,0,13,0,,,
+Namespace,"exports",SEP-backend\src\routes\index.ts,0,12,0,,,
 Function,"finishLoginAttempt",SEP-backend\src\utils\authUtils.ts,,15,,,,
 Function,"flushActivities",SEP-backend\src\utils\flush.ts,,10,,,,
 Function,"flushDB",SEP-backend\src\utils\flush.ts,,6,,,,
@@ -600,11 +588,5 @@ Function,"request",SEP-backend\src\utils\supervisorUtils.ts,,11,,,,
 Function,"retractPermission",SEP-backend\src\utils\supervisorUtils.ts,,5,,,,
 Unnamed Function,"server.(unnamed_function_1)",SEP-backend\src\server.ts,,3,,,,
 Function,"startLoginAttempt",SEP-backend\src\utils\authUtils.ts,,27,,,,
-Function,"testAbbott",SEP-backend\src\services\testService.ts,,8,,,,
-Function,"testExcel",SEP-backend\src\services\testService.ts,,16,,,,
-Function,"testGb",SEP-backend\src\services\testService.ts,,41,,,,
-Function,"testNightScout",SEP-backend\src\services\testService.ts,,38,,,,
-Function,"testOneDrive",SEP-backend\src\services\testService.ts,,10,,,,
-Function,"testParseNewest",SEP-backend\src\services\testService.ts,,22,,,,
 Function,"uploadFile",SEP-backend\src\routes\upload.ts,,42,,,,
 Unnamed Function,"validUnixTimestamp.(unnamed_function_8)",SEP-backend\src\services\utils\dates.ts,,3,,,,

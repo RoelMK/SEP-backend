@@ -14,7 +14,7 @@ export interface MetricReport {
     [metric.FUNCTIONS_MODULE]: number;
     [metric.COMMENT_RATIO]: number;
     [metric.CYCLIC_DEPENDENCIES]: number;
-    [metric.CLASS_COUPLING]: number;
+    //[metric.CLASS_COUPLING]: number; Not possible for Typescript
     [metric.FANOUT]: number;
 }
 
@@ -36,7 +36,7 @@ export enum metric {
     //internal duplication is left out for now
     COMMENT_RATIO = 'COMMENT_RATIO',
     CYCLIC_DEPENDENCIES = 'CYCLIC_DEPENDENCIES',
-    CLASS_COUPLING = 'CLASS_COUPLING',
+    //CLASS_COUPLING = 'CLASS_COUPLING', Not possible for Typescript
     FANOUT = 'FANOUT'
     //external duplication is left out for now
 }
@@ -64,7 +64,7 @@ export const mInvolvedIn = {
         qAttributes.MODIFIABILITY,
         qAttributes.TESTABILITY
     ],
-    [metric.CLASS_COUPLING]: [qAttributes.MODULARITY, qAttributes.REUSABILITY],
+    //[metric.CLASS_COUPLING]: [qAttributes.MODULARITY, qAttributes.REUSABILITY], Not possible for Typescript
     [metric.FANOUT]: [qAttributes.MODULARITY, qAttributes.REUSABILITY]
 };
 
@@ -84,7 +84,7 @@ export const initMReport: MetricReport = {
     [metric.FUNCTIONS_MODULE]: 0,
     [metric.COMMENT_RATIO]: 0,
     [metric.CYCLIC_DEPENDENCIES]: 0,
-    [metric.CLASS_COUPLING]: 0,
+    //[metric.CLASS_COUPLING]: 0, Not possible for Typescript
     [metric.FANOUT]: 0
 };
 

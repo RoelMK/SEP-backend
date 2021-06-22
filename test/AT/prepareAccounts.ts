@@ -49,7 +49,6 @@ class AccountPreparation {
 
         // add data
         try {
-            // TODO: check dates sent in backend-discussion to make sure the data is on the correct dates
             addMoods(this.gbAccessToken, this.playerId);
             console.log('mood added to the profile');
 

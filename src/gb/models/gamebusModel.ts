@@ -124,8 +124,6 @@ export interface NotificationParams {
     paramValue: string | null;
 }
 
-//TODO add output interfaces for getPlayer and getUser
-
 export interface PropertyPermissionsReference {
     id: number;
     index: any;

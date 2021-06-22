@@ -87,8 +87,7 @@ export default class GlucoseMapper {
                 } as GlucoseModel;
         }
 
-        // TODO what to do at end of function, this should not happen
-        // For now return empty model with only zeros
+        // Return empty model with only zeros
         return emptyGlucoseModel();
     }
 

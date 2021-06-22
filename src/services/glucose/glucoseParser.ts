@@ -72,7 +72,6 @@ export default class GlucoseParser extends ModelParser {
             case DateFormat.ABBOTT_US:
                 return GlucoseUnit.MG_DL;
             default:
-                // TODO this should not happen, but should also be caught earlier (see Abbottparser)
                 return GlucoseUnit.UNDEFINED;
         }
     }
@@ -98,7 +97,7 @@ export default class GlucoseParser extends ModelParser {
     }
 }
 /**
- * Current glucose sources available //TODO ? Add more
+ * Current glucose sources available
  */
 export enum GlucoseSource {
     ABBOTT = 1,

@@ -7,9 +7,6 @@ import { DataParser, DataSource, OutputDataType } from './dataParser';
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
 export class EetMeterParser extends DataParser {
-    // Parsers can't be initialized from the start since they have to be initialized with the filtered data
-    // TODO: don't think these should be private since you want to POST from them, but I'll keep them private for now,
-    // alternatively, you can create a public method in the AbbottParser for each data type POST individually
     private eetmeterConsumptionData: Consumptie[] = [];
 
     /**

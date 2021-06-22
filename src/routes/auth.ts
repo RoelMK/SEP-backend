@@ -44,6 +44,4 @@ router.post('/gamebus/callback', (req: Request, res: Response) => {
     }
 });
 
-// TODO: add DELETE endpoint on Disconnect URL (/gamebus/disconnect)
-
 module.exports = router;

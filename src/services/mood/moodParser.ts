@@ -3,6 +3,7 @@ import { MoodModel } from '../../gb/models/moodModel';
 import { ModelParser } from '../modelParser';
 //import { ModelParser } from '../modelParser';
 
+//TODO only implement if mood data from other sources needs to be parsed
 export default class MoodParser extends ModelParser {
     // Mood data to be exported
     mood?: MoodModel;

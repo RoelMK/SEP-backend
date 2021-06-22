@@ -81,7 +81,6 @@ export default class NightscoutParser extends DataParser {
         try {
             return await this.nsClient.getGlucoseUnit();
         } catch (e) {
-            // TODO can we just assume this? Maybe based on the average value this can be determined more accurately
             return GlucoseUnit.MMOL_L;
         }
     }
@@ -94,8 +93,6 @@ export default class NightscoutParser extends DataParser {
         this.retrieveLastUpdate(this.nsClient.getNightscoutHost());
 
         if (this.testEntries === undefined || this.testTreatments === undefined) {
-            // TODO note to self use parse with parameter or just individual funtions as below
-            // does not matter for result and below needs less overhead
             this.nightScoutEntries = await this.parseEntry();
             this.nightScoutTreatments = await this.parseTreatment();
             // retrieve glucose unit

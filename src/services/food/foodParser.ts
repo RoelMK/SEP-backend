@@ -13,8 +13,6 @@ import { GameBusToken } from '../../gb/auth/tokenHandler';
  * Food parser class that opens a .csv file and processes it to foodModels
  * Currently supported food sources:
  * - Abbott
- * TODO: automatically detect food source based on column names
- * TODO: use dynamic format where user is able to pick what column represents what
  */
 export default class FoodParser extends ModelParser {
     // Food data to be exported

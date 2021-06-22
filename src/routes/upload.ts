@@ -68,19 +68,6 @@ uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any
     });
 });
 
-// test get requests for file uploads //TODO remove
-uploadRouter.get('/upload/abbott', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLabbott.html');
-});
-
-uploadRouter.get('/upload/fooddiary', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLfooddiary.html');
-});
-
-uploadRouter.get('/upload/eetmeter', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLeetmeter.html');
-});
-
 /**
  *
  * @param req Post request, containing file path of uploaded file and more

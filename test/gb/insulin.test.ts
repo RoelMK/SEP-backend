@@ -219,7 +219,6 @@ describe('with mocked insulin put call', () => {
 
         const response = await client.insulin().putSingleInsulinActivity(insulin, 0);
 
-        // TODO: add form data check?
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({

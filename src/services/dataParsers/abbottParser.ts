@@ -64,12 +64,8 @@ export default class AbbottParser extends DataParser {
                 parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
                 parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
                 parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL
-                // TODO: checking for dateFormat for every entry can be slow,
-                // it also looks like dates might be always present, but can this be assumed?
-                //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
             );
         });
-        // TODO: come up with a better way to return AbbottData if there is no glucose data
         if (!glucose) {
             return [emptyAbbottData()];
         }
@@ -87,7 +83,6 @@ export default class AbbottParser extends DataParser {
                 entry.carbohydrates__grams_
             );
         });
-        // TODO: come up with a better way to return AbbottData if there is no food data
         if (food?.length === 0) {
             return [emptyAbbottData()];
         }
@@ -112,8 +107,6 @@ export default class AbbottParser extends DataParser {
      * Determines the date format (locale) of the input file based on first entry
      */
     private getLocale(): void {
-        // TODO check if the first entry is NONE, but others are not
-        // TODO involves checking if first can be NONE at all
         this.dateFormat = getDateFormat(this.abbottData?.[0].device_timestamp);
     }
 }
@@ -150,7 +143,6 @@ const emptyAbbottData = (): AbbottData => ({
 
 /**
  * Raw Abbott .csv data format
- * TODO: what is non_numeric_food?
  */
 export type AbbottData = {
     device: string;

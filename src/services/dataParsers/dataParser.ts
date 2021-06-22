@@ -123,7 +123,7 @@ export abstract class DataParser {
                 this.intializedParsers.push(this.foodParser);
                 return;
             case OutputDataType.MOOD:
-                //TODO
+                //TODO implement moodparser (if mood from other sources is parsed)
                 this.moodParser = new MoodParser(data, this.userInfo);
                 this.intializedParsers.push(this.moodParser);
                 return;
@@ -208,7 +208,6 @@ export abstract class DataParser {
                 } as CombinedDataParserOutput;
 
             default:
-                // TODO this should not happen
                 return [];
         }
     }

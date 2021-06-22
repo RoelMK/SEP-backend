@@ -46,7 +46,6 @@ export class GameBusClient {
         this.gamebusUser = new User(this, true);
     }
 
-    // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
     activity(): Activity {
         return this.gamebusActivity;
     }

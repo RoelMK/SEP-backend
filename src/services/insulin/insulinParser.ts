@@ -74,7 +74,7 @@ export default class InsulinParser extends ModelParser {
     }
 }
 /**
- * Current insulin sources available //TODO ? Add more
+ * Current insulin sources available
  */
 export enum InsulinSource {
     ABBOTT = 0,

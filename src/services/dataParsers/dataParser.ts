@@ -249,7 +249,8 @@ export abstract class DataParser {
     protected getLastProcessedTimestamp(): number {
         const newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
-        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
+        //TODO moodparser is not implemented
+        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0);
         newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
         newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
         return Math.max(...newestModels);

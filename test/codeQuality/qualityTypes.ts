@@ -87,3 +87,26 @@ export const initMReport: MetricReport = {
     [metric.CLASS_COUPLING]: 0,
     [metric.FANOUT]: 0
 };
+
+export interface UnderstandExport {
+    kind: string;
+    name: string;
+    file: string;
+    avgcyclomatic: number;
+    countlinecode: number;
+    maxcyclomatic: number;
+    ratiocommenttocode: number;
+    countdeclmethod: number;
+    countdeclfunction: number;
+}
+
+export interface UnderstandDependencies {
+    from_file: string; // the file that is using another file
+    to_file: string; // the other file that is used
+    references: string;
+}
+
+export interface UnderstandDependenciesMatrix {
+    Dependent_File: string;
+    //keys for every other file + values for the amount of dependencies
+}

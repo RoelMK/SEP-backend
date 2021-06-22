@@ -2,8 +2,10 @@
 // (We should not forget to clearly mention this)
 
 import CSVParser from '../../src/services/fileParsers/csvParser';
+import { ratioToRank, simplifyKinds } from './qualityHelpers';
 import {
     MAX_AVG_COMPLEXITY,
+    MAX_FANOUT,
     MAX_FUNCTIONS_MODULE,
     MAX_METHODS_CLASS,
     MAX_METHOD_COMPLEXITY,
@@ -16,7 +18,10 @@ import {
     metric,
     MetricReport,
     mInvolvedIn,
-    QualityReport
+    QualityReport,
+    UnderstandDependencies,
+    UnderstandDependenciesMatrix,
+    UnderstandExport
 } from './qualityTypes';
 
 class QualityCheck {
@@ -26,14 +31,14 @@ class QualityCheck {
     async analyseUnderstandExports() {
         const csvParser = new CSVParser();
 
-        // parse csv
+        // parse metricscsv
         const understandExport: UnderstandExport[] = (await csvParser.parse(
             'test/codeQuality/metrics.csv'
         )) as unknown as UnderstandExport[];
         //console.log(understandExport);
 
         // reduce kind names to basics
-        this.simplifyKinds(understandExport);
+        simplifyKinds(understandExport);
 
         // calculate metrics
         this.calculateSLOCRank(understandExport);
@@ -42,6 +47,20 @@ class QualityCheck {
         this.calculateMAXCycloRank(understandExport);
         this.calculateMethodsClassRank(understandExport);
         this.calculateFunctionsModuleRank(understandExport);
+
+        // parse csv for dependenciess
+        const fileDependencies: UnderstandDependencies[] = (await csvParser.parse(
+            'test/codeQuality/fileDependencies.csv'
+        )) as unknown as UnderstandDependencies[];
+        this.calculateFanout(fileDependencies);
+
+        // parse csv for dependenciess
+        const fileDependenciesMatrix: UnderstandDependenciesMatrix[] = (await csvParser.parse(
+            'test/codeQuality/fileDependencyMatrix.csv'
+        )) as unknown as UnderstandDependenciesMatrix[];
+        this.calculateCyclicDependencies(fileDependenciesMatrix);
+
+        // show metrics report
         console.log(this.mReport);
 
         this.generateQualityReport();
@@ -83,7 +102,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate software line of code rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.SLOC] = this.ratioToRank(faultyModules.length / moduleExports.length);
+        this.mReport[metric.SLOC] = ratioToRank(faultyModules.length / moduleExports.length);
     }
 
     /**
@@ -105,9 +124,7 @@ class QualityCheck {
         });
 
         // Calculate software line of code rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.COMMENT_RATIO] = this.ratioToRank(
-            faultyFiles.length / fileExports.length
-        );
+        this.mReport[metric.COMMENT_RATIO] = ratioToRank(faultyFiles.length / fileExports.length);
     }
 
     /**
@@ -128,7 +145,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate avg cyclomatic complexity rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.AVG_COMPLEXITY] = this.ratioToRank(
+        this.mReport[metric.AVG_COMPLEXITY] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -152,7 +169,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate max method cyclomatic complexity rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.METHOD_COMPLEXITY] = this.ratioToRank(
+        this.mReport[metric.METHOD_COMPLEXITY] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -176,7 +193,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate methods per class rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.METHODS_CLASS] = this.ratioToRank(
+        this.mReport[metric.METHODS_CLASS] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -200,67 +217,36 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate functions per file rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.FUNCTIONS_MODULE] = this.ratioToRank(
+        this.mReport[metric.FUNCTIONS_MODULE] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
 
-    /**
-     * Converts fault ratios to rankings for metrics
-     * @param ratio fault to total ratio
-     * @returns rank between -2 and 2
-     */
-    private ratioToRank(ratio: number) {
-        //TODO check thresholds
-        if (ratio < 0.04) {
-            return 2;
-        } else if (ratio < 0.06) {
-            return 1;
-        } else if (ratio < 0.11) {
-            return 0;
-        } else if (ratio < 0.21) {
-            return -1;
-        } else {
-            return -2;
-        }
-    }
-    /**
-     * Generates a list of all present kinds in the Understand Export
-     * @param understandExport Understand Export array
-     * @returns all different kinds in the Understand Export
-     */
-    private getAllKinds(understandExport: UnderstandExport[]): string[] {
-        const kinds: string[] = [];
-        understandExport.forEach((element) => {
-            if (!kinds.includes(element.kind)) {
-                kinds.push(element.kind);
+    private calculateFanout(fDependencies: UnderstandDependencies[]) {
+        const fanout: Record<string, number> = {};
+        fDependencies.forEach((dep) => {
+            if (fanout[dep.from_file] === undefined) fanout[dep.from_file] = 0;
+            fanout[dep.from_file] += parseInt(dep.references);
+        });
+
+        const faultyFiles: string[] = [];
+        const evaluatedFiles = Object.keys(fanout);
+        evaluatedFiles.forEach((key) => {
+            if (fanout[key] >= MAX_FANOUT) {
+                console.log(
+                    `File: ${key} uses to many items of other files, namely ${fanout[key]}`
+                );
+                faultyFiles.push(key);
             }
         });
-        return kinds;
+        // Calculate fanout rank by dividing faulty files by evaluated files
+        this.mReport[metric.FANOUT] = ratioToRank(faultyFiles.length / evaluatedFiles.length);
     }
 
-    /**
-     * Simplifies names as private method to method or unnamed function to function
-     * @param understandExport list of Understand exported metrics
-     */
-    private simplifyKinds(understandExport: UnderstandExport[]) {
-        understandExport.forEach((element) => {
-            const words = element.kind.split(' ');
-            element.kind = words[words.length - 1];
-        });
+    private calculateCyclicDependencies(fileDependenciesMatrix: UnderstandDependenciesMatrix[]) {
+        console.log('Dependency matrix to be implemented (how tho)');
+        console.log(fileDependenciesMatrix[0]);
     }
 }
 
 new QualityCheck().analyseUnderstandExports();
-
-interface UnderstandExport {
-    kind: string;
-    name: string;
-    file: string;
-    avgcyclomatic: number;
-    countlinecode: number;
-    maxcyclomatic: number;
-    ratiocommenttocode: number;
-    countdeclmethod: number;
-    countdeclfunction: number;
-}

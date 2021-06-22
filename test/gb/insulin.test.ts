@@ -58,7 +58,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&start=19-04-2021&end=21-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&end=21-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(insulin).toEqual([]);
@@ -73,7 +73,7 @@ describe('with mocked insulin get call', () => {
                 headers: expect.objectContaining({
                     Authorization: `Bearer ${mockToken}`
                 }),
-                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&start=19-04-2021&end=20-04-2021&sort=-date`
+                url: `${endpoint}/players/0/activities?gds=LOG_INSULIN&end=20-04-2021&start=19-04-2021&sort=-date`
             })
         );
         expect(insulin).toEqual([]);

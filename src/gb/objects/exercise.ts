@@ -1,16 +1,52 @@
 import { Query, Headers } from '../gbClient';
 import { ActivityModel } from '../models/activityModel';
 import { ExerciseModel } from '../models/exerciseModel';
-import { ActivityGETData } from '../models/gamebusModel';
+import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
 import { Activity, QueryOrder } from './activity';
 import { GameBusObject } from './base';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames } from './keys';
+import { ExerciseGameDescriptorNames, Keys } from './keys';
 
 /**
  * Class for exercise-specific functions
  */
 export class Exercise extends GameBusObject {
+    async postSingleExerciseActivity(
+        model: ExerciseModel,
+        playerID: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<unknown> {
+        const data = this.toPOSTData(model, playerID);
+        const response = await this.activity.postActivity(data, headers, query);
+        return response;
+    }
+    /**S
+     * Function that creates a SPOSTData from a model and playerID
+     * @param model FoodModel object
+     * @param playerID player ID of the user
+     */
+    public toPOSTData(model: ExerciseModel, playerID: number): ActivityPOSTData {
+        const obj = {
+            gameDescriptorTK: ExerciseGameDescriptorNames[model.type],
+            // We post as Mibida since they have all permissions
+            dataProviderName: Keys.gbDataProviderTK,
+            image: '', //TODO add image?
+            date: model.timestamp,
+            propertyInstances: [] as PropertyInstancePOST[],
+            players: [playerID]
+        };
+        for (const key in ExercisePropertyKeys) {
+            if (model[key] !== undefined) {
+                obj.propertyInstances.push({
+                    propertyTK: `${ExercisePropertyKeys[key]}`,
+                    value: model[key]
+                });
+            }
+        }
+        return obj;
+    }
+
     /**
      * Function that returns ALL exercise activities
      * @param playerId ID of player

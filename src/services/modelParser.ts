@@ -17,7 +17,6 @@ export abstract class ModelParser {
             this.lastUpdated = 0;
         }
         this.gbClient = new GameBusClient(
-            //TODO optional, because it is not used?
             new TokenHandler(
                 userInfo.accessToken,
                 userInfo.refreshToken as string,

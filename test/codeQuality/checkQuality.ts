@@ -265,9 +265,7 @@ class QualityCheck {
         // go over all files + dependencies
         fileDependenciesMatrix.forEach((dep) => {
             const file = dep['Dependent File'];
-            console.log(file);
             if (adjacencyList[file] === undefined) adjacencyList[file] = [];
-            console.log(adjacencyList[file]);
             // loop over keys
             Object.keys(dep).forEach((otherFile) => {
                 const dependenciesWithOtherfile = dep[otherFile];

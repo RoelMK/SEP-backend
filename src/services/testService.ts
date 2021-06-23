@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TokenHandler } from '../gb/auth/tokenHandler';
-import { GameBusClient, GameBusClient } from '../gb/gbClient';
-import { ChallengePOSTData } from '../gb/models/gamebusModel';
-import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
-import { MoodModel, MoodModel } from '../gb/models/moodModel';
+
 import { DBClient } from '../db/dbClient';
 import { GameBusToken, TokenHandler } from '../gb/auth/tokenHandler';
-
-import { ExerciseModel } from '../gb/models/exerciseModel';
-
+import { GameBusClient } from '../gb/gbClient';
+import { ChallengePOSTData } from '../gb/models/gamebusModel';
+import { MoodModel } from '../gb/models/moodModel';
 import { NightScoutClient } from '../nightscout/nsClient';
 import AbbottParser from './dataParsers/abbottParser';
 import { OutputDataType } from './dataParsers/dataParser';

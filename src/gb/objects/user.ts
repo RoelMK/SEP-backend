@@ -12,4 +12,38 @@ export class User {
         const response = await this.gamebus.get('users/current', headers, query, this.authRequired);
         return response;
     }
+
+    /**
+     * Disconnects given data provider (ID) from the given player (ID)
+     * @param playerId ID of player
+     * @param dataProviderId ID of data provider to disconnect
+     */
+    async disconnectDataProvider(
+        playerId: number,
+        dataProviderId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        await this.gamebus.delete(
+            `players/${playerId}/data-providers/${dataProviderId}`,
+            headers,
+            query,
+            this.authRequired
+        );
+    }
+
+    async connectDataProvider(
+        playerId: number,
+        dataProviderId: number,
+        headers?: Headers,
+        query?: Query
+    ): Promise<void> {
+        await this.gamebus.post(
+            `players/${playerId}/data-providers/${dataProviderId}`,
+            undefined,
+            headers,
+            query,
+            this.authRequired
+        );
+    }
 }

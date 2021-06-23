@@ -3,6 +3,7 @@ import { DBClient } from '../../src/db/dbClient';
 import {
     createJWT,
     finishLoginAttempt,
+    refreshJWT,
     registerConnectCallback,
     startLoginAttempt
 } from '../../src/utils/authUtils';
@@ -131,4 +132,21 @@ test('start login again after callback', async () => {
 
     // Finish login
     expect(finishLoginAttempt(token?.loginToken as string)).toBeDefined();
+});
+
+/**
+ * UTP: TODO
+ */
+test('Refreshing JWT', async () => {
+    const playerId = '1';
+    const refreshToken = '2';
+    expect(refreshJWT(playerId, refreshToken)).toBeDefined();
+});
+
+/**
+ * UTP: TODO
+ * Now we give undefined as input but this could also come from GameBus
+ */
+test('startLoginAttempt with undefined email address', async () => {
+    expect(await startLoginAttempt('', true)).toBeUndefined();
 });

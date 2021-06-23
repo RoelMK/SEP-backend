@@ -11,6 +11,7 @@ import {
     parseNightScout
 } from '../testUtils/parseUtils';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
+import InsulinMapper from '../../src/services/insulin/insulinMapper';
 
 describe('Abbott insulin', () => {
     /**
@@ -158,5 +159,17 @@ describe('Nightscout insulin', () => {
         expect(await parseNightScout([], [testNSInsulin], OutputDataType.INSULIN)).toStrictEqual(
             expectedResult
         );
+    });
+});
+
+describe('Glucose mapper', () => {
+    /**
+     * ATP: TODO
+     */
+    test('unsupported insulin source', () => {
+        new InsulinMapper(); // test if class is error-free and can be created
+        expect(() => {
+            InsulinMapper.mapInsulin('nonsense' as unknown as InsulinSource, DateFormat.FOOD_DIARY);
+        }).toThrow('Insulin source not implemented!');
     });
 });

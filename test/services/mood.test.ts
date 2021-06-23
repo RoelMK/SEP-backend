@@ -1,5 +1,6 @@
 import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 import { MoodModel } from '../../src/gb/models/moodModel';
+import MoodMapper from '../../src/services/mood/moodMapper';
 import MoodParser from '../../src/services/mood/moodParser';
 import { postMoodData } from '../testUtils/parseUtils';
 
@@ -37,5 +38,16 @@ test('mood from future other source', async () => {
         timestamp: 0,
         arousal: 1,
         valence: 1
+    });
+});
+
+describe('Mood mapper', () => {
+    /**
+     * ATP: TODO
+     */
+    test('unsupported mood source', () => {
+        new MoodMapper(); // test if class is error-free and can be created
+        //TODO, finish when mood template is implemented in the future
+        expect(true).toBeTruthy();
     });
 });

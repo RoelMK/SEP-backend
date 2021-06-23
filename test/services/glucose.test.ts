@@ -1,4 +1,4 @@
-import { GlucoseModel } from '../../src/gb/models/glucoseModel';
+import { GlucoseModel, GlucoseUnit } from '../../src/gb/models/glucoseModel';
 import { AbbottData } from '../../src/services/dataParsers/abbottParser';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { GlucoseSource } from '../../src/services/glucose/glucoseParser';
@@ -6,6 +6,7 @@ import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { parseAbbott, parseNightScout, postGlucoseData } from '../testUtils/parseUtils';
 import { NightScoutEntryModel } from '../../src/services/dataParsers/nightscoutParser';
+import GlucoseMapper from '../../src/services/glucose/glucoseMapper';
 
 describe('Abbott glucose', () => {
     /**
@@ -130,5 +131,21 @@ describe('Nightscout glucose', () => {
         expect(await parseNightScout([testNSGlucose], [], OutputDataType.GLUCOSE)).toStrictEqual(
             expectedResult
         );
+    });
+});
+
+describe('Glucose mapper', () => {
+    /**
+     * ATP: TODO
+     */
+    test('unsupported glucose source', () => {
+        new GlucoseMapper(); // test if class is error-free and can be created
+        expect(() => {
+            GlucoseMapper.mapGlucose(
+                'nonsense' as unknown as GlucoseSource,
+                DateFormat.FOOD_DIARY,
+                GlucoseUnit.UNDEFINED
+            );
+        }).toThrow('Glucose source not implemented!');
     });
 });

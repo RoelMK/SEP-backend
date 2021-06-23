@@ -29,8 +29,7 @@ export default class InsulinMapper {
             case InsulinSource.NIGHTSCOUT:
                 return this.mapNightScout;
             default:
-                // TODO this should not happen
-                return this.mapFoodDiaryInsulin;
+                throw Error('Insulin source not implemented!');
         }
     }
 

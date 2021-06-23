@@ -11,6 +11,7 @@ import {
 } from '../testUtils/parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
+import FoodMapper from '../../src/services/food/foodMapper';
 
 describe('Abbott food', () => {
     /**
@@ -279,5 +280,17 @@ describe('Nightscout food', () => {
         expect(await parseNightScout([], [testNSFood], OutputDataType.FOOD)).toStrictEqual(
             expectedResult
         );
+    });
+});
+
+describe('Food mapper', () => {
+    /**
+     * ATP: TODO
+     */
+    test('unsupported food source', () => {
+        new FoodMapper(); // test if class is error-free and can be created
+        expect(() => {
+            FoodMapper.mapFood('nonsense' as unknown as FoodSource, DateFormat.FOOD_DIARY);
+        }).toThrow('Food source not supported');
     });
 });

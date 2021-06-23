@@ -322,7 +322,7 @@ test('Register and update multiple file parse events and retrieve it', () => {
 });
 
 /**
- * UTP: DB - 21
+ * UTP: DB - 19
  */
 test('Retrieve non existing parse event', () => {
     const playerId = '-1';
@@ -333,7 +333,7 @@ test('Retrieve non existing parse event', () => {
 });
 
 /**
- * UTP: DB - 22
+ * UTP: DB - 20
  */
 test('Execute methods while database does not exist', () => {
     try {

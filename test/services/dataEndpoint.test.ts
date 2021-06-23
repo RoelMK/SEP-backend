@@ -28,7 +28,7 @@ describe('with mocked requests get call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: DEP - 24
+     * UTP: DEP - 23
      */
     test('union single data timestamp', () => {
         const data: EndpointData = {
@@ -104,7 +104,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 25
+     * UTP: DEP - 24
      */
     test('union multiple data timestamps', () => {
         const data: EndpointData = {
@@ -188,7 +188,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 4
+     * UTP: DEP - 3
      */
     test('empty request', async () => {
         const endpoint = new DataEndpoint(client, 0, [], {});
@@ -197,7 +197,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 5
+     * UTP: DEP - 4
      */
     test('request glucose', async () => {
         const endpoint = new DataEndpoint(client, 0, ['glucose'], {});
@@ -206,7 +206,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 6
+     * UTP: DEP - 5
      */
     test('request insulin', async () => {
         const endpoint = new DataEndpoint(client, 0, ['insulin'], {});
@@ -215,7 +215,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 7
+     * UTP: DEP - 6
      */
     test('request mood', async () => {
         const endpoint = new DataEndpoint(client, 0, ['mood'], {});
@@ -224,7 +224,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 8
+     * UTP: DEP - 7
      */
     test('request food', async () => {
         const endpoint = new DataEndpoint(client, 0, ['food'], {});
@@ -233,7 +233,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 9
+     * UTP: DEP - 8
      */
     test('request exercise without parameters', async () => {
         const endpoint = new DataEndpoint(client, 0, ['exercise'], {});
@@ -242,7 +242,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 10
+     * UTP: DEP - 9
      */
     test('request exercise with parameters', async () => {
         const endpoint = new DataEndpoint(client, 0, ['exercise'], {
@@ -253,7 +253,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 11
+     * UTP: DEP - 10
      */
     test('request all data types', async () => {
         const endpoint = new DataEndpoint(
@@ -267,7 +267,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 18
+     * UTP: DEP - 17
      */
     test('parsing of empty exercise type list', () => {
         const exTypes = parseExerciseTypes('');
@@ -275,7 +275,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 19
+     * UTP: DEP - 18
      */
     test('parsing of single exercise in type list', () => {
         const exTypes = parseExerciseTypes('WALK');
@@ -283,7 +283,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 20
+     * UTP: DEP - 19
      */
     test('parsing of multiple exercise types in list', () => {
         const exTypes = parseExerciseTypes('WALK,RUN,MOUNTAINBIKE');
@@ -295,7 +295,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 21
+     * UTP: DEP - 20
      */
     test('parsing of multiple exercise types in list with duplicates', () => {
         const exTypes = parseExerciseTypes('WALK,WALK,RUN,MOUNTAINBIKE,RUN');
@@ -307,7 +307,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 22
+     * UTP: DEP - 21
      */
     test('parsing of multiple exercise types in list with non-existent', () => {
         const exTypes = parseExerciseTypes('WALK,wefojwefjowef,RUN,MOUNTAINBIKE,BLABLA');
@@ -319,7 +319,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 23
+     * UTP: DEP - 22
      */
     test('parsing of multiple exercise types in list with whitespace and irregular capitalization', () => {
         const exTypes = parseExerciseTypes('wAlk, run, MOUNTAINBIKE');
@@ -331,7 +331,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 12
+     * UTP: DEP - 11
      */
     test('parsing of empty data type list', () => {
         const dataTypes = parseDataTypes([]);
@@ -339,7 +339,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 13
+     * UTP: DEP - 12
      */
     test('parsing of single data in type list', () => {
         const dataTypes = parseDataTypes(['GLUCOSE']);
@@ -347,7 +347,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 14
+     * UTP: DEP - 13
      */
     test('parsing of multiple data types in list', () => {
         const dataTypes = parseDataTypes(['GLUCOSE', 'FOOD']);
@@ -355,7 +355,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 15
+     * UTP: DEP - 14
      */
     test('parsing of multiple data types in list with duplicates', () => {
         const dataTypes = parseDataTypes(['GLUCOSE', 'FOOD', 'FOOD']);
@@ -363,7 +363,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 16
+     * UTP: DEP - 15
      */
     test('parsing of multiple data types in list with non-existent', () => {
         const dataTypes = parseDataTypes(['wefni0werfji0qwef', 'GLUCOSE', 'FOOD', 'jhj8i9f']);
@@ -371,7 +371,7 @@ describe('with mocked requests get call', () => {
     });
 
     /**
-     * UTP: DEP - 17
+     * UTP: DEP - 16
      */
     test('parsing of multiple data types in list with whitespace and irregular capitalization', () => {
         const dataTypes = parseDataTypes(['gluCose', 'FOOD']);

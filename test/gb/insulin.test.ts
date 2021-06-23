@@ -105,7 +105,7 @@ describe('with mocked insulin post call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: GB - 33
+     * UTP: GB - 36
      */
     test('POST a single activity', async () => {
         const model: InsulinModel = {
@@ -146,7 +146,7 @@ describe('with mocked insulin post call', () => {
     });
 
     /**
-     * UTP: GB - 34
+     * UTP: GB - 37
      */
     test('POST a multiple activities', async () => {
         const model1: InsulinModel = {
@@ -225,7 +225,7 @@ describe('with mocked insulin put call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: GB - 35
+     * UTP: GB - 38
      */
     test('PUT a single insulin model', async () => {
         const insulin: InsulinModel = {
@@ -269,7 +269,7 @@ describe('with mocked insulin put call', () => {
 
 describe('convert response to models', () => {
     /**
-     * UTP: GB - 28
+     * UTP: GB - 30
      */
     test('convert single response to single model with insulin type 0', () => {
         const response: ActivityGETData = {
@@ -361,7 +361,7 @@ describe('convert response to models', () => {
     });
 
     /**
-     * UTP: GB - 29
+     * UTP: GB - 31
      */
     test('convert single response to single model with insulin type 1', () => {
         const response: ActivityGETData = {

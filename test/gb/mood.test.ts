@@ -105,7 +105,7 @@ describe('with mocked mood post call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: GB - 38
+     * UTP: GB - 41
      */
     test('POST a single activity', async () => {
         const model: MoodModel = {
@@ -146,7 +146,7 @@ describe('with mocked mood post call', () => {
     });
 
     /**
-     * UTP: GB - 39
+     * UTP: GB - 42
      */
     test('POST multiple activities', async () => {
         const model1: MoodModel = {
@@ -225,7 +225,7 @@ describe('with mocked mood put call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: GB - 40
+     * UTP: GB - 43
      */
     test('PUT a single mood model', async () => {
         const mood: MoodModel = {
@@ -250,7 +250,7 @@ describe('with mocked mood put call', () => {
     });
 
     /**
-     * UTP: GB - 41
+     * UTP: GB - 44
      */
     test('PUT a single mood model without ID', async () => {
         const mood: MoodModel = {
@@ -267,7 +267,7 @@ describe('with mocked mood put call', () => {
 
 describe('convert response to models', () => {
     /**
-     * UTP: GB - 30
+     * UTP: GB - 32
      */
     test('convert mood response to model', () => {
         const response: ActivityGETData = {

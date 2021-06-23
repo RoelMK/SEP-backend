@@ -325,7 +325,7 @@ describe('with mocked food get call', () => {
     });
 
     /**
-     * UTP: GB - 34
+     * UTP: GB - 39
      */
     test('POST a single activity', async () => {
         const model: FoodModel = {
@@ -371,7 +371,7 @@ describe('with mocked food get call', () => {
     });
 
     /**
-     * UTP: GB - 35
+     * UTP: GB - 40
      */
     test('POST a multiple activities', async () => {
         const model1: FoodModel = {

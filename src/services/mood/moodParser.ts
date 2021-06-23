@@ -1,6 +1,7 @@
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { MoodModel } from '../../gb/models/moodModel';
 import { ModelParser } from '../modelParser';
+import MoodMapper from './moodMapper';
 //import { ModelParser } from '../modelParser';
 
 export default class MoodParser extends ModelParser {
@@ -23,6 +24,7 @@ export default class MoodParser extends ModelParser {
      */
     private process(): void {
         // TODO: process if needed
+        this.mood = this.moodInput.map(MoodMapper.mapMood())[0];
     }
 
     /**

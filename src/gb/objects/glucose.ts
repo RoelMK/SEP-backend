@@ -1,5 +1,4 @@
 import { convertMG_DLtoMMOL_L } from '../../services/utils/units';
-import { Query, Headers } from '../gbClient';
 import {
     ActivityGETData,
     ActivityPOSTData,
@@ -7,7 +6,9 @@ import {
     IDPropertyInstancePOST,
     PropertyInstancePOST,
     GlucoseModel,
-    ActivityModel
+    ActivityModel,
+    Query,
+    Headers
 } from '../models';
 import { QueryOrder } from './activity';
 import { Activity, GameBusObject, Keys } from '.';

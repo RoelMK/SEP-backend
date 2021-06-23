@@ -1,5 +1,5 @@
-import { GameBusClient, Headers, Query } from '../gbClient';
-import { CircleGETData } from '../models';
+import { GameBusClient } from '../gbClient';
+import { CircleGETData, Headers, Query } from '../models';
 
 export class Circle {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}

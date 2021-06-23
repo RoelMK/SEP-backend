@@ -1,5 +1,5 @@
-import { GameBusClient, Headers, Query } from '../gbClient';
-import { ChallengePOSTData } from '../models';
+import { GameBusClient } from '../gbClient';
+import { ChallengePOSTData, Headers, Query } from '../models';
 import FormData from 'form-data';
 
 export class Challenge {

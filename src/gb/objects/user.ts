@@ -1,5 +1,5 @@
-import { GameBusClient, Query, Headers } from '../gbClient';
-import { GameBusUser } from '../models';
+import { GameBusClient } from '../gbClient';
+import { GameBusUser, Query, Headers } from '../models';
 
 export class User {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}

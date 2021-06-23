@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GameBusObject, Keys, Activity } from '.';
-import { Query, Headers } from '../gbClient';
 import {
     ActivityModel,
     FoodModel,
@@ -8,7 +6,9 @@ import {
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
+    PropertyInstancePOST,
+    Headers,
+    Query
 } from '../models';
 
 import { QueryOrder } from './activity';

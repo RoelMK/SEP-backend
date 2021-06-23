@@ -219,3 +219,17 @@ export interface ChallengeConditionsPOSTData {
 export interface Points {
     dataProviders?: DataProviderReference;
 }
+
+/**
+ * Query interface that is converted to {@URLSearchParams}
+ */
+export interface Query {
+    [key: string]: string;
+}
+
+/**
+ * Headers interface
+ */
+export interface Headers {
+    [key: string]: string;
+}

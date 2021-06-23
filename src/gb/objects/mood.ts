@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Query, Headers } from '../gbClient';
 import {
     ActivityGETData,
     ActivityPOSTData,
@@ -7,7 +5,9 @@ import {
     IDPropertyInstancePOST,
     PropertyInstancePOST,
     MoodModel,
-    ActivityModel
+    ActivityModel,
+    Query,
+    Headers
 } from '../models';
 import { QueryOrder } from './activity';
 import { Activity, GameBusObject } from '.';

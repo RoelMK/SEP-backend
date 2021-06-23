@@ -1,10 +1,11 @@
-import { Query, Headers } from '../gbClient';
 import {
     ActivityModel,
     ExerciseModel,
     ActivityGETData,
     ActivityPOSTData,
-    PropertyInstancePOST
+    PropertyInstancePOST,
+    Query,
+    Headers
 } from '../models';
 import { QueryOrder } from './activity';
 import { startCase, toLower } from 'lodash';

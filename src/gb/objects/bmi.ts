@@ -1,10 +1,11 @@
-import { Query, Headers } from '../gbClient';
 import {
     ActivityGETData,
     ActivityPOSTData,
     PropertyInstancePOST,
     BMIModel,
-    ActivityModel
+    ActivityModel,
+    Query,
+    Headers
 } from '../models';
 import { Activity, GameBusObject, Keys } from '.';
 

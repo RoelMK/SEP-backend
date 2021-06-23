@@ -12,6 +12,7 @@ import {
     Mood,
     User
 } from './objects';
+import { Headers, Query } from './models';
 import FormData from 'form-data';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
@@ -328,20 +329,6 @@ export enum RequestMethod {
     POST = 'POST',
     PUT = 'PUT',
     DELETE = 'DELETE'
-}
-
-/**
- * Query interface that is converted to {@URLSearchParams}
- */
-export interface Query {
-    [key: string]: string;
-}
-
-/**
- * Headers interface
- */
-export interface Headers {
-    [key: string]: string;
 }
 
 // Date format that is to be used in GameBus queries

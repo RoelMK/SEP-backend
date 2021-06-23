@@ -11,7 +11,9 @@ export {
     ChallengePOSTData,
     CircleGETData,
     IDPropertyInstancePOST,
-    GameBusUser
+    GameBusUser,
+    Headers,
+    Query
 } from './gamebusModel';
 export { GlucoseModel } from './glucoseModel';
 export { InsulinModel } from './insulinModel';

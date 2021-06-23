@@ -898,6 +898,14 @@
         "id": "crypto"
       }
     ],
+    "src\\utils\\supervisorUtils.ts": [
+      {
+        "issuer": "src\\utils\\supervisorUtils.ts",
+        "request": "../db/dbClient",
+        "kind": "StaticImport",
+        "id": "src\\db\\dbClient.ts"
+      }
+    ],
     "node_modules\\multer\\index.js": null,
     "src\\services\\dataParsers\\abbottParser.ts": [
       {
@@ -1033,14 +1041,6 @@
         "id": "src\\services\\dataParsers\\dataParser.ts"
       }
     ],
-    "src\\utils\\supervisorUtils.ts": [
-      {
-        "issuer": "src\\utils\\supervisorUtils.ts",
-        "request": "../db/dbClient",
-        "kind": "StaticImport",
-        "id": "src\\db\\dbClient.ts"
-      }
-    ],
     "src\\gb\\gbClient.ts": [
       {
         "issuer": "src\\gb\\gbClient.ts",
@@ -1059,6 +1059,12 @@
         "request": "./objects",
         "kind": "StaticImport",
         "id": "src\\gb\\objects\\index.ts"
+      },
+      {
+        "issuer": "src\\gb\\gbClient.ts",
+        "request": "./models",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\index.ts"
       },
       {
         "issuer": "src\\gb\\gbClient.ts",
@@ -1090,8 +1096,41 @@
       }
     ],
     "path": [],
+    "src\\gb\\models\\exerciseModel.ts": [],
     "src\\gb\\models\\foodModel.ts": [],
     "src\\gb\\models\\glucoseModel.ts": [],
+    "src\\gb\\models\\unionModel.ts": [
+      {
+        "issuer": "src\\gb\\models\\unionModel.ts",
+        "request": "./exerciseModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\exerciseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\unionModel.ts",
+        "request": "./foodModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\foodModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\unionModel.ts",
+        "request": "./glucoseModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\glucoseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\unionModel.ts",
+        "request": "./insulinModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\insulinModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\unionModel.ts",
+        "request": "./moodModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\moodModel.ts"
+      }
+    ],
     "src\\services\\fileParsers\\csvParser.ts": [
       {
         "issuer": "src\\services\\fileParsers\\csvParser.ts",
@@ -1404,39 +1443,6 @@
         "id": "src\\services\\modelParser.ts"
       }
     ],
-    "src\\gb\\models\\exerciseModel.ts": [],
-    "src\\gb\\models\\unionModel.ts": [
-      {
-        "issuer": "src\\gb\\models\\unionModel.ts",
-        "request": "./exerciseModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\exerciseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\unionModel.ts",
-        "request": "./foodModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\foodModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\unionModel.ts",
-        "request": "./glucoseModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\glucoseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\unionModel.ts",
-        "request": "./insulinModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\insulinModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\unionModel.ts",
-        "request": "./moodModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\moodModel.ts"
-      }
-    ],
     "crypto": [],
     "src\\nightscout\\nsClient.ts": [
       {
@@ -1532,10 +1538,74 @@
         "id": "src\\gb\\objects\\user.ts"
       }
     ],
+    "src\\gb\\models\\index.ts": [
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./activityModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\activityModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./bmiModels",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\bmiModels.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./exerciseModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\exerciseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./foodModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\foodModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./gamebusModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\gamebusModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./glucoseModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\glucoseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./insulinModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\insulinModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./moodModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\moodModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./unionModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\unionModel.ts"
+      }
+    ],
     "node_modules\\axios\\index.js": null,
     "node_modules\\date-fns\\esm\\index.js": null,
     "node_modules\\better-sqlite3\\lib\\index.js": null,
     "src\\services\\fileParsers\\fileParser.ts": [],
+    "src\\services\\utils\\interfaceKeys.ts": [
+      {
+        "issuer": "src\\services\\utils\\interfaceKeys.ts",
+        "request": "../dataParsers/dataParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParser.ts"
+      }
+    ],
     "src\\onedrive\\odClient.ts": [
       {
         "issuer": "src\\onedrive\\odClient.ts",
@@ -1548,14 +1618,6 @@
         "request": "util",
         "kind": "StaticImport",
         "id": "util"
-      }
-    ],
-    "src\\services\\utils\\interfaceKeys.ts": [
-      {
-        "issuer": "src\\services\\utils\\interfaceKeys.ts",
-        "request": "../dataParsers/dataParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParser.ts"
       }
     ],
     "src\\services\\food\\foodMapper.ts": [
@@ -1691,12 +1753,6 @@
     "src\\gb\\objects\\bmi.ts": [
       {
         "issuer": "src\\gb\\objects\\bmi.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\bmi.ts",
         "request": "../models",
         "kind": "StaticImport",
         "id": "src\\gb\\models\\index.ts"
@@ -1745,12 +1801,6 @@
     "src\\gb\\objects\\exercise.ts": [
       {
         "issuer": "src\\gb\\objects\\exercise.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\exercise.ts",
         "request": "../models",
         "kind": "StaticImport",
         "id": "src\\gb\\models\\index.ts"
@@ -1789,12 +1839,6 @@
       },
       {
         "issuer": "src\\gb\\objects\\food.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\food.ts",
         "request": "../models",
         "kind": "StaticImport",
         "id": "src\\gb\\models\\index.ts"
@@ -1812,12 +1856,6 @@
         "request": "../../services/utils/units",
         "kind": "StaticImport",
         "id": "src\\services\\utils\\units.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\glucose.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
       },
       {
         "issuer": "src\\gb\\objects\\glucose.ts",
@@ -1841,12 +1879,6 @@
     "src\\gb\\objects\\insulin.ts": [
       {
         "issuer": "src\\gb\\objects\\insulin.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\insulin.ts",
         "request": "../models",
         "kind": "StaticImport",
         "id": "src\\gb\\models\\index.ts"
@@ -1865,12 +1897,6 @@
       }
     ],
     "src\\gb\\objects\\mood.ts": [
-      {
-        "issuer": "src\\gb\\objects\\mood.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
       {
         "issuer": "src\\gb\\objects\\mood.ts",
         "request": "../models",
@@ -1904,70 +1930,14 @@
         "id": "src\\gb\\models\\index.ts"
       }
     ],
+    "src\\gb\\models\\activityModel.ts": [],
     "node_modules\\@azure\\msal-node\\dist\\msal-node.esm.js": null,
     "node_modules\\jsonwebtoken\\index.js": null,
     "node_modules\\ts-xor\\dist\\index.js": null,
     "util": [],
     "src\\services\\utils\\units.ts": [],
-    "src\\gb\\models\\index.ts": [
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./activityModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\activityModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./bmiModels",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\bmiModels.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./exerciseModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\exerciseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./foodModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\foodModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./gamebusModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\gamebusModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./glucoseModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\glucoseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./insulinModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\insulinModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./moodModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\moodModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./unionModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\unionModel.ts"
-      }
-    ],
     "node_modules\\papaparse\\papaparse.js": null,
     "node_modules\\form-data\\lib\\form_data.js": null,
-    "src\\gb\\models\\activityModel.ts": [],
     "node_modules\\lodash\\lodash.js": null,
     "node_modules\\xml2js\\lib\\xml2js.js": null,
     "node_modules\\xlsx\\xlsx.js": null,
@@ -1984,11 +1954,6 @@
       "src\\gb\\objects\\base.ts"
     ],
     [
-      "src\\gb\\gbClient.ts",
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\bmi.ts"
-    ],
-    [
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\bmi.ts"
     ],
@@ -2003,11 +1968,6 @@
       "src\\gb\\objects\\circle.ts"
     ],
     [
-      "src\\gb\\gbClient.ts",
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\exercise.ts"
-    ],
-    [
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\exercise.ts"
     ],
@@ -2016,32 +1976,12 @@
       "src\\gb\\objects\\food.ts"
     ],
     [
-      "src\\gb\\gbClient.ts",
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\food.ts"
-    ],
-    [
-      "src\\gb\\gbClient.ts",
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\glucose.ts"
     ],
     [
       "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\glucose.ts"
-    ],
-    [
-      "src\\gb\\gbClient.ts",
-      "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\insulin.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\insulin.ts"
-    ],
-    [
-      "src\\gb\\gbClient.ts",
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\mood.ts"
     ],
     [
       "src\\gb\\objects\\index.ts",

@@ -1,4 +1,4 @@
-import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
+import { GameBusClient, queryDateFormat } from '../gbClient';
 import { format, addDays, addYears } from 'date-fns';
 import {
     ActivityProperty,
@@ -6,7 +6,9 @@ import {
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
-    PropertyInstanceReference
+    PropertyInstanceReference,
+    Headers,
+    Query
 } from '../models';
 import { fromUnixMsTime } from '../../services/utils/dates';
 import FormData from 'form-data';

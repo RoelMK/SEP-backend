@@ -26,6 +26,11 @@ const uploadRouter = Router();
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
     if (!req.body.format) {
         res.status(400).send('Specify file format!');
+        try {
+            fs.unlinkSync(req.file.path);
+        } catch (e) {
+            console.log(e.message);
+        }
         return;
     }
     // retrieve user information
@@ -66,19 +71,6 @@ uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any
             console.log(e.message);
         }
     });
-});
-
-// test get requests for file uploads //TODO remove
-uploadRouter.get('/upload/abbott', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLabbott.html');
-});
-
-uploadRouter.get('/upload/fooddiary', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLfooddiary.html');
-});
-
-uploadRouter.get('/upload/eetmeter', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLeetmeter.html');
 });
 
 /**

@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { table } from 'console';
-import { oneDriveToken } from '../gb/usersExport';
 import { OneDriveClient } from './odClient';
 
 const client: AxiosInstance = axios.create();
-
+const oneDriveToken = '';
 //https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0
 
 //NOTE: token/sessionID (I forgot) expires after ~ 7 minutes of inactivity (5 if we use persistent changes)

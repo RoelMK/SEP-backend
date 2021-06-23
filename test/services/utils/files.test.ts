@@ -11,7 +11,7 @@ test('Get extension from a file path', () => {
 });
 
 /**
- * UTP: FILE - 1
+ * UTP: FILE - 2
  */
 test('Get extension from a file path, robustness', () => {
     const filePath = 'random/path/to/randomnothin';
@@ -23,7 +23,17 @@ test('Get extension from a file path, robustness', () => {
 });
 
 /**
- * UTP: FILE - 2
+ * UTP: FILE - 3
+ */
+test('Getting extension from file path with other slashes', () => {
+    const filePath = 'random\\path\\to\\file.csv';
+    const filePath2 = 'file.xlsx';
+    expect(getFileExtension(filePath, false)).toBe('csv');
+    expect(getFileExtension(filePath2, false)).toBe('xlsx');
+});
+
+/**
+ * UTP: FILE - 4
  */
 test('Getting directory from file path', () => {
     const filePath = 'random/path/to/file.csv';
@@ -36,7 +46,7 @@ test('Getting directory from file path', () => {
 });
 
 /**
- * UTP: FILE - 3
+ * UTP: FILE - 5
  */
 test('Getting file name from file path', () => {
     const filePath = 'random/path/to/file.csv';

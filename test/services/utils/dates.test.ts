@@ -1,5 +1,6 @@
 import { parse, getUnixTime, format } from 'date-fns';
 import {
+    convertExcelDateTimes,
     DateFormat,
     fromUnixMsTime,
     getDateFormat,
@@ -16,9 +17,13 @@ describe('getting date format from string', () => {
     test('Getting date format from normal string', () => {
         const dateStringEU = '25/01/2020 14:53';
         const dateStringUS = '11-29-2018 11:24 AM';
+        const dateStringEP = '29-11-2018';
+        const dateStringWrong = '55-55-2018';
 
         expect(getDateFormat(dateStringEU)).toBe(DateFormat.ABBOTT_EU);
         expect(getDateFormat(dateStringUS)).toBe(DateFormat.ABBOTT_US);
+        expect(getDateFormat(dateStringEP)).toBe(DateFormat.ENDPOINT_DATE);
+        expect(getDateFormat(dateStringWrong)).toBe('');
     });
 });
 
@@ -185,4 +190,22 @@ describe('Checking valid unix timestamps', () => {
             validUnixTimestamp(timestamp);
         }).toThrow('unixDate is not correctly formatted (should be 13 digits)');
     });
+});
+
+/**
+ * UTP: TODO
+ */
+test('Convert excel date and time', () => {
+    const input = [{ date: '44325', time: '0.417361111' }];
+    const expectedOutput = [{ date: '09/05/21', time: '10:01' }];
+    expect(convertExcelDateTimes(input)).toStrictEqual(expectedOutput);
+});
+
+/**
+ * UTP: TODO
+ */
+test('Convert excel date and time robustness', () => {
+    const input = [{ cheese: 'tasty' }];
+    const expectedOutput = [{ cheese: 'tasty' }];
+    expect(convertExcelDateTimes(input)).toStrictEqual(expectedOutput);
 });

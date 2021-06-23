@@ -43,7 +43,7 @@ test('mood from future other source', async () => {
 
 describe('Mood mapper', () => {
     /**
-     * ATP: TODO
+     * UTP: TODO
      */
     test('unsupported mood source', () => {
         new MoodMapper(); // test if class is error-free and can be created

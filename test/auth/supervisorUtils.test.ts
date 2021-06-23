@@ -29,7 +29,7 @@ afterAll(() => {
 
 /**
  * Purpose: Check full supervisor functionality.
- * UTP: AUTH - 5
+ * UTP: AUTH - 6
  */
 test('check full supervisor functionality', async () => {
     const childEmail = 'child@gmail.com';

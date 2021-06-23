@@ -112,7 +112,7 @@ test('callback while no open login', async () => {
 
 /**
  * Purpose: Check if a login attempt cannot be hijacked.
- * UTP: AUTH - 4
+ * UTP: AUTH - 5
  */
 test('start login again after callback', async () => {
     const playerId = '447';

@@ -136,6 +136,9 @@ test('database register double login attempt', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 11
+ */
 test('log child token', () => {
     const childEmail = 'child@gmail.com';
 
@@ -144,6 +147,9 @@ test('log child token', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 12
+ */
 test('request supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -153,6 +159,9 @@ test('request supervisor', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 13
+ */
 test('Get a list of requested supervisors for a normal user', () => {
     const childEmail = 'child@gmail.com';
 
@@ -165,6 +174,9 @@ test('Get a list of requested supervisors for a normal user', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 14
+ */
 test('Confirm supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -174,6 +186,9 @@ test('Confirm supervisor', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 15
+ */
 test('Get a list of supervisors which role is approved', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -188,6 +203,9 @@ test('Get a list of supervisors which role is approved', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 16
+ */
 test('Check if user is a supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -195,9 +213,13 @@ test('Check if user is a supervisor', () => {
     const dbClient = new DBClient();
     expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.checkRole(supervisorEmail)).toBeTruthy();
+    expect(dbClient.checkRole(childEmail)).toBeFalsy();
     dbClient.close();
 });
 
+/**
+ * ATP: DB - 17
+ */
 test('Get a list of normal users requested supervisor role from a supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -212,15 +234,22 @@ test('Get a list of normal users requested supervisor role from a supervisor', (
     dbClient.close();
 });
 
+/**
+ * ATP: DB - 18
+ */
 test('Retract supervisor permission', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
     expect(dbClient.retractPermission(childEmail, supervisorEmail)).toBeTruthy();
+    expect(dbClient.checkRole(supervisorEmail)).toBeFalsy();
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 8
+ */
 test('Register a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';
@@ -293,7 +322,7 @@ test('Register and update multiple file parse events and retrieve it', () => {
 });
 
 /**
- * UTP: DB - 11
+ * UTP: DB - 21
  */
 test('Retrieve non existing parse event', () => {
     const playerId = '-1';
@@ -304,7 +333,7 @@ test('Retrieve non existing parse event', () => {
 });
 
 /**
- * UTP: DB - 12
+ * UTP: DB - 22
  */
 test('Execute methods while database does not exist', () => {
     try {

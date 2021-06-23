@@ -164,7 +164,7 @@ describe('with mocked exercises get call', () => {
 
 describe('convert response to models', () => {
     /**
-     * UTP: GB - 26
+     * UTP: GB - 28
      */
     test('convert single response to single model', () => {
         const response: ActivityGETData = {

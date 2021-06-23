@@ -1,4 +1,4 @@
-import { Activity } from './activity';
+import { Activity } from '.';
 
 /**
  * Base object used for constructor-inheritance

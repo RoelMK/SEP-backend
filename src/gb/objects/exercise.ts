@@ -1,11 +1,15 @@
 import { Query, Headers } from '../gbClient';
-import { ActivityModel } from '../models/activityModel';
-import { ExerciseModel } from '../models/exerciseModel';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
+import {
+    ActivityModel,
+    ExerciseModel,
+    ActivityGETData,
+    ActivityPOSTData,
+    PropertyInstancePOST
+} from '../models';
+import { QueryOrder } from './activity';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames, Keys } from './keys';
+import { ExerciseGameDescriptorNames } from './keys';
+import { GameBusObject, Keys, Activity } from '.';
 
 /**
  * Class for exercise-specific functions

@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Headers } from '../gbClient';
-import { ActivityModel } from '../models/activityModel';
 import {
+    ActivityModel,
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
-} from '../models/gamebusModel';
-import { InsulinModel } from '../models/insulinModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
+    PropertyInstancePOST,
+    InsulinModel
+} from '../models';
+import { QueryOrder } from './activity';
+import { Activity, GameBusObject, Keys } from '.';
 
 /**
  * Class for insulin-specific functions

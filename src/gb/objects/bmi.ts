@@ -1,10 +1,12 @@
-import { BMIModel } from '../models/bmiModels';
 import { Query, Headers } from '../gbClient';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
-import { Activity } from './activity';
-import { ActivityModel } from '../models/activityModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    PropertyInstancePOST,
+    BMIModel,
+    ActivityModel
+} from '../models';
+import { Activity, GameBusObject, Keys } from '.';
 
 export class BMI extends GameBusObject {
     /**

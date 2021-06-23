@@ -1,12 +1,13 @@
 import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
 import { format, addDays, addYears } from 'date-fns';
-import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import {
+    ActivityProperty,
+    ActivityModel,
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
     PropertyInstanceReference
-} from '../models/gamebusModel';
+} from '../models';
 import { fromUnixMsTime } from '../../services/utils/dates';
 import FormData from 'form-data';
 import { ExerciseGameDescriptorNames, Keys } from './keys';

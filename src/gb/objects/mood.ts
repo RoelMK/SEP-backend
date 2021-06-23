@@ -5,12 +5,12 @@ import {
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
-} from '../models/gamebusModel';
-import { MoodModel } from '../models/moodModel';
-import { GameBusObject } from './base';
-import { ActivityModel } from '../models/activityModel';
-import { Activity, QueryOrder } from './activity';
+    PropertyInstancePOST,
+    MoodModel,
+    ActivityModel
+} from '../models';
+import { QueryOrder } from './activity';
+import { Activity, GameBusObject } from '.';
 
 /**
  * Class for glucose-specific functions

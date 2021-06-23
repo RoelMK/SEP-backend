@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { GameBusObject, Keys, Activity } from '.';
 import { Query, Headers } from '../gbClient';
-import { ActivityModel } from '../models/activityModel';
-import { FoodModel } from '../models/foodModel';
 import {
+    ActivityModel,
+    FoodModel,
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
     PropertyInstancePOST
-} from '../models/gamebusModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
+} from '../models';
+
+import { QueryOrder } from './activity';
 
 //const util = require('util')
 

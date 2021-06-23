@@ -1,17 +1,18 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
-import { Activity } from './objects/activity';
-import { Exercise } from './objects/exercise';
-import { Food } from './objects/food';
-import { Glucose } from './objects/glucose';
-import { Insulin } from './objects/insulin';
-import { Mood } from './objects/mood';
+import {
+    Activity,
+    BMI,
+    Challenge,
+    Circle,
+    Exercise,
+    Food,
+    Glucose,
+    Insulin,
+    Mood,
+    User
+} from './objects';
 import FormData from 'form-data';
-import { Circle } from './objects/circle';
-import { Challenge } from './objects/challenge';
-import { BMI } from './objects/bmi';
-import { User } from './objects/user';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {

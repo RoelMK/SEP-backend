@@ -24,8 +24,6 @@ describe('test routes from test.ts', () => {
         expect(response.text).toBe('Hi, this was a success!');
     });
 
-    // TODO: not sure how to test the '/jwt-test' endpoint
-
     test('/clean', async () => {
         const response = await request(server).get('/clean');
         expect(response.statusCode).toBe(200);
@@ -33,11 +31,17 @@ describe('test routes from test.ts', () => {
 });
 
 describe('GET data', () => {
+    /**
+     * UTP: DEP - 1
+     */
     test('no authorization header given', async () => {
         const response = await request(server).get('/data');
         expect(response.statusCode).toBe(401);
     });
 
+    /**
+     * UTP: DEP - 2
+     */
     test('no query parameters given', async () => {
         const response = await request(server).get('/data').set(
             // This token has an expiry date of 20/11/2286, so this test will work until then
@@ -48,6 +52,9 @@ describe('GET data', () => {
     });
 });
 describe('mood endpoint', () => {
+    /**
+     * UTP: MEP - 1
+     */
     test('POST mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
@@ -58,6 +65,9 @@ describe('mood endpoint', () => {
         expect(response.statusCode).toBe(401);
     });
 
+    /**
+     * UTP: MEP - 2
+     */
     test('PUT mood data', async () => {
         const moodData: MoodModel = {
             timestamp: 0,
@@ -71,6 +81,9 @@ describe('mood endpoint', () => {
 });
 
 describe('insulin endpoint', () => {
+    /**
+     * UTP: IEP - 1
+     */
     test('PUT insulin data', async () => {
         const insulin: InsulinModel = {
             timestamp: 0,

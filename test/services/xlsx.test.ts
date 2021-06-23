@@ -1,7 +1,7 @@
 import ExcelParser, { ExcelConfig } from '../../src/services/fileParsers/excelParser';
 
 /**
- * UTP: XLSX - ?? TODO
+ * UTP: XLSX - 1
  */
 test('parse Excel file', async () => {
     const expectedOutput = [
@@ -25,7 +25,7 @@ test('parse Excel file', async () => {
 });
 
 /**
- * UTP: XLSX - ?? TODO
+ * UTP: XLSX - 2
  */
 test('parse Excel file raw data', async () => {
     const expectedOutput = [

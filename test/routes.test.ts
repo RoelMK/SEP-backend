@@ -175,7 +175,7 @@ describe('insulin endpoint', () => {
  * File upload tests ------------------------------------------------------------------------------------------
  */
 /**
- * UTP: TODO
+ * UTP: FILEP - 1
  */
 test('POST no format', async () => {
     const response = await request(server)
@@ -191,7 +191,7 @@ test('POST no format', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: FILEP - 2
  */
 test('POST unsupported format', async () => {
     const response = await request(server)
@@ -208,7 +208,7 @@ test('POST unsupported format', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: FILEP - 3
  */
 test('POST supported format, with unsupported file extension', async () => {
     const response = await request(server)
@@ -224,12 +224,12 @@ test('POST supported format, with unsupported file extension', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: FILEP - 4
  */
-test('POST supported format fooddiary, with supported file extension but wrong file content', async () => {
+test('POST supported format abbott, with supported file extension but wrong file content', async () => {
     const response = await request(server)
         .post('/upload')
-        .field('format', 'fooddiary')
+        .field('format', 'abbott')
         .attach('file', 'test/services/data/eetmeter.xml')
         .set(
             // This token has an expiry date of 20/11/2286, so this test will work until then
@@ -240,12 +240,12 @@ test('POST supported format fooddiary, with supported file extension but wrong f
 });
 
 /**
- * UTP: TODO
+ * UTP: FILEP - 5
  */
-test('POST supported format abbott, with supported file extension but wrong file content', async () => {
+test('POST supported format fooddiary, with supported file extension but wrong file content', async () => {
     const response = await request(server)
         .post('/upload')
-        .field('format', 'abbott')
+        .field('format', 'fooddiary')
         .attach('file', 'test/services/data/eetmeter.xml')
         .set(
             // This token has an expiry date of 20/11/2286, so this test will work until then

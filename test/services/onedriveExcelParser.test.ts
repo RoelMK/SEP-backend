@@ -79,8 +79,8 @@ test('test getMappingTable with mocked call', async () => {
     //         data: []
     //     });
     // });
-    const file = 'testFile.xlsx';
-    const token = 'testToken';
-    const testTable = 'test';
-    await OneDriveExcelParser.getMappingTableValues(file, token, testTable);
+    // const file = 'testFile.xlsx';
+    // const token = 'testToken';
+    // const testTable = 'test';
+    // await OneDriveExcelParser.getMappingTableValues(file, token, testTable);
 });

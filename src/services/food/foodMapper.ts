@@ -1,7 +1,7 @@
 import { FoodModel } from '../../gb/models/foodModel';
 import { Consumptie, NightScoutTreatmentModel } from '../dataParsers/dataParserTypes';
 import { DateFormat, parseDate } from '../utils/dates';
-import { FoodSource } from './foodParser';
+import { FoodSource } from './foodTypes';
 
 /**
  * Helper class to map the different food sources to 1 foodModel

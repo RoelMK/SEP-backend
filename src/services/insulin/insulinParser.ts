@@ -1,14 +1,9 @@
 import { InsulinModel } from '../../gb/models/insulinModel';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
-import { XOR } from 'ts-xor';
 import { ModelParser } from '../modelParser';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
-import {
-    AbbottData,
-    FoodDiaryData,
-    NightScoutTreatmentModel
-} from '../dataParsers/dataParserTypes';
+import { InsulinInput, InsulinSource } from './insulinTypes';
 
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
@@ -75,16 +70,3 @@ export default class InsulinParser extends ModelParser {
         }
     }
 }
-/**
- * Current insulin sources available
- */
-export enum InsulinSource {
-    ABBOTT = 0,
-    FOOD_DIARY_EXCEL = 1,
-    NIGHTSCOUT = 2
-}
-
-/**
- * All possible input types for insulin data
- */
-export type InsulinInput = XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>;

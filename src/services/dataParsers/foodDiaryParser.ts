@@ -1,6 +1,4 @@
 import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
-import { FoodSource } from '../food/foodParser';
-import { InsulinSource } from '../insulin/insulinParser';
 import { DateFormat, parseExcelTime } from '../utils/dates';
 import OneDriveExcelParser from '../fileParsers/oneDriveExcelParser';
 import ExcelParser from '../fileParsers/excelParser';
@@ -8,6 +6,8 @@ import { MEAL_TYPE } from '../../gb/models/foodModel';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { FoodDiaryData, FoodDiaryDataGuard } from './dataParserTypes';
+import { FoodSource } from '../food/foodTypes';
+import { InsulinSource } from '../insulin/insulinTypes';
 
 /**
  * Default class for parsing food diaries

@@ -1,10 +1,9 @@
-import { XOR } from 'ts-xor';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import { AbbottData, NightScoutEntryModel } from '../dataParsers/dataParserTypes';
 import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
+import { GlucoseInput, GlucoseSource } from './glucoseTypes';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -95,15 +94,3 @@ export default class GlucoseParser extends ModelParser {
         }
     }
 }
-/**
- * Current glucose sources available
- */
-export enum GlucoseSource {
-    ABBOTT = 1,
-    NIGHTSCOUT = 2
-}
-
-/**
- * All possible input types for glucose data
- */
-export type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;

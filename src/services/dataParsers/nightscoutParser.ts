@@ -2,9 +2,9 @@ import { XOR } from 'ts-xor';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseUnit } from '../../gb/models/glucoseModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
-import { FoodSource } from '../food/foodParser';
-import { GlucoseSource } from '../glucose/glucoseParser';
-import { InsulinSource } from '../insulin/insulinParser';
+import { FoodSource } from '../food/foodTypes';
+import { GlucoseSource } from '../glucose/glucoseTypes';
+import { InsulinSource } from '../insulin/insulinTypes';
 
 import { DataParser, DataSource, OutputDataType } from './dataParser';
 import {

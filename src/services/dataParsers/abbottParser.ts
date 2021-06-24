@@ -1,12 +1,12 @@
 import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
-import { FoodSource } from '../food/foodParser';
-import { GlucoseSource } from '../glucose/glucoseParser';
-import { InsulinSource } from '../insulin/insulinParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { RecordType } from '../../gb/models/glucoseModel';
-import { AbbottData, AbbottDataGuard } from './dataParserTypes';
+import { AbbottData, AbbottDataGuard, emptyAbbottData } from './dataParserTypes';
+import { FoodSource } from '../food/foodTypes';
+import { GlucoseSource } from '../glucose/glucoseTypes';
+import { InsulinSource } from '../insulin/insulinTypes';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -111,33 +111,3 @@ export default class AbbottParser extends DataParser {
         this.dateFormat = getDateFormat(this.abbottData?.[0].device_timestamp);
     }
 }
-
-/**
- * Function that can return an empty AbbottData entry that might be needed for easy returns
- * @returns Empty AbbottData
- */
-const emptyAbbottData = (): AbbottData => ({
-    device: '',
-    serial_number: '',
-    device_timestamp: '',
-    record_type: '',
-    historic_glucose_mg_dl: '',
-    historic_glucose_mmol_l: '',
-    scan_glucose_mg_dl: '',
-    scan_glucose_mmol_l: '',
-    non_numeric_rapid_acting_insulin: '',
-    rapid_acting_insulin__units_: '',
-    non_numeric_food: '',
-    carbohydrates__grams_: '',
-    carbohydrates__servings_: '',
-    non_numeric_long_acting_insulin: '',
-    long_acting_insulin__units_: '',
-    long_acting_insulin_value__units_: '',
-    notes: '',
-    strip_glucose_mg_dl: '',
-    strip_glucose_mmol_l: '',
-    ketone_mmol_l: '',
-    meal_insulin__units_: '',
-    correction_insulin__units_: '',
-    user_change_insulin__units_: ''
-});

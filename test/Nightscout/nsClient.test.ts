@@ -2,7 +2,7 @@ import { NightScoutClient } from '../../src/nightscout/nsClient';
 import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from '../../src/services/dataParsers/nightscoutParser';
+} from '../../src/services/dataParsers/dataParserTypes';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');

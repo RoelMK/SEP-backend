@@ -10,7 +10,8 @@ import {
     Headers
 } from '../models';
 import { QueryOrder } from './activity';
-import { Activity, GameBusObject, Keys } from '.';
+import { Activity, GameBusObject } from '.';
+import { InsulinIDs, InsulinPropertyKeys, Keys } from './GBObjectTypes';
 
 /**
  * Class for insulin-specific functions
@@ -284,27 +285,3 @@ export class Insulin extends GameBusObject {
         return obj;
     }
 }
-
-/**
- * Data provider names for known insulin data sources
- */
-export enum InsulinDataProviderNames {
-    GameBuS = 'GameBus',
-    Daily_run = 'Daily_run'
-}
-
-/**
- * Relevant properties to map properties of insulin to the insulinModel
- */
-export enum InsulinPropertyKeys {
-    insulinAmount = 'INSULIN_DOSE',
-    insulinType = 'INSULIN_SPEED'
-}
-
-const InsulinIDs = Object.freeze({
-    //INSULIN_TYPE : 1143,
-    insulinAmount: 1144,
-    insulinType: 1185
-});
-
-export { InsulinIDs };

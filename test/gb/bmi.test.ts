@@ -2,8 +2,8 @@ import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { BMIModel } from '../../src/gb/models/bmiModels';
 import { ActivityGETData, ActivityPOSTData } from '../../src/gb/models/gamebusModel';
-import { BMI, BMIPropertyKeys } from '../../src/gb/objects/bmi';
-import { Keys } from '../../src/gb/objects/keys';
+import { BMI } from '../../src/gb/objects/bmi';
+import { BMIPropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');

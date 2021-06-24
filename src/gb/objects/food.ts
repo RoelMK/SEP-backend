@@ -1,4 +1,4 @@
-import { GameBusObject, Keys, Activity } from '.';
+import { GameBusObject, Activity } from '.';
 import {
     ActivityModel,
     FoodModel,
@@ -12,6 +12,7 @@ import {
 } from '../models';
 
 import { QueryOrder } from './activity';
+import { FoodIDs, FoodPropertyKeys, Keys } from './GBObjectTypes';
 
 //const util = require('util')
 
@@ -249,35 +250,3 @@ export class Food extends GameBusObject {
             });
     }
 }
-
-export enum FoodPropertyKeys {
-    carbohydrates = 'FOOD_CARBOHYDRATES_GRAMS',
-    calories = 'KCAL_CARB',
-    meal_type = 'FOOD_MEAL_TYPE',
-    glycemic_index = 'FOOD_GLYCEMIC_INDEX',
-    fat = 'FOOD_FAT_GRAMS',
-    saturatedFat = 'FOOD_SATURATED_FAT_GRAMS',
-    proteins = 'FOOD_PROTEINS_GRAMS',
-    fibers = 'FIBERS_WEIGHT',
-    salt = 'FOOD_SALT_GRAMS',
-    water = 'FOOD_WATER_GRAMS',
-    sugars = 'FOOD_SUGAR_GRAMS',
-    description = 'DESCRIPTION'
-}
-
-const FoodIDs = Object.freeze({
-    description: 12,
-    calories: 77,
-    fibers: 79,
-    carbohydrates: 1176,
-    meal_type: 1177,
-    glycemic_index: 1178,
-    fat: 1179,
-    saturatedFat: 1180,
-    proteins: 1181,
-    salt: 1182,
-    water: 1183,
-    sugars: 1184
-});
-
-export { FoodIDs };

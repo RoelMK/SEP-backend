@@ -7,7 +7,8 @@ import {
     Query,
     Headers
 } from '../models';
-import { Activity, GameBusObject, Keys } from '.';
+import { Activity, GameBusObject } from '.';
+import { BMIPropertyKeys, Keys } from './GBObjectTypes';
 
 export class BMI extends GameBusObject {
     /**
@@ -144,13 +145,4 @@ export class BMI extends GameBusObject {
                 return this.convertBMIResponseToModel(response);
             });
     }
-}
-
-export enum BMIPropertyKeys {
-    weight = 'WEIGHT',
-    length = 'LENGTH',
-    age = 'AGE',
-    gender = 'GENDER',
-    waistCircumference = 'WAIST_CIRCUMFERENCE',
-    bmi = 'BODY_MASS_INDEX'
 }

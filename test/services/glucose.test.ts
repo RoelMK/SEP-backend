@@ -1,11 +1,10 @@
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { AbbottData } from '../../src/services/dataParsers/abbottParser';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { AbbottData, NightScoutEntryModel } from '../../src/services/dataParsers/dataParserTypes';
 import { GlucoseSource } from '../../src/services/glucose/glucoseParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { parseAbbott, parseNightScout, postGlucoseData } from '../testUtils/parseUtils';
-import { NightScoutEntryModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott glucose', () => {
     test('import Abbott EU glucose', async () => {

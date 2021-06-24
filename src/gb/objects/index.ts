@@ -7,6 +7,5 @@ export { Exercise } from './exercise';
 export { Food } from './food';
 export { Glucose } from './glucose';
 export { Insulin } from './insulin';
-export { Keys } from './keys';
 export { Mood } from './mood';
 export { User } from './user';

@@ -1,7 +1,10 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
+import {
+    FoodDiaryData,
+    NightScoutTreatmentModel
+} from '../../src/services/dataParsers/dataParserTypes';
 import { InsulinSource } from '../../src/services/insulin/insulinParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import {
@@ -10,7 +13,6 @@ import {
     postInsulinData,
     parseNightScout
 } from '../testUtils/parseUtils';
-import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott insulin', () => {
     test('import Abbott EU insulin', async () => {

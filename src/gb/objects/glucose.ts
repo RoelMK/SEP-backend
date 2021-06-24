@@ -11,7 +11,8 @@ import {
     Headers
 } from '../models';
 import { QueryOrder } from './activity';
-import { Activity, GameBusObject, Keys } from '.';
+import { Activity, GameBusObject } from '.';
+import { GlucoseIDs, GlucosePropertyKeys, Keys } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions
@@ -208,18 +209,3 @@ export class Glucose extends GameBusObject {
             });
     }
 }
-
-/**
- * Relevant properties to map properties of activities to the glucoseModel
- * [key in glucoseModel] = [translationKey in GameBus]
- */
-export enum GlucosePropertyKeys {
-    glucoseLevel = 'eAG_MMOLL', // in mmol/L
-    glucoseLevelMgdl = 'eAG_MGDL' // in mg/dL (we won't use this one)
-}
-
-const GlucoseIDs = Object.freeze({
-    glucoseLevel: 88
-});
-
-export { GlucoseIDs };

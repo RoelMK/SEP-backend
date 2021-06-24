@@ -9,9 +9,8 @@ import {
 } from '../models';
 import { QueryOrder } from './activity';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames } from './keys';
-import { GameBusObject, Keys, Activity } from '.';
-import { ExercisePropertyKeys } from './GBObjectTypes';
+import { GameBusObject, Activity } from '.';
+import { ExerciseGameDescriptorNames, ExercisePropertyKeys, Keys } from './GBObjectTypes';
 
 /**
  * Class for exercise-specific functions

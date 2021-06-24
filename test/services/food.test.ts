@@ -1,6 +1,5 @@
 import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
 import { FoodSource } from '../../src/services/food/foodParser';
 import {
     parseAbbott,
@@ -10,7 +9,10 @@ import {
     postFoodData
 } from '../testUtils/parseUtils';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
+import {
+    FoodDiaryData,
+    NightScoutTreatmentModel
+} from '../../src/services/dataParsers/dataParserTypes';
 
 describe('Abbott food', () => {
     test('import Abbott EU food', async () => {

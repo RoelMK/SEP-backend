@@ -4,7 +4,7 @@ import { GameBusClient } from '../../src/gb/gbClient';
 import { ExerciseModel } from '../../src/gb/models/exerciseModel';
 import { ActivityGETData } from '../../src/gb/models/gamebusModel';
 import { Exercise } from '../../src/gb/objects/exercise';
-import { ExerciseGameDescriptorNames } from '../../src/gb/objects/keys';
+import { ExerciseGameDescriptorNames } from '../../src/gb/objects/GBObjectTypes';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');

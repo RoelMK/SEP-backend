@@ -9,9 +9,8 @@ import {
     Query,
     Headers
 } from '../models';
-import { QueryOrder } from './activity';
 import { Activity, GameBusObject } from '.';
-import { MoodIDs, MoodPropertyKeys } from './GBObjectTypes';
+import { MoodIDs, MoodPropertyKeys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions

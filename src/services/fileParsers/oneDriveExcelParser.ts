@@ -1,5 +1,5 @@
 import { OneDriveClient } from '../../onedrive/odClient';
-import { DataSource } from '../dataParsers/dataParser';
+import { DataSource } from '../dataParsers/dataParserTypes';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getFileDirectory, getFileName } from '../utils/files';
 import { getKeys } from '../utils/interfaceKeys';

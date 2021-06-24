@@ -11,8 +11,7 @@ import {
     Query
 } from '../models';
 
-import { QueryOrder } from './activity';
-import { FoodIDs, FoodPropertyKeys, Keys } from './GBObjectTypes';
+import { FoodIDs, FoodPropertyKeys, Keys, QueryOrder } from './GBObjectTypes';
 
 //const util = require('util')
 

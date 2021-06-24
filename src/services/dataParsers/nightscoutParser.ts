@@ -6,11 +6,13 @@ import { FoodSource } from '../food/foodTypes';
 import { GlucoseSource } from '../glucose/glucoseTypes';
 import { InsulinSource } from '../insulin/insulinTypes';
 
-import { DataParser, DataSource, OutputDataType } from './dataParser';
+import { DataParser } from './dataParser';
 import {
+    DataSource,
     NightScoutDatatype,
     NightScoutEntryModel,
-    NightScoutTreatmentModel
+    NightScoutTreatmentModel,
+    OutputDataType
 } from './dataParserTypes';
 
 /**

@@ -2,8 +2,8 @@ import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { FoodModel } from '../../gb/models/foodModel';
 import { FoodSource } from '../food/foodTypes';
 import { getFileName } from '../utils/files';
-import { DataParser, DataSource, OutputDataType } from './dataParser';
-import { Consumptie, EetmeterData } from './dataParserTypes';
+import { DataParser } from './dataParser';
+import { Consumptie, DataSource, EetmeterData, OutputDataType } from './dataParserTypes';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */

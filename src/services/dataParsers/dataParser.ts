@@ -15,6 +15,13 @@ import { ModelParser } from '../modelParser';
 import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
+import {
+    CombinedDataParserOutput,
+    DataSource,
+    DeveloperError,
+    InputError,
+    OutputDataType
+} from './dataParserTypes';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
@@ -263,48 +270,4 @@ export abstract class DataParser {
     parseOnlyNewest(only_parse_newest: boolean): void {
         this.only_parse_newest = only_parse_newest;
     }
-}
-
-/**
- * A list of possible data sources
- */
-export enum DataSource {
-    ABBOTT = 0,
-    FOOD_DIARY = 1,
-    EETMETER = 2,
-    NIGHTSCOUT = 3
-}
-
-/**
- * A list of possible output models
- */
-export enum OutputDataType {
-    GLUCOSE = 0,
-    INSULIN = 1,
-    FOOD = 2,
-    MOOD = 3,
-    ALL = 4
-}
-
-// custom errors
-export class InputError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'InputError';
-    }
-}
-
-class DeveloperError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'DeveloperError';
-    }
-}
-
-// Interface used if getData(ALL) is called
-export interface CombinedDataParserOutput {
-    food: FoodModel[] | null;
-    glucose: GlucoseModel[] | null;
-    insulin: InsulinModel[] | null;
-    mood: MoodModel[] | null;
 }

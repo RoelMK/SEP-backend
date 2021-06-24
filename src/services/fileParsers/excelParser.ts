@@ -1,5 +1,5 @@
 import XLSX from 'xlsx';
-import { DataSource } from '../dataParsers/dataParser';
+import { DataSource } from '../dataParsers/dataParserTypes';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getKeys } from '../utils/interfaceKeys';
 import { FileParser } from './fileParser';

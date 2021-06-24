@@ -12,7 +12,7 @@ import {
 } from '../models';
 import { fromUnixMsTime } from '../../services/utils/dates';
 import FormData from 'form-data';
-import { ExerciseGameDescriptorNames, Keys } from './GBObjectTypes';
+import { ExerciseGameDescriptorNames, Keys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class that is used to GET/POST to GameBus activities
@@ -483,9 +483,4 @@ export class Activity {
         });
         return activityModels;
     }
-}
-
-export enum QueryOrder {
-    ASC = '+',
-    DESC = '-'
 }

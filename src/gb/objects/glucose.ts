@@ -10,9 +10,8 @@ import {
     Query,
     Headers
 } from '../models';
-import { QueryOrder } from './activity';
 import { Activity, GameBusObject } from '.';
-import { GlucoseIDs, GlucosePropertyKeys, Keys } from './GBObjectTypes';
+import { GlucoseIDs, GlucosePropertyKeys, Keys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions

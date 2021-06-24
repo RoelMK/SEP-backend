@@ -1,9 +1,16 @@
-import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
+import { DataParser } from './dataParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { RecordType } from '../../gb/models/glucoseModel';
-import { AbbottData, AbbottDataGuard, emptyAbbottData } from './dataParserTypes';
+import {
+    AbbottData,
+    AbbottDataGuard,
+    DataSource,
+    emptyAbbottData,
+    InputError,
+    OutputDataType
+} from './dataParserTypes';
 import { FoodSource } from '../food/foodTypes';
 import { GlucoseSource } from '../glucose/glucoseTypes';
 import { InsulinSource } from '../insulin/insulinTypes';

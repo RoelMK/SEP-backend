@@ -230,7 +230,7 @@ Public Method,"FoodParser.constructor",SEP-backend\src\services\food\foodParser.
 Public Method,"FoodParser.post",SEP-backend\src\services\food\foodParser.ts,,12,,,,
 Private Method,"FoodParser.process",SEP-backend\src\services\food\foodParser.ts,,5,,,,
 Enum,"FoodPropertyKeys",SEP-backend\src\gb\objects\GBObjectTypes.ts,,14,,,,
-Enum,"FoodSource",SEP-backend\src\services\food\foodParser.ts,,6,,,,
+Enum,"FoodSource",SEP-backend\src\services\food\foodTypes.ts,,6,,,,
 Class,"GameBusClient",SEP-backend\src\gb\gbClient.ts,1,192,6,,18,
 Public Method,"GameBusClient.activity",SEP-backend\src\gb\gbClient.ts,,3,,,,
 Public Method,"GameBusClient.bmi",SEP-backend\src\gb\gbClient.ts,,3,,,,
@@ -281,7 +281,7 @@ Public Method,"GlucoseParser.constructor",SEP-backend\src\services\glucose\gluco
 Public Method,"GlucoseParser.post",SEP-backend\src\services\glucose\glucoseParser.ts,,15,,,,
 Private Method,"GlucoseParser.process",SEP-backend\src\services\glucose\glucoseParser.ts,,10,,,,
 Enum,"GlucosePropertyKeys",SEP-backend\src\gb\objects\GBObjectTypes.ts,,4,,,,
-Enum,"GlucoseSource",SEP-backend\src\services\glucose\glucoseParser.ts,,4,,,,
+Enum,"GlucoseSource",SEP-backend\src\services\glucose\glucoseTypes.ts,,4,,,,
 Enum,"GlucoseUnit",SEP-backend\src\gb\models\glucoseModel.ts,,5,,,,
 Interface,"Headers",SEP-backend\src\gb\models\gamebusModel.ts,,3,,,,
 Interface,"IDActivityPOSTData",SEP-backend\src\gb\models\gamebusModel.ts,,8,,,,
@@ -316,7 +316,7 @@ Public Method,"InsulinParser.constructor",SEP-backend\src\services\insulin\insul
 Public Method,"InsulinParser.post",SEP-backend\src\services\insulin\insulinParser.ts,,15,,,,
 Private Method,"InsulinParser.process",SEP-backend\src\services\insulin\insulinParser.ts,,7,,,,
 Enum,"InsulinPropertyKeys",SEP-backend\src\gb\objects\GBObjectTypes.ts,,4,,,,
-Enum,"InsulinSource",SEP-backend\src\services\insulin\insulinParser.ts,,5,,,,
+Enum,"InsulinSource",SEP-backend\src\services\insulin\insulinTypes.ts,,5,,,,
 Enum,"InsulinType",SEP-backend\src\gb\models\insulinModel.ts,,4,,,,
 Class,"Keys",SEP-backend\src\gb\objects\GBObjectTypes.ts,0,15,0,,0,
 Interface,"Koolhydraten",SEP-backend\src\services\dataParsers\dataParserTypes.ts,,3,,,,
@@ -462,7 +462,7 @@ File,"SEP-backend\src\routes\supervisor.ts",SEP-backend\src\routes\supervisor.ts
 File,"SEP-backend\src\routes\upload.ts",SEP-backend\src\routes\upload.ts,4,100,7,"0.20",,2
 File,"SEP-backend\src\server.ts",SEP-backend\src\server.ts,2,35,3,"0.17",,0
 File,"SEP-backend\src\services\dataEndpoint.ts",SEP-backend\src\services\dataEndpoint.ts,2,264,7,"0.36",,12
-File,"SEP-backend\src\services\dataParsers\abbottParser.ts",SEP-backend\src\services\dataParsers\abbottParser.ts,1,93,2,"0.40",,6
+File,"SEP-backend\src\services\dataParsers\abbottParser.ts",SEP-backend\src\services\dataParsers\abbottParser.ts,1,68,2,"0.49",,6
 File,"SEP-backend\src\services\dataParsers\dataParser.ts",SEP-backend\src\services\dataParsers\dataParser.ts,2,216,10,"0.32",,14
 File,"SEP-backend\src\services\dataParsers\dataParserTypes.ts",SEP-backend\src\services\dataParsers\dataParserTypes.ts,1,187,2,"0.51",,2
 File,"SEP-backend\src\services\dataParsers\eetmeterParser.ts",SEP-backend\src\services\dataParsers\eetmeterParser.ts,1,25,2,"0.60",,3
@@ -474,15 +474,18 @@ File,"SEP-backend\src\services\fileParsers\fileParser.ts",SEP-backend\src\servic
 File,"SEP-backend\src\services\fileParsers\oneDriveExcelParser.ts",SEP-backend\src\services\fileParsers\oneDriveExcelParser.ts,2,81,4,"0.49",,6
 File,"SEP-backend\src\services\fileParsers\xmlParser.ts",SEP-backend\src\services\fileParsers\xmlParser.ts,1,23,1,"0.43",,3
 File,"SEP-backend\src\services\food\foodMapper.ts",SEP-backend\src\services\food\foodMapper.ts,2,88,5,"0.39",,7
-File,"SEP-backend\src\services\food\foodParser.ts",SEP-backend\src\services\food\foodParser.ts,2,51,4,"0.63",,3
-File,"SEP-backend\src\services\glucose\glucoseMapper.ts",SEP-backend\src\services\glucose\glucoseMapper.ts,2,71,7,"0.45",,5
-File,"SEP-backend\src\services\glucose\glucoseParser.ts",SEP-backend\src\services\glucose\glucoseParser.ts,2,62,4,"0.61",,4
+File,"SEP-backend\src\services\food\foodParser.ts",SEP-backend\src\services\food\foodParser.ts,2,37,4,"0.70",,3
+File,"SEP-backend\src\services\food\foodTypes.ts",SEP-backend\src\services\food\foodTypes.ts,0,17,0,"0.35",,0
+File,"SEP-backend\src\services\glucose\glucoseMapper.ts",SEP-backend\src\services\glucose\glucoseMapper.ts,2,67,7,"0.42",,5
+File,"SEP-backend\src\services\glucose\glucoseParser.ts",SEP-backend\src\services\glucose\glucoseParser.ts,2,56,4,"0.57",,4
+File,"SEP-backend\src\services\glucose\glucoseTypes.ts",SEP-backend\src\services\glucose\glucoseTypes.ts,1,12,1,"0.83",,0
 File,"SEP-backend\src\services\insulin\insulinMapper.ts",SEP-backend\src\services\insulin\insulinMapper.ts,2,74,4,"0.31",,5
-File,"SEP-backend\src\services\insulin\insulinParser.ts",SEP-backend\src\services\insulin\insulinParser.ts,2,53,4,"0.57",,3
+File,"SEP-backend\src\services\insulin\insulinParser.ts",SEP-backend\src\services\insulin\insulinParser.ts,2,42,4,"0.57",,3
+File,"SEP-backend\src\services\insulin\insulinTypes.ts",SEP-backend\src\services\insulin\insulinTypes.ts,0,12,0,"0.50",,0
 File,"SEP-backend\src\services\modelParser.ts",SEP-backend\src\services\modelParser.ts,1,38,2,"0.50",,5
 File,"SEP-backend\src\services\mood\moodMapper.ts",SEP-backend\src\services\mood\moodMapper.ts,0,2,0,"3.00",,0
 File,"SEP-backend\src\services\mood\moodParser.ts",SEP-backend\src\services\mood\moodParser.ts,2,24,4,"0.71",,3
-File,"SEP-backend\src\services\utils\dates.ts",SEP-backend\src\services\utils\dates.ts,2,132,5,"0.58",,1
+File,"SEP-backend\src\services\utils\dates.ts",SEP-backend\src\services\utils\dates.ts,2,99,5,"0.67",,1
 File,"SEP-backend\src\services\utils\files.ts",SEP-backend\src\services\utils\files.ts,4,21,5,"0.90",,0
 File,"SEP-backend\src\services\utils\interfaceKeys.ts",SEP-backend\src\services\utils\interfaceKeys.ts,1,46,3,"0.39",,3
 File,"SEP-backend\src\services\utils\units.ts",SEP-backend\src\services\utils\units.ts,1,7,1,"1.71",,0
@@ -517,12 +520,10 @@ Unnamed Function,"convertExcelDateTimes.(unnamed_function_5)",SEP-backend\src\se
 Unnamed Function,"convertExcelDateTimes.(unnamed_function_5).(unnamed_function_6)",SEP-backend\src\services\utils\dates.ts,,8,,,,
 Unnamed Function,"convertMG_DLtoMMOL_L.(unnamed_function_1)",SEP-backend\src\services\utils\units.ts,,3,,,,
 Unnamed Function,"convertMMOL_LtoMG_dL.(unnamed_function_2)",SEP-backend\src\services\utils\units.ts,,3,,,,
-Unnamed Function,"createDateSlices.(unnamed_function_9)",SEP-backend\src\services\utils\dates.ts,,22,,,,
 Function,"createJWT",SEP-backend\src\utils\authUtils.ts,,11,,,,
 Unnamed Function,"defaultConfig.transformHeader.(unnamed_function_3)",SEP-backend\src\services\fileParsers\csvParser.ts,,3,,,,
 Unnamed Function,"emptyAbbottData.(unnamed_function_1)",SEP-backend\src\services\dataParsers\dataParserTypes.ts,,1,,,,
-Unnamed Function,"emptyAbbottData.(unnamed_function_4)",SEP-backend\src\services\dataParsers\abbottParser.ts,,1,,,,
-Unnamed Function,"emptyGlucoseModel.(unnamed_function_3)",SEP-backend\src\services\glucose\glucoseMapper.ts,,1,,,,
+Unnamed Function,"emptyGlucoseModel.(unnamed_function_1)",SEP-backend\src\services\glucose\glucoseTypes.ts,,1,,,,
 Unnamed Function,"emptyInsulinModel.(unnamed_function_2)",SEP-backend\src\services\insulin\insulinMapper.ts,,1,,,,
 Namespace,"exports",SEP-backend\src\routes\index.ts,0,12,0,,,
 Function,"finishLoginAttempt",SEP-backend\src\utils\authUtils.ts,,15,,,,

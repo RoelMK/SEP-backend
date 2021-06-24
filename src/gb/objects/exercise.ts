@@ -7,10 +7,14 @@ import {
     Query,
     Headers
 } from '../models';
-import { QueryOrder } from './activity';
 import { startCase, toLower } from 'lodash';
 import { GameBusObject, Activity } from '.';
-import { ExerciseGameDescriptorNames, ExercisePropertyKeys, Keys } from './GBObjectTypes';
+import {
+    ExerciseGameDescriptorNames,
+    ExercisePropertyKeys,
+    Keys,
+    QueryOrder
+} from './GBObjectTypes';
 
 /**
  * Class for exercise-specific functions

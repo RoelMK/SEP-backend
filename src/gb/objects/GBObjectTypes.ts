@@ -1,4 +1,18 @@
-//   --------------------------------------------- Exercise ---------------------------------------------
+/**
+ *
+ *   --------------------------------------------- Activity ---------------------------------------------
+ *
+ */
+export enum QueryOrder {
+    ASC = '+',
+    DESC = '-'
+}
+
+/**
+ *
+ *   --------------------------------------------- Exercise ---------------------------------------------
+ *
+ */
 /**
  * Relevant properties to map properties of activities to the exerciseModel
  * [key in exerciseModel] = [translationKey in GameBus]

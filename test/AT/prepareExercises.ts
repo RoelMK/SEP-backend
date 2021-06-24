@@ -1,7 +1,7 @@
 import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { ExerciseModel } from '../../src/gb/models/exerciseModel';
-import { ExerciseGameDescriptorNames } from '../../src/gb/objects/keys';
+import { ExerciseGameDescriptorNames } from '../../src/gb/objects/GBObjectTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 
 export function addExercises(gbAccessToken: string, pId: string) {

@@ -193,7 +193,7 @@ describe('Checking valid unix timestamps', () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: 15
  */
 test('Convert excel date and time', () => {
     const input = [{ date: '44325', time: '0.417361111' }];
@@ -202,7 +202,7 @@ test('Convert excel date and time', () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: 16
  */
 test('Convert excel date and time robustness', () => {
     const input = [{ cheese: 'tasty' }];

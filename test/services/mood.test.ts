@@ -17,10 +17,11 @@ test('mood data processing', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: MEX - 2
  * Moodparser is not used now, but this test ensures the template is correct
  */
 test('mood from future other source', async () => {
+    new MoodMapper(); // test if class is error-free and can be created
     const dummyUserInfo: GameBusToken = {
         playerId: 'testing',
         accessToken: '12345',
@@ -38,16 +39,5 @@ test('mood from future other source', async () => {
         timestamp: 0,
         arousal: 1,
         valence: 1
-    });
-});
-
-describe('Mood mapper', () => {
-    /**
-     * UTP: TODO
-     */
-    test('unsupported mood source', () => {
-        new MoodMapper(); // test if class is error-free and can be created
-        //TODO, finish when mood template is implemented in the future
-        expect(true).toBeTruthy();
     });
 });

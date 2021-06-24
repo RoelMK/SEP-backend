@@ -1,11 +1,6 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import {
-    CombinedDataParserOutput,
-    DataParser,
-    OutputDataType
-} from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -14,6 +9,8 @@ import { checkJwt } from '../middlewares/checkJwt';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import axios from 'axios';
 import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
+import { DataParser } from '../services/dataParsers/dataParser';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParserTypes';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();

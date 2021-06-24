@@ -162,9 +162,9 @@ describe('Nightscout insulin', () => {
     });
 });
 
-describe('Glucose mapper', () => {
+describe('Insulin mapper', () => {
     /**
-     * ATP: TODO
+     * UTP: INS - 6
      */
     test('unsupported insulin source', () => {
         new InsulinMapper(); // test if class is error-free and can be created

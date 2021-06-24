@@ -136,7 +136,7 @@ describe('Nightscout glucose', () => {
 
 describe('Glucose mapper', () => {
     /**
-     * ATP: TODO
+     * UTP: GLU - 4
      */
     test('unsupported glucose source', () => {
         new GlucoseMapper(); // test if class is error-free and can be created

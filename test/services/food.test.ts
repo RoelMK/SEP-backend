@@ -285,7 +285,7 @@ describe('Nightscout food', () => {
 
 describe('Food mapper', () => {
     /**
-     * ATP: TODO
+     * UTP: FOOD - 9
      */
     test('unsupported food source', () => {
         new FoodMapper(); // test if class is error-free and can be created

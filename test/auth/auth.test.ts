@@ -135,7 +135,7 @@ test('start login again after callback', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: AUTH - 7
  */
 test('Refreshing JWT', async () => {
     const playerId = '1';
@@ -144,7 +144,7 @@ test('Refreshing JWT', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: AUTH - 8
  * Now we give undefined as input but this could also come from GameBus
  */
 test('startLoginAttempt with undefined email address', async () => {

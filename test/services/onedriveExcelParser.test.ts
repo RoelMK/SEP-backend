@@ -28,7 +28,7 @@ test('import standardized food diary with missing values from a onedrive', async
 });
 
 /**
- * UTP: TODO
+ * UTP: ONED - 11
  */
 test('assign keys to raw onedrive data', async () => {
     const sampleODInput = [['', 0.8, 'Breakfast', 'Cheese', 5, 40, 2, 1, '', '']];
@@ -51,7 +51,7 @@ test('assign keys to raw onedrive data', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: ONED - 12
  */
 test('assign wrong keys to raw onedrive data', async () => {
     const sampleODInput = [['', 0.8, 'Breakfast', 'Cheese', 5, 40, 2, 1, '', '']];
@@ -62,9 +62,9 @@ test('assign wrong keys to raw onedrive data', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: ONED - 13
  */
-test('try to assign no keys to raw onedrive data with the function', async () => {
+test('try to assign no keys to raw onedrive data', async () => {
     const sampleODInput = [['', 0.8, 'Breakfast', 'Cheese', 5, 40, 2, 1, '', '']];
     expect(() => {
         new OneDriveExcelParser().assignKeys(sampleODInput);

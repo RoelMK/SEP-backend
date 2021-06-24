@@ -1,6 +1,9 @@
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { AbbottData, NightScoutEntryModel } from '../../src/services/dataParsers/dataParserTypes';
+import {
+    AbbottData,
+    NightScoutEntryModel,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParserTypes';
 import { GlucoseSource } from '../../src/services/glucose/glucoseTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';

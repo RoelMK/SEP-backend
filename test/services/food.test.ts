@@ -7,10 +7,10 @@ import {
     parseNightScout,
     postFoodData
 } from '../testUtils/parseUtils';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import {
     FoodDiaryData,
-    NightScoutTreatmentModel
+    NightScoutTreatmentModel,
+    OutputDataType
 } from '../../src/services/dataParsers/dataParserTypes';
 import { FoodSource } from '../../src/services/food/foodTypes';
 

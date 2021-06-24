@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import { checkJwt } from '../middlewares/checkJwt';
 import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
-import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParser';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParserTypes';
 import NightscoutParser from '../services/dataParsers/nightscoutParser';
 
 const nightscoutRouter = Router();

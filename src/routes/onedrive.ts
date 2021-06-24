@@ -4,7 +4,7 @@ import { checkJwt } from '../middlewares/checkJwt';
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
 import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
 import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
-import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParser';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParserTypes';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

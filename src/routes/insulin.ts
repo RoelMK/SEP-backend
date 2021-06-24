@@ -60,20 +60,21 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
             // Send 201 and new model
             return res.status(201).json(response);
         } catch (error) {
+            // Check for errors on insulin PUT
             if (axios.isAxiosError(error)) {
-                // Unauthorized -> 401
+                // Unauthorized on insulin PUT -> 401
                 if (error.response?.status === 401) {
                     return res.status(401).send();
                 }
             }
-            // Unknown error -> 503
+            // Unknown error on inuslin PUT -> 503
             return res.status(503).send();
         }
     }
 
     // POST
     try {
-        // POST model
+        // POST insulin model
         const response = await gbClient
             .insulin()
             .postSingleInsulinActivity(insulinModel, req.user.playerId);
@@ -81,12 +82,12 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
     } catch (error) {
         // Error catching on insulin POST
         if (axios.isAxiosError(error)) {
-            // Unauthorized -> 401
+            // Unauthorized on insulin POST -> 401
             if (error.response?.status === 401) {
                 return res.status(401).send();
             }
         }
-        // Unknown error -> 503
+        // Unknown error on insulin POST -> 503
         return res.status(503).send();
     }
 });

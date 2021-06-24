@@ -42,6 +42,10 @@ export default class ExcelParser extends FileParser {
             header: 1
         });
 
+        return this.checkRawTableData(rawTableData);
+    }
+
+    static checkRawTableData(rawTableData: any[][]): Map<string, string> {
         // check for empty table
         if (rawTableData === undefined) {
             return new Map<string, string>();

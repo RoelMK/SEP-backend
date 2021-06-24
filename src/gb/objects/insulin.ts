@@ -199,10 +199,13 @@ export class Insulin extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each insulin model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the insulin model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return insulin response
         return response;
     }
 
@@ -224,8 +227,8 @@ export class Insulin extends GameBusObject {
         const data = this.toIDPOSTData(model, playerId);
         // PUT insulin activity
         const response = (await this.activity.putActivity(
-            data,
-            model.activityId,
+            data, // insulin model
+            model.activityId, // insulin activity ID
             headers,
             query
         )) as ActivityGETData[];

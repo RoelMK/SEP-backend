@@ -66,10 +66,13 @@ export class Glucose extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each glucose model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the glucose model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return glucose response
         return response;
     }
 

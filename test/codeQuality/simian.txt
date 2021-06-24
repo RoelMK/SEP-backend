@@ -1,48 +1,9 @@
 simian -balanceParentheses+ -failOnDuplication- -ignoreCharacterCase+ -ignoreCurlyBraces+ -ignoreIdentifierCase+ -ignoreModifiers+ -ignoreStringCase+ -threshold=6 **/*.ts
 
 {balanceParentheses=true, ignoreCharacterCase=true, ignoreCurlyBraces=true, ignoreIdentifierCase=true, ignoreModifiers=true, ignoreStringCase=true, threshold=6}
-Found 6 duplicate lines with fingerprint adf8dbac91bdd0d57800b302ca84581a in the following files:
- Between lines 215 and 220 in ~\SEP-backend\src\gb\objects\mood.ts
- Between lines 226 and 231 in ~\SEP-backend\src\gb\objects\insulin.ts
 Found 7 duplicate lines with fingerprint 550bf096ff61d5f59c5de31303860ce8 in the following files:
  Between lines 115 and 121 in ~\SEP-backend\src\services\dataParsers\dataParserTypes.ts
  Between lines 56 and 62 in ~\SEP-backend\src\services\utils\interfaceKeys.ts
-Found 10 duplicate lines with fingerprint d13af397db4b8189bd357503af532aa8 in the following files:
- Between lines 63 and 72 in ~\SEP-backend\src\routes\mood.ts
- Between lines 62 and 71 in ~\SEP-backend\src\routes\insulin.ts
- Between lines 24 and 33 in ~\SEP-backend\src\routes\activity.ts
-Found 10 duplicate lines with fingerprint ddbec490a40aece39f2b878bc7c0450b in the following files:
- Between lines 82 and 91 in ~\SEP-backend\src\routes\mood.ts
- Between lines 83 and 92 in ~\SEP-backend\src\routes\insulin.ts
- Between lines 25 and 34 in ~\SEP-backend\src\routes\activity.ts
-Found 12 duplicate lines with fingerprint c7544079bfa0d9dab8887fe9b81dcea4 in the following files:
- Between lines 276 and 287 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 252 and 263 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 228 and 239 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 204 and 215 in ~\SEP-backend\src\services\dataEndpoint.ts
-Found 12 duplicate lines with fingerprint 1def8cc7239acfeda6d025f969d2116f in the following files:
- Between lines 186 and 198 in ~\SEP-backend\src\gb\objects\mood.ts
- Between lines 197 and 209 in ~\SEP-backend\src\gb\objects\insulin.ts
- Between lines 64 and 76 in ~\SEP-backend\src\gb\objects\glucose.ts
- Between lines 50 and 62 in ~\SEP-backend\src\gb\objects\food.ts
-Found 12 duplicate lines with fingerprint b90d77184055d9f4da27b4741f7f6fbf in the following files:
- Between lines 253 and 265 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 229 and 241 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 205 and 217 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 181 and 193 in ~\SEP-backend\src\services\dataEndpoint.ts
-Found 13 duplicate lines with fingerprint 80423ba567cd8d366870902e9c282a6c in the following files:
- Between lines 204 and 217 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 228 and 241 in ~\SEP-backend\src\services\dataEndpoint.ts
- Between lines 252 and 265 in ~\SEP-backend\src\services\dataEndpoint.ts
-Found 13 duplicate lines with fingerprint 3f8c9fca6a1d39e52eab9cf810cf68fe in the following files:
- Between lines 50 and 63 in ~\SEP-backend\src\gb\objects\food.ts
- Between lines 64 and 77 in ~\SEP-backend\src\gb\objects\glucose.ts
-Found 16 duplicate lines with fingerprint d51f8bc54997be101e282780c8402618 in the following files:
- Between lines 61 and 77 in ~\SEP-backend\src\routes\mood.ts
- Between lines 60 and 76 in ~\SEP-backend\src\routes\insulin.ts
-Found 19 duplicate lines with fingerprint 1f3aa15edac53d8205dd1968c96f0250 in the following files:
- Between lines 45 and 66 in ~\SEP-backend\src\services\fileParsers\excelParser.ts
- Between lines 79 and 100 in ~\SEP-backend\src\services\fileParsers\oneDriveExcelParser.ts
-Found 249 duplicate lines in 21 blocks in 12 files
-Processed a total of 7994 significant (8627 raw) lines in 74 files
-Processing time: 0.102sec
+Found 14 duplicate lines in 2 blocks in 2 files
+Processed a total of 8001 significant (8632 raw) lines in 74 files
+Processing time: 0.094sec

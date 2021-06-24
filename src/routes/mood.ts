@@ -61,31 +61,32 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
             // Send 201 and new model
             return res.status(201).json(response);
         } catch (error) {
+            // Check for errors on mood PUT
             if (axios.isAxiosError(error)) {
-                // Unauthorized -> 401
+                // Unauthorized on mood PUT -> 401
                 if (error.response?.status === 401) {
                     return res.status(401).send();
                 }
             }
-            // Unknown error -> 503
+            // Unknown error on mood PUT -> 503
             return res.status(503).send();
         }
     }
 
     // POST
     try {
-        // POST model
+        // POST mood model
         const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
         return res.status(201).json(response);
     } catch (error) {
         // Error catching on mood POST
         if (axios.isAxiosError(error)) {
-            // Unauthorized -> 401
+            // Unauthorized on mood POST -> 401
             if (error.response?.status === 401) {
                 return res.status(401).send();
             }
         }
-        // Unknown error -> 503
+        // Unknown error on mood POST -> 503
         return res.status(503).send();
     }
 });

@@ -188,10 +188,13 @@ export class Mood extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each mood model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the mood model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return mood response
         return response;
     }
 
@@ -213,8 +216,8 @@ export class Mood extends GameBusObject {
         const data = this.toIDPOSTData(model, playerId);
         // PUT mood activity
         const response = (await this.activity.putActivity(
-            data,
-            model.activityId,
+            data, // mood model
+            model.activityId, // mood activity ID
             headers,
             query
         )) as ActivityGETData[];

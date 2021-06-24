@@ -52,10 +52,13 @@ export class Food extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each food model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the food model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return food response
         return response;
     }
 

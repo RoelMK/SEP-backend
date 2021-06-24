@@ -3,6 +3,7 @@ import { DataSource } from '../dataParsers/dataParserTypes';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getFileDirectory, getFileName } from '../utils/files';
 import { getKeys } from '../utils/interfaceKeys';
+import ExcelParser from './excelParser';
 import { FileParser } from './fileParser';
 
 /**
@@ -76,27 +77,7 @@ export default class OneDriveExcelParser extends FileParser {
         );
         const rawTableData = await odClient.getTableValues();
 
-        // check for empty table
-        if (rawTableData === undefined) {
-            return new Map<string, string>();
-        }
-
-        // check if there are results
-        if (rawTableData.length == 0) {
-            return new Map<string, string>();
-        }
-
-        // check if the mapping contains more or less than two columns
-        if (rawTableData[0].length != 2) {
-            return new Map<string, string>();
-        }
-
-        // turn raw table data into a mapping
-        const resultMap = new Map<string, string>();
-        rawTableData.forEach(function (entry: any[]) {
-            resultMap.set(entry[0], entry[1]);
-        });
-        return resultMap;
+        return ExcelParser.checkRawTableData(rawTableData);
     }
 
     /**

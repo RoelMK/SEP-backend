@@ -82,12 +82,12 @@ export default class OneDriveExcelParser extends FileParser {
         }
 
         // check if there are results
-        if (rawTableData.length == 0) {
+        if (rawTableData.length === 0) {
             return new Map<string, string>();
         }
 
         // check if the mapping contains more or less than two columns
-        if (rawTableData[0].length != 2) {
+        if (rawTableData[0].length !== 2) {
             return new Map<string, string>();
         }
 
@@ -110,7 +110,7 @@ export default class OneDriveExcelParser extends FileParser {
             throw Error('Keys are undefined, no data source was provided!');
         }
         // amount of values in an object-array must be equal to the amount of passed keys
-        if (array2D[0].length != keys.length) {
+        if (array2D[0].length !== keys.length) {
             throw Error(
                 'Length mismatch: 2D array cannot be converted to an object with given keys!'
             );

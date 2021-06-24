@@ -4,16 +4,13 @@
     "description": "Backend for a diabetes platform.",
     "main": "src\\app.ts",
     "scripts": {
-        "test-api": "ts-node src/gb/test.ts",
-        "test-server": "ts-node src/server.ts",
-        "test-services": "ts-node src/services/testService.ts",
-        "test-excel-import": "ts-node src/services/excelParser.ts",
-        "prep": "ts-node test/AT/prepareAccounts.ts" ,
+        "start": "node dist/server.js",
+        "dev": "ts-node src/server.ts",
+        "prep": "ts-node test/AT/prepareAccounts.ts",
         "test": "jest",
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "lint-fix": "eslint . --ext .ts --fix"
-        
     },
     "repository": {
         "type": "git",

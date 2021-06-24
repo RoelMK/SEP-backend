@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { GlucoseUnit } from '../gb/models/glucoseModel';
 import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from '../services/dataParsers/nightscoutParser';
-import { GlucoseUnit } from '../gb/models/glucoseModel';
+} from '../services/dataParsers/dataParserTypes';
 
 export class NightScoutClient {
     // Axios client

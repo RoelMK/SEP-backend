@@ -24,11 +24,12 @@ import InsulinParser, {
 import { DateFormat } from '../../src/services/utils/dates';
 import { MoodModel } from '../../src/gb/models/moodModel';
 import MoodParser from '../../src/services/mood/moodParser';
-import NightscoutParser, {
+import NightscoutParser from '../../src/services/dataParsers/nightscoutParser';
+import { GameBusToken } from '../../src/gb/auth/tokenHandler';
+import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from '../../src/services/dataParsers/nightscoutParser';
-import { GameBusToken } from '../../src/gb/auth/tokenHandler';
+} from '../../src/services/dataParsers/dataParserTypes';
 
 const dummyUserInfo: GameBusToken = {
     playerId: 'testing',

@@ -1,12 +1,14 @@
 import { InsulinModel } from '../../gb/models/insulinModel';
-import { AbbottData } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { XOR } from 'ts-xor';
-import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
+import {
+    AbbottData,
+    FoodDiaryData,
+    NightScoutTreatmentModel
+} from '../dataParsers/dataParserTypes';
 
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel

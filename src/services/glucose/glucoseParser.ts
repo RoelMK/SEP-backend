@@ -1,8 +1,7 @@
 import { XOR } from 'ts-xor';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import { AbbottData } from '../dataParsers/abbottParser';
-import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
+import { AbbottData, NightScoutEntryModel } from '../dataParsers/dataParserTypes';
 import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';

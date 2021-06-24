@@ -4,9 +4,9 @@ import { FoodModel } from '../gb/models/foodModel';
 import { GlucoseModel } from '../gb/models/glucoseModel';
 import { InsulinModel } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
-import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
 import { DateSlice } from './utils/dates';
 import { nullUnion, UnionModel } from '../gb/models/unionModel';
+import { ExerciseGameDescriptorNames } from '../gb/objects/GBObjectTypes';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve

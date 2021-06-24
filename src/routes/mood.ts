@@ -3,7 +3,7 @@ import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
-import { Keys } from '../gb/objects/keys';
+import { Keys } from '../gb/objects/GBObjectTypes';
 import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 

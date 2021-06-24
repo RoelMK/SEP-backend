@@ -32,6 +32,7 @@ export class Food extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert food model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -164,13 +165,13 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that returns all activities of given types on given date (as unix)
+     * Function that returns all food activities on given date (as unix)
      * @param playerId ID of player
-     * @param date Date as unix
+     * @param date Date as unix for food query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
-     * @returns All activities of given types on given date
+     * @returns All food activities on given date
      */
     async getFoodActivitiesOnUnixDate(
         playerId: number,
@@ -243,12 +244,15 @@ export class Food extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertResponseToFoodModel(response);
-            });
+        return (
+            response
+                // Get all relevant food properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertResponseToFoodModel(response);
+                })
+        );
     }
 }

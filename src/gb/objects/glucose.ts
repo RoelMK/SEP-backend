@@ -48,6 +48,7 @@ export class Glucose extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert glucose model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -132,7 +133,7 @@ export class Glucose extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Page number for glucose data in case of pagination
         headers?: Headers,
         query?: Query
     ): Promise<GlucoseModel[]> {
@@ -202,12 +203,15 @@ export class Glucose extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertGlucoseResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant glucose properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertGlucoseResponseToModel(response);
+                })
+        );
     }
 }

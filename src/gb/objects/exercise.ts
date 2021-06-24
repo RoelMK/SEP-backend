@@ -26,6 +26,7 @@ export class Exercise extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert exercise model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -114,7 +115,7 @@ export class Exercise extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 117
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -149,7 +150,7 @@ export class Exercise extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 152
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -286,12 +287,15 @@ export class Exercise extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertExerciseResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant exercise properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertExerciseResponseToModel(response);
+                })
+        );
     }
 }

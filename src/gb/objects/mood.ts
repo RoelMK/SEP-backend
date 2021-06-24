@@ -30,13 +30,16 @@ export class Mood extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertMoodResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant mood properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertMoodResponseToModel(response);
+                })
+        );
     }
 
     /**
@@ -93,13 +96,13 @@ export class Mood extends GameBusObject {
     }
 
     /**
-     * Function that returns all activities of given types on given date (as unix)
+     * Function that returns all mood activities on given date (as unix)
      * @param playerId ID of player
-     * @param date Date as unix
+     * @param date Date as unix for mood query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
-     * @returns All activities of given types on given date
+     * @returns All mood activities on given date
      */
     async getMoodActivitiesOnUnixDate(
         playerId: number,
@@ -138,7 +141,7 @@ export class Mood extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Page number for mood data in case of pagination
         headers?: Headers,
         query?: Query
     ): Promise<MoodModel[]> {
@@ -206,7 +209,9 @@ export class Mood extends GameBusObject {
         if (model.activityId === undefined) {
             throw new Error('Activity ID must be present in order to replace activity');
         }
+        // Convert mood model to POST data
         const data = this.toIDPOSTData(model, playerId);
+        // PUT mood activity
         const response = (await this.activity.putActivity(
             data,
             model.activityId,

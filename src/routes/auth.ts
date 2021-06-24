@@ -32,6 +32,7 @@ router.get('/login', async (req: Request, res: Response) => {
             return res.status(403).send();
         }
     } else {
+        // If login fails -> 400
         return res.status(400).send();
     }
 });

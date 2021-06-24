@@ -19,7 +19,7 @@ nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
         return;
     }
 
-    // retrieve user information
+    // retrieve user information from nightscout endpoint
     const userInfo: GameBusToken = {
         playerId: req.user.playerId,
         accessToken: req.user.accessToken,
@@ -44,9 +44,11 @@ nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
                 res.status(400).send(`An erroneous host was uploaded! Reason: ${e.message}`);
                 break;
             default:
+                // Log message when nightscout connection fails
                 console.log(e.message);
                 res.status(503).send('Something went wrong :(');
         }
+        // Don't do anything on connection fail
         return;
     }
 

@@ -34,9 +34,9 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT request if activityId is present
+    // PUT request for insulin if activityId is present
     if (req.body.activityId) {
-        // Get activity ID
+        // Get activity ID of insulin
         const activityId = req.body.activityId as number;
         // Check whether given ID is an insulin activity
         const insulinActivity = await gbClient
@@ -79,6 +79,7 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
             .postSingleInsulinActivity(insulinModel, req.user.playerId);
         return res.status(201).json(response);
     } catch (error) {
+        // Error catching on insulin POST
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401
             if (error.response?.status === 401) {

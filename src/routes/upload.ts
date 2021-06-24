@@ -25,7 +25,7 @@ uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any
         res.status(400).send('Specify file format!');
         return;
     }
-    // retrieve user information
+    // retrieve user information from upload endpoint
     const userInfo: GameBusToken = {
         playerId: req.user.playerId,
         accessToken: req.user.accessToken,
@@ -106,9 +106,11 @@ async function uploadFile(req: any, res: any, dataParser: DataParser): Promise<v
                 );
                 break;
             default:
+                // Log message when uploading file fails
                 console.log(e.message);
                 res.status(503).send('Something went wrong :(');
         }
+        // Don't do anything on upload fail
         return;
     }
 

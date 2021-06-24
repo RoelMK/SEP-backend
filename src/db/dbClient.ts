@@ -105,6 +105,7 @@ export class DBClient {
                 return false;
             }
         } catch (e) {
+            // Catch error on login attempt and return false
             return false;
         }
     }
@@ -128,6 +129,7 @@ export class DBClient {
                 return false;
             }
         } catch (e) {
+            // Catch error on callback and return false
             return false;
         }
     }

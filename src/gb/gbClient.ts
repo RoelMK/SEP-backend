@@ -111,10 +111,10 @@ export class GameBusClient {
             path,
             RequestMethod.PUT,
             body,
-            headers,
+            headers, // Headers for PUT
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full PUT response
         );
     }
 
@@ -141,10 +141,10 @@ export class GameBusClient {
             path,
             RequestMethod.POST,
             body,
-            headers,
+            headers, // Headers for POST
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full POST response
         );
     }
 
@@ -172,7 +172,7 @@ export class GameBusClient {
             headers,
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full GET response
         );
     }
 
@@ -200,7 +200,7 @@ export class GameBusClient {
             headers,
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full DELETE response
         );
     }
 

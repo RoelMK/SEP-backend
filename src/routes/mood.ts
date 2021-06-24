@@ -35,9 +35,9 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT request if activityId is present
+    // PUT request for mood if activityId is present
     if (req.body.activityId) {
-        // Get activity ID
+        // Get activity ID of mood
         const activityId = req.body.activityId as number;
         // Check whether given ID is a mood activity
         const moodActivity = await gbClient
@@ -78,6 +78,7 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
         const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
         return res.status(201).json(response);
     } catch (error) {
+        // Error catching on mood POST
         if (axios.isAxiosError(error)) {
             // Unauthorized -> 401
             if (error.response?.status === 401) {

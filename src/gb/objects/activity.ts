@@ -36,14 +36,14 @@ export class Activity {
         query?: Query
     ): Promise<ActivityGETData[]> {
         // PUT uses form-data, so we convert data to string and send as form data
-        const body = new FormData();
-        body.append('activity', JSON.stringify(data));
-        const formHeaders = body.getHeaders();
+        const activityBody = new FormData();
+        activityBody.append('activity', JSON.stringify(data));
+        const formHeaders = activityBody.getHeaders();
 
         // We have to create the headers here because FormData has some extra headers
-        let gamebusHeaders = this.gamebus.createHeader(true, headers);
-        gamebusHeaders = {
-            ...gamebusHeaders,
+        let activityHeaders = this.gamebus.createHeader(true, headers);
+        activityHeaders = {
+            ...activityHeaders,
             ...formHeaders
         };
 
@@ -57,8 +57,8 @@ export class Activity {
         const response = await this.gamebus.client.request({
             method: 'PUT',
             url: gamebusUrl,
-            headers: gamebusHeaders,
-            data: body
+            headers: activityHeaders,
+            data: activityBody
         });
         return response.data as ActivityGETData[];
     }

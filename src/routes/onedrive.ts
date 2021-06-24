@@ -22,7 +22,7 @@ onedriveRouter.get('/onedrive', checkJwt, async (req: any, res: any) => {
         return;
     }
 
-    // retrieve user information
+    // retrieve user information from onedrive endpoint
     const userInfo: GameBusToken = {
         playerId: req.user.playerId,
         accessToken: req.user.accessToken,
@@ -102,6 +102,7 @@ onedriveRouter.get('/redirect', async (req: any, res: any) => {
             return res.status(403).send();
         }
     } else {
+        // If OneDrive fails -> 400
         return res.status(400).send();
     }
 });

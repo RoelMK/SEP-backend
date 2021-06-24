@@ -53,7 +53,7 @@ export class Insulin extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Page number for insulin data in case of pagination
         headers?: Headers,
         query?: Query
     ): Promise<InsulinModel[]> {
@@ -159,13 +159,16 @@ export class Insulin extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertInsulinResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant insulin properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertInsulinResponseToModel(response);
+                })
+        );
     }
 
     /**
@@ -217,7 +220,9 @@ export class Insulin extends GameBusObject {
         if (model.activityId === undefined) {
             throw new Error('Activity ID must be present in order to replace activity');
         }
+        // Convert insulin model to POST data
         const data = this.toIDPOSTData(model, playerId);
+        // PUT insulin activity
         const response = (await this.activity.putActivity(
             data,
             model.activityId,

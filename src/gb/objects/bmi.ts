@@ -69,6 +69,7 @@ export class BMI extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert BMI model to POST data and post it
         const data = this.toPOSTData(model, playerId);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -138,12 +139,15 @@ export class BMI extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertBMIResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant BMI properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertBMIResponseToModel(response);
+                })
+        );
     }
 }

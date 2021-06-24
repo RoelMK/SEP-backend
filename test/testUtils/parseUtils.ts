@@ -12,15 +12,9 @@ import { EetMeterParser } from '../../src/services/dataParsers/eetmeterParser';
 import { FoodModel } from '../../src/gb/models/foodModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
-import FoodParser, { FoodInput, FoodSource } from '../../src/services/food/foodParser';
-import GlucoseParser, {
-    GlucoseInput,
-    GlucoseSource
-} from '../../src/services/glucose/glucoseParser';
-import InsulinParser, {
-    InsulinInput,
-    InsulinSource
-} from '../../src/services/insulin/insulinParser';
+import FoodParser from '../../src/services/food/foodParser';
+import GlucoseParser from '../../src/services/glucose/glucoseParser';
+import InsulinParser from '../../src/services/insulin/insulinParser';
 import { DateFormat } from '../../src/services/utils/dates';
 import { MoodModel } from '../../src/gb/models/moodModel';
 import MoodParser from '../../src/services/mood/moodParser';
@@ -30,6 +24,9 @@ import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
 } from '../../src/services/dataParsers/dataParserTypes';
+import { FoodInput, FoodSource } from '../../src/services/food/foodTypes';
+import { GlucoseInput, GlucoseSource } from '../../src/services/glucose/glucoseTypes';
+import { InsulinInput, InsulinSource } from '../../src/services/insulin/insulinTypes';
 
 const dummyUserInfo: GameBusToken = {
     playerId: 'testing',

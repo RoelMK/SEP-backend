@@ -3,14 +3,17 @@ import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import FoodParser, { FoodSource } from '../../src/services/food/foodParser';
-import GlucoseParser, { GlucoseSource } from '../../src/services/glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../../src/services/insulin/insulinParser';
+import FoodParser from '../../src/services/food/foodParser';
+import GlucoseParser from '../../src/services/glucose/glucoseParser';
+import InsulinParser from '../../src/services/insulin/insulinParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseEetmeter, parseFoodDiary } from '../testUtils/parseUtils';
 import fs from 'fs';
 import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 import { AbbottData, FoodDiaryData } from '../../src/services/dataParsers/dataParserTypes';
+import { FoodSource } from '../../src/services/food/foodTypes';
+import { InsulinSource } from '../../src/services/insulin/insulinTypes';
+import { GlucoseSource } from '../../src/services/glucose/glucoseTypes';
 
 // database init
 beforeAll(() => {

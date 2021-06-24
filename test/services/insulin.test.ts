@@ -5,7 +5,7 @@ import {
     FoodDiaryData,
     NightScoutTreatmentModel
 } from '../../src/services/dataParsers/dataParserTypes';
-import { InsulinSource } from '../../src/services/insulin/insulinParser';
+import { InsulinSource } from '../../src/services/insulin/insulinTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import {
     parseAbbott,

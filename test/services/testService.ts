@@ -8,11 +8,12 @@ import { MoodModel } from '../../src/gb/models/moodModel';
 import { NightScoutClient } from '../../src/nightscout/nsClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
-import NightscoutParser, {
+import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from '../../src/services/dataParsers/nightscoutParser';
+} from '../../src/services/dataParsers/dataParserTypes';
+import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
+import NightscoutParser from '../../src/services/dataParsers/nightscoutParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 
 const dummyUserInfo: GameBusToken = {

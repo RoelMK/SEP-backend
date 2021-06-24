@@ -66,6 +66,7 @@ export default class InsulinParser extends ModelParser {
                         parseInt(this.userInfo.playerId)
                     );
         } catch (e) {
+            // Ignore insulin post errors
             /*continue*/
         }
     }

@@ -30,6 +30,7 @@ export class NightScoutClient {
             await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
+            // Check POST entry error
             switch (error.response.data.status) {
                 case 401:
                     throw new Error(
@@ -58,6 +59,7 @@ export class NightScoutClient {
             await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
+            // Check POST treatment error
             switch (error.response.data.status) {
                 case 401:
                     throw new Error(

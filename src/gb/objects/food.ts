@@ -80,6 +80,7 @@ export class Food extends GameBusObject {
                 });
             }
         }
+        // Return as food post data
         return obj;
     }
 

@@ -106,6 +106,7 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // PUT request
         return this.request(
             path,
             RequestMethod.PUT,
@@ -135,6 +136,7 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // POST request
         return this.request(
             path,
             RequestMethod.POST,
@@ -157,11 +159,12 @@ export class GameBusClient {
      */
     async get(
         path: string,
-        headers?: Headers,
+        headers?: Headers, // Headers for GET request
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // GET request
         return this.request(
             path,
             RequestMethod.GET,
@@ -184,11 +187,12 @@ export class GameBusClient {
      */
     async delete(
         path: string,
-        headers?: Headers,
+        headers?: Headers, // Headers for DELETE request
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // DELETE request
         return this.request(
             path,
             RequestMethod.DELETE,

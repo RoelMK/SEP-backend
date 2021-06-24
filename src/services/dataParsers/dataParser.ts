@@ -123,7 +123,7 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new food data
                     this.only_parse_newest,
                     this.lastUpdated
                 );
@@ -139,7 +139,7 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new insulin data
                     this.only_parse_newest,
                     this.lastUpdated
                 );
@@ -150,7 +150,7 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new glucose data
                     this.only_parse_newest,
                     this.lastUpdated
                 );

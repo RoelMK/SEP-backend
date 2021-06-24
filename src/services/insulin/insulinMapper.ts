@@ -76,7 +76,7 @@ export default class InsulinMapper {
         return {
             timestamp: parseDate(
                 entry.date.replace(/-/g, '/') + ' ' + entry.time,
-                DateFormat.FOOD_DIARY,
+                DateFormat.FOOD_DIARY, // Use date format of food diary for the insulin entry
                 new Date(),
                 true
             ),

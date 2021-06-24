@@ -59,6 +59,7 @@ dataRouter.get('/data', checkJwt, async (req: any, res: any) => {
         }
     } catch (error) {
         if (axios.isAxiosError(error)) {
+            // Check for error on data endpoint
             if (error.response?.status === 401) {
                 // Unauthorized
                 return res.status(401).send();

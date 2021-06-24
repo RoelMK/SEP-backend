@@ -53,6 +53,7 @@ export class Exercise extends GameBusObject {
                 });
             }
         }
+        // Return as exercise POST data
         return obj;
     }
 
@@ -181,7 +182,7 @@ export class Exercise extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 185
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -213,7 +214,7 @@ export class Exercise extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 217
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {

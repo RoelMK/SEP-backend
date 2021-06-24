@@ -95,6 +95,7 @@ export class BMI extends GameBusObject {
                 });
             }
         }
+        // Return as BMI post data
         return obj;
     }
 

@@ -43,7 +43,7 @@ export function FoodDiaryDataKeys(): string[] {
  * Excel parser does not accept interfaces as argument, only stringarray
  * It seems not possible as the import { keys } from 'ts-transformer-keys' is broken
  * To get this automatically at runtime
- * @returns array containing all keys of interface FoodDiaryData
+ * @returns array containing all keys of interface AbbottData
  */
 export function AbbottDataKeys(): string[] {
     return [

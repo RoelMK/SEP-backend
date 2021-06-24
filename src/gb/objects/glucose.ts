@@ -92,6 +92,7 @@ export class Glucose extends GameBusObject {
                 });
             }
         }
+        // Return as glucose post data
         return obj;
     }
 

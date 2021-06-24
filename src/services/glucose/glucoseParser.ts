@@ -90,6 +90,7 @@ export default class GlucoseParser extends ModelParser {
                         parseInt(this.userInfo.playerId)
                     );
         } catch (e) {
+            // Ignore glucose post errors
             /*continue*/
         }
     }

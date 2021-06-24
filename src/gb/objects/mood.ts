@@ -236,6 +236,7 @@ export class Mood extends GameBusObject {
                 });
             }
         }
+        // Return as mood post data
         return obj;
     }
 

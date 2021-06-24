@@ -28,9 +28,11 @@ supervisorRouter.post('/logToken', (req: any, res: any) => {
     if (success) {
         return res.status(200).json({ success: true, email: req.body.email });
     } else {
+        // No success for logging token -> 400
         return res
             .status(400)
             .json({ success: false, message: 'Something went wrong, please try again later' });
+        // Also include message for logging token error
     }
 });
 
@@ -57,9 +59,11 @@ supervisorRouter.post('/request', (req: any, res: any) => {
     if (success) {
         return res.status(200).json({ success: true });
     } else {
+        // No success for requesting role -> 400
         return res
             .status(400)
             .json({ success: false, message: 'Something went wrong, please try again later' });
+        // Also include message for requesting role
     }
 });
 

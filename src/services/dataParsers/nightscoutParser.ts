@@ -141,7 +141,7 @@ export default class NightscoutParser extends DataParser {
     }
 
     /**
-     * Filters the insulin entries from the raw data
+     * Filters the insulin entries from the raw Nightscout data
      * @returns All insulin entries
      */
     private filterInsulin(): NightScoutTreatmentModel[] {

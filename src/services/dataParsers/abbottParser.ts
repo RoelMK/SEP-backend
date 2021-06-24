@@ -98,7 +98,7 @@ export default class AbbottParser extends DataParser {
     }
 
     /**
-     * Filters the insulin entries from the raw data
+     * Filters the insulin entries from the raw Abbott data
      * @returns All insulin entries
      */
     private filterInsulin(): AbbottData[] {

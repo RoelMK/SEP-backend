@@ -6,6 +6,7 @@ import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { RecordType } from '../../gb/models/glucoseModel';
+import { AbbottData, AbbottDataGuard } from './dataParserTypes';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -140,60 +141,3 @@ const emptyAbbottData = (): AbbottData => ({
     correction_insulin__units_: '',
     user_change_insulin__units_: ''
 });
-
-/**
- * Raw Abbott .csv data format
- */
-export type AbbottData = {
-    device: string;
-    serial_number: string;
-    device_timestamp: string;
-    record_type: string;
-    historic_glucose_mg_dl?: string;
-    historic_glucose_mmol_l?: string;
-    scan_glucose_mg_dl?: string;
-    scan_glucose_mmol_l?: string;
-    non_numeric_rapid_acting_insulin: string;
-    rapid_acting_insulin__units_: string;
-    non_numeric_food: string;
-    carbohydrates__grams_: string;
-    carbohydrates__servings_: string;
-    non_numeric_long_acting_insulin: string;
-    long_acting_insulin__units_?: string; // apparently there is a difference between US and EU names for these
-    long_acting_insulin_value__units_?: string;
-    notes: string;
-    strip_glucose_mg_dl?: string;
-    strip_glucose_mmol_l?: string;
-    ketone_mmol_l: string;
-    meal_insulin__units_: string;
-    correction_insulin__units_: string;
-    user_change_insulin__units_: string;
-};
-
-/**
- * Function to check if an object belongs to the AbbottData interface
- * @param object any object
- * @returns whether the object is part of the interface AbbottData
- */
-function AbbottDataGuard(object: any): object is AbbottData {
-    if (object === undefined) {
-        return false;
-    }
-    return (
-        object.device !== undefined &&
-        object.serial_number !== undefined &&
-        object.device_timestamp !== undefined &&
-        object.record_type !== undefined &&
-        object.non_numeric_rapid_acting_insulin !== undefined &&
-        object.rapid_acting_insulin__units_ !== undefined &&
-        object.non_numeric_food !== undefined &&
-        object.carbohydrates__grams_ !== undefined &&
-        object.carbohydrates__servings_ !== undefined &&
-        object.non_numeric_long_acting_insulin !== undefined &&
-        object.notes !== undefined &&
-        object.ketone_mmol_l !== undefined &&
-        object.meal_insulin__units_ !== undefined &&
-        object.correction_insulin__units_ !== undefined &&
-        object.user_change_insulin__units_ !== undefined
-    );
-}

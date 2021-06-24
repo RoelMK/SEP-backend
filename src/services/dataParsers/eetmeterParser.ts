@@ -3,6 +3,7 @@ import { FoodModel } from '../../gb/models/foodModel';
 import { FoodSource } from '../food/foodParser';
 import { getFileName } from '../utils/files';
 import { DataParser, DataSource, OutputDataType } from './dataParser';
+import { Consumptie, EetmeterData } from './dataParserTypes';
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
  */
@@ -44,69 +45,4 @@ export class EetMeterParser extends DataParser {
     getData(): FoodModel[] | undefined {
         return this.foodParser?.foodData;
     }
-}
-
-export interface EetmeterData {
-    Consumpties: Consumpties;
-}
-export interface Consumpties {
-    Attributes: [any];
-    Consumptie: [Consumptie];
-}
-export type Consumptie = {
-    Attributes: Periode;
-    Datum: Datum;
-    Product: Product;
-    Nutrienten: Nutrienten;
-};
-export interface Nutrienten {
-    Koolhydraten: Koolhydraten;
-    Energie: Energie;
-    Vet: Vet;
-    VerzadigdVet: VerzadigdVet;
-    Zout: Zout;
-    Water: Water;
-    Suikers: Suikers;
-}
-
-export interface Periode {
-    Periode: string;
-}
-
-export interface Product {
-    Naam: string;
-}
-
-export interface Datum {
-    Dag: number;
-    Maand: number;
-    Jaar: number;
-}
-
-export interface Koolhydraten {
-    Value: number;
-}
-
-export interface Energie {
-    Value: number;
-}
-
-export interface Vet {
-    Value: number;
-}
-
-export interface Zout {
-    Value: number;
-}
-
-export interface Water {
-    Value: number;
-}
-
-export interface Suikers {
-    Value: number;
-}
-
-export interface VerzadigdVet {
-    Value: number;
 }

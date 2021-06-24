@@ -11,6 +11,7 @@ import { QueryOrder } from './activity';
 import { startCase, toLower } from 'lodash';
 import { ExerciseGameDescriptorNames } from './keys';
 import { GameBusObject, Keys, Activity } from '.';
+import { ExercisePropertyKeys } from './GBObjectTypes';
 
 /**
  * Class for exercise-specific functions
@@ -287,24 +288,4 @@ export class Exercise extends GameBusObject {
                 return this.convertExerciseResponseToModel(response);
             });
     }
-}
-
-/**
- * Relevant properties to map properties of activities to the exerciseModel
- * [key in exerciseModel] = [translationKey in GameBus]
- */
-export enum ExercisePropertyKeys {
-    duration = 'DURATION', // in seconds as string
-    steps = 'STEPS', // in amount as string
-    distance = 'DISTANCE', // in meters as string
-    calories = 'KCALORIES', // in kcal as string
-    groupSize = 'GROUP_SIZE', // in amount as string
-    penalty = 'PENALTY', // in amount [0 - 100] as string
-    score = 'SCORE', // in amount [-inf, inf] as string
-    maxSpeed = 'SPEED.MAX', // maximum speed reached in m/s
-    avgSpeed = 'SPEED.AVG', // average speed reached in m/s
-    maxHeartrate = 'MAX_HEART_RATE', // maximum heart rate reached (in bpm)
-    avgHeartrate = 'AVG_HEART_RATE', // average heart rate reached (in bpm)
-    minHeartrate = 'MIN_HEART_RATE', // minimum heart rate reached (in bpm)
-    heartrate = '' // heart rate (in bpm), add if required
 }

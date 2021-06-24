@@ -7,6 +7,7 @@ import ExcelParser from '../fileParsers/excelParser';
 import { MEAL_TYPE } from '../../gb/models/foodModel';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
+import { FoodDiaryData, FoodDiaryDataGuard } from './dataParserTypes';
 
 /**
  * Default class for parsing food diaries
@@ -210,42 +211,4 @@ export default class FoodDiaryParser extends DataParser {
         }
         return entry;
     }
-}
-
-/**
- * Type of a parsed food diary, extends string, string records
- */
-export type FoodDiaryData = {
-    date: string;
-    time: string;
-    meal_type: string;
-    description: string;
-    carbohydrates: string;
-    glycemic_index: string;
-    base_insulin: string;
-    high_correction_insulin: string;
-    sports_correction_insulin: string;
-    total_insulin: string;
-};
-
-/**
- * Function to check if an object belongs to the FoodDiaryData interface
- * @param object any object
- * @returns whether the object is part of the interface AbbottData
- */
-function FoodDiaryDataGuard(object: any): object is FoodDiaryData {
-    if (object === undefined) {
-        return false;
-    }
-    return (
-        'date' in object &&
-        'time' in object &&
-        'description' in object &&
-        'meal_type' in object &&
-        'carbohydrates' in object &&
-        'glycemic_index' in object &&
-        'base_insulin' in object &&
-        'high_correction_insulin' in object &&
-        'total_insulin' in object
-    );
 }

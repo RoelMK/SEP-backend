@@ -11,6 +11,7 @@ import {
 } from '../models';
 import { QueryOrder } from './activity';
 import { Activity, GameBusObject } from '.';
+import { MoodIDs, MoodPropertyKeys } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions
@@ -259,33 +260,4 @@ export class Mood extends GameBusObject {
         }
         return obj;
     }
-}
-
-/**
- * Relevant properties to map properties of activities to the mood model
- */
-export enum MoodPropertyKeys {
-    arousal = 'MOOD_AROUSAL', // number in range [1,3]
-    valence = 'MOOD_VALENCE' // number in range [1,3]
-}
-
-const MoodIDs = Object.freeze({
-    arousal: 1186,
-    valence: 1187
-});
-
-export { MoodIDs };
-
-/**
- * Data provider names for known mood data sources
- */
-export enum MoodDataProviderNames {
-    DAILY_RUN = 'Daily_run'
-}
-
-/**
- * Data property names for known mood data properties
- */
-export enum MoodGameDescriptorNames {
-    logMood = 'LOG_MOOD' // Mood descriptor
 }

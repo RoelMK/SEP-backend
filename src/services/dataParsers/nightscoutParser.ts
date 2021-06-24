@@ -7,6 +7,11 @@ import { GlucoseSource } from '../glucose/glucoseParser';
 import { InsulinSource } from '../insulin/insulinParser';
 
 import { DataParser, DataSource, OutputDataType } from './dataParser';
+import {
+    NightScoutDatatype,
+    NightScoutEntryModel,
+    NightScoutTreatmentModel
+} from './dataParserTypes';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -146,41 +151,4 @@ export default class NightscoutParser extends DataParser {
         }
         return insulin;
     }
-}
-
-export type NightScoutEntryModel = {
-    type: string;
-    dateString?: string;
-    date: number;
-    sgv: number;
-    _id?: string;
-    direction?: string;
-    noise?: number;
-    filtered?: number;
-    unfiltered?: number;
-    rssi?: number;
-    utcOffset?: number;
-    sysTime?: string;
-};
-
-export type NightScoutTreatmentModel = {
-    eventType: string;
-    created_at: string;
-    _id?: string;
-    glucose?: string;
-    glucoseType?: string; // Finger or sensor
-    carbs?: number;
-    protein?: number;
-    fat?: number;
-    insulin?: number;
-    units?: string; // glucose units
-    notes?: string;
-    enteredBy?: string;
-    utcOffset?: number;
-};
-
-// Enum that contains all retrievable data from Nightscout
-enum NightScoutDatatype {
-    ENTRY = 0,
-    TREATMENT = 1
 }

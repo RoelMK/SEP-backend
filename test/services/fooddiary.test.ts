@@ -1,9 +1,8 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { parseFoodDiary } from '../testUtils/parseUtils';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/dataParserTypes';
+import { FoodDiaryData, OutputDataType } from '../../src/services/dataParsers/dataParserTypes';
 
 test('test robustness of food diary data parser', async () => {
     expect(async () => {

@@ -1,4 +1,4 @@
-import { DataSource } from '../dataParsers/dataParser';
+import { DataSource } from '../dataParsers/dataParserTypes';
 
 /**
  * Obtains the keys that are matched to the values of parsed Excel rows

@@ -7,10 +7,10 @@ import { ChallengePOSTData } from '../../src/gb/models/gamebusModel';
 import { MoodModel } from '../../src/gb/models/moodModel';
 import { NightScoutClient } from '../../src/nightscout/nsClient';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import {
     NightScoutEntryModel,
-    NightScoutTreatmentModel
+    NightScoutTreatmentModel,
+    OutputDataType
 } from '../../src/services/dataParsers/dataParserTypes';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import NightscoutParser from '../../src/services/dataParsers/nightscoutParser';

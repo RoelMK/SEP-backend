@@ -1,9 +1,4 @@
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
-import {
-    CombinedDataParserOutput,
-    DataSource,
-    OutputDataType
-} from '../../src/services/dataParsers/dataParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import CSVParser from '../../src/services/fileParsers/csvParser';
 import XMLParser from '../../src/services/fileParsers/xmlParser';
@@ -21,8 +16,11 @@ import MoodParser from '../../src/services/mood/moodParser';
 import NightscoutParser from '../../src/services/dataParsers/nightscoutParser';
 import { GameBusToken } from '../../src/gb/auth/tokenHandler';
 import {
+    CombinedDataParserOutput,
+    DataSource,
     NightScoutEntryModel,
-    NightScoutTreatmentModel
+    NightScoutTreatmentModel,
+    OutputDataType
 } from '../../src/services/dataParsers/dataParserTypes';
 import { FoodInput, FoodSource } from '../../src/services/food/foodTypes';
 import { GlucoseInput, GlucoseSource } from '../../src/services/glucose/glucoseTypes';

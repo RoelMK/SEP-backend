@@ -33,12 +33,13 @@ export class Glucose extends GameBusObject {
             headers,
             query
         );
+        // Convert response to model
         return Glucose.convertResponseToGlucoseModels(response);
     }
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model single glucose model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postSingleGlucoseActivity(
@@ -54,7 +55,7 @@ export class Glucose extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model glucose models to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postMultipleGlucoseActivities(
@@ -78,8 +79,8 @@ export class Glucose extends GameBusObject {
         const obj = {
             gameDescriptorTK: Keys.glucoseTranslationKey,
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // glucose timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -99,10 +100,10 @@ export class Glucose extends GameBusObject {
      */
     public toIDPOSTData(model: GlucoseModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: Keys.glucoseGameDescriptorID,
+            gameDescriptor: Keys.glucoseGameDescriptorID, // Glucose game descriptor
             dataProvider: this.activity.dataProviderID,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Glucose timestamp
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
         };
@@ -141,10 +142,11 @@ export class Glucose extends GameBusObject {
             [Keys.glucoseTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 144
             headers,
             query
         );
+        // Convert response between unix dates to model
         return Glucose.convertResponseToGlucoseModels(response);
     }
 

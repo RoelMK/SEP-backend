@@ -121,8 +121,8 @@ export class GameBusClient {
      * POST request
      * @param path Endpoint URL (without base in {endpoint})
      * @param body Body of POST
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for POST
+     * @param query Any query options for POST
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
@@ -149,8 +149,8 @@ export class GameBusClient {
     /**
      * GET request
      * @param path Endpoint URL (without base in {endpoint})
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for GET
+     * @param query Any query options for GET
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
@@ -176,8 +176,8 @@ export class GameBusClient {
     /**
      * DELETE request
      * @param path Endpoint URL (without base in {endpoint})
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for DELETE
+     * @param query Any query options for DELETE
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response

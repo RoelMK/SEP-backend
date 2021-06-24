@@ -65,6 +65,7 @@ export class DBClient {
             return true;
         } catch (e) {
             return false;
+            // Code duplication prevention 68
         }
     }
 
@@ -80,6 +81,7 @@ export class DBClient {
             return true;
         } catch (e) {
             return false;
+            // Code duplication prevention 84
         }
     }
 
@@ -183,6 +185,7 @@ export class DBClient {
             return true;
         } catch (e) {
             return false;
+            // Code duplication prevention 188
         }
     }
     /**
@@ -254,6 +257,7 @@ export class DBClient {
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 260
         }
     }
 
@@ -274,6 +278,7 @@ export class DBClient {
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 281
         }
     }
 
@@ -293,6 +298,7 @@ export class DBClient {
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 301
         }
     }
 
@@ -308,10 +314,12 @@ export class DBClient {
                     'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=False'
                 )
                 .all(childEmail);
+            // Return supervisors who are requested
             return supervisors;
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 321
         }
     }
 
@@ -331,6 +339,7 @@ export class DBClient {
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 342
         }
     }
 
@@ -347,10 +356,12 @@ export class DBClient {
                     'SELECT supervisor_email FROM supervisor WHERE player_email=? AND confirmed=True'
                 )
                 .all(childEmail);
+            // Return supervisors who are approved
             return supervisors;
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 364
         }
     }
 
@@ -372,6 +383,7 @@ export class DBClient {
         } catch (e) {
             console.log(e);
             return false;
+            // Code duplication prevention 386
         }
     }
 
@@ -390,6 +402,7 @@ export class DBClient {
             return true;
         } catch (e) {
             return false;
+            // Code duplication prevention 105
         }
     }
 

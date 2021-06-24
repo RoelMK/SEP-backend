@@ -35,6 +35,7 @@ nightscoutRouter.get('/nightscout', checkJwt, async (req: any, res: any) => {
     } catch (e) {
         // error has occured, send back appropriate response
         if (axios.isAxiosError(e) && e.response?.status === 401) {
+            // In the case of an error with Nightscout, send 401
             res.status(401).send();
             return;
         }

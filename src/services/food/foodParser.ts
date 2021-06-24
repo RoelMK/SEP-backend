@@ -56,7 +56,7 @@ export default class FoodParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing food posting
         }
         try {
             if (this.foodData && this.foodData.length > 0)

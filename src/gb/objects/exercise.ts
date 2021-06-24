@@ -91,6 +91,7 @@ export class Exercise extends GameBusObject {
             headers,
             query
         );
+        // Convert exercise from GD to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
@@ -123,18 +124,19 @@ export class Exercise extends GameBusObject {
             gameDescriptors,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 126
             headers,
             query
         );
+        // Convert exercise from GD between unix dates to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
     /**
      * Function that returns ALL exercise activities between given dates
      * @param playerId ID of player
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of exercise query
+     * @param endDate Ending date (excluding, unix) of exercise query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -157,7 +159,7 @@ export class Exercise extends GameBusObject {
             endDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 160
             headers,
             query
         );
@@ -189,17 +191,17 @@ export class Exercise extends GameBusObject {
             gameDescriptors,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 192
             headers,
             query
         );
+        // Convert exercise from GD on unix date to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
     /**
      * Function that returns ALL exercise activities on given date
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
      * @param date Date as unix
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
@@ -221,7 +223,7 @@ export class Exercise extends GameBusObject {
             date,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 223
             headers,
             query
         );

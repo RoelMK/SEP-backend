@@ -55,7 +55,7 @@ export default class InsulinParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing insulin posting
         }
         try {
             if (this.insulinData && this.insulinData.length > 0)

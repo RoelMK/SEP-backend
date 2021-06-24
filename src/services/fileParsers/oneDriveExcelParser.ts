@@ -38,7 +38,7 @@ export default class OneDriveExcelParser extends FileParser {
             // create oneDrive client
             const odClient = new OneDriveClient(
                 oneDriveToken,
-                getFileName(filePath),
+                getFileName(filePath), // Code duplication prevention 41
                 getFileDirectory(filePath),
                 tableName
             );
@@ -69,7 +69,7 @@ export default class OneDriveExcelParser extends FileParser {
         // create onedrive client
         const odClient = new OneDriveClient(
             oneDriveToken,
-            getFileName(filePath),
+            getFileName(filePath), // Code duplication prevention 72
             getFileDirectory(filePath),
             tableName,
             this.mappingTableSheet

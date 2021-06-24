@@ -55,7 +55,7 @@ export default class AbbottParser extends DataParser {
         // post data
         await this.postProcessedData();
 
-        // update the timestamp of newest parsed entry to this file
+        // update the timestamp of newest Abbott entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 

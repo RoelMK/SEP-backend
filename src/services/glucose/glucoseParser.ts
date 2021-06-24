@@ -79,7 +79,7 @@ export default class GlucoseParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing glucose posting
         }
         try {
             if (this.glucoseData && this.glucoseData.length > 0)

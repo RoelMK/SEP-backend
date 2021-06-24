@@ -196,7 +196,7 @@ export class Activity {
         endDate: Date,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 199
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -249,7 +249,7 @@ export class Activity {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 252
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -261,7 +261,7 @@ export class Activity {
             endDateAsDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 264
             headers,
             query
         );
@@ -285,7 +285,7 @@ export class Activity {
         gameDescriptors: string[],
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 288
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -317,7 +317,7 @@ export class Activity {
         date: Date,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 320
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -329,10 +329,11 @@ export class Activity {
             tomorrowAsDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 332
             headers,
             query
         );
+        // Return all activities on given date
         return activities;
     }
 
@@ -349,7 +350,7 @@ export class Activity {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 352
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -365,10 +366,11 @@ export class Activity {
             tomorrowUnix,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 368
             headers,
             query
         );
+        // Return all activities between given dates
         return activities;
     }
 
@@ -387,7 +389,7 @@ export class Activity {
         gameDescriptors: string[],
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 390
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {

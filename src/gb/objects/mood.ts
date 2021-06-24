@@ -1,6 +1,6 @@
 import {
-    ActivityGETData,
     ActivityPOSTData,
+    ActivityGETData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
     PropertyInstancePOST,
@@ -49,6 +49,7 @@ export class Mood extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
+        // Get all activities with mood ID
         return await this.activity.getAllActivitiesWithGd(
             playerId,
             [this.moodTranslationKey],
@@ -94,7 +95,6 @@ export class Mood extends GameBusObject {
     /**
      * Function that returns all activities of given types on given date (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
      * @param date Date as unix
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
@@ -106,28 +106,27 @@ export class Mood extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 108
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
         return await this.activity.getActivitiesOnUnixDateWithGd(
-            playerId,
+            playerId, // Code duplication prevention 113
             date,
             [this.moodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 118
             headers,
             query
         );
     }
 
     /**
-     * Function that returns all activities of given types between given dates (as unix)
+     * Function that returns all mood activities between given dates (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of mood query
+     * @param endDate Ending date (excluding, unix) of mood query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -151,16 +150,16 @@ export class Mood extends GameBusObject {
                 [this.moodTranslationKey],
                 order,
                 limit,
-                page,
+                page, // Code duplication prevention 152
                 headers,
                 query
             )
         );
-    }
+    } //
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model single mood model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postSingleMoodActivity(
@@ -176,7 +175,7 @@ export class Mood extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model mood models to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postMultipleMoodActivities(
@@ -224,8 +223,8 @@ export class Mood extends GameBusObject {
         const obj = {
             gameDescriptorTK: this.moodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // mood timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -245,10 +244,10 @@ export class Mood extends GameBusObject {
      */
     public toIDPOSTData(model: MoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.moodGameDescriptorID,
+            gameDescriptor: this.moodGameDescriptorID, // Mood game descriptor
             dataProvider: this.activity.dataProviderID,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Mood timestamp
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
         };

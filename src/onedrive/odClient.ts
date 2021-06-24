@@ -34,6 +34,14 @@ export class OneDriveClient {
         this.printDeep = printDeep ?? false;
     }
 
+    getRequestHeaders(sessionID: string) {
+        return {
+            'content-type': 'Application/Json',
+            authorization: `Bearer ${this.token}`,
+            'workbook-session-id': `Bearer ${sessionID}`
+        };
+    }
+
     setPrintValues(setDoValue: boolean, setDeepValue?: boolean): void {
         this.doPrint = setDoValue;
         this.printDeep = setDeepValue ?? this.printDeep;
@@ -71,11 +79,7 @@ export class OneDriveClient {
         workSheetName: string,
         tableName: string
     ) {
-        const requestHeaders = {
-            'content-type': 'Application/Json',
-            authorization: `Bearer ${token}`,
-            'workbook-session-id': `Bearer ${sessionID}`
-        };
+        const requestHeaders = this.getRequestHeaders(sessionID);
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
@@ -94,10 +98,12 @@ export class OneDriveClient {
     }
 
     private async getTableResult(tableName: string) {
+        // Get file ID for table result
         this.printBool('Get fileID');
         const fileResult = await this.getFile(this.token, this.fileName, this.folderPath);
         const workbookID = fileResult.id;
 
+        // Get session ID for table result
         this.printBool('Get session');
         const sessionResult = await this.getExcelSession(workbookID, this.token);
         const sessionID = sessionResult.data.id;
@@ -114,10 +120,12 @@ export class OneDriveClient {
     }
 
     async getTableList(): Promise<any> {
+        // Get file ID for table list
         this.printBool('Get fileID');
         const fileResult = await this.getFile(this.token, this.fileName, this.folderPath);
         const workbookID = fileResult.id;
 
+        // Get session ID for table list
         this.printBool('Get session');
         const sessionResult = await this.getExcelSession(workbookID, this.token);
         const sessionID = sessionResult.data.id;
@@ -138,11 +146,7 @@ export class OneDriveClient {
         sessionID: string,
         workSheetName: string
     ) {
-        const requestHeaders = {
-            accept: 'Application/Json',
-            authorization: `Bearer ${token}`,
-            'workbook-session-id': `Bearer ${sessionID}`
-        };
+        const requestHeaders = this.getRequestHeaders(sessionID);
         try {
             const config: AxiosRequestConfig = {
                 method: 'GET',
@@ -187,14 +191,15 @@ export class OneDriveClient {
      * @param topLeft Topleft cell of the to be retrieved range
      * @param bottomRight Bottomright cell of the to be retrieved range
      * @returns its complicated
-     * TODO actually make an interface for it, even though it doesn't do anything as
      * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getRangeResult(topLeft: string, bottomRight: string) {
+        // Get file ID for range result
         this.printBool('Get fileID');
         const fileResult = await this.getFile(this.token, this.fileName, this.folderPath);
         const workbookID = fileResult.id;
 
+        // Get session ID for range result
         this.printBool('Get session');
         const sessionResult = await this.getExcelSession(workbookID, this.token);
         const sessionID = sessionResult.data.id;
@@ -216,7 +221,6 @@ export class OneDriveClient {
      * @param topLeft Topleft cell of the to be retrieved range
      * @param bottomRight Bottomright cell of the to be retrieved range
      * @returns its complicated
-     * TODO actually make an interface for it, even though it doesn't do anything as
      * it isnt used outside of this class and it is AXIOS response, so class checking is not done
      */
     private async getRangeDetailed(
@@ -227,11 +231,7 @@ export class OneDriveClient {
         topLeft: string,
         bottomRight: string
     ) {
-        const requestHeaders = {
-            'content-type': 'Application/Json',
-            authorization: `Bearer ${token}`,
-            'workbook-session-id': `Bearer ${sessionID}`
-        };
+        const requestHeaders = this.getRequestHeaders(sessionID);
 
         const config: AxiosRequestConfig = {
             method: 'GET',

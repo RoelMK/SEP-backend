@@ -65,10 +65,10 @@ export class Food extends GameBusObject {
      */
     public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: Keys.foodTranslationKey,
+            gameDescriptorTK: Keys.foodTranslationKey, // Food game descriptor
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Food timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -128,10 +128,10 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that returns all activities of given types between given dates (as unix)
+     * Function that returns all food activities between given dates (as unix)
      * @param playerId ID of player
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of food query
+     * @param endDate Ending date (excluding, unix) of food query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -143,7 +143,7 @@ export class Food extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 146
         headers?: Headers,
         query?: Query
     ): Promise<FoodModel[]> {
@@ -154,10 +154,11 @@ export class Food extends GameBusObject {
             [Keys.foodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 157
             headers,
             query
         );
+        // Convert response between dates to models
         return Food.convertResponseToFoodModels(result);
     }
 
@@ -175,7 +176,7 @@ export class Food extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 178
         headers?: Headers,
         query?: Query
     ): Promise<FoodModel[]> {
@@ -185,10 +186,11 @@ export class Food extends GameBusObject {
             [Keys.foodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 188
             headers,
             query
         );
+        // Convert response on date to models
         return Food.convertResponseToFoodModels(result);
     }
 
@@ -232,9 +234,9 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Converts an entire response to GlucoseModels
+     * Converts an entire response to FoodModels
      * @param response Array of ActivityGETData (response)
-     * @returns Array of GlucoseModels
+     * @returns Array of FoodModels
      */
     static convertResponseToFoodModels(response: ActivityGETData[] | undefined): FoodModel[] {
         if (!response) {

@@ -28,6 +28,7 @@ export class Insulin extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
+        // Get all activities with insulin ID
         return await this.activity.getAllActivitiesWithGd(
             playerId,
             [Keys.insulinTranslationKey],
@@ -39,8 +40,8 @@ export class Insulin extends GameBusObject {
     /**
      * Function that returns all insulin activities between given dates (as unix)
      * @param playerId ID of player
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of insulin query
+     * @param endDate Ending date (excluding, unix) of insulin query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -64,12 +65,12 @@ export class Insulin extends GameBusObject {
                 [Keys.insulinTranslationKey],
                 order,
                 limit,
-                page,
+                page, // Code duplication prevention 67
                 headers,
                 query
             )
         );
-    }
+    } ///
 
     /**
      * Function that returns all insulin activities on given date (as unix)
@@ -85,17 +86,17 @@ export class Insulin extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 88
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
         return await this.activity.getActivitiesOnUnixDateWithGd(
-            playerId,
+            playerId, // Code duplication prevention 93
             date,
             [Keys.insulinTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 98
             headers,
             query
         );
@@ -169,7 +170,7 @@ export class Insulin extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model single insulin model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postSingleInsulinActivity(
@@ -185,7 +186,7 @@ export class Insulin extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model insulin models to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postMultipleInsulinActivities(
@@ -233,8 +234,8 @@ export class Insulin extends GameBusObject {
         const obj = {
             gameDescriptorTK: Keys.insulinTranslationKey,
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // insulin timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -262,10 +263,10 @@ export class Insulin extends GameBusObject {
      */
     public toIDPOSTData(model: InsulinModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: Keys.insulinGameDescriptorID,
+            gameDescriptor: Keys.insulinGameDescriptorID, // Insulin game descriptor
             dataProvider: this.activity.dataProviderID,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Insulin timestamp
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
         };

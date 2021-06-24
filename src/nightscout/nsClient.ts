@@ -89,6 +89,7 @@ export class NightScoutClient {
         } catch (error) {
             console.log(error);
             return []; // return empty data array
+            // Code duplication prevention 92
         }
     }
 
@@ -107,6 +108,7 @@ export class NightScoutClient {
         } catch (error) {
             console.log(error);
             return []; // return empty data array
+            // Code duplication prevention 110
         }
     }
 

@@ -38,6 +38,7 @@ onedriveRouter.get('/onedrive', checkJwt, async (req: any, res: any) => {
     } catch (e) {
         // handle errors and send back appropriate response
         if (axios.isAxiosError(e) && e.response?.status === 401) {
+            // In the case of an error with OneDrive, send 401
             res.status(401).send();
             return;
         }

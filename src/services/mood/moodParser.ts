@@ -31,7 +31,7 @@ export default class MoodParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing mood posting
         }
         try {
             if (this.moodInput && this.moodInput.length > 0)

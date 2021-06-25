@@ -23,6 +23,78 @@ This repo contains the back-end server for the Diabetter dashboard. It is writte
 6. Execute `yarn start` or `npm run start` to start the compiled server
 7. Navigate to http://localhost:8080/ to see your local server
 
+## Changing GameBus configuration
+
+Right now, the back-end will be using our own data provider with the pre-defined game descriptors for retrieving and posting data. The back-end is currently using the following data provider(s) and game descriptors of the GameBus test API (api3):
+
+### Data providers
+
+| Data provider ID | Data provider name |
+| ---------------- | ------------------ |
+| 1                | GameBus            |
+| 18               | Daily_run          |
+
+These values are defined in `src/gb/objects/activity` for our own data provider ID & name. The GameBus data provider ID & name are defined in `src/gb/objects/keys`.
+
+### Game descriptors
+
+| Data type | Game descriptor ID(s) | Game descriptor translation key(s) |
+| --------- | --------------------- | ---------------------------------- |
+| Food      | 58                    | Nutrition_Diary                    |
+| Insulin   | 1075                  | LOG_INSULIN                        |
+| Glucose   | 61                    | BLOOD_GLUCOSE_MSMT                 |
+| Mood      | 1062                  | LOG_MOOD                           |
+| Exercise  | -                     | Most exercise game descriptors     |
+| BMI       | 1078                  | BODY_MASS_INDEX                    |
+
+These values are (mostly) defined in `src/gb/objects/keys`. The translation keys are used for retrieving and sending SINGLE activities, for sending multiple activities, the game descriptor IDs are used. The translation keys for the exercise activities are also defined in `src/gb/objects/keys`, but separately since there are lots of different exercise game descriptors.
+
+### Properties
+
+| Game descriptor translation key(s) | Game descriptor properties | Notes                                            |
+| ---------------------------------- | -------------------------- | ------------------------------------------------ |
+| Nutrition_Diary                    | FOOD_CARBOHYDRATES_GRAMS   |                                                  |
+|                                    | KCAL_CARB                  |                                                  |
+|                                    | FOOD_MEAL_TYPE             |                                                  |
+|                                    | FOOD_GLYCEMIC_INDEX        |                                                  |
+|                                    | FOOD_FAT_GRAMS             |                                                  |
+|                                    | FOOD_SATURATED_FAT_GRAMS   |                                                  |
+|                                    | FOOD_PROTEINS_GRAMS        |                                                  |
+|                                    | FIBERS_WEIGHT              |                                                  |
+|                                    | FOOD_SALT_GRAMS            |                                                  |
+|                                    | FOOD_WATER_GRAMS           |                                                  |
+|                                    | FOOD_SUGAR_GRAMS           |                                                  |
+|                                    | DESCRIPTION                |                                                  |
+| LOG_INSULIN                        | INSULIN_DOSE               |                                                  |
+|                                    | INSULIN_SPEED              |                                                  |
+| BLOOD_GLUCOSE_MSMT                 | eAG_MMOLL                  |                                                  |
+|                                    | eAG_MGDL                   | Converted to mmol/L on our end                   |
+| LOG_MOOD                           | MOOD_AROUSAL               |                                                  |
+|                                    | MOOD_VALENCE               |                                                  |
+| Most exercise game descriptors     | DURATION                   |                                                  |
+|                                    | STEPS                      |                                                  |
+|                                    | DISTANCE                   |                                                  |
+|                                    | KCALORIES                  |                                                  |
+|                                    | GROUP_SIZE                 |                                                  |
+|                                    | PENALTY                    |                                                  |
+|                                    | SCORE                      |                                                  |
+|                                    | SPEED.MAX                  |                                                  |
+|                                    | SPEED.AVG                  |                                                  |
+|                                    | MAX_HEART_RATE             |                                                  |
+|                                    | AVG_HEART_RATE             |                                                  |
+|                                    | MIN_HEART_RATE             |                                                  |
+|                                    | -                          | This is for heartrate, but was never implemented |
+| BODY_MASS_INDEX                    | WEIGHT                     |                                                  |
+|                                    | LENGTH                     |                                                  |
+|                                    | AGE                        |                                                  |
+|                                    | GENDER                     | Unused                                           |
+|                                    | WAIST_CIRCUMFERENCE        | Unused                                           |
+|                                    | BODY_MASS_INDEX            | Unused                                           |
+
+These property translation keys are defined in each object at the bottom of the files, the `enum` for these translation keys will automatically map the translation key of the property to the key of the property in our models (for an example of this, see `convertResponseToFoodModel()` in `src/gb/objects/food`). These models can be found in `src/gb/models`.
+
+All of the .sql scripts used to insert these game descriptors and properties into the API can be found in the `sql` folder. A more detailed list of all the game descriptors can also be found in `src/gb/models/descriptors.md`.
+
 ## Improvements to be made
 
 ### Performance

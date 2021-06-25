@@ -52,7 +52,6 @@ db.test.db
 test.bat
 dist/
 data/
-sql/
 auth.test.db-journal
 auth.test.db
 db.test.db

@@ -55,6 +55,6 @@ test('get all data', () => {
  */
 test('get mood data', () => {
     const abbottParser = new AbbottParser('test.csv', {} as GameBusToken);
-    const expectedResult = [undefined];
+    const expectedResult = undefined;
     expect(abbottParser.getData(OutputDataType.MOOD)).toStrictEqual(expectedResult);
 });

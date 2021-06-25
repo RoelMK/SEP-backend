@@ -1,4 +1,4 @@
-import { DataSource } from '../dataParsers/dataParser';
+import { DataSource } from '../dataParsers/dataParserTypes';
 
 /**
  * Obtains the keys that are matched to the values of parsed Excel rows
@@ -14,15 +14,14 @@ export function getKeys(dataSource?: DataSource): string[] | undefined {
         case DataSource.ABBOTT:
             return AbbottDataKeys();
         default:
-            // TODO This should not happen
-            return undefined;
+            throw Error('Getting keys from this datasource has not been implemented yet.');
     }
 }
 
 /**
  * Excel parser does not accept interfaces as argument, only stringarray
- * //TODO until now I have not found a way of generating this automatically
  * It seems not possible as the import { keys } from 'ts-transformer-keys' is broken
+ * To get this automatically at runtime
  * @returns array containing all keys of interface FoodDiaryData
  */
 export function FoodDiaryDataKeys(): string[] {
@@ -42,9 +41,9 @@ export function FoodDiaryDataKeys(): string[] {
 
 /**
  * Excel parser does not accept interfaces as argument, only stringarray
- * //TODO until now I have not found a way of generating this automatically
  * It seems not possible as the import { keys } from 'ts-transformer-keys' is broken
- * @returns array containing all keys of interface FoodDiaryData
+ * To get this automatically at runtime
+ * @returns array containing all keys of interface AbbottData
  */
 export function AbbottDataKeys(): string[] {
     return [

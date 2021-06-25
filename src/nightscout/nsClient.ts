@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { GlucoseUnit } from '../gb/models/glucoseModel';
 import {
     NightScoutEntryModel,
     NightScoutTreatmentModel
-} from '../services/dataParsers/nightscoutParser';
-import { GlucoseUnit } from '../gb/models/glucoseModel';
+} from '../services/dataParsers/dataParserTypes';
 
 export class NightScoutClient {
     // Axios client
@@ -30,6 +30,7 @@ export class NightScoutClient {
             await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
+            // Check POST entry error
             switch (error.response.data.status) {
                 case 401:
                     throw new Error(
@@ -58,6 +59,7 @@ export class NightScoutClient {
             await this.client.request(config); //const response =
         } catch (error) {
             console.log(error);
+            // Check POST treatment error
             switch (error.response.data.status) {
                 case 401:
                     throw new Error(
@@ -89,6 +91,7 @@ export class NightScoutClient {
         } catch (error) {
             console.log(error);
             return []; // return empty data array
+            // Code duplication prevention 92
         }
     }
 
@@ -107,6 +110,7 @@ export class NightScoutClient {
         } catch (error) {
             console.log(error);
             return []; // return empty data array
+            // Code duplication prevention 110
         }
     }
 

@@ -1,12 +1,9 @@
 import { InsulinModel } from '../../gb/models/insulinModel';
-import { AbbottData } from '../dataParsers/abbottParser';
 import { DateFormat } from '../utils/dates';
 import InsulinMapper from './insulinMapper';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
-import { XOR } from 'ts-xor';
-import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
+import { InsulinInput, InsulinSource } from './insulinTypes';
 
 /**
  * Insulin parser class that opens a .csv file and processes it to insulinModel
@@ -58,7 +55,7 @@ export default class InsulinParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing insulin posting
         }
         try {
             if (this.insulinData && this.insulinData.length > 0)
@@ -69,20 +66,8 @@ export default class InsulinParser extends ModelParser {
                         parseInt(this.userInfo.playerId)
                     );
         } catch (e) {
+            // Ignore insulin post errors
             /*continue*/
         }
     }
 }
-/**
- * Current insulin sources available //TODO ? Add more
- */
-export enum InsulinSource {
-    ABBOTT = 0,
-    FOOD_DIARY_EXCEL = 1,
-    NIGHTSCOUT = 2
-}
-
-/**
- * All possible input types for insulin data
- */
-export type InsulinInput = XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>;

@@ -2,11 +2,18 @@ import { XOR } from 'ts-xor';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseUnit } from '../../gb/models/glucoseModel';
 import { NightScoutClient } from '../../nightscout/nsClient';
-import { FoodSource } from '../food/foodParser';
-import { GlucoseSource } from '../glucose/glucoseParser';
-import { InsulinSource } from '../insulin/insulinParser';
+import { FoodSource } from '../food/foodTypes';
+import { GlucoseSource } from '../glucose/glucoseTypes';
+import { InsulinSource } from '../insulin/insulinTypes';
 
-import { DataParser, DataSource, OutputDataType } from './dataParser';
+import { DataParser } from './dataParser';
+import {
+    DataSource,
+    NightScoutDatatype,
+    NightScoutEntryModel,
+    NightScoutTreatmentModel,
+    OutputDataType
+} from './dataParserTypes';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -81,7 +88,6 @@ export default class NightscoutParser extends DataParser {
         try {
             return await this.nsClient.getGlucoseUnit();
         } catch (e) {
-            // TODO can we just assume this? Maybe based on the average value this can be determined more accurately
             return GlucoseUnit.MMOL_L;
         }
     }
@@ -94,8 +100,6 @@ export default class NightscoutParser extends DataParser {
         this.retrieveLastUpdate(this.nsClient.getNightscoutHost());
 
         if (this.testEntries === undefined || this.testTreatments === undefined) {
-            // TODO note to self use parse with parameter or just individual funtions as below
-            // does not matter for result and below needs less overhead
             this.nightScoutEntries = await this.parseEntry();
             this.nightScoutTreatments = await this.parseTreatment();
             // retrieve glucose unit
@@ -137,7 +141,7 @@ export default class NightscoutParser extends DataParser {
     }
 
     /**
-     * Filters the insulin entries from the raw data
+     * Filters the insulin entries from the raw Nightscout data
      * @returns All insulin entries
      */
     private filterInsulin(): NightScoutTreatmentModel[] {
@@ -149,41 +153,4 @@ export default class NightscoutParser extends DataParser {
         }
         return insulin;
     }
-}
-
-export type NightScoutEntryModel = {
-    type: string;
-    dateString?: string;
-    date: number;
-    sgv: number;
-    _id?: string;
-    direction?: string;
-    noise?: number;
-    filtered?: number;
-    unfiltered?: number;
-    rssi?: number;
-    utcOffset?: number;
-    sysTime?: string;
-};
-
-export type NightScoutTreatmentModel = {
-    eventType: string;
-    created_at: string;
-    _id?: string;
-    glucose?: string;
-    glucoseType?: string; // Finger or sensor
-    carbs?: number;
-    protein?: number;
-    fat?: number;
-    insulin?: number;
-    units?: string; // glucose units
-    notes?: string;
-    enteredBy?: string;
-    utcOffset?: number;
-};
-
-// Enum that contains all retrievable data from Nightscout
-enum NightScoutDatatype {
-    ENTRY = 0,
-    TREATMENT = 1
 }

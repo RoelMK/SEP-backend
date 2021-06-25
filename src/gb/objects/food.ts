@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Query, Headers } from '../gbClient';
-import { ActivityModel } from '../models/activityModel';
-import { FoodModel } from '../models/foodModel';
+import { GameBusObject, Activity } from '.';
 import {
+    ActivityModel,
+    FoodModel,
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
-} from '../models/gamebusModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
+    PropertyInstancePOST,
+    Headers,
+    Query
+} from '../models';
+
+import { FoodIDs, FoodPropertyKeys, Keys, QueryOrder } from './GBObjectTypes';
 
 //const util = require('util')
 
@@ -32,6 +32,7 @@ export class Food extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert food model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -51,10 +52,13 @@ export class Food extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each food model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the food model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return food response
         return response;
     }
 
@@ -65,10 +69,10 @@ export class Food extends GameBusObject {
      */
     public toPOSTData(model: FoodModel, playerID: number): ActivityPOSTData {
         const obj = {
-            gameDescriptorTK: Keys.foodTranslationKey,
+            gameDescriptorTK: Keys.foodTranslationKey, // Food game descriptor
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Food timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -80,6 +84,7 @@ export class Food extends GameBusObject {
                 });
             }
         }
+        // Return as food post data
         return obj;
     }
 
@@ -128,10 +133,10 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Function that returns all activities of given types between given dates (as unix)
+     * Function that returns all food activities between given dates (as unix)
      * @param playerId ID of player
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of food query
+     * @param endDate Ending date (excluding, unix) of food query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -143,7 +148,7 @@ export class Food extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 146
         headers?: Headers,
         query?: Query
     ): Promise<FoodModel[]> {
@@ -154,28 +159,29 @@ export class Food extends GameBusObject {
             [Keys.foodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 157
             headers,
             query
         );
+        // Convert response between dates to models
         return Food.convertResponseToFoodModels(result);
     }
 
     /**
-     * Function that returns all activities of given types on given date (as unix)
+     * Function that returns all food activities on given date (as unix)
      * @param playerId ID of player
-     * @param date Date as unix
+     * @param date Date as unix for food query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
-     * @returns All activities of given types on given date
+     * @returns All food activities on given date
      */
     async getFoodActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 178
         headers?: Headers,
         query?: Query
     ): Promise<FoodModel[]> {
@@ -185,10 +191,11 @@ export class Food extends GameBusObject {
             [Keys.foodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 188
             headers,
             query
         );
+        // Convert response on date to models
         return Food.convertResponseToFoodModels(result);
     }
 
@@ -232,52 +239,23 @@ export class Food extends GameBusObject {
     }
 
     /**
-     * Converts an entire response to GlucoseModels
+     * Converts an entire response to FoodModels
      * @param response Array of ActivityGETData (response)
-     * @returns Array of GlucoseModels
+     * @returns Array of FoodModels
      */
     static convertResponseToFoodModels(response: ActivityGETData[] | undefined): FoodModel[] {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertResponseToFoodModel(response);
-            });
+        return (
+            response
+                // Get all relevant food properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertResponseToFoodModel(response);
+                })
+        );
     }
 }
-
-export enum FoodPropertyKeys {
-    carbohydrates = 'FOOD_CARBOHYDRATES_GRAMS',
-    calories = 'KCAL_CARB',
-    meal_type = 'FOOD_MEAL_TYPE',
-    glycemic_index = 'FOOD_GLYCEMIC_INDEX',
-    fat = 'FOOD_FAT_GRAMS',
-    saturatedFat = 'FOOD_SATURATED_FAT_GRAMS',
-    proteins = 'FOOD_PROTEINS_GRAMS',
-    fibers = 'FIBERS_WEIGHT',
-    salt = 'FOOD_SALT_GRAMS',
-    water = 'FOOD_WATER_GRAMS',
-    sugars = 'FOOD_SUGAR_GRAMS',
-    description = 'DESCRIPTION'
-}
-
-const FoodIDs = Object.freeze({
-    description: 12,
-    calories: 77,
-    fibers: 79,
-    carbohydrates: 1176,
-    meal_type: 1177,
-    glycemic_index: 1178,
-    fat: 1179,
-    saturatedFat: 1180,
-    proteins: 1181,
-    salt: 1182,
-    water: 1183,
-    sugars: 1184
-});
-
-export { FoodIDs };

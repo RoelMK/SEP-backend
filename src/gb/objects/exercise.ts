@@ -1,11 +1,20 @@
-import { Query, Headers } from '../gbClient';
-import { ActivityModel } from '../models/activityModel';
-import { ExerciseModel } from '../models/exerciseModel';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
+import {
+    ActivityModel,
+    ExerciseModel,
+    ActivityGETData,
+    ActivityPOSTData,
+    PropertyInstancePOST,
+    Query,
+    Headers
+} from '../models';
 import { startCase, toLower } from 'lodash';
-import { ExerciseGameDescriptorNames, Keys } from './keys';
+import { GameBusObject, Activity } from '.';
+import {
+    ExerciseGameDescriptorNames,
+    ExercisePropertyKeys,
+    Keys,
+    QueryOrder
+} from './GBObjectTypes';
 
 /**
  * Class for exercise-specific functions
@@ -17,6 +26,7 @@ export class Exercise extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert exercise model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -44,6 +54,7 @@ export class Exercise extends GameBusObject {
                 });
             }
         }
+        // Return as exercise POST data
         return obj;
     }
 
@@ -82,6 +93,7 @@ export class Exercise extends GameBusObject {
             headers,
             query
         );
+        // Convert exercise from GD to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
@@ -103,7 +115,7 @@ export class Exercise extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 117
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -114,18 +126,19 @@ export class Exercise extends GameBusObject {
             gameDescriptors,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 126
             headers,
             query
         );
+        // Convert exercise from GD between unix dates to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
     /**
      * Function that returns ALL exercise activities between given dates
      * @param playerId ID of player
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of exercise query
+     * @param endDate Ending date (excluding, unix) of exercise query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -137,7 +150,7 @@ export class Exercise extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 152
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -148,7 +161,7 @@ export class Exercise extends GameBusObject {
             endDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 160
             headers,
             query
         );
@@ -170,7 +183,7 @@ export class Exercise extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 185
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -180,17 +193,17 @@ export class Exercise extends GameBusObject {
             gameDescriptors,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 192
             headers,
             query
         );
+        // Convert exercise from GD on unix date to model
         return Exercise.convertResponseToExerciseModels(response);
     }
 
     /**
      * Function that returns ALL exercise activities on given date
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
      * @param date Date as unix
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
@@ -202,7 +215,7 @@ export class Exercise extends GameBusObject {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 217
         headers?: Headers,
         query?: Query
     ): Promise<ExerciseModel[]> {
@@ -212,7 +225,7 @@ export class Exercise extends GameBusObject {
             date,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 223
             headers,
             query
         );
@@ -274,32 +287,15 @@ export class Exercise extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertExerciseResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant exercise properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertExerciseResponseToModel(response);
+                })
+        );
     }
-}
-
-/**
- * Relevant properties to map properties of activities to the exerciseModel
- * [key in exerciseModel] = [translationKey in GameBus]
- */
-export enum ExercisePropertyKeys {
-    duration = 'DURATION', // in seconds as string
-    steps = 'STEPS', // in amount as string
-    distance = 'DISTANCE', // in meters as string
-    calories = 'KCALORIES', // in kcal as string
-    groupSize = 'GROUP_SIZE', // in amount as string
-    penalty = 'PENALTY', // in amount [0 - 100] as string
-    score = 'SCORE', // in amount [-inf, inf] as string
-    maxSpeed = 'SPEED.MAX', // maximum speed reached in m/s
-    avgSpeed = 'SPEED.AVG', // average speed reached in m/s
-    maxHeartrate = 'MAX_HEART_RATE', // maximum heart rate reached (in bpm)
-    avgHeartrate = 'AVG_HEART_RATE', // average heart rate reached (in bpm)
-    minHeartrate = 'MIN_HEART_RATE', // minimum heart rate reached (in bpm)
-    heartrate = '' // heart rate (in bpm), add if required
 }

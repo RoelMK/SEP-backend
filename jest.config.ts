@@ -30,7 +30,8 @@ export default {
         'src/onedrive/models/',
         'src/onedrive/auth.ts',
         'src/onedrive/test.ts',
-        'src/services/testService.ts'
+        'src/services/testService.ts',
+        'dist/*'
     ],
 
     // Indicates which provider should be used to instrument code for coverage

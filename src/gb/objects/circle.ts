@@ -1,5 +1,5 @@
-import { GameBusClient, Headers, Query } from '../gbClient';
-import { CircleGETData } from '../models/gamebusModel';
+import { GameBusClient } from '../gbClient';
+import { CircleGETData, Headers, Query } from '../models';
 
 export class Circle {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
@@ -18,7 +18,7 @@ export class Circle {
     ): Promise<CircleGETData> {
         const circle: CircleGETData = await this.gamebus.get(
             `circles/${circleId}`,
-            headers,
+            headers, // Code duplication prevention 21
             query,
             this.authRequired
         );
@@ -94,7 +94,7 @@ export class Circle {
     ): Promise<number[]> {
         const circle: CircleGETData = await this.gamebus.get(
             `circles/${circleId}`,
-            headers,
+            headers, // Code duplication prevention 97
             query,
             this.authRequired
         );

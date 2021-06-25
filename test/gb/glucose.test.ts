@@ -7,10 +7,10 @@ import {
     ActivityGETData
 } from '../../src/gb/models/gamebusModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { GlucosePropertyKeys, Glucose } from '../../src/gb/objects/glucose';
+import { Glucose } from '../../src/gb/objects/glucose';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { mockRequest } from '../testUtils/requestUtils';
-import { Keys } from '../../src/gb/objects/keys';
+import { GlucosePropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
 
 jest.mock('axios');
 

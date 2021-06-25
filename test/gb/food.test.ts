@@ -2,9 +2,8 @@ import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
-import { FoodPropertyKeys } from '../../src/gb/objects/food';
+import { FoodPropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
 import { mockRequest } from '../testUtils/requestUtils';
-import { Keys } from '../../src/gb/objects/keys';
 
 jest.mock('axios');
 

@@ -3,7 +3,7 @@ import { Response, Router } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { InsulinModel, InsulinType } from '../gb/models/insulinModel';
-import { Keys } from '../gb/objects/keys';
+import { Keys } from '../gb/objects/GBObjectTypes';
 import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 
@@ -34,9 +34,9 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT request if activityId is present
+    // PUT request for insulin if activityId is present
     if (req.body.activityId) {
-        // Get activity ID
+        // Get activity ID of insulin
         const activityId = req.body.activityId as number;
         // Check whether given ID is an insulin activity
         const insulinActivity = await gbClient
@@ -60,32 +60,34 @@ insulinRouter.post('/insulin', checkJwt, async (req: any, res: Response) => {
             // Send 201 and new model
             return res.status(201).json(response);
         } catch (error) {
+            // Check for errors on insulin PUT
             if (axios.isAxiosError(error)) {
-                // Unauthorized -> 401
+                // Unauthorized on insulin PUT -> 401
                 if (error.response?.status === 401) {
                     return res.status(401).send();
                 }
             }
-            // Unknown error -> 503
+            // Unknown error on inuslin PUT -> 503
             return res.status(503).send();
         }
     }
 
     // POST
     try {
-        // POST model
+        // POST insulin model
         const response = await gbClient
             .insulin()
             .postSingleInsulinActivity(insulinModel, req.user.playerId);
         return res.status(201).json(response);
     } catch (error) {
+        // Error catching on insulin POST
         if (axios.isAxiosError(error)) {
-            // Unauthorized -> 401
+            // Unauthorized on insulin POST -> 401
             if (error.response?.status === 401) {
                 return res.status(401).send();
             }
         }
-        // Unknown error -> 503
+        // Unknown error on insulin POST -> 503
         return res.status(503).send();
     }
 });

@@ -8,12 +8,13 @@
         "test-server": "ts-node src/server.ts",
         "test-services": "ts-node src/services/testService.ts",
         "test-excel-import": "ts-node src/services/excelParser.ts",
-        "prep": "ts-node test/AT/prepareAccounts.ts" ,
+        "check-code": "ts-node test/codeQuality/checkQuality.ts",
+        "check-circular": "dpdm --exclude node_modules --circular --output dpdm.json src/*",
+        "prep": "ts-node test/AT/prepareAccounts.ts",
         "test": "jest",
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "lint-fix": "eslint . --ext .ts --fix"
-        
     },
     "repository": {
         "type": "git",
@@ -39,6 +40,7 @@
         "cors": "^2.8.5",
         "date-fns": "^2.21.1",
         "dotenv": "^8.6.0",
+        "dpdm": "^3.6.1",
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
         "express-jwt": "^6.0.0",

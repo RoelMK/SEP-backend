@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Query, Headers } from '../gbClient';
 import {
-    ActivityGETData,
     ActivityPOSTData,
+    ActivityGETData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
-} from '../models/gamebusModel';
-import { MoodModel } from '../models/moodModel';
-import { GameBusObject } from './base';
-import { ActivityModel } from '../models/activityModel';
-import { Activity, QueryOrder } from './activity';
+    PropertyInstancePOST,
+    MoodModel,
+    ActivityModel,
+    Query,
+    Headers
+} from '../models';
+import { Activity, GameBusObject } from '.';
+import { MoodIDs, MoodPropertyKeys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions
@@ -30,13 +30,16 @@ export class Mood extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertMoodResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant mood properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertMoodResponseToModel(response);
+                })
+        );
     }
 
     /**
@@ -49,6 +52,7 @@ export class Mood extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
+        // Get all activities with mood ID
         return await this.activity.getAllActivitiesWithGd(
             playerId,
             [this.moodTranslationKey],
@@ -92,42 +96,40 @@ export class Mood extends GameBusObject {
     }
 
     /**
-     * Function that returns all activities of given types on given date (as unix)
+     * Function that returns all mood activities on given date (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
-     * @param date Date as unix
+     * @param date Date as unix for mood query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
-     * @returns All activities of given types on given date
+     * @returns All mood activities on given date
      */
     async getMoodActivitiesOnUnixDate(
         playerId: number,
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 108
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
         return await this.activity.getActivitiesOnUnixDateWithGd(
-            playerId,
+            playerId, // Code duplication prevention 113
             date,
             [this.moodTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 118
             headers,
             query
         );
     }
 
     /**
-     * Function that returns all activities of given types between given dates (as unix)
+     * Function that returns all mood activities between given dates (as unix)
      * @param playerId ID of player
-     * @param gameDescriptors List of activity types (see below)
-     * @param startDate Starting date (including, unix)
-     * @param endDate Ending date (excluding, unix)
+     * @param startDate Starting date (including, unix) of mood query
+     * @param endDate Ending date (excluding, unix) of mood query
      * @param order Optional, ascending (+) or descending (-)
      * @param limit (Optional) amount of activities to retrieve, if not specified it retrieves all of them
      * @param page (Optional) page number of activities to retrieve, only useful when limit is specified
@@ -139,7 +141,7 @@ export class Mood extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Page number for mood data in case of pagination
         headers?: Headers,
         query?: Query
     ): Promise<MoodModel[]> {
@@ -151,16 +153,16 @@ export class Mood extends GameBusObject {
                 [this.moodTranslationKey],
                 order,
                 limit,
-                page,
+                page, // Code duplication prevention 152
                 headers,
                 query
             )
         );
-    }
+    } //
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model single mood model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postSingleMoodActivity(
@@ -176,7 +178,7 @@ export class Mood extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model mood models to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postMultipleMoodActivities(
@@ -186,10 +188,13 @@ export class Mood extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each mood model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the mood model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return mood response
         return response;
     }
 
@@ -207,10 +212,12 @@ export class Mood extends GameBusObject {
         if (model.activityId === undefined) {
             throw new Error('Activity ID must be present in order to replace activity');
         }
+        // Convert mood model to POST data
         const data = this.toIDPOSTData(model, playerId);
+        // PUT mood activity
         const response = (await this.activity.putActivity(
-            data,
-            model.activityId,
+            data, // mood model
+            model.activityId, // mood activity ID
             headers,
             query
         )) as ActivityGETData[];
@@ -224,8 +231,8 @@ export class Mood extends GameBusObject {
         const obj = {
             gameDescriptorTK: this.moodGameDescriptor,
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // mood timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -237,6 +244,7 @@ export class Mood extends GameBusObject {
                 });
             }
         }
+        // Return as mood post data
         return obj;
     }
 
@@ -245,10 +253,10 @@ export class Mood extends GameBusObject {
      */
     public toIDPOSTData(model: MoodModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: this.moodGameDescriptorID,
+            gameDescriptor: this.moodGameDescriptorID, // Mood game descriptor
             dataProvider: this.activity.dataProviderID,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Mood timestamp
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
         };
@@ -259,33 +267,4 @@ export class Mood extends GameBusObject {
         }
         return obj;
     }
-}
-
-/**
- * Relevant properties to map properties of activities to the mood model
- */
-export enum MoodPropertyKeys {
-    arousal = 'MOOD_AROUSAL', // number in range [1,3]
-    valence = 'MOOD_VALENCE' // number in range [1,3]
-}
-
-const MoodIDs = Object.freeze({
-    arousal: 1186,
-    valence: 1187
-});
-
-export { MoodIDs };
-
-/**
- * Data provider names for known mood data sources
- */
-export enum MoodDataProviderNames {
-    DAILY_RUN = 'Daily_run'
-}
-
-/**
- * Data property names for known mood data properties
- */
-export enum MoodGameDescriptorNames {
-    logMood = 'LOG_MOOD' // Mood descriptor
 }

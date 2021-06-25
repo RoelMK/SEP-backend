@@ -25,7 +25,7 @@ This repo contains the back-end server for the Diabetter dashboard. It is writte
 
 ## Changing GameBus configuration
 
-Right now, the back-end will be using our own data provider with the pre-defined game descriptors for retrieving and posting data. The back-end is currently using the following data provider(s) and game descriptors of the GameBus test API (api3):
+Right now, the back-end will be using our own data provider with the pre-defined game descriptors for retrieving and posting data on the test API (api3). The back-end is currently using the following data provider(s) and game descriptors:
 
 ### Data providers
 
@@ -91,9 +91,11 @@ These values are (mostly) defined in `src/gb/objects/keys`. The translation keys
 |                                    | WAIST_CIRCUMFERENCE        | Unused                                           |
 |                                    | BODY_MASS_INDEX            | Unused                                           |
 
-These property translation keys are defined in each object at the bottom of the files, the `enum` for these translation keys will automatically map the translation key of the property to the key of the property in our models (for an example of this, see `convertResponseToFoodModel()` in `src/gb/objects/food`). These models can be found in `src/gb/models`.
+These property translation keys are defined in each object at the bottom of the files, the `enum` for these translation keys will automatically map the translation key of the property to the key of the property in our models (for an example of this, see `convertResponseToFoodModel()` in `src/gb/objects/food.ts`). These models can be found in `src/gb/models`.
 
 All of the .sql scripts used to insert these game descriptors and properties into the API can be found in the `sql` folder. A more detailed list of all the game descriptors can also be found in `src/gb/models/descriptors.md`.
+
+If you want the back-end to interact with the production API of GameBus, the endpoint for the GameBus Client is defined in `src/gb/gbClient.ts` at the top of the file. Keep in mind that you will most likely have to change the game descriptor IDs as well as add the missing game descriptors and properties to the production API before things will work as expected.
 
 ## Improvements to be made
 

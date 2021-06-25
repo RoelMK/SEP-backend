@@ -3,6 +3,7 @@ import { DBClient } from '../src/db/dbClient';
 import { InsulinModel } from '../src/gb/models/insulinModel';
 import { MoodModel } from '../src/gb/models/moodModel';
 import { server } from '../src/server';
+import fs from 'fs';
 
 jest.mock('axios');
 
@@ -201,8 +202,12 @@ test('getting role without email', async () => {
  * UTP: TODO
  */
 test('Full supervisor endpoint test', async () => {
-    new DBClient().initialize();
-    new DBClient().reset();
+    // Proper cleaning is required after each task
+    process.env.DATABASE = 'db.test.db';
+    const dbClient = new DBClient();
+    dbClient.initialize();
+    dbClient.reset();
+    dbClient.close();
     // request supervisor
     let response = await request(server)
         .post('/supervisor/request')
@@ -278,8 +283,11 @@ test('Full supervisor endpoint test', async () => {
         );
     expect(response.statusCode).toBe(200);
 
-    new DBClient().reset();
-    new DBClient().close();
+    try {
+        fs.unlinkSync(process.env.DATABASE!); // Remove db file
+    } catch (error) {
+        return;
+    }
 });
 
 /**

@@ -35,9 +35,11 @@ test('mood from future other source', async () => {
             valence: 1
         }
     ];
-    expect(await new MoodParser(moodInput, dummyUserInfo).mood).toStrictEqual({
-        timestamp: 0,
-        arousal: 1,
-        valence: 1
-    });
+    expect(await new MoodParser(moodInput, dummyUserInfo).mood).toStrictEqual([
+        {
+            timestamp: 0,
+            arousal: 1,
+            valence: 1
+        }
+    ]);
 });

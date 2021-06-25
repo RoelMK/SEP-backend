@@ -1024,7 +1024,29 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(true);
     });
-});
 
-//TODO: getTableList
-//TODO: getfile from root
+    /**
+     * UTP: ONED - 14
+     */
+    test('Default constructor', () => {
+        const client = new OneDriveClient(
+            'token',
+            'diary.xlsx',
+            '',
+            undefined,
+            undefined,
+            undefined,
+            undefined
+        );
+        // @ts-ignore
+        expect(client.folderPath).toEqual(undefined);
+        // @ts-ignore
+        expect(client.tableName).toEqual('fooddiary');
+        // @ts-ignore
+        expect(client.sheetName).toEqual('Sheet1');
+        // @ts-ignore
+        expect(client.doPrint).toEqual(false);
+        // @ts-ignore
+        expect(client.printDeep).toEqual(false);
+    });
+});

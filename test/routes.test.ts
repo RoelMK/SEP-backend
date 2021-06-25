@@ -258,8 +258,12 @@ test('POST supported format fooddiary, with supported file extension but wrong f
 /**
  * Auth endpoint tests ------------------------------------------------------------------------------------------
  */
-test('', async () => {
-    const response = await request(server).post('/auth').field('--', '--').set(
+
+/**
+ * UTP: TODO
+ */
+test('No email specified', async () => {
+    const response = await request(server).get('/login').set(
         // This token has an expiry date of 20/11/2286, so this test will work until then
         'Authorization',
         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
@@ -268,15 +272,97 @@ test('', async () => {
 });
 
 /**
+ * UTP: TODO
+ */
+test('No login token specified', async () => {
+    const response = await request(server).get('/login').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    expect(response.statusCode).toBe(400);
+});
+
+/**
+ * UTP: TODO
+ */
+test('Register callback with unspecified user information', async () => {
+    const response = await request(server).post('/gamebus/callback').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    expect(response.statusCode).toBe(400);
+});
+
+/**
+ * UTP: TODO
+ */
+test('Register callback without login attempt', async () => {
+    const response = await request(server)
+        .post('/gamebus/callback?player_id=1&access_token=123&refresh_token=456')
+        .field('player_id', '1')
+        .field('access_token', '123')
+        .field('refresh_token', '456')
+        .set(
+            // This token has an expiry date of 20/11/2286, so this test will work until then
+            'Authorization',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+        );
+    // because GameBus is needed for proper login sequnce, we can only test if the
+    // expected error is thrown
+    expect(response.statusCode).toBe(403);
+});
+
+/**
  * Activity endpoint tests ------------------------------------------------------------------------------------------
  */
-//TODO
+
+/**
+ * UTP: TODO
+ */
+test('Deleting activity without ID', async () => {
+    const response = await request(server).post('/activities/delete').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    // because GameBus is needed for proper login sequnce, we can only test if the
+    // expected error is thrown
+    expect(response.statusCode).toBe(400);
+});
 
 /**
  * Insulin endpoint tests ------------------------------------------------------------------------------------------
  */
-//TODO
 
+/**
+ * UTP: TODO
+ */
+test('Posting insulin without parameters', async () => {
+    const response = await request(server).post('/insulin').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    // because GameBus is needed for proper login sequnce, we can only test if the
+    // expected error is thrown
+    expect(response.statusCode).toBe(400);
+});
+
+/**
+ * UTP: TODO
+ */
+test('Putting insulin without parameters', async () => {
+    const response = await request(server).post('/insulin').field('activityId', '1').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    // because GameBus is needed for proper login sequnce, we can only test if the
+    // expected error is thrown
+    expect(response.statusCode).toBe(400);
+});
 /**
  * Mood endpoint tests ------------------------------------------------------------------------------------------
  */

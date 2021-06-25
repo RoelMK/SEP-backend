@@ -1,7 +1,13 @@
+/**
+ * This file exports all models stored in the current directory
+ * for further use in our program.
+ *
+ */
+
+// GameBus models
 export { ActivityModel, ActivityProperty } from './activityModel';
 export { BMIModel } from './bmiModels';
-export { ExerciseModel } from './exerciseModel';
-export { FoodModel } from './foodModel';
+
 export {
     ActivityGETData,
     ActivityPOSTData,
@@ -15,7 +21,12 @@ export {
     Headers,
     Query
 } from './gamebusModel';
+// data models
+export { FoodModel } from './foodModel';
 export { GlucoseModel } from './glucoseModel';
 export { InsulinModel } from './insulinModel';
 export { MoodModel } from './moodModel';
+export { ExerciseModel } from './exerciseModel';
+
+// combination of other models
 export { UnionModel } from './unionModel';

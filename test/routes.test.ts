@@ -195,7 +195,7 @@ test('POST no format', async () => {
  */
 test('POST unsupported format', async () => {
     const response = await request(server)
-        .post('/upload?format=story')
+        .post('/upload')
         .field('format', 'story')
         .attach('file', 'test/services/data/eetmeter.xml')
         .set(
@@ -212,7 +212,7 @@ test('POST unsupported format', async () => {
  */
 test('POST supported format, with unsupported file extension', async () => {
     const response = await request(server)
-        .post('/upload?format=fooddiary')
+        .post('/upload')
         .field('format', 'fooddiary')
         .attach('file', 'test/services/data/text.txt')
         .set(
@@ -254,3 +254,45 @@ test('POST supported format fooddiary, with supported file extension but wrong f
         );
     expect(response.statusCode).toBe(400);
 });
+
+/**
+ * Auth endpoint tests ------------------------------------------------------------------------------------------
+ */
+test('', async () => {
+    const response = await request(server).post('/auth').field('--', '--').set(
+        // This token has an expiry date of 20/11/2286, so this test will work until then
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
+    );
+    expect(response.statusCode).toBe(400);
+});
+
+/**
+ * Activity endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO
+
+/**
+ * Insulin endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO
+
+/**
+ * Mood endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO
+
+/**
+ * Nightscout endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO
+
+/**
+ * OneDrive endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO
+
+/**
+ * Profile endpoint tests ------------------------------------------------------------------------------------------
+ */
+//TODO

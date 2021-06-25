@@ -30,7 +30,8 @@ export default {
         'src/onedrive/models/',
         'src/onedrive/auth.ts',
         'src/onedrive/test.ts',
-        'src/services/testService.ts'
+        'src/services/testService.ts',
+        'dist/*'
     ],
 
     // Indicates which provider should be used to instrument code for coverage
@@ -150,7 +151,7 @@ export default {
     // ],
 
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-    testPathIgnorePatterns: ['\\\\node_modules\\\\', 'src'],
+    testPathIgnorePatterns: ['\\\\node_modules\\\\', 'src', 'dist'],
 
     // The regexp pattern or array of patterns that Jest uses to detect test files
     // testRegex: [],

@@ -1,7 +1,7 @@
 import { GlucoseUnit, GlucoseModel, RecordType } from '../../gb/models/glucoseModel';
 import { DateFormat, parseDate } from '../utils/dates';
 import { convertMG_DLtoMMOL_L } from '../utils/units';
-import { GlucoseSource } from './glucoseParser';
+import { emptyGlucoseModel, GlucoseSource } from './glucoseTypes';
 
 /**
  * Helper class to map the different glucose sources to 1 glucoseModel
@@ -89,8 +89,7 @@ export default class GlucoseMapper {
                 } as GlucoseModel;
         }
 
-        // TODO what to do at end of function, this should not happen
-        // For now return empty model with only zeros
+        // Return empty model with only zeros
         return emptyGlucoseModel();
     }
 
@@ -104,12 +103,3 @@ export default class GlucoseMapper {
         } as GlucoseModel;
     }
 }
-
-/**
- * Function that can return an empty GlucoseModel entry that might be needed for easy returns
- * @returns Empty GlucoseModel
- */
-const emptyGlucoseModel = (): GlucoseModel => ({
-    timestamp: 0,
-    glucoseLevel: 0
-});

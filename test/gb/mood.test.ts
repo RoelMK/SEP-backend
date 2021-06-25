@@ -6,7 +6,8 @@ import {
     IDActivityPOSTData
 } from '../../src/gb/models/gamebusModel';
 import { MoodModel } from '../../src/gb/models/moodModel';
-import { Mood, MoodPropertyKeys } from '../../src/gb/objects/mood';
+import { MoodPropertyKeys } from '../../src/gb/objects/GBObjectTypes';
+import { Mood } from '../../src/gb/objects/mood';
 import { mockRequest } from '../testUtils/requestUtils';
 
 jest.mock('axios');

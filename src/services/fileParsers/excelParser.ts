@@ -1,5 +1,5 @@
 import XLSX from 'xlsx';
-import { DataSource } from '../dataParsers/dataParser';
+import { DataSource } from '../dataParsers/dataParserTypes';
 import { convertExcelDateTimes } from '../utils/dates';
 import { getKeys } from '../utils/interfaceKeys';
 import { FileParser } from './fileParser';
@@ -48,6 +48,10 @@ export default class ExcelParser extends FileParser {
             header: 1
         });
 
+        return this.checkRawTableData(rawTableData);
+    }
+
+    static checkRawTableData(rawTableData: any[][]): Map<string, string> {
         // check for empty table
         if (rawTableData === undefined) {
             return new Map<string, string>();

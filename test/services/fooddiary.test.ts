@@ -1,8 +1,8 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel } from '../../src/gb/models/insulinModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
 import { parseFoodDiary } from '../testUtils/parseUtils';
-import FoodDiaryParser, { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
+import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
+import { FoodDiaryData, OutputDataType } from '../../src/services/dataParsers/dataParserTypes';
 
 /**
  * UTP: FD - 1
@@ -22,7 +22,9 @@ test('test robustness of food diary data parser', async () => {
  * UTP: FD - 2
  */
 test('test automatic date + total insulin fill', async () => {
-    const rawFoodData: FoodDiaryData[] = [
+    type NewType = FoodDiaryData;
+
+    const rawFoodData: NewType[] = [
         {
             date: '08/05/21',
             time: '13:12',

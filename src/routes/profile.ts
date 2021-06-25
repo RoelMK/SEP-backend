@@ -24,6 +24,7 @@ profileRouter.get('/profile', checkJwt, async (req: any, res: any) => {
         return res.status(200).json(profileData);
     } catch (error) {
         if (axios.isAxiosError(error)) {
+            // Check for error on profile endpoint
             if (error.response?.status === 401) {
                 // Unauthorized
                 return res.status(401).send();
@@ -79,6 +80,7 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
         await gbClient.bmi().postSingleBMIActivity(bmi, req.user.playerId);
         return res.status(200).send('Successfully posted profile information');
     } catch (error) {
+        // Check for error on POST profile endpoint
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 401) {
                 // Unauthorized
@@ -92,21 +94,21 @@ profileRouter.post('/profile', checkJwt, async (req: any, res: any) => {
 
 interface UserProfile extends GameBusUser, BMIModel {
     timestamp: number;
-    activityId?: number; // ID of GameBus activity
-    weight: number | null; // weight in kg, should not be optional since we POST it
-    length: number | null; // height in cm
-    age: number | null; // age in years
-    gender?: string | null; // Either m, f or o, optional since we don't really need it
-    waistCircumference?: number | null; // in cm, optional since we don't really need it
-    bmi?: number | null; // in kg/m^2, optional since we don't really need it
+    activityId?: number;
+    weight: number | null;
+    length: number | null;
+    age: number | null;
+    gender?: string | null;
+    waistCircumference?: number | null;
+    bmi?: number | null;
     id: number; // user ID
     email: string;
     firstName: string;
     lastName: string;
     image: string | null; // null if no image
-    registrationDate: number; // Unix timestamp in ms
-    isActivated: boolean; // email verified
-    language: string; // 'en' for English, 'nl' for Dutch
+    registrationDate: number;
+    isActivated: boolean;
+    language: string;
     player: {
         id: number; // player ID (as opposed to user ID)
     };

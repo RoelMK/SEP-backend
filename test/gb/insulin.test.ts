@@ -6,8 +6,8 @@ import {
     ActivityGETData
 } from '../../src/gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { InsulinPropertyKeys, Insulin } from '../../src/gb/objects/insulin';
-import { Keys } from '../../src/gb/objects/keys';
+import { InsulinPropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
+import { Insulin } from '../../src/gb/objects/insulin';
 
 import { mockRequest } from '../testUtils/requestUtils';
 
@@ -237,7 +237,6 @@ describe('with mocked insulin put call', () => {
 
         const response = await client.insulin().putSingleInsulinActivity(insulin, 0);
 
-        // TODO: add form data check?
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({

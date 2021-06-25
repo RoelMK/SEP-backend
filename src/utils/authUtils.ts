@@ -74,9 +74,11 @@ export async function startLoginAttempt(
         if (registered) {
             return { loginToken: loginToken, expires: expires.getTime() };
         } else {
+            // Undefined if not registered
             return undefined;
         }
     }
+    // Undefined if no player ID
     return undefined;
 }
 
@@ -108,6 +110,7 @@ async function getPlayerIdByEmail(email: string): Promise<string | undefined> {
             return undefined;
         }
     }
+    // Undefined if no access code
     return undefined;
 }
 

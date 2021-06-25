@@ -1,14 +1,4 @@
-import {
-    parse,
-    isValid,
-    fromUnixTime,
-    add,
-    format,
-    addDays,
-    addHours,
-    addMinutes,
-    differenceInDays
-} from 'date-fns';
+import { parse, isValid, fromUnixTime, add, format } from 'date-fns';
 
 /**
  * Function that will parse a string date to a Date object or Unix timestamp
@@ -72,7 +62,7 @@ const getDateFormat = (dateString: string, referenceDate?: Date): DateFormat => 
 /**
  * Some excel libraries do not offer possibility to convert dates to string format
  * and instead return the number of days since the start of 1900. This function converts those numbers
- * to a readable dateformat // TODO now only usable for fooddiary onedrive imports
+ * to a readable dateformat
  * @param daysSince1900 the number of days since 1900, i.e. the way excel stores dates
  */
 const parseExcelDate = (daysSince1900: number): string => {
@@ -92,7 +82,6 @@ const parseExcelDate = (daysSince1900: number): string => {
  * Some excel libraries do not offer possibility to convert times to string format
  * and instead return the fraction of a day, for example 0.5 for noon
  * This function converts the fraction to a readable dateformat (HH:mm)
- * TODO now only usable for fooddiary onedrive imports
  * @param daysSince1900 the fraction of the day, i.e. how excel stores time
  */
 const parseExcelTime = (dayFraction: number): string => {
@@ -157,40 +146,6 @@ const validUnixTimestamp = (unixDate: number): boolean => {
 };
 
 /**
- * Function that creates date slices.
- * @param startDate First date to create a slice for
- * @param endDate Last date to create a slice for
- * @param startTimeHours Start hour of slice
- * @param startTimeMinutes Start minute of slice
- * @param endTimeHours End hour of slice
- * @param endTimeMinutes End minute of slice
- * @param maxNumberOfSlices Maximum number of slices to create, default is 365
- * @returns List of date slices
- */
-const createDateSlices = (
-    startDate: Date,
-    endDate: Date,
-    startTimeHours: number,
-    startTimeMinutes: number,
-    endTimeHours: number,
-    endTimeMinutes: number,
-    maxNumberOfSlices = 365
-): DateSlice[] => {
-    const dateSlices: DateSlice[] = [];
-    const days = Math.min(maxNumberOfSlices, differenceInDays(endDate, startDate) + 1);
-    for (let i = 0; i < days; i++) {
-        dateSlices.push({
-            startDate: addMinutes(
-                addHours(addDays(startDate, i), startTimeHours),
-                startTimeMinutes
-            ),
-            endDate: addMinutes(addHours(addDays(startDate, i), endTimeHours), endTimeMinutes)
-        });
-    }
-    return dateSlices;
-};
-
-/**
  * Different date formats used in different data sources (including NONE)
  */
 enum DateFormat {
@@ -221,6 +176,5 @@ export {
     convertExcelDateTimes,
     DateFormat,
     validUnixTimestamp,
-    createDateSlices,
     DateSlice
 };

@@ -1,15 +1,18 @@
-import { GameBusClient, Headers, Query, queryDateFormat } from '../gbClient';
+import { GameBusClient, queryDateFormat } from '../gbClient';
 import { format, addDays, addYears } from 'date-fns';
-import { ActivityProperty, ActivityModel } from '../models/activityModel';
 import {
+    ActivityProperty,
+    ActivityModel,
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
-    PropertyInstanceReference
-} from '../models/gamebusModel';
+    PropertyInstanceReference,
+    Headers,
+    Query
+} from '../models';
 import { fromUnixMsTime } from '../../services/utils/dates';
 import FormData from 'form-data';
-import { ExerciseGameDescriptorNames, Keys } from './keys';
+import { ExerciseGameDescriptorNames, Keys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class that is used to GET/POST to GameBus activities
@@ -33,14 +36,14 @@ export class Activity {
         query?: Query
     ): Promise<ActivityGETData[]> {
         // PUT uses form-data, so we convert data to string and send as form data
-        const body = new FormData();
-        body.append('activity', JSON.stringify(data));
-        const formHeaders = body.getHeaders();
+        const activityBody = new FormData();
+        activityBody.append('activity', JSON.stringify(data));
+        const formHeaders = activityBody.getHeaders();
 
         // We have to create the headers here because FormData has some extra headers
-        let gamebusHeaders = this.gamebus.createHeader(true, headers);
-        gamebusHeaders = {
-            ...gamebusHeaders,
+        let activityHeaders = this.gamebus.createHeader(true, headers);
+        activityHeaders = {
+            ...activityHeaders,
             ...formHeaders
         };
 
@@ -54,8 +57,8 @@ export class Activity {
         const response = await this.gamebus.client.request({
             method: 'PUT',
             url: gamebusUrl,
-            headers: gamebusHeaders,
-            data: body
+            headers: activityHeaders,
+            data: activityBody
         });
         return response.data as ActivityGETData[];
     }
@@ -193,7 +196,7 @@ export class Activity {
         endDate: Date,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 199
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -246,7 +249,7 @@ export class Activity {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 252
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -258,7 +261,7 @@ export class Activity {
             endDateAsDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 264
             headers,
             query
         );
@@ -282,7 +285,7 @@ export class Activity {
         gameDescriptors: string[],
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 288
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -314,7 +317,7 @@ export class Activity {
         date: Date,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 320
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -326,10 +329,11 @@ export class Activity {
             tomorrowAsDate,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 332
             headers,
             query
         );
+        // Return all activities on given date
         return activities;
     }
 
@@ -346,7 +350,7 @@ export class Activity {
         date: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 352
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -362,10 +366,11 @@ export class Activity {
             tomorrowUnix,
             order,
             limit,
-            page,
+            page, // Code duplication prevention 368
             headers,
             query
         );
+        // Return all activities between given dates
         return activities;
     }
 
@@ -384,7 +389,7 @@ export class Activity {
         gameDescriptors: string[],
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Code duplication prevention 390
         headers?: Headers,
         query?: Query
     ): Promise<ActivityGETData[]> {
@@ -480,9 +485,4 @@ export class Activity {
         });
         return activityModels;
     }
-}
-
-export enum QueryOrder {
-    ASC = '+',
-    DESC = '-'
 }

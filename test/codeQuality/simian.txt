@@ -1,0 +1,9 @@
+simian -balanceParentheses+ -failOnDuplication- -ignoreCharacterCase+ -ignoreCurlyBraces+ -ignoreIdentifierCase+ -ignoreModifiers+ -ignoreStringCase+ -threshold=6 **/*.ts
+
+{balanceParentheses=true, ignoreCharacterCase=true, ignoreCurlyBraces=true, ignoreIdentifierCase=true, ignoreModifiers=true, ignoreStringCase=true, threshold=6}
+Found 7 duplicate lines with fingerprint 550bf096ff61d5f59c5de31303860ce8 in the following files:
+ Between lines 115 and 121 in ~\SEP-backend\src\services\dataParsers\dataParserTypes.ts
+ Between lines 56 and 62 in ~\SEP-backend\src\services\utils\interfaceKeys.ts
+Found 14 duplicate lines in 2 blocks in 2 files
+Processed a total of 8001 significant (8632 raw) lines in 74 files
+Processing time: 0.094sec

@@ -4,89 +4,99 @@ export interface ConnectionData {
     userID: number;
 }
 
+// Interface for activity POST
 export interface ActivityPOSTData {
-    gameDescriptorTK: string;
-    dataProviderName: string;
-    image: string;
-    date: number;
-    propertyInstances: PropertyInstancePOST[];
-    players: number[];
+    gameDescriptorTK: string; // Translation key of game descriptor
+    dataProviderName: string; // Name of data provider
+    image: string | null; // Image URL (optional)
+    date: number; // Unix timestamp
+    propertyInstances: PropertyInstancePOST[]; // Property instances
+    players: number[]; // Array of player IDs
 }
 
+// Interface for activity POST properties
 export interface PropertyInstancePOST {
-    propertyTK: string;
-    value: any;
+    propertyTK: string; // Property translation key
+    value: any; // Value of property
 }
 
+// Interface for activity POST using IDs
 export interface IDActivityPOSTData {
-    gameDescriptor: number;
-    dataProvider: number;
-    image?: string;
-    date: number;
-    propertyInstances: IDPropertyInstancePOST[];
-    players: number[];
+    gameDescriptor: number; // Game descriptor ID
+    dataProvider: number; // Data provider ID
+    image?: string | null; // Image URL (optional)
+    date: number; // Unix timestamp
+    propertyInstances: IDPropertyInstancePOST[]; // Property instances
+    players: number[]; // Array of player IDs
 }
 
+// Interface for activity POST properties using IDs
 export interface IDPropertyInstancePOST {
-    property: number;
-    value: any;
+    property: number; // Property ID
+    value: any; // Value of property
 }
 
+// Interface for activity GET
 export interface ActivityGETData {
-    id: number;
-    date: number;
-    isManual: boolean;
-    group?: any; //unkown yet
-    image?: any; //unkown yet
-    creator: UserReference;
-    player: UserReference;
-    gameDescriptor: GameDescriptorReference;
-    dataProvider: DataProviderReference;
-    propertyInstances: PropertyInstanceReference[];
-    personalPoints: any[]; //TODO, no idea
+    id: number; // Activity ID
+    date: number; // Unix timestamp
+    isManual: boolean; // Entered manually
+    group?: any; // Circles
+    image?: string | null; // Image URL
+    creator: UserReference; // Creator of activity
+    player: UserReference; // Player of activity
+    gameDescriptor: GameDescriptorReference; // Game descriptor
+    dataProvider: DataProviderReference; // Data provider
+    propertyInstances: PropertyInstanceReference[]; // Properties
+    personalPoints: any[]; // Points earned
     supports: SupportReference[];
-    chats: any[]; //TODO, prob not going to use anyways
+    chats: any[];
 }
 
+// Interface for GameBus user
 export interface UserReference {
-    id: number;
+    id: number; // Player ID
     user: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        image: string | null;
+        id: number; // User ID
+        firstName: string; // User first name
+        lastName: string; // User last name
+        image: string | null; // User profile picture
     };
 }
 
+// Interface for GameBus game descriptor
 export interface GameDescriptorReference {
-    id: number;
-    translationKey: string;
-    image: string | null;
-    type: string; //not sure if this is always there
+    id: number; // Game descriptor ID
+    translationKey: string; // Game descriptor translation key
+    image: string | null; // Game descriptor image
+    type: string; // Type of game descriptor
     miniGames?: any[];
     isAggregate: boolean | null; //not sure if this is alway there
 }
 
+// Interface for GameBus data provider
 export interface DataProviderReference {
-    id: number;
-    name: string;
-    image: string | null;
-    isConnected: boolean; //not sure if this is always there
+    id: number; // Data provider ID
+    name: string; // Data provider name
+    image: string | null; // Data provider image
+    isConnected: boolean; // Whether the data provider is
 }
 
+// Interface for property instance
 export interface PropertyInstanceReference {
-    id: number;
-    value: string; // still not sure about this one
-    property: PropertyInstanceProperty;
+    id: number; // ID of property in activity
+    value: string; // Property value
+    property: PropertyInstanceProperty; // Reference to property
 }
 
+// Interface for property instance reference
 export interface PropertyInstanceProperty {
-    id: number;
-    translationKey: string;
-    baseUnit: string;
-    inputType: string;
-    aggregationStrategy: string;
-    propertyPermissions: PropertyPermissionsReference[]; // Probably not needed
+    id: number; // Property ID
+    translationKey: string; // Property translation key
+    baseUnit: string; // Property base unit
+    inputType: string; // Property input type (STRING, INT, DOUBLE)
+    aggregationStrategy: string; // Property aggregation
+    propertyPermissions: PropertyPermissionsReference[];
 }
 
 export interface SupportReference {
@@ -95,17 +105,18 @@ export interface SupportReference {
     supporter: UserReference;
 }
 
+// Interface for GameBus user on /users endpoint
 export interface GameBusUser {
-    id: number; // user ID
+    id: number; // User ID
     email: string;
     firstName: string;
     lastName: string;
-    image: string | null; // null if no image
-    registrationDate: number; // Unix timestamp in ms
-    isActivated: boolean; // email verified
+    image: string | null; // Null if no image
+    registrationDate: number; // Unix timestamp
+    isActivated: boolean; // Email verified
     language: string; // 'en' for English, 'nl' for Dutch
     player: {
-        id: number; // player ID (as opposed to user ID)
+        id: number; // Player ID (as opposed to user ID)
     };
     notifications: Notification[];
 }
@@ -124,8 +135,7 @@ export interface NotificationParams {
     paramValue: string | null;
 }
 
-//TODO add output interfaces for getPlayer and getUser
-
+// Interface for property permissions (unused)
 export interface PropertyPermissionsReference {
     id: number;
     index: any;
@@ -136,13 +146,14 @@ export interface PropertyPermissionsReference {
     allowedValues: any[];
 }
 
+// Interface for circles
 export interface CircleGETData {
-    id: number;
-    name: string;
-    image: string | null;
-    type: string;
-    description: string;
-    isPrivate: boolean;
+    id: number; // Circle ID
+    name: string; // Circle name
+    image: string | null; // Circle image
+    type: string; // Circle type
+    description: string; // Circle description
+    isPrivate: boolean; // Whether the circle is private
     removed: boolean;
     leadersCanLogActivities: boolean;
     leadersCanSignUpPlayers: boolean;
@@ -157,18 +168,20 @@ export interface CircleGETData {
     chats: any[];
 }
 
+// Interface for circle members
 export interface MembershipReference {
-    id: number;
+    id: number; // Player ID
     state: string;
-    player: UserReference;
+    player: UserReference; // Reference to user
     initiatorOfMembership: UserReference;
-    initiatorOfLeadership: UserReference | null; //not sure
+    initiatorOfLeadership: UserReference | null;
 }
 
+// Interface for challenge POST
 export interface ChallengePOSTData {
-    name: string;
-    description: null | string;
-    image: null | string;
+    name: string; // Name of challenge
+    description: null | string; // Description of challenge
+    image: null | string; // Image of challenge
     websiteURL: null | string;
     minCircleSize: number;
     maxCircleSize: number;
@@ -181,9 +194,10 @@ export interface ChallengePOSTData {
     contenders: any;
     withNudging: any;
     rules: ChallengeRulesPOSTData[];
-    circles: number[];
+    circles: number[]; // Reference to circle IDs the challenge is posted in
 }
 
+// Interface for challenge rules (POST)
 export interface ChallengeRulesPOSTData {
     id: any;
     name: string;
@@ -204,4 +218,18 @@ export interface ChallengeConditionsPOSTData {
 
 export interface Points {
     dataProviders?: DataProviderReference;
+}
+
+/**
+ * Query interface that is converted to {@URLSearchParams}
+ */
+export interface Query {
+    [key: string]: string;
+}
+
+/**
+ * Headers interface
+ */
+export interface Headers {
+    [key: string]: string;
 }

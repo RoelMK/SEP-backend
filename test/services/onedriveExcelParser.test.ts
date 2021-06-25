@@ -1,8 +1,8 @@
 import { parseOneDriveFoodDiary } from '../testUtils/parseUtils';
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { getKeys } from '../../src/services/utils/interfaceKeys';
-import { DataSource } from '../../src/services/dataParsers/dataParser';
 import OneDriveExcelParser from '../../src/services/fileParsers/oneDriveExcelParser';
+import { DataSource } from '../../src/services/dataParsers/dataParserTypes';
 
 jest.mock('axios');
 /**

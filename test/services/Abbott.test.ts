@@ -1,5 +1,5 @@
 import { InsulinModel } from '../../src/gb/models/insulinModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
+import { OutputDataType } from '../../src/services/dataParsers/dataParserTypes';
 import { parseAbbott } from '../testUtils/parseUtils';
 
 /**

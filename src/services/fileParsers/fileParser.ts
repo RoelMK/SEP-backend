@@ -1,6 +1,4 @@
 export abstract class FileParser {
-    //TODO can be removed possibly
-
     /**
      * Reads raw data of a file and returns it
      * Can have multiple arguments that are not predefined

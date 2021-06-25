@@ -1,8 +1,12 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
-import { InsulinSource } from '../../src/services/insulin/insulinParser';
+import {
+    FoodDiaryData,
+    NightScoutTreatmentModel,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParserTypes';
+import InsulinMapper from '../../src/services/insulin/insulinMapper';
+import { InsulinSource } from '../../src/services/insulin/insulinTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import {
     parseAbbott,
@@ -10,8 +14,6 @@ import {
     postInsulinData,
     parseNightScout
 } from '../testUtils/parseUtils';
-import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
-import InsulinMapper from '../../src/services/insulin/insulinMapper';
 
 describe('Abbott insulin', () => {
     /**

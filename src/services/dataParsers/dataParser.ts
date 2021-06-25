@@ -15,6 +15,13 @@ import { ModelParser } from '../modelParser';
 import MoodParser from '../mood/moodParser';
 import { DateFormat } from '../utils/dates';
 import { getFileExtension, getFileName } from '../utils/files';
+import {
+    CombinedDataParserOutput,
+    DataSource,
+    DeveloperError,
+    InputError,
+    OutputDataType
+} from './dataParserTypes';
 
 /**
  * Abstract DataParser class that can take a .csv file as input and pass it onto other parsers
@@ -116,14 +123,14 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new food data
                     this.only_parse_newest,
                     this.lastUpdated
                 );
                 this.intializedParsers.push(this.foodParser);
                 return;
             case OutputDataType.MOOD:
-                //TODO
+                //TODO implement moodparser (if mood from other sources is parsed)
                 this.moodParser = new MoodParser(data, this.userInfo);
                 this.intializedParsers.push(this.moodParser);
                 return;
@@ -132,7 +139,7 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new insulin data
                     this.only_parse_newest,
                     this.lastUpdated
                 );
@@ -143,7 +150,7 @@ export abstract class DataParser {
                     data,
                     dataSource,
                     this.dateFormat,
-                    this.userInfo,
+                    this.userInfo, // This is for making sure we are only posting new glucose data
                     this.only_parse_newest,
                     this.lastUpdated
                 );
@@ -208,7 +215,6 @@ export abstract class DataParser {
                 } as CombinedDataParserOutput;
 
             default:
-                // TODO this should not happen
                 return [];
         }
     }
@@ -250,7 +256,8 @@ export abstract class DataParser {
     protected getLastProcessedTimestamp(): number {
         const newestModels: number[] = [];
         newestModels.push(this.foodParser ? this.foodParser.getNewestEntry() : 0);
-        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0); tracking update times for mood is useless
+        //TODO moodparser is not implemented
+        //newestModels.push(this.moodParser ? this.moodParser.getNewestEntry() : 0);
         newestModels.push(this.insulinParser ? this.insulinParser.getNewestEntry() : 0);
         newestModels.push(this.glucoseParser ? this.glucoseParser.getNewestEntry() : 0);
         return Math.max(...newestModels);
@@ -263,48 +270,4 @@ export abstract class DataParser {
     parseOnlyNewest(only_parse_newest: boolean): void {
         this.only_parse_newest = only_parse_newest;
     }
-}
-
-/**
- * A list of possible data sources
- */
-export enum DataSource {
-    ABBOTT = 0,
-    FOOD_DIARY = 1,
-    EETMETER = 2,
-    NIGHTSCOUT = 3
-}
-
-/**
- * A list of possible output models
- */
-export enum OutputDataType {
-    GLUCOSE = 0,
-    INSULIN = 1,
-    FOOD = 2,
-    MOOD = 3,
-    ALL = 4
-}
-
-// custom errors
-export class InputError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'InputError';
-    }
-}
-
-class DeveloperError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'DeveloperError';
-    }
-}
-
-// Interface used if getData(ALL) is called
-export interface CombinedDataParserOutput {
-    food: FoodModel[] | null;
-    glucose: GlucoseModel[] | null;
-    insulin: InsulinModel[] | null;
-    mood: MoodModel[] | null;
 }

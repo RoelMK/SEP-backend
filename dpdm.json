@@ -168,9 +168,9 @@
       },
       {
         "issuer": "src\\routes\\onedrive.ts",
-        "request": "../services/dataParsers/dataParser",
+        "request": "../services/dataParsers/dataParserTypes",
         "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParser.ts"
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
       },
       {
         "issuer": "src\\routes\\onedrive.ts",
@@ -220,12 +220,6 @@
       },
       {
         "issuer": "src\\routes\\upload.ts",
-        "request": "../services/dataParsers/dataParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParser.ts"
-      },
-      {
-        "issuer": "src\\routes\\upload.ts",
         "request": "fs",
         "kind": "StaticImport",
         "id": "node_modules\\fs\\index.js"
@@ -271,6 +265,18 @@
         "request": "../services/dataEndpoint",
         "kind": "StaticImport",
         "id": "src\\services\\dataEndpoint.ts"
+      },
+      {
+        "issuer": "src\\routes\\upload.ts",
+        "request": "../services/dataParsers/dataParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParser.ts"
+      },
+      {
+        "issuer": "src\\routes\\upload.ts",
+        "request": "../services/dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
       }
     ],
     "src\\routes\\supervisor.ts": [
@@ -370,9 +376,9 @@
       },
       {
         "issuer": "src\\routes\\nightscout.ts",
-        "request": "../services/dataParsers/dataParser",
+        "request": "../services/dataParsers/dataParserTypes",
         "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParser.ts"
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
       },
       {
         "issuer": "src\\routes\\nightscout.ts",
@@ -614,32 +620,6 @@
       }
     ],
     "node_modules\\express\\index.js": null,
-    "src\\utils\\authUtils.ts": [
-      {
-        "issuer": "src\\utils\\authUtils.ts",
-        "request": "jsonwebtoken",
-        "kind": "StaticImport",
-        "id": "node_modules\\jsonwebtoken\\index.js"
-      },
-      {
-        "issuer": "src\\utils\\authUtils.ts",
-        "request": "../db/dbClient",
-        "kind": "StaticImport",
-        "id": "src\\db\\dbClient.ts"
-      },
-      {
-        "issuer": "src\\utils\\authUtils.ts",
-        "request": "../gb/gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\utils\\authUtils.ts",
-        "request": "crypto",
-        "kind": "StaticImport",
-        "id": "crypto"
-      }
-    ],
     "src\\gb\\auth\\tokenHandler.ts": [],
     "src\\middlewares\\checkJwt.ts": [
       {
@@ -738,114 +718,12 @@
         "id": "src\\gb\\objects\\GBObjectTypes.ts"
       }
     ],
-    "src\\services\\dataParsers\\dataParser.ts": [
+    "src\\services\\dataParsers\\dataParserTypes.ts": [
       {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../db/dbClient",
+        "issuer": "src\\services\\dataParsers\\dataParserTypes.ts",
+        "request": "../../gb/models",
         "kind": "StaticImport",
-        "id": "src\\db\\dbClient.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../gb/auth/tokenHandler",
-        "kind": "StaticImport",
-        "id": "src\\gb\\auth\\tokenHandler.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../gb/models/foodModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\foodModel.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../gb/models/glucoseModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\glucoseModel.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../gb/models/insulinModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\insulinModel.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../../gb/models/moodModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\moodModel.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../fileParsers/csvParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\fileParsers\\csvParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../fileParsers/excelParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\fileParsers\\excelParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../fileParsers/oneDriveExcelParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\fileParsers\\oneDriveExcelParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../fileParsers/xmlParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\fileParsers\\xmlParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../food/foodParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\food\\foodParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../glucose/glucoseParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\glucose\\glucoseParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../insulin/insulinParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\insulin\\insulinParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../modelParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\modelParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../mood/moodParser",
-        "kind": "StaticImport",
-        "id": "src\\services\\mood\\moodParser.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../utils/dates",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\dates.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "../utils/files",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\files.ts"
-      },
-      {
-        "issuer": "src\\services\\dataParsers\\dataParser.ts",
-        "request": "./dataParserTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+        "id": "src\\gb\\models\\index.ts"
       }
     ],
     "src\\services\\dataParsers\\foodDiaryParser.ts": [
@@ -1007,12 +885,140 @@
         "id": "src\\services\\dataParsers\\dataParserTypes.ts"
       }
     ],
-    "src\\utils\\supervisorUtils.ts": [
+    "src\\services\\dataParsers\\dataParser.ts": [
       {
-        "issuer": "src\\utils\\supervisorUtils.ts",
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../db/dbClient",
+        "kind": "StaticImport",
+        "id": "src\\db\\dbClient.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../gb/auth/tokenHandler",
+        "kind": "StaticImport",
+        "id": "src\\gb\\auth\\tokenHandler.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../gb/models/foodModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\foodModel.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../gb/models/glucoseModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\glucoseModel.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../gb/models/insulinModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\insulinModel.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../../gb/models/moodModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\moodModel.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../fileParsers/csvParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\fileParsers\\csvParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../fileParsers/excelParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\fileParsers\\excelParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../fileParsers/oneDriveExcelParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\fileParsers\\oneDriveExcelParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../fileParsers/xmlParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\fileParsers\\xmlParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../food/foodParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\food\\foodParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../glucose/glucoseParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\glucose\\glucoseParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../insulin/insulinParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\insulin\\insulinParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../modelParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\modelParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../mood/moodParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\mood\\moodParser.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../utils/dates",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\dates.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "../utils/files",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\files.ts"
+      },
+      {
+        "issuer": "src\\services\\dataParsers\\dataParser.ts",
+        "request": "./dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      }
+    ],
+    "src\\utils\\authUtils.ts": [
+      {
+        "issuer": "src\\utils\\authUtils.ts",
+        "request": "jsonwebtoken",
+        "kind": "StaticImport",
+        "id": "node_modules\\jsonwebtoken\\index.js"
+      },
+      {
+        "issuer": "src\\utils\\authUtils.ts",
         "request": "../db/dbClient",
         "kind": "StaticImport",
         "id": "src\\db\\dbClient.ts"
+      },
+      {
+        "issuer": "src\\utils\\authUtils.ts",
+        "request": "../gb/gbClient",
+        "kind": "StaticImport",
+        "id": "src\\gb\\gbClient.ts"
+      },
+      {
+        "issuer": "src\\utils\\authUtils.ts",
+        "request": "crypto",
+        "kind": "StaticImport",
+        "id": "crypto"
       }
     ],
     "src\\gb\\gbClient.ts": [
@@ -1030,12 +1036,6 @@
       },
       {
         "issuer": "src\\gb\\gbClient.ts",
-        "request": "./objects",
-        "kind": "StaticImport",
-        "id": "src\\gb\\objects\\index.ts"
-      },
-      {
-        "issuer": "src\\gb\\gbClient.ts",
         "request": "./models",
         "kind": "StaticImport",
         "id": "src\\gb\\models\\index.ts"
@@ -1045,6 +1045,12 @@
         "request": "form-data",
         "kind": "StaticImport",
         "id": "node_modules\\form-data\\lib\\form_data.js"
+      },
+      {
+        "issuer": "src\\gb\\gbClient.ts",
+        "request": "./objects/gbObjects",
+        "kind": "StaticImport",
+        "id": "src\\gb\\objects\\gbObjects.ts"
       }
     ],
     "src\\services\\utils\\dates.ts": [
@@ -1053,6 +1059,14 @@
         "request": "date-fns",
         "kind": "StaticImport",
         "id": "node_modules\\date-fns\\esm\\index.js"
+      }
+    ],
+    "src\\utils\\supervisorUtils.ts": [
+      {
+        "issuer": "src\\utils\\supervisorUtils.ts",
+        "request": "../db/dbClient",
+        "kind": "StaticImport",
+        "id": "src\\db\\dbClient.ts"
       }
     ],
     "src\\services\\dataParsers\\nightscoutParser.ts": [
@@ -1117,7 +1131,6 @@
     "src\\gb\\models\\bmiModels.ts": [],
     "src\\gb\\models\\gamebusModel.ts": [],
     "node_modules\\dotenv\\lib\\main.js": null,
-    "crypto": [],
     "src\\onedrive\\cachePlugin.js": [
       {
         "issuer": "src\\onedrive\\cachePlugin.js",
@@ -1162,21 +1175,149 @@
         "id": "src\\gb\\models\\moodModel.ts"
       }
     ],
-    "src\\services\\fileParsers\\csvParser.ts": [
+    "src\\gb\\models\\index.ts": [
       {
-        "issuer": "src\\services\\fileParsers\\csvParser.ts",
-        "request": "papaparse",
-        "kind": "StaticImport",
-        "id": "node_modules\\papaparse\\papaparse.js"
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./activityModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\activityModel.ts"
       },
       {
-        "issuer": "src\\services\\fileParsers\\csvParser.ts",
-        "request": "fs",
-        "kind": "StaticImport",
-        "id": "node_modules\\fs\\index.js"
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./bmiModels",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\bmiModels.ts"
       },
       {
-        "issuer": "src\\services\\fileParsers\\csvParser.ts",
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./exerciseModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\exerciseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./foodModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\foodModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./gamebusModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\gamebusModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./glucoseModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\glucoseModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./insulinModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\insulinModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./moodModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\moodModel.ts"
+      },
+      {
+        "issuer": "src\\gb\\models\\index.ts",
+        "request": "./unionModel",
+        "kind": "StaticExport",
+        "id": "src\\gb\\models\\unionModel.ts"
+      }
+    ],
+    "src\\services\\food\\foodTypes.ts": [
+      {
+        "issuer": "src\\services\\food\\foodTypes.ts",
+        "request": "ts-xor",
+        "kind": "StaticImport",
+        "id": "node_modules\\ts-xor\\dist\\index.js"
+      },
+      {
+        "issuer": "src\\services\\food\\foodTypes.ts",
+        "request": "../dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      }
+    ],
+    "src\\services\\glucose\\glucoseTypes.ts": [
+      {
+        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
+        "request": "../dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      },
+      {
+        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
+        "request": "ts-xor",
+        "kind": "StaticImport",
+        "id": "node_modules\\ts-xor\\dist\\index.js"
+      },
+      {
+        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
+        "request": "../../gb/models",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\index.ts"
+      }
+    ],
+    "src\\services\\insulin\\insulinTypes.ts": [
+      {
+        "issuer": "src\\services\\insulin\\insulinTypes.ts",
+        "request": "ts-xor",
+        "kind": "StaticImport",
+        "id": "node_modules\\ts-xor\\dist\\index.js"
+      },
+      {
+        "issuer": "src\\services\\insulin\\insulinTypes.ts",
+        "request": "../dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      }
+    ],
+    "src\\services\\fileParsers\\oneDriveExcelParser.ts": [
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "../../onedrive/odClient",
+        "kind": "StaticImport",
+        "id": "src\\onedrive\\odClient.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "../dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "../utils/dates",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\dates.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "../utils/files",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\files.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "../utils/interfaceKeys",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\interfaceKeys.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "request": "./excelParser",
+        "kind": "StaticImport",
+        "id": "src\\services\\fileParsers\\excelParser.ts"
+      },
+      {
+        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
         "request": "./fileParser",
         "kind": "StaticImport",
         "id": "src\\services\\fileParsers\\fileParser.ts"
@@ -1214,39 +1355,21 @@
         "id": "src\\services\\fileParsers\\fileParser.ts"
       }
     ],
-    "src\\services\\fileParsers\\oneDriveExcelParser.ts": [
+    "src\\services\\fileParsers\\csvParser.ts": [
       {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
-        "request": "../../onedrive/odClient",
+        "issuer": "src\\services\\fileParsers\\csvParser.ts",
+        "request": "papaparse",
         "kind": "StaticImport",
-        "id": "src\\onedrive\\odClient.ts"
+        "id": "node_modules\\papaparse\\papaparse.js"
       },
       {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
-        "request": "../dataParsers/dataParserTypes",
+        "issuer": "src\\services\\fileParsers\\csvParser.ts",
+        "request": "fs",
         "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+        "id": "node_modules\\fs\\index.js"
       },
       {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
-        "request": "../utils/dates",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\dates.ts"
-      },
-      {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
-        "request": "../utils/files",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\files.ts"
-      },
-      {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
-        "request": "../utils/interfaceKeys",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\interfaceKeys.ts"
-      },
-      {
-        "issuer": "src\\services\\fileParsers\\oneDriveExcelParser.ts",
+        "issuer": "src\\services\\fileParsers\\csvParser.ts",
         "request": "./fileParser",
         "kind": "StaticImport",
         "id": "src\\services\\fileParsers\\fileParser.ts"
@@ -1420,184 +1543,49 @@
         "id": "src\\services\\modelParser.ts"
       }
     ],
-    "src\\services\\dataParsers\\dataParserTypes.ts": [
+    "crypto": [],
+    "src\\gb\\objects\\gbObjects.ts": [
       {
-        "issuer": "src\\services\\dataParsers\\dataParserTypes.ts",
-        "request": "../../gb/models",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
+        "request": ".",
         "kind": "StaticImport",
-        "id": "src\\gb\\models\\index.ts"
-      }
-    ],
-    "src\\services\\food\\foodTypes.ts": [
-      {
-        "issuer": "src\\services\\food\\foodTypes.ts",
-        "request": "ts-xor",
-        "kind": "StaticImport",
-        "id": "node_modules\\ts-xor\\dist\\index.js"
+        "id": "src\\gb\\objects\\index.ts"
       },
       {
-        "issuer": "src\\services\\food\\foodTypes.ts",
-        "request": "../dataParsers/dataParserTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
-      }
-    ],
-    "src\\services\\insulin\\insulinTypes.ts": [
-      {
-        "issuer": "src\\services\\insulin\\insulinTypes.ts",
-        "request": "ts-xor",
-        "kind": "StaticImport",
-        "id": "node_modules\\ts-xor\\dist\\index.js"
-      },
-      {
-        "issuer": "src\\services\\insulin\\insulinTypes.ts",
-        "request": "../dataParsers/dataParserTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
-      }
-    ],
-    "src\\services\\glucose\\glucoseTypes.ts": [
-      {
-        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
-        "request": "../dataParsers/dataParserTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
-      },
-      {
-        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
-        "request": "ts-xor",
-        "kind": "StaticImport",
-        "id": "node_modules\\ts-xor\\dist\\index.js"
-      },
-      {
-        "issuer": "src\\services\\glucose\\glucoseTypes.ts",
-        "request": "../../gb/models",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\index.ts"
-      }
-    ],
-    "src\\gb\\objects\\index.ts": [
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
-        "request": "./activity",
-        "kind": "StaticExport",
-        "id": "src\\gb\\objects\\activity.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
-        "request": "./base",
-        "kind": "StaticExport",
-        "id": "src\\gb\\objects\\base.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./bmi",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\bmi.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\index.ts",
-        "request": "./challenge",
-        "kind": "StaticExport",
-        "id": "src\\gb\\objects\\challenge.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
-        "request": "./circle",
-        "kind": "StaticExport",
-        "id": "src\\gb\\objects\\circle.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./exercise",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\exercise.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./food",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\food.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./glucose",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\glucose.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./insulin",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\insulin.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\index.ts",
+        "issuer": "src\\gb\\objects\\gbObjects.ts",
         "request": "./mood",
-        "kind": "StaticExport",
+        "kind": "StaticImport",
         "id": "src\\gb\\objects\\mood.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\index.ts",
-        "request": "./user",
-        "kind": "StaticExport",
-        "id": "src\\gb\\objects\\user.ts"
-      }
-    ],
-    "src\\gb\\models\\index.ts": [
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./activityModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\activityModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./bmiModels",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\bmiModels.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./exerciseModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\exerciseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./foodModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\foodModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./gamebusModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\gamebusModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./glucoseModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\glucoseModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./insulinModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\insulinModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./moodModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\moodModel.ts"
-      },
-      {
-        "issuer": "src\\gb\\models\\index.ts",
-        "request": "./unionModel",
-        "kind": "StaticExport",
-        "id": "src\\gb\\models\\unionModel.ts"
       }
     ],
     "src\\nightscout\\nsClient.ts": [
@@ -1623,13 +1611,14 @@
     "node_modules\\axios\\index.js": null,
     "node_modules\\date-fns\\esm\\index.js": null,
     "node_modules\\better-sqlite3\\lib\\index.js": null,
+    "src\\gb\\models\\activityModel.ts": [],
     "src\\services\\fileParsers\\fileParser.ts": [],
     "src\\services\\utils\\interfaceKeys.ts": [
       {
         "issuer": "src\\services\\utils\\interfaceKeys.ts",
-        "request": "../dataParsers/dataParser",
+        "request": "../dataParsers/dataParserTypes",
         "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParser.ts"
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
       }
     ],
     "src\\onedrive\\odClient.ts": [
@@ -1644,32 +1633,6 @@
         "request": "util",
         "kind": "StaticImport",
         "id": "util"
-      }
-    ],
-    "src\\services\\food\\foodMapper.ts": [
-      {
-        "issuer": "src\\services\\food\\foodMapper.ts",
-        "request": "../../gb/models/foodModel",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\foodModel.ts"
-      },
-      {
-        "issuer": "src\\services\\food\\foodMapper.ts",
-        "request": "../dataParsers/dataParserTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
-      },
-      {
-        "issuer": "src\\services\\food\\foodMapper.ts",
-        "request": "../utils/dates",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\dates.ts"
-      },
-      {
-        "issuer": "src\\services\\food\\foodMapper.ts",
-        "request": "./foodTypes",
-        "kind": "StaticImport",
-        "id": "src\\services\\food\\foodTypes.ts"
       }
     ],
     "src\\services\\glucose\\glucoseMapper.ts": [
@@ -1698,6 +1661,32 @@
         "id": "src\\services\\glucose\\glucoseTypes.ts"
       }
     ],
+    "src\\services\\food\\foodMapper.ts": [
+      {
+        "issuer": "src\\services\\food\\foodMapper.ts",
+        "request": "../../gb/models/foodModel",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\foodModel.ts"
+      },
+      {
+        "issuer": "src\\services\\food\\foodMapper.ts",
+        "request": "../dataParsers/dataParserTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\dataParsers\\dataParserTypes.ts"
+      },
+      {
+        "issuer": "src\\services\\food\\foodMapper.ts",
+        "request": "../utils/dates",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\dates.ts"
+      },
+      {
+        "issuer": "src\\services\\food\\foodMapper.ts",
+        "request": "./foodTypes",
+        "kind": "StaticImport",
+        "id": "src\\services\\food\\foodTypes.ts"
+      }
+    ],
     "src\\services\\insulin\\insulinMapper.ts": [
       {
         "issuer": "src\\services\\insulin\\insulinMapper.ts",
@@ -1724,50 +1713,36 @@
         "id": "src\\services\\insulin\\insulinTypes.ts"
       }
     ],
-    "src\\gb\\objects\\activity.ts": [
+    "src\\gb\\objects\\index.ts": [
       {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "../gbClient",
+        "issuer": "src\\gb\\objects\\index.ts",
+        "request": "./activity",
         "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
+        "id": "src\\gb\\objects\\activity.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "date-fns",
-        "kind": "StaticImport",
-        "id": "node_modules\\date-fns\\esm\\index.js"
+        "issuer": "src\\gb\\objects\\index.ts",
+        "request": "./activity",
+        "kind": "StaticExport",
+        "id": "src\\gb\\objects\\activity.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "../models",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\index.ts"
+        "issuer": "src\\gb\\objects\\index.ts",
+        "request": "./challenge",
+        "kind": "StaticExport",
+        "id": "src\\gb\\objects\\challenge.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "../../services/utils/dates",
-        "kind": "StaticImport",
-        "id": "src\\services\\utils\\dates.ts"
+        "issuer": "src\\gb\\objects\\index.ts",
+        "request": "./circle",
+        "kind": "StaticExport",
+        "id": "src\\gb\\objects\\circle.ts"
       },
       {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "form-data",
-        "kind": "StaticImport",
-        "id": "node_modules\\form-data\\lib\\form_data.js"
-      },
-      {
-        "issuer": "src\\gb\\objects\\activity.ts",
-        "request": "./GBObjectTypes",
-        "kind": "StaticImport",
-        "id": "src\\gb\\objects\\GBObjectTypes.ts"
-      }
-    ],
-    "src\\gb\\objects\\base.ts": [
-      {
-        "issuer": "src\\gb\\objects\\base.ts",
-        "request": ".",
-        "kind": "StaticImport",
-        "id": "src\\gb\\objects\\index.ts"
+        "issuer": "src\\gb\\objects\\index.ts",
+        "request": "./user",
+        "kind": "StaticExport",
+        "id": "src\\gb\\objects\\user.ts"
       }
     ],
     "src\\gb\\objects\\bmi.ts": [
@@ -1788,40 +1763,6 @@
         "request": "./GBObjectTypes",
         "kind": "StaticImport",
         "id": "src\\gb\\objects\\GBObjectTypes.ts"
-      }
-    ],
-    "src\\gb\\objects\\challenge.ts": [
-      {
-        "issuer": "src\\gb\\objects\\challenge.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\challenge.ts",
-        "request": "../models",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\index.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\challenge.ts",
-        "request": "form-data",
-        "kind": "StaticImport",
-        "id": "node_modules\\form-data\\lib\\form_data.js"
-      }
-    ],
-    "src\\gb\\objects\\circle.ts": [
-      {
-        "issuer": "src\\gb\\objects\\circle.ts",
-        "request": "../gbClient",
-        "kind": "StaticImport",
-        "id": "src\\gb\\gbClient.ts"
-      },
-      {
-        "issuer": "src\\gb\\objects\\circle.ts",
-        "request": "../models",
-        "kind": "StaticImport",
-        "id": "src\\gb\\models\\index.ts"
       }
     ],
     "src\\gb\\objects\\exercise.ts": [
@@ -1936,6 +1877,83 @@
         "id": "src\\gb\\objects\\GBObjectTypes.ts"
       }
     ],
+    "node_modules\\@azure\\msal-node\\dist\\msal-node.esm.js": null,
+    "node_modules\\jsonwebtoken\\index.js": null,
+    "node_modules\\ts-xor\\dist\\index.js": null,
+    "util": [],
+    "src\\services\\utils\\units.ts": [],
+    "src\\gb\\objects\\activity.ts": [
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "../gbClient",
+        "kind": "StaticImport",
+        "id": "src\\gb\\gbClient.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "date-fns",
+        "kind": "StaticImport",
+        "id": "node_modules\\date-fns\\esm\\index.js"
+      },
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "../models",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\index.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "../../services/utils/dates",
+        "kind": "StaticImport",
+        "id": "src\\services\\utils\\dates.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "form-data",
+        "kind": "StaticImport",
+        "id": "node_modules\\form-data\\lib\\form_data.js"
+      },
+      {
+        "issuer": "src\\gb\\objects\\activity.ts",
+        "request": "./GBObjectTypes",
+        "kind": "StaticImport",
+        "id": "src\\gb\\objects\\GBObjectTypes.ts"
+      }
+    ],
+    "src\\gb\\objects\\challenge.ts": [
+      {
+        "issuer": "src\\gb\\objects\\challenge.ts",
+        "request": "../gbClient",
+        "kind": "StaticImport",
+        "id": "src\\gb\\gbClient.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\challenge.ts",
+        "request": "../models",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\index.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\challenge.ts",
+        "request": "form-data",
+        "kind": "StaticImport",
+        "id": "node_modules\\form-data\\lib\\form_data.js"
+      }
+    ],
+    "src\\gb\\objects\\circle.ts": [
+      {
+        "issuer": "src\\gb\\objects\\circle.ts",
+        "request": "../gbClient",
+        "kind": "StaticImport",
+        "id": "src\\gb\\gbClient.ts"
+      },
+      {
+        "issuer": "src\\gb\\objects\\circle.ts",
+        "request": "../models",
+        "kind": "StaticImport",
+        "id": "src\\gb\\models\\index.ts"
+      }
+    ],
     "src\\gb\\objects\\user.ts": [
       {
         "issuer": "src\\gb\\objects\\user.ts",
@@ -1950,72 +1968,37 @@
         "id": "src\\gb\\models\\index.ts"
       }
     ],
-    "src\\gb\\models\\activityModel.ts": [],
-    "node_modules\\jsonwebtoken\\index.js": null,
-    "node_modules\\@azure\\msal-node\\dist\\msal-node.esm.js": null,
-    "node_modules\\ts-xor\\dist\\index.js": null,
-    "util": [],
-    "src\\services\\utils\\units.ts": [],
     "node_modules\\papaparse\\papaparse.js": null,
     "node_modules\\form-data\\lib\\form_data.js": null,
-    "node_modules\\xlsx\\xlsx.js": null,
     "node_modules\\xml2js\\lib\\xml2js.js": null,
     "node_modules\\lodash\\lodash.js": null,
+    "node_modules\\xlsx\\xlsx.js": null,
     "node_modules\\express-jwt\\lib\\index.js": null
   },
   "circulars": [
     [
       "src\\gb\\gbClient.ts",
+      "src\\gb\\objects\\gbObjects.ts",
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\activity.ts"
     ],
     [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\base.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\bmi.ts"
-    ],
-    [
       "src\\gb\\gbClient.ts",
+      "src\\gb\\objects\\gbObjects.ts",
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\challenge.ts"
     ],
     [
       "src\\gb\\gbClient.ts",
+      "src\\gb\\objects\\gbObjects.ts",
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\circle.ts"
     ],
     [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\exercise.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\food.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\glucose.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\insulin.ts"
-    ],
-    [
-      "src\\gb\\objects\\index.ts",
-      "src\\gb\\objects\\mood.ts"
-    ],
-    [
       "src\\gb\\gbClient.ts",
+      "src\\gb\\objects\\gbObjects.ts",
       "src\\gb\\objects\\index.ts",
       "src\\gb\\objects\\user.ts"
-    ],
-    [
-      "src\\services\\dataParsers\\dataParser.ts",
-      "src\\services\\fileParsers\\excelParser.ts",
-      "src\\services\\utils\\interfaceKeys.ts"
     ]
   ]
 }

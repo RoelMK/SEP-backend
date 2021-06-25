@@ -1,91 +1,65 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
-import {
-    Activity,
-    BMI,
-    Challenge,
-    Circle,
-    Exercise,
-    Food,
-    Glucose,
-    Insulin,
-    Mood,
-    User
-} from './objects';
 import { Headers, Query } from './models';
 import FormData from 'form-data';
+import { GameBusObjects } from './objects/gbObjects';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
     readonly client: AxiosInstance;
 
-    private gamebusActivity: Activity;
-    private gamebusExercise: Exercise;
-    private gamebusFood: Food;
-    private gamebusGlucose: Glucose;
-    private gamebusInsulin: Insulin;
-    private gamebusMood: Mood;
-    private gamebusCircle: Circle;
-    private gamebusChallenge: Challenge;
-    private gamebusBMI: BMI;
-    private gamebusUser: User;
+    private gbObjects: GameBusObjects;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
         this.client = axios.create();
-
-        // Create necessary classes
-        this.gamebusActivity = new Activity(this, true);
-        this.gamebusExercise = new Exercise(this.gamebusActivity, true);
-        this.gamebusFood = new Food(this.gamebusActivity, true);
-        this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
-        this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
-        this.gamebusMood = new Mood(this.gamebusActivity, true);
-        this.gamebusCircle = new Circle(this, true);
-        this.gamebusChallenge = new Challenge(this, true);
-        this.gamebusBMI = new BMI(this.gamebusActivity, true);
-        this.gamebusUser = new User(this, true);
+        this.gbObjects = new GameBusObjects(this);
     }
 
-    activity(): Activity {
-        return this.gamebusActivity;
+    /**
+     * Facade to retrieve GameBus objects and their functionalities
+     * @returns GameBus objects
+     */
+
+    activity() {
+        return this.gbObjects.gamebusActivity;
     }
 
-    exercise(): Exercise {
-        return this.gamebusExercise;
+    exercise() {
+        return this.gbObjects.gamebusExercise;
     }
 
-    food(): Food {
-        return this.gamebusFood;
+    food() {
+        return this.gbObjects.gamebusFood;
     }
 
-    glucose(): Glucose {
-        return this.gamebusGlucose;
+    glucose() {
+        return this.gbObjects.gamebusGlucose;
     }
 
-    insulin(): Insulin {
-        return this.gamebusInsulin;
+    insulin() {
+        return this.gbObjects.gamebusInsulin;
     }
 
-    mood(): Mood {
-        return this.gamebusMood;
+    mood() {
+        return this.gbObjects.gamebusMood;
     }
 
-    circle(): Circle {
-        return this.gamebusCircle;
+    circle() {
+        return this.gbObjects.gamebusCircle;
     }
 
-    challenge(): Challenge {
-        return this.gamebusChallenge;
+    challenge() {
+        return this.gbObjects.gamebusChallenge;
     }
 
-    bmi(): BMI {
-        return this.gamebusBMI;
+    bmi() {
+        return this.gbObjects.gamebusBMI;
     }
 
-    user(): User {
-        return this.gamebusUser;
+    user() {
+        return this.gbObjects.gamebusUser;
     }
 
     /**

@@ -211,6 +211,8 @@ test('Check if user is a supervisor', () => {
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
+    dbClient.reset();
+    expect(dbClient.requestSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.checkRole(supervisorEmail)).toBeTruthy();
     expect(dbClient.checkRole(childEmail)).toBeFalsy();
@@ -225,6 +227,8 @@ test('Get a list of normal users requested supervisor role from a supervisor', (
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
+    dbClient.reset();
+    expect(dbClient.requestSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.getChildren(supervisorEmail)).toEqual([
         {

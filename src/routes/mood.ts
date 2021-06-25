@@ -15,7 +15,14 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
     const arousal = req.body.arousal as number;
 
     // Check if given timestamps are valid
-    if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
+    if (
+        !moodTime ||
+        !validUnixTimestamp(moodTime) ||
+        valence < 1 ||
+        valence > 3 ||
+        arousal < 1 ||
+        valence > 3
+    ) {
         // Bad request
         return res.status(400).json({
             success: false,

@@ -7,15 +7,15 @@ export interface QualityReport {
     [qAttributes.TESTABILITY]: { rank; metricsInvolved };
 }
 export interface MetricReport {
-    [metric.SLOC]: number;
-    [metric.AVG_COMPLEXITY]: number;
-    [metric.METHOD_COMPLEXITY]: number;
-    [metric.METHODS_CLASS]: number;
-    [metric.FUNCTIONS_MODULE]: number;
-    [metric.COMMENT_RATIO]: number;
-    [metric.CYCLIC_DEPENDENCIES]: number;
+    [enumMETRIC.SLOC]: number;
+    [enumMETRIC.AVG_COMPLEXITY]: number;
+    [enumMETRIC.METHOD_COMPLEXITY]: number;
+    [enumMETRIC.METHODS_CLASS]: number;
+    [enumMETRIC.FUNCTIONS_MODULE]: number;
+    [enumMETRIC.COMMENT_RATIO]: number;
+    [enumMETRIC.CYCLIC_DEPENDENCIES]: number;
     //[metric.CLASS_COUPLING]: number; Not possible for Typescript
-    [metric.FANOUT]: number;
+    [enumMETRIC.FANOUT]: number;
 }
 
 // ISO 25010 maintainability attributes
@@ -27,7 +27,7 @@ export enum qAttributes {
     TESTABILITY = 'TESTABILITY'
 }
 
-export enum metric {
+export enum enumMETRIC {
     SLOC = 'SLOC',
     AVG_COMPLEXITY = 'AVG_COMPLEXITY',
     METHOD_COMPLEXITY = 'METHOD_COMPLEXITY',
@@ -42,22 +42,30 @@ export enum metric {
 }
 // which (m)etrics are involved in determining the ranks of which attributes
 export const mInvolvedIn = {
-    [metric.SLOC]: [qAttributes.ANALYZABILITY, qAttributes.MODIFIABILITY, qAttributes.TESTABILITY],
-    [metric.AVG_COMPLEXITY]: [qAttributes.MODIFIABILITY, qAttributes.TESTABILITY],
-    [metric.METHOD_COMPLEXITY]: [qAttributes.MODIFIABILITY, qAttributes.TESTABILITY],
-    [metric.METHODS_CLASS]: [
-        qAttributes.MODULARITY,
-        qAttributes.REUSABILITY,
-        qAttributes.ANALYZABILITY,
-        qAttributes.MODIFIABILITY
-    ],
-    [metric.FUNCTIONS_MODULE]: [
+    [enumMETRIC.SLOC]: [
         qAttributes.ANALYZABILITY,
         qAttributes.MODIFIABILITY,
         qAttributes.TESTABILITY
     ],
-    [metric.COMMENT_RATIO]: [qAttributes.ANALYZABILITY],
-    [metric.CYCLIC_DEPENDENCIES]: [
+    [enumMETRIC.AVG_COMPLEXITY]: [qAttributes.MODIFIABILITY, qAttributes.TESTABILITY],
+    [enumMETRIC.METHOD_COMPLEXITY]: [
+        //qAttributes.MODIFIABILITY, qAttributes.TESTABILITY TODO removed,
+        //because AVG and METHOD complexity are both 2 and only one counts
+    ],
+    [enumMETRIC.METHODS_CLASS]: [
+        // qAttributes.MODULARITY, Not sure if they will measure this or FUNCTIONS_MODULE TODO pick one
+        // qAttributes.REUSABILITY,
+        // qAttributes.ANALYZABILITY,
+        // qAttributes.MODIFIABILITY
+    ],
+    [enumMETRIC.FUNCTIONS_MODULE]: [
+        qAttributes.MODULARITY, //Not sure if they will measure this or FUNCTIONS_MODULE TODO pick one
+        qAttributes.REUSABILITY,
+        qAttributes.ANALYZABILITY,
+        qAttributes.MODIFIABILITY
+    ],
+    [enumMETRIC.COMMENT_RATIO]: [qAttributes.ANALYZABILITY],
+    [enumMETRIC.CYCLIC_DEPENDENCIES]: [
         qAttributes.MODULARITY,
         qAttributes.REUSABILITY,
         qAttributes.ANALYZABILITY,
@@ -65,7 +73,7 @@ export const mInvolvedIn = {
         qAttributes.TESTABILITY
     ],
     //[metric.CLASS_COUPLING]: [qAttributes.MODULARITY, qAttributes.REUSABILITY], Not possible for Typescript
-    [metric.FANOUT]: [qAttributes.MODULARITY, qAttributes.REUSABILITY]
+    [enumMETRIC.FANOUT]: [qAttributes.MODULARITY, qAttributes.REUSABILITY]
 };
 
 export const initQReport: QualityReport = {
@@ -77,15 +85,15 @@ export const initQReport: QualityReport = {
 };
 
 export const initMReport: MetricReport = {
-    [metric.SLOC]: 0,
-    [metric.AVG_COMPLEXITY]: 0,
-    [metric.METHOD_COMPLEXITY]: 0,
-    [metric.METHODS_CLASS]: 0,
-    [metric.FUNCTIONS_MODULE]: 0,
-    [metric.COMMENT_RATIO]: 0,
-    [metric.CYCLIC_DEPENDENCIES]: 0,
+    [enumMETRIC.SLOC]: 0,
+    [enumMETRIC.AVG_COMPLEXITY]: 0,
+    [enumMETRIC.METHOD_COMPLEXITY]: 0,
+    [enumMETRIC.METHODS_CLASS]: 0,
+    [enumMETRIC.FUNCTIONS_MODULE]: 0,
+    [enumMETRIC.COMMENT_RATIO]: 0,
+    [enumMETRIC.CYCLIC_DEPENDENCIES]: 0,
     //[metric.CLASS_COUPLING]: 0, Not possible for Typescript
-    [metric.FANOUT]: 0
+    [enumMETRIC.FANOUT]: 0
 };
 
 export interface UnderstandExport {

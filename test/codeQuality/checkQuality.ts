@@ -16,7 +16,7 @@ import {
 import {
     initMReport,
     initQReport,
-    metric,
+    enumMETRIC,
     MetricReport,
     mInvolvedIn,
     QualityReport,
@@ -73,6 +73,10 @@ class QualityCheck {
 
         this.generateQualityReport();
         console.log(this.qReport);
+
+        console.log(
+            `If all calculations are right, we would get the grade ${this.calculateGrade()}`
+        );
     }
 
     private generateQualityReport() {
@@ -110,7 +114,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate software line of code rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.SLOC] = ratioToRank(faultyModules.length / moduleExports.length);
+        this.mReport[enumMETRIC.SLOC] = ratioToRank(faultyModules.length / moduleExports.length);
     }
 
     /**
@@ -132,7 +136,9 @@ class QualityCheck {
         });
 
         // Calculate software line of code rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.COMMENT_RATIO] = ratioToRank(faultyFiles.length / fileExports.length);
+        this.mReport[enumMETRIC.COMMENT_RATIO] = ratioToRank(
+            faultyFiles.length / fileExports.length
+        );
     }
 
     /**
@@ -153,7 +159,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate avg cyclomatic complexity rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.AVG_COMPLEXITY] = ratioToRank(
+        this.mReport[enumMETRIC.AVG_COMPLEXITY] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -177,7 +183,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate max method cyclomatic complexity rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.METHOD_COMPLEXITY] = ratioToRank(
+        this.mReport[enumMETRIC.METHOD_COMPLEXITY] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -201,7 +207,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate methods per class rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.METHODS_CLASS] = ratioToRank(
+        this.mReport[enumMETRIC.METHODS_CLASS] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -225,7 +231,7 @@ class QualityCheck {
         console.log(faultyModules);
 
         // Calculate functions per file rank by dividing faulty modules by evaluated modules
-        this.mReport[metric.FUNCTIONS_MODULE] = ratioToRank(
+        this.mReport[enumMETRIC.FUNCTIONS_MODULE] = ratioToRank(
             faultyModules.length / moduleExports.length
         );
     }
@@ -252,7 +258,7 @@ class QualityCheck {
             }
         });
         // Calculate fanout rank by dividing faulty files by evaluated files
-        this.mReport[metric.FANOUT] = ratioToRank(faultyFiles.length / evaluatedFiles.length);
+        this.mReport[enumMETRIC.FANOUT] = ratioToRank(faultyFiles.length / evaluatedFiles.length);
     }
 
     /**
@@ -287,9 +293,18 @@ class QualityCheck {
             });
         });
 
-        this.mReport[metric.CYCLIC_DEPENDENCIES] = ratioToRank(
+        this.mReport[enumMETRIC.CYCLIC_DEPENDENCIES] = ratioToRank(
             countCycles / fileDependenciesMatrix.length
         );
+    }
+
+    // determine code quality grade
+    private calculateGrade(): number {
+        let total = 0;
+        Object.values(this.qReport).forEach((ranking) => {
+            total += ranking.rank;
+        });
+        return (total + 10) / 2.0;
     }
 }
 

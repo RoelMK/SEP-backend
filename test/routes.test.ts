@@ -103,7 +103,7 @@ describe('insulin endpoint', () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: SEP - 1
  */
 test('Supervisor logToken without token and email', async () => {
     const response = await request(server).post('/supervisor/logToken').set(
@@ -115,7 +115,7 @@ test('Supervisor logToken without token and email', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 2
  */
 test('request without emails', async () => {
     const response = await request(server).post('/supervisor/request').set(
@@ -127,7 +127,7 @@ test('request without emails', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 3
  */
 test('getting token without emails', async () => {
     const response = await request(server).get('/supervisor/getToken').set(
@@ -139,7 +139,7 @@ test('getting token without emails', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 4
  */
 test('getting supervisors without normal user email', async () => {
     const response = await request(server).get('/supervisor/getSupervisors').set(
@@ -151,7 +151,7 @@ test('getting supervisors without normal user email', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 5
  */
 test('getting approved supervisors without normal user email', async () => {
     const response = await request(server).get('/supervisor/getApproved').set(
@@ -163,7 +163,7 @@ test('getting approved supervisors without normal user email', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 6
  */
 test('getting normal users without supervisor email', async () => {
     const response = await request(server).get('/supervisor/getChildren').set(
@@ -175,9 +175,9 @@ test('getting normal users without supervisor email', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 7
  */
-test('retracting permission emails', async () => {
+test('retracting permission without emails', async () => {
     const response = await request(server).post('/supervisor/retractPermission').set(
         // This token has an expiry date of 20/11/2286, so this test will work until then
         'Authorization',
@@ -187,7 +187,7 @@ test('retracting permission emails', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 8
  */
 test('getting role without email', async () => {
     const response = await request(server).get('/supervisor/role').set(
@@ -199,7 +199,7 @@ test('getting role without email', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: SEP - 9
  */
 test('Full supervisor endpoint test', async () => {
     // Proper cleaning is required after each task
@@ -379,7 +379,7 @@ test('POST supported format fooddiary, with supported file extension but wrong f
  */
 
 /**
- * UTP: TODO
+ * UTP: AEP - 1
  */
 test('No email specified', async () => {
     const response = await request(server).get('/login').set(
@@ -391,7 +391,7 @@ test('No email specified', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: AEP - 2
  */
 test('No login token specified', async () => {
     const response = await request(server).get('/login').set(
@@ -403,7 +403,7 @@ test('No login token specified', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: AEP - 3
  */
 test('Register callback with unspecified user information', async () => {
     const response = await request(server).post('/gamebus/callback').set(
@@ -415,7 +415,7 @@ test('Register callback with unspecified user information', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: AEP - 4
  */
 test('Register callback without login attempt', async () => {
     const response = await request(server)
@@ -438,7 +438,7 @@ test('Register callback without login attempt', async () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: ACEP - 1
  */
 test('Deleting activity without ID', async () => {
     const response = await request(server).post('/activities/delete').set(
@@ -456,7 +456,7 @@ test('Deleting activity without ID', async () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: IEP - 2
  */
 test('Posting insulin without parameters', async () => {
     const response = await request(server).post('/insulin').set(
@@ -470,7 +470,7 @@ test('Posting insulin without parameters', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: IEP - 3
  */
 test('Putting insulin without parameters', async () => {
     const response = await request(server).post('/insulin').field('activityId', '1').set(
@@ -488,7 +488,7 @@ test('Putting insulin without parameters', async () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: MEP - 3
  */
 test('Posting mood without parameters', async () => {
     const response = await request(server).post('/mood').set(
@@ -502,7 +502,7 @@ test('Posting mood without parameters', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: MEP - 4
  */
 test('Putting mood without parameters', async () => {
     const response = await request(server).post('/mood').field('activityId', '1').set(
@@ -520,7 +520,7 @@ test('Putting mood without parameters', async () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: NSEP - 1
  */
 test('Nightscout without specified host', async () => {
     const response = await request(server).get('/nightscout').set(
@@ -536,9 +536,9 @@ test('Nightscout without specified host', async () => {
  */
 
 /**
- * UTP: TODO
+ * UTP: ODEP - 1
  */
-test('Get data from onedrive without parameters', async () => {
+test('Get data from onedrive without OneDrive token and file path', async () => {
     const response = await request(server).get('/onedrive/onedrive').set(
         // This token has an expiry date of 20/11/2286, so this test will work until then
         'Authorization',
@@ -548,7 +548,7 @@ test('Get data from onedrive without parameters', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: ODEP - 2
  */
 test('Login to OneDrive without parameters', async () => {
     const response = await request(server).get('/onedrive/login').set(
@@ -562,7 +562,7 @@ test('Login to OneDrive without parameters', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: ODEP - 3
  */
 test('OneDrive login redirect wihout redirect code', async () => {
     const response = await request(server).get('/onedrive/redirect').set(
@@ -574,7 +574,7 @@ test('OneDrive login redirect wihout redirect code', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: ODEP - 4
  */
 test('Test endpoint for displaying OneDrive tokens, but without parameters', async () => {
     const response = await request(server).get('/onedrive/displayTokens').set(
@@ -590,7 +590,7 @@ test('Test endpoint for displaying OneDrive tokens, but without parameters', asy
  */
 
 /**
- * UTP: TODO
+ * UTP: PEP - 1
  */
 test('Posting profile information without mandatory parameters', async () => {
     const response = await request(server).post('/profile').set(
@@ -602,7 +602,7 @@ test('Posting profile information without mandatory parameters', async () => {
 });
 
 /**
- * UTP: TODO
+ * UTP: PEP - 2
  */
 test('Posting profile information with invalid mandatory parameters', async () => {
     const response = await request(server)
@@ -619,27 +619,10 @@ test('Posting profile information with invalid mandatory parameters', async () =
 });
 
 /**
- * UTP: TODO
- */
-test('Posting profile information with invalid mandatory parameters', async () => {
-    const response = await request(server)
-        .post('/profile')
-        .field('weight', '-1')
-        .field('length', '-1')
-        .field('age', '-1')
-        .set(
-            // This token has an expiry date of 20/11/2286, so this test will work until then
-            'Authorization',
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF5ZXJJZCI6IjAiLCJhY2Nlc3NUb2tlbiI6IjIyMjIiLCJyZWZyZXNoVG9rZW4iOiIzMzMzIiwiaWF0IjoxNjIxMzQ1Njg5LCJleHAiOjk5OTk5OTk5OTksImlzcyI6Imh0dHBzOi8vdHVlLm5sIn0.K1-b9_gMWGhlBW4oJobu3zCKGVBQt56GQNwDnR2qe38'
-        );
-    expect(response.statusCode).toBe(400);
-});
-
-/**
- * UTP: TODO
+ * UTP: PEP - 3
  * //TODO Risky because GameBus is called
  */
-test('Posting profile information with invalid mandatory parameters', async () => {
+test('Getting profile information with an unused account', async () => {
     const response = await request(server).get('/profile').set(
         // This token has an expiry date of 20/11/2286, so this test will work until then
         'Authorization',

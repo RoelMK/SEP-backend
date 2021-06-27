@@ -30,6 +30,7 @@ export default {
         'src/onedrive/models/', // Same as above
         'src/onedrive/auth.ts', // Not mock-able
         'src/utils/flush.ts', // Only for AT, no testing needed
+        'src/routes/flushDB.ts', // Only for AT, no testing needed
         'dist/*'
     ],
 

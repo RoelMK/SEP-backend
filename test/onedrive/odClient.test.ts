@@ -1,6 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable quotes */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import {
+    generateRedirectUrl,
+    OneDriveTokenModel
+} from '../../src/onedrive/models/onedriveTokenModel';
 import { OneDriveClient } from '../../src/onedrive/odClient';
 import { mockOnedriveRequest } from './odUtils';
 
@@ -1049,4 +1053,20 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(false);
     });
+});
+
+/**
+ * UTP: ONED - 15
+ */
+test('Generate OneDrive redirect URL', () => {
+    const account: OneDriveTokenModel = {
+        homeAccountId: '1',
+        accessToken: '2',
+        expiresOn: 1000000000000
+    };
+    expect(
+        generateRedirectUrl(account).endsWith(
+            '?homeAccountId=1&accessToken=2&expiresOn=1000000000000'
+        )
+    ).toBeTruthy();
 });

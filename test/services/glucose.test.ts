@@ -5,7 +5,7 @@ import {
     OutputDataType
 } from '../../src/services/dataParsers/dataParserTypes';
 import GlucoseMapper from '../../src/services/glucose/glucoseMapper';
-import { GlucoseSource } from '../../src/services/glucose/glucoseTypes';
+import { emptyGlucoseModel, GlucoseSource } from '../../src/services/glucose/glucoseTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { parseAbbott, parseNightScout, postGlucoseData } from '../testUtils/parseUtils';
@@ -150,4 +150,15 @@ describe('Glucose mapper', () => {
             );
         }).toThrow('Glucose source not implemented!');
     });
+});
+
+/**
+ * UTP: GLU - 5
+ */
+test('Get empty glucose model', () => {
+    const expectedModel: GlucoseModel = {
+        timestamp: 0,
+        glucoseLevel: 0
+    };
+    expect(emptyGlucoseModel()).toStrictEqual(expectedModel);
 });

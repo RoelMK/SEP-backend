@@ -70,17 +70,3 @@ test('try to assign no keys to raw onedrive data', async () => {
         new OneDriveExcelParser().assignKeys(sampleODInput);
     }).toThrow('Keys are undefined, no data source was provided!');
 });
-
-// TODO if we really want this to be 80% then we will need to mock some stuff
-test('test getMappingTable with mocked call', async () => {
-    // Request handler that simply returns empty data for every request
-    // const request = mockRequest(() => {
-    //     return Promise.resolve({
-    //         data: []
-    //     });
-    // });
-    // // const file = 'testFile.xlsx';
-    // // const token = 'testToken';
-    // // const testTable = 'test';
-    // await OneDriveExcelParser.getMappingTableValues(file, token, testTable);
-});

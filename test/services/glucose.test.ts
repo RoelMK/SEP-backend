@@ -101,7 +101,6 @@ describe('POST glucose', () => {
             }
         ];
         const response = await postGlucoseData(glucose, GlucoseSource.ABBOTT, DateFormat.ABBOTT_EU);
-        // TODO: change response once implemented
         expect(response).toBe(undefined);
     });
 });

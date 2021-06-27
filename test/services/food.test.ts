@@ -222,7 +222,6 @@ describe('POST food', () => {
             FoodSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY
         );
-        // TODO: change response once implemented
         expect(response).toBe(undefined);
     });
 });

@@ -15,7 +15,7 @@ export enum GlucoseUnit {
     MG_DL = 'mg/dL'
 }
 
-/** //TODO move
+/**
  * Different record type meanings
  * Glucose levels (0 & 1) are in mmol/L
  * Insulin (4) includes both rapid-acting insulin and long-acting insulin (in units)

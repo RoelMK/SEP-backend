@@ -10,8 +10,6 @@ import { mockOnedriveRequest } from './odUtils';
 
 jest.mock('axios');
 
-// TODO: improve coverage
-
 describe('with mocked activities get call', () => {
     // Request handler that returns simulated onedrive responses
     const request = mockOnedriveRequest((obj) => {

@@ -131,7 +131,6 @@ describe('POST insulin', () => {
             InsulinSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY
         );
-        // TODO: change response once implemented
         expect(response).toBe(undefined);
     });
 });

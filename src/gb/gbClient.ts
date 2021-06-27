@@ -266,7 +266,6 @@ export class GameBusClient {
         // Add authentication token to Authorization header if provided (and needed)
         if (authRequired && this.tokenHandler) {
             const token = this.tokenHandler.getToken();
-            // TODO: should we handle this differently?
             //this.playerId = token.playerId;
             // Only add the access token part of the token
             headers['Authorization'] = `Bearer ${token.accessToken}`;

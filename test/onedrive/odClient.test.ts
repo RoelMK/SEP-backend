@@ -693,17 +693,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
@@ -734,17 +724,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
@@ -775,17 +755,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
@@ -816,17 +786,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 
@@ -864,17 +824,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 
@@ -923,17 +873,7 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 

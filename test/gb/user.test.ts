@@ -34,7 +34,7 @@ describe('with mocked user get call', () => {
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
     /**
-     * UTP: TODO
+     * UTP: GB - 46
      */
     test('GET current user', async () => {
         const user = await client.user().getCurrentUser();
@@ -66,7 +66,7 @@ describe('with mocked user get call', () => {
     });
 
     /**
-     * UTP: TODO
+     * UTP: GB - 47
      */
     test('Disconnect data provider', async () => {
         const playerId = 1;
@@ -84,7 +84,7 @@ describe('with mocked user get call', () => {
     });
 
     /**
-     * UTP: TODO
+     * UTP: GB - 48
      */
     test('Connect data provider', async () => {
         const playerId = 1;

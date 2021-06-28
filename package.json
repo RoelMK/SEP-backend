@@ -11,7 +11,7 @@
         "check-code": "ts-node test/codeQuality/checkQuality.ts",
         "check-circular": "dpdm --exclude node_modules --circular --output dpdm.json src/*",
         "prep": "ts-node test/AT/prepareAccounts.ts",
-        "test": "jest",
+        "test": "jest --runInBand",
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "lint-fix": "eslint . --ext .ts --fix"

@@ -37,7 +37,11 @@ afterAll(() => {
 });
 
 // Before each test, clear the file parse events so old entries are not used
-beforeEach(() => new DBClient().cleanFileParseEvents());
+beforeEach(() => {
+    const dbClient: DBClient = new DBClient();
+    dbClient.cleanFileParseEvents();
+    dbClient.close();
+});
 
 /**
  * Checks whether updating only new data within files works as intended

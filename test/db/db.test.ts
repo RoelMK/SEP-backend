@@ -355,4 +355,5 @@ test('Execute methods while database does not exist', () => {
     expect(dbClient.registerCallback('id', 't1', 't2')).toBeFalsy();
     expect(dbClient.registerLoginAttempt('id', 't1', new Date())).toBeFalsy();
     expect(dbClient.removeFinishedLoginAttempt('id')).toBeFalsy();
+    dbClient.close();
 });

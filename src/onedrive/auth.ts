@@ -40,7 +40,7 @@ const config: msal.Configuration = {
 };
 const cca = new msal.ConfidentialClientApplication(config);
 const msalTokenCache = cca.getTokenCache();
-const redirectUri = 'https://squaretablestudios.com/redirect.php'; // TODO: this should not be hardcoded here...
+const redirectUri = process.env.ONEDRIVE_BACKEND_REDIRECT as string;
 const scopes = ['user.read', 'Files.Read'];
 
 /**

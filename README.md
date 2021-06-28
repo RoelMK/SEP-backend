@@ -97,13 +97,13 @@ All of the .sql scripts used to insert these game descriptors and properties int
 
 If you want the back-end to interact with the production API of GameBus, the endpoint for the GameBus Client is defined in `src/gb/gbClient.ts` at the top of the file. Keep in mind that you will most likely have to change the game descriptor IDs as well as add the missing game descriptors and properties to the production API before things will work as expected.
 
-## Improvements to be made
+## Improvements to be made (by others)
 
 ### Performance
 
-Currently, the back-end relies on the GameBus infrastructure to store and retrieve data. While this works fine for small amounts of data (a few activities a day), insulin and especially glucose data can have a lot of occurences throughout a day, which GameBus is not prepared for. One way to mitigate this through our end is to have our own (SQL) database in which we can store the user's activities. This way, we can retrieve all user activities once on login and then query on our own database instead of querying on the GameBus API.
+Currently, the back-end relies on the GameBus infrastructure to store and retrieve data. While this works fine for small amounts of data (a few activities a day), insulin and especially glucose data can have a lot of occurences throughout a day, which GameBus is not prepared for (for explanation, see next paragraph). One way to mitigate this through our end is to have our own (SQL) database in which we can store the user's activities. This way, we can retrieve all user activities once on login and then query on our own database instead of querying on the GameBus API. While this makes the initial load a lot slower, this will speed up queries by a significant amount since we will be able to query on all property types with minimal response sizes using SQL instead of relying on (huge) HTTP responses.
 
-GameBus' API can also be improved to make the retrieving of activities faster. Currently, a single activity response is around 140 lines of JSON, if the API were to have options to only get certain fields of the response (leave out the permissions for example), getting many activities at once could be a lot faster. Furthermore, currently the GameBus API only allows one to query on start- and end-dates as well as game descriptor IDs, if the API were to allow more query types (i.e. property values, actual times [not just dates]), the back-end could be sped up dramastically since this would allow us to more closely narrow down the activities we need to display.
+GameBus' API can also be improved to make the retrieving of activities faster. Currently, a single activity response is around 140 lines of JSON, if the API were to have options to only get certain fields of the response (leave out the permissions for example), getting many activities at once could be a lot faster. Furthermore, currently the GameBus API only allows one to query on start- and end-dates as well as game descriptor IDs, if the API were to allow more query types (i.e. property values, actual times [not just dates]), the back-end could be sped up dramatically since this would allow us to more closely narrow down the activities we need to display.
 
 ### Aggregation
 

@@ -64,7 +64,7 @@ describe('with mocked activities get call', () => {
 test('circles where the player is a Leader and the circle names have Diabetter in it', async () => {
     const expectedResult: number[] = [];
     const handler = new TokenHandler('testToken', 'refreshToken', '0');
-    const gamebus = new GameBusClient(handler, true);
+    const gamebus = new GameBusClient(handler);
     const circ = new Circle(gamebus, true);
     expect(await circ.getAllCirclesLeaderDiabetter(0)).toEqual(expectedResult);
 });
@@ -75,7 +75,7 @@ test('circles where the player is a Leader and the circle names have Diabetter i
 test('array of player IDs in a circle', async () => {
     const expectedResult: number[] = [];
     const handler = new TokenHandler('testToken', 'refreshToken', '0');
-    const gamebus = new GameBusClient(handler, true);
+    const gamebus = new GameBusClient(handler);
     const circ = new Circle(gamebus, true);
     expect((await circ.getPlayersForAGivenCircle(100800)) as number[]).toEqual(expectedResult);
 });

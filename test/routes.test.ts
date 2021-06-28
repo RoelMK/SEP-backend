@@ -6,6 +6,7 @@ import { server } from '../src/server';
 import fs from 'fs';
 
 jest.mock('axios');
+jest.setTimeout(60000);
 
 // Everything is currently in 1 file since server.close() can only happen once
 afterAll((done) => {

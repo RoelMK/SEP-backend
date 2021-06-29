@@ -29,7 +29,10 @@ describe('with mocked moods get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
-    test('GET activities from type', async () => {
+    /**
+     * UTP: GB - 23
+     */
+    test('GET mood activities', async () => {
         const moods = await client.mood().getAllMoodActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
@@ -45,7 +48,10 @@ describe('with mocked moods get call', () => {
         expect(moods).toEqual([]);
     });
 
-    test('GET activities from type between dates', async () => {
+    /**
+     * UTP: GB - 24
+     */
+    test('GET mood activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
         const moods = await client
@@ -64,7 +70,10 @@ describe('with mocked moods get call', () => {
         expect(moods).toEqual([]);
     });
 
-    test('GET activities from type on date', async () => {
+    /**
+     * UTP: GB - 25
+     */
+    test('GET mood activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const moods = await client.mood().getMoodActivitiesOnUnixDate(0, unixTimestamp);
 
@@ -96,6 +105,9 @@ describe('with mocked mood post call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 41
+     */
     test('POST a single activity', async () => {
         const model: MoodModel = {
             timestamp: 12,
@@ -134,7 +146,10 @@ describe('with mocked mood post call', () => {
         );
     });
 
-    test('POST a multiple activities', async () => {
+    /**
+     * UTP: GB - 42
+     */
+    test('POST multiple activities', async () => {
         const model1: MoodModel = {
             timestamp: 1,
             arousal: 2,
@@ -210,6 +225,9 @@ describe('with mocked mood put call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 43
+     */
     test('PUT a single mood model', async () => {
         const mood: MoodModel = {
             timestamp: 1,
@@ -232,7 +250,10 @@ describe('with mocked mood put call', () => {
         expect(response).toEqual({});
     });
 
-    test('PUT a single mood model withoud ID', async () => {
+    /**
+     * UTP: GB - 44
+     */
+    test('PUT a single mood model without ID', async () => {
         const mood: MoodModel = {
             timestamp: 1,
             valence: 2,
@@ -246,6 +267,9 @@ describe('with mocked mood put call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 32
+     */
     test('convert mood response to model', () => {
         const response: ActivityGETData = {
             id: 0,

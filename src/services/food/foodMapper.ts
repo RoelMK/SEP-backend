@@ -33,7 +33,7 @@ export default class FoodMapper {
             case FoodSource.NIGHTSCOUT:
                 return this.mapNightScout;
             default:
-                return this.mapFoodDiary;
+                throw Error('Food source not supported');
         }
     }
 

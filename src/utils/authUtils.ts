@@ -61,7 +61,6 @@ export async function startLoginAttempt(
     } else {
         playerId = await getPlayerIdByEmail(email);
     }
-
     if (playerId) {
         const dbClient: DBClient = new DBClient();
         dbClient.cleanLoginAttempts();

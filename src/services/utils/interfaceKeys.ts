@@ -5,7 +5,7 @@ import { DataSource } from '../dataParsers/dataParserTypes';
  * @param dataSource enum value defining the source of the raw data
  * @returns string of keys corresponding to the interface keys of the data
  */
-export function getKeys(dataSource: DataSource): string[] {
+export function getKeys(dataSource?: DataSource): string[] | undefined {
     // get all keys corresponding to the data source
     switch (dataSource) {
         case DataSource.FOOD_DIARY:
@@ -14,7 +14,7 @@ export function getKeys(dataSource: DataSource): string[] {
         case DataSource.ABBOTT:
             return AbbottDataKeys();
         default:
-            throw Error('Getting keys from this datasource has not been implemented yet.');
+            return undefined;
     }
 }
 

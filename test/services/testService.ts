@@ -188,7 +188,9 @@ async function testParseNewest() {
 }
 
 function cleanParses() {
-    new DBClient().cleanFileParseEvents();
+    const dbClient = new DBClient();
+    dbClient.cleanFileParseEvents();
+    dbClient.close();
 }
 
 function addMoods(pId: string, gbAccessToken: string) {

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import { checkJwt } from '../middlewares/checkJwt';
 import { getAccessToken, getAccessTokenSilent, getAuthorizationUrl } from '../onedrive/auth';
-import { OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
+import { generateRedirectUrl, OneDriveTokenModel } from '../onedrive/models/onedriveTokenModel';
 import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
 import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParserTypes';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -119,27 +119,5 @@ onedriveRouter.get('/displayTokens', async (req: any, res: any) => {
         return res.status(400).send();
     }
 });
-
-/**
- * Generates a redirect URL where account details are passed as query parameters.
- * @param account Account details to generate URL for
- * @returns URL to redirect to
- */
-function generateRedirectUrl(account: OneDriveTokenModel): string {
-    let redirectUri = process.env.ONEDRIVE_FRONTEND_REDIRECT;
-    if (!redirectUri) {
-        redirectUri = '/onedrive/displayTokens'; // Set a default uri if none is specified in env
-    }
-
-    return (
-        redirectUri +
-        '?homeAccountId=' +
-        encodeURIComponent(account.homeAccountId) +
-        '&accessToken=' +
-        encodeURIComponent(account.accessToken) +
-        '&expiresOn=' +
-        account.expiresOn.toString()
-    );
-}
 
 module.exports = onedriveRouter;

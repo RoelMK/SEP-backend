@@ -26,6 +26,9 @@ describe('with mocked exercises get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 9
+     */
     test('GET all exercise activities', async () => {
         const exercises = await client.exercise().getAllExerciseActivities(0);
 
@@ -42,6 +45,9 @@ describe('with mocked exercises get call', () => {
         expect(exercises).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 10
+     */
     test('GET activities from type', async () => {
         const exercises = await client
             .exercise()
@@ -60,6 +66,9 @@ describe('with mocked exercises get call', () => {
         expect(exercises).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 11
+     */
     test('GET activities from type between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -84,6 +93,9 @@ describe('with mocked exercises get call', () => {
         expect(exercises).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 12
+     */
     test('GET all exercise activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -103,6 +115,9 @@ describe('with mocked exercises get call', () => {
         expect(exercises).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 13
+     */
     test('GET activities from type on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const exercises = await client
@@ -125,6 +140,9 @@ describe('with mocked exercises get call', () => {
         expect(exercises).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 14
+     */
     test('GET all exercise activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const exercises = await client
@@ -145,6 +163,9 @@ describe('with mocked exercises get call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 28
+     */
     test('convert single response to single model', () => {
         const response: ActivityGETData = {
             id: 0,

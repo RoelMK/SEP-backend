@@ -1,8 +1,12 @@
 import { MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
-import { InsulinSource } from '../../src/services/insulin/insulinParser';
+import {
+    FoodDiaryData,
+    NightScoutTreatmentModel,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParserTypes';
+import InsulinMapper from '../../src/services/insulin/insulinMapper';
+import { InsulinSource } from '../../src/services/insulin/insulinTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import {
     parseAbbott,
@@ -10,9 +14,11 @@ import {
     postInsulinData,
     parseNightScout
 } from '../testUtils/parseUtils';
-import { NightScoutTreatmentModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott insulin', () => {
+    /**
+     * UTP: INS - 1
+     */
     test('import Abbott EU insulin', async () => {
         const expectedResult: InsulinModel = {
             insulinAmount: 9,
@@ -29,6 +35,9 @@ describe('Abbott insulin', () => {
         ).toStrictEqual([expectedResult]);
     });
 
+    /**
+     * UTP: INS - 2
+     */
     test('import Abbott US insulin', async () => {
         const expectedResult: InsulinModel = {
             insulinAmount: 14,
@@ -47,6 +56,9 @@ describe('Abbott insulin', () => {
 });
 
 describe('Food Diary insulin', () => {
+    /**
+     * UTP: INS - 3
+     */
     // check first row of standard (non missing) food diary test file
     test('import standardized food diary insulin values full', async () => {
         const expectedResult: InsulinModel = {
@@ -69,6 +81,9 @@ describe('Food Diary insulin', () => {
         ).toStrictEqual(expectedResult);
     });
 
+    /**
+     * UTP: INS - 4
+     */
     // check third row of standard, missing food diary test file
     test('import standardized food diary insulin values with missing values', async () => {
         const expectedResult: InsulinModel = {
@@ -93,6 +108,9 @@ describe('Food Diary insulin', () => {
 });
 
 describe('POST insulin', () => {
+    /**
+     * UTP: IEX - 1
+     */
     test('POSTing insulinmodels', async () => {
         const insulin: FoodDiaryData[] = [
             {
@@ -113,12 +131,14 @@ describe('POST insulin', () => {
             InsulinSource.FOOD_DIARY_EXCEL,
             DateFormat.FOOD_DIARY
         );
-        // TODO: change response once implemented
         expect(response).toBe(undefined);
     });
 });
 
 describe('Nightscout insulin', () => {
+    /**
+     * UTP: INS - 5
+     */
     test('import mocked Nightscout response data with insulin', async () => {
         const testNSInsulin: NightScoutTreatmentModel = {
             _id: '60b26f9e6e6598317390a04a',
@@ -140,5 +160,17 @@ describe('Nightscout insulin', () => {
         expect(await parseNightScout([], [testNSInsulin], OutputDataType.INSULIN)).toStrictEqual(
             expectedResult
         );
+    });
+});
+
+describe('Insulin mapper', () => {
+    /**
+     * UTP: INS - 6
+     */
+    test('unsupported insulin source', () => {
+        new InsulinMapper(); // test if class is error-free and can be created
+        expect(() => {
+            InsulinMapper.mapInsulin('nonsense' as unknown as InsulinSource, DateFormat.FOOD_DIARY);
+        }).toThrow('Insulin source not implemented!');
     });
 });

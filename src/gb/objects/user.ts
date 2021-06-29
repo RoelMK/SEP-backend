@@ -1,5 +1,5 @@
-import { GameBusClient, Query, Headers } from '../gbClient';
-import { GameBusUser } from '../models/gamebusModel';
+import { GameBusClient } from '../gbClient';
+import { GameBusUser, Query, Headers } from '../models';
 
 export class User {
     constructor(private readonly gamebus: GameBusClient, private readonly authRequired: boolean) {}
@@ -32,6 +32,11 @@ export class User {
         );
     }
 
+    /**
+     * Connects given data provider (ID) from the given player (ID)
+     * @param playerId ID of player
+     * @param dataProviderId ID of data provider to connect
+     */
     async connectDataProvider(
         playerId: number,
         dataProviderId: number,

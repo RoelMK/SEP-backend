@@ -1,11 +1,9 @@
-import { XOR } from 'ts-xor';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { GlucoseModel, GlucoseUnit } from '../../gb/models/glucoseModel';
-import { AbbottData } from '../dataParsers/abbottParser';
-import { NightScoutEntryModel } from '../dataParsers/nightscoutParser';
 import { ModelParser } from '../modelParser';
 import { DateFormat } from '../utils/dates';
 import GlucoseMapper from './glucoseMapper';
+import { GlucoseInput, GlucoseSource } from './glucoseTypes';
 
 /**
  * Glucose parser class that opens a .csv file and processes it to glucoseModel
@@ -72,7 +70,6 @@ export default class GlucoseParser extends ModelParser {
             case DateFormat.ABBOTT_US:
                 return GlucoseUnit.MG_DL;
             default:
-                // TODO this should not happen, but should also be caught earlier (see Abbottparser)
                 return GlucoseUnit.UNDEFINED;
         }
     }
@@ -82,7 +79,7 @@ export default class GlucoseParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing glucose posting
         }
         try {
             if (this.glucoseData && this.glucoseData.length > 0)
@@ -93,19 +90,8 @@ export default class GlucoseParser extends ModelParser {
                         parseInt(this.userInfo.playerId)
                     );
         } catch (e) {
+            // Ignore glucose post errors
             /*continue*/
         }
     }
 }
-/**
- * Current glucose sources available //TODO ? Add more
- */
-export enum GlucoseSource {
-    ABBOTT = 1,
-    NIGHTSCOUT = 2
-}
-
-/**
- * All possible input types for glucose data
- */
-export type GlucoseInput = XOR<AbbottData[], NightScoutEntryModel[]>;

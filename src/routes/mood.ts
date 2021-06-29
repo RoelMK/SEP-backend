@@ -3,7 +3,7 @@ import { Router, Response } from 'express';
 import { TokenHandler } from '../gb/auth/tokenHandler';
 import { GameBusClient } from '../gb/gbClient';
 import { MoodModel } from '../gb/models/moodModel';
-import { Keys } from '../gb/objects/keys';
+import { Keys } from '../gb/objects/GBObjectTypes';
 import { checkJwt } from '../middlewares/checkJwt';
 import { validUnixTimestamp } from '../services/utils/dates';
 
@@ -15,7 +15,14 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
     const arousal = req.body.arousal as number;
 
     // Check if given timestamps are valid
-    if (!validUnixTimestamp(moodTime) || valence < 1 || valence > 3 || arousal < 1 || valence > 3) {
+    if (
+        !moodTime ||
+        !validUnixTimestamp(moodTime) ||
+        valence < 1 ||
+        valence > 3 ||
+        arousal < 1 ||
+        valence > 3
+    ) {
         // Bad request
         return res.status(400).json({
             success: false,
@@ -35,9 +42,9 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
         new TokenHandler(req.user.accessToken, req.user.refreshToken, req.user.playerId)
     );
 
-    // PUT request if activityId is present
+    // PUT request for mood if activityId is present
     if (req.body.activityId) {
-        // Get activity ID
+        // Get activity ID of mood
         const activityId = req.body.activityId as number;
         // Check whether given ID is a mood activity
         const moodActivity = await gbClient
@@ -61,30 +68,32 @@ moodRouter.post('/mood', checkJwt, async (req: any, res: Response) => {
             // Send 201 and new model
             return res.status(201).json(response);
         } catch (error) {
+            // Check for errors on mood PUT
             if (axios.isAxiosError(error)) {
-                // Unauthorized -> 401
+                // Unauthorized on mood PUT -> 401
                 if (error.response?.status === 401) {
                     return res.status(401).send();
                 }
             }
-            // Unknown error -> 503
+            // Unknown error on mood PUT -> 503
             return res.status(503).send();
         }
     }
 
     // POST
     try {
-        // POST model
+        // POST mood model
         const response = await gbClient.mood().postSingleMoodActivity(moodModel, req.user.playerId);
         return res.status(201).json(response);
     } catch (error) {
+        // Error catching on mood POST
         if (axios.isAxiosError(error)) {
-            // Unauthorized -> 401
+            // Unauthorized on mood POST -> 401
             if (error.response?.status === 401) {
                 return res.status(401).send();
             }
         }
-        // Unknown error -> 503
+        // Unknown error on mood POST -> 503
         return res.status(503).send();
     }
 });

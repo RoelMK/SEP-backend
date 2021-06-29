@@ -1,11 +1,19 @@
-import { DataParser, DataSource, InputError, OutputDataType } from './dataParser';
-import { FoodSource } from '../food/foodParser';
-import { GlucoseSource } from '../glucose/glucoseParser';
-import { InsulinSource } from '../insulin/insulinParser';
+import { DataParser } from './dataParser';
 import { getDateFormat } from '../utils/dates';
 import { getFileName } from '../utils/files';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
 import { RecordType } from '../../gb/models/glucoseModel';
+import {
+    AbbottData,
+    AbbottDataGuard,
+    DataSource,
+    emptyAbbottData,
+    InputError,
+    OutputDataType
+} from './dataParserTypes';
+import { FoodSource } from '../food/foodTypes';
+import { GlucoseSource } from '../glucose/glucoseTypes';
+import { InsulinSource } from '../insulin/insulinTypes';
 
 /**
  * Class that reads the Abbott .csv files and passes the data onto the relevant parsers
@@ -47,7 +55,7 @@ export default class AbbottParser extends DataParser {
         // post data
         await this.postProcessedData();
 
-        // update the timestamp of newest parsed entry to this file
+        // update the timestamp of newest Abbott entry to this file
         this.setLastUpdate(getFileName(this.filePath as string), this.getLastProcessedTimestamp());
     }
 
@@ -64,12 +72,8 @@ export default class AbbottParser extends DataParser {
                 parseInt(entry.record_type) === RecordType.SCAN_GLUCOSE_LEVEL ||
                 parseInt(entry.record_type) === RecordType.HISTORIC_GLUCOSE_LEVEL ||
                 parseInt(entry.record_type) === RecordType.STRIP_GLUCOSE_LEVEL
-                // TODO: checking for dateFormat for every entry can be slow,
-                // it also looks like dates might be always present, but can this be assumed?
-                //&&getDateFormat(entry.device_timestamp) !== DateFormat.NONE)
             );
         });
-        // TODO: come up with a better way to return AbbottData if there is no glucose data
         if (!glucose) {
             return [emptyAbbottData()];
         }
@@ -87,7 +91,6 @@ export default class AbbottParser extends DataParser {
                 entry.carbohydrates__grams_
             );
         });
-        // TODO: come up with a better way to return AbbottData if there is no food data
         if (food?.length === 0) {
             return [emptyAbbottData()];
         }
@@ -95,7 +98,7 @@ export default class AbbottParser extends DataParser {
     }
 
     /**
-     * Filters the insulin entries from the raw data
+     * Filters the insulin entries from the raw Abbott data
      * @returns All insulin entries
      */
     private filterInsulin(): AbbottData[] {
@@ -112,96 +115,6 @@ export default class AbbottParser extends DataParser {
      * Determines the date format (locale) of the input file based on first entry
      */
     private getLocale(): void {
-        // TODO check if the first entry is NONE, but others are not
-        // TODO involves checking if first can be NONE at all
         this.dateFormat = getDateFormat(this.abbottData?.[0].device_timestamp);
     }
-}
-
-/**
- * Function that can return an empty AbbottData entry that might be needed for easy returns
- * @returns Empty AbbottData
- */
-const emptyAbbottData = (): AbbottData => ({
-    device: '',
-    serial_number: '',
-    device_timestamp: '',
-    record_type: '',
-    historic_glucose_mg_dl: '',
-    historic_glucose_mmol_l: '',
-    scan_glucose_mg_dl: '',
-    scan_glucose_mmol_l: '',
-    non_numeric_rapid_acting_insulin: '',
-    rapid_acting_insulin__units_: '',
-    non_numeric_food: '',
-    carbohydrates__grams_: '',
-    carbohydrates__servings_: '',
-    non_numeric_long_acting_insulin: '',
-    long_acting_insulin__units_: '',
-    long_acting_insulin_value__units_: '',
-    notes: '',
-    strip_glucose_mg_dl: '',
-    strip_glucose_mmol_l: '',
-    ketone_mmol_l: '',
-    meal_insulin__units_: '',
-    correction_insulin__units_: '',
-    user_change_insulin__units_: ''
-});
-
-/**
- * Raw Abbott .csv data format
- * TODO: what is non_numeric_food?
- */
-export type AbbottData = {
-    device: string;
-    serial_number: string;
-    device_timestamp: string;
-    record_type: string;
-    historic_glucose_mg_dl?: string;
-    historic_glucose_mmol_l?: string;
-    scan_glucose_mg_dl?: string;
-    scan_glucose_mmol_l?: string;
-    non_numeric_rapid_acting_insulin: string;
-    rapid_acting_insulin__units_: string;
-    non_numeric_food: string;
-    carbohydrates__grams_: string;
-    carbohydrates__servings_: string;
-    non_numeric_long_acting_insulin: string;
-    long_acting_insulin__units_?: string; // apparently there is a difference between US and EU names for these
-    long_acting_insulin_value__units_?: string;
-    notes: string;
-    strip_glucose_mg_dl?: string;
-    strip_glucose_mmol_l?: string;
-    ketone_mmol_l: string;
-    meal_insulin__units_: string;
-    correction_insulin__units_: string;
-    user_change_insulin__units_: string;
-};
-
-/**
- * Function to check if an object belongs to the AbbottData interface
- * @param object any object
- * @returns whether the object is part of the interface AbbottData
- */
-function AbbottDataGuard(object: any): object is AbbottData {
-    if (object === undefined) {
-        return false;
-    }
-    return (
-        object.device !== undefined &&
-        object.serial_number !== undefined &&
-        object.device_timestamp !== undefined &&
-        object.record_type !== undefined &&
-        object.non_numeric_rapid_acting_insulin !== undefined &&
-        object.rapid_acting_insulin__units_ !== undefined &&
-        object.non_numeric_food !== undefined &&
-        object.carbohydrates__grams_ !== undefined &&
-        object.carbohydrates__servings_ !== undefined &&
-        object.non_numeric_long_acting_insulin !== undefined &&
-        object.notes !== undefined &&
-        object.ketone_mmol_l !== undefined &&
-        object.meal_insulin__units_ !== undefined &&
-        object.correction_insulin__units_ !== undefined &&
-        object.user_change_insulin__units_ !== undefined
-    );
 }

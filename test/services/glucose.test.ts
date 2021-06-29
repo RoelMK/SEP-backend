@@ -1,13 +1,19 @@
-import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { AbbottData } from '../../src/services/dataParsers/abbottParser';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { GlucoseSource } from '../../src/services/glucose/glucoseParser';
+import { GlucoseModel, GlucoseUnit } from '../../src/gb/models/glucoseModel';
+import {
+    AbbottData,
+    NightScoutEntryModel,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParserTypes';
+import GlucoseMapper from '../../src/services/glucose/glucoseMapper';
+import { emptyGlucoseModel, GlucoseSource } from '../../src/services/glucose/glucoseTypes';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { parseAbbott, parseNightScout, postGlucoseData } from '../testUtils/parseUtils';
-import { NightScoutEntryModel } from '../../src/services/dataParsers/nightscoutParser';
 
 describe('Abbott glucose', () => {
+    /**
+     * UTP: GLU - 1
+     */
     test('import Abbott EU glucose', async () => {
         const expectedResult: GlucoseModel[] = [
             {
@@ -43,6 +49,9 @@ describe('Abbott glucose', () => {
         ).toStrictEqual(expectedResult);
     });
 
+    /**
+     * UTP: GLU - 2
+     */
     test('import Abbott US glucose', async () => {
         const expectedResult: GlucoseModel = {
             glucoseLevel: convertMG_DLtoMMOL_L(82),
@@ -60,6 +69,9 @@ describe('Abbott glucose', () => {
 });
 
 describe('POST glucose', () => {
+    /**
+     * UTP: GEX - 1
+     */
     test('POSTing glucosemodels', async () => {
         const glucose: AbbottData[] = [
             {
@@ -89,12 +101,14 @@ describe('POST glucose', () => {
             }
         ];
         const response = await postGlucoseData(glucose, GlucoseSource.ABBOTT, DateFormat.ABBOTT_EU);
-        // TODO: change response once implemented
         expect(response).toBe(undefined);
     });
 });
 
 describe('Nightscout glucose', () => {
+    /**
+     * UTP: GLU - 3
+     */
     test('import mocked Nightscout response with glucose', async () => {
         const testNSGlucose: NightScoutEntryModel = {
             _id: '60b39a3a6e65983173dc66f4',
@@ -119,4 +133,31 @@ describe('Nightscout glucose', () => {
             expectedResult
         );
     });
+});
+
+describe('Glucose mapper', () => {
+    /**
+     * UTP: GLU - 4
+     */
+    test('unsupported glucose source', () => {
+        new GlucoseMapper(); // test if class is error-free and can be created
+        expect(() => {
+            GlucoseMapper.mapGlucose(
+                'nonsense' as unknown as GlucoseSource,
+                DateFormat.FOOD_DIARY,
+                GlucoseUnit.UNDEFINED
+            );
+        }).toThrow('Glucose source not implemented!');
+    });
+});
+
+/**
+ * UTP: GLU - 5
+ */
+test('Get empty glucose model', () => {
+    const expectedModel: GlucoseModel = {
+        timestamp: 0,
+        glucoseLevel: 0
+    };
+    expect(emptyGlucoseModel()).toStrictEqual(expectedModel);
 });

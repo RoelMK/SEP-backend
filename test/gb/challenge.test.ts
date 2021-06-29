@@ -21,6 +21,9 @@ describe('with mocked challenge post call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: CLCR - 1
+     */
     test('POST a challenge', async () => {
         const challenge: ChallengePOSTData = {
             name: 'challenge name test',
@@ -73,6 +76,9 @@ describe('with mocked challenge post call', () => {
         expect(response).toEqual([]);
     });
 
+    /**
+     * UTP: CLCR - 2
+     */
     test('POST request join circles to a challenge', async () => {
         const response = await client.challenge().postCircleMembership(0, 1, 0);
 

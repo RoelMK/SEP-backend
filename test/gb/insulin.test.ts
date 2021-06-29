@@ -6,8 +6,8 @@ import {
     ActivityGETData
 } from '../../src/gb/models/gamebusModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { InsulinPropertyKeys, Insulin } from '../../src/gb/objects/insulin';
-import { Keys } from '../../src/gb/objects/keys';
+import { InsulinPropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
+import { Insulin } from '../../src/gb/objects/insulin';
 
 import { mockRequest } from '../testUtils/requestUtils';
 
@@ -30,7 +30,10 @@ describe('with mocked insulin get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
-    test('GET activities from type', async () => {
+    /**
+     * UTP: GB - 17
+     */
+    test('GET insulin activities', async () => {
         const insulin = await client.insulin().getInsulinActivities(0);
 
         // Check that URL matches expected URL and mockToken is used in authorization
@@ -46,7 +49,10 @@ describe('with mocked insulin get call', () => {
         expect(insulin).toEqual([]);
     });
 
-    test('GET activities from type between dates', async () => {
+    /**
+     * UTP: GB - 18
+     */
+    test('GET insulin activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
         const insulin = await client
@@ -64,7 +70,10 @@ describe('with mocked insulin get call', () => {
         expect(insulin).toEqual([]);
     });
 
-    test('GET activities from type on date', async () => {
+    /**
+     * UTP: GB - 19
+     */
+    test('GET insulin activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const insulin = await client.insulin().getInsulinActivitiesOnUnixDate(0, unixTimestamp);
         expect(request).toHaveBeenCalledTimes(1);
@@ -95,6 +104,9 @@ describe('with mocked insulin post call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 36
+     */
     test('POST a single activity', async () => {
         const model: InsulinModel = {
             timestamp: 12,
@@ -133,6 +145,9 @@ describe('with mocked insulin post call', () => {
         );
     });
 
+    /**
+     * UTP: GB - 37
+     */
     test('POST a multiple activities', async () => {
         const model1: InsulinModel = {
             timestamp: 1,
@@ -209,6 +224,9 @@ describe('with mocked insulin put call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 38
+     */
     test('PUT a single insulin model', async () => {
         const insulin: InsulinModel = {
             timestamp: 1,
@@ -219,7 +237,6 @@ describe('with mocked insulin put call', () => {
 
         const response = await client.insulin().putSingleInsulinActivity(insulin, 0);
 
-        // TODO: add form data check?
         expect(request).toHaveBeenCalledTimes(1);
         expect(request).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -232,6 +249,10 @@ describe('with mocked insulin put call', () => {
         expect(response).toEqual({});
     });
 
+    /**
+     * UTP: GB - ??
+     * TODO_UTP
+     */
     test('PUT a single insulin model without ID', async () => {
         const insulin: InsulinModel = {
             timestamp: 1,
@@ -246,6 +267,9 @@ describe('with mocked insulin put call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 30
+     */
     test('convert single response to single model with insulin type 0', () => {
         const response: ActivityGETData = {
             id: 0,
@@ -335,6 +359,9 @@ describe('convert response to models', () => {
         expect(Insulin.convertResponseToInsulinModels([response])).toStrictEqual([expectedResult]);
     });
 
+    /**
+     * UTP: GB - 31
+     */
     test('convert single response to single model with insulin type 1', () => {
         const response: ActivityGETData = {
             id: 0,

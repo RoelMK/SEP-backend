@@ -1,11 +1,6 @@
 import multer from 'multer';
 import Router from 'express';
 import AbbottParser from '../services/dataParsers/abbottParser';
-import {
-    CombinedDataParserOutput,
-    DataParser,
-    OutputDataType
-} from '../services/dataParsers/dataParser';
 import fs from 'fs';
 import { getFileDirectory } from '../services/utils/files';
 import FoodDiaryParser from '../services/dataParsers/foodDiaryParser';
@@ -14,6 +9,8 @@ import { checkJwt } from '../middlewares/checkJwt';
 import { GameBusToken } from '../gb/auth/tokenHandler';
 import axios from 'axios';
 import { DataEndpoint, EndpointData } from '../services/dataEndpoint';
+import { DataParser } from '../services/dataParsers/dataParser';
+import { CombinedDataParserOutput, OutputDataType } from '../services/dataParsers/dataParserTypes';
 
 const upload = multer({ dest: 'uploads/' });
 const uploadRouter = Router();
@@ -26,9 +23,14 @@ const uploadRouter = Router();
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
     if (!req.body.format) {
         res.status(400).send('Specify file format!');
+        try {
+            fs.unlinkSync(req.file.path);
+        } catch (e) {
+            console.log(e.message);
+        }
         return;
     }
-    // retrieve user information
+    // retrieve user information from upload endpoint
     const userInfo: GameBusToken = {
         playerId: req.user.playerId,
         accessToken: req.user.accessToken,
@@ -66,19 +68,6 @@ uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any
             console.log(e.message);
         }
     });
-});
-
-// test get requests for file uploads //TODO remove
-uploadRouter.get('/upload/abbott', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLabbott.html');
-});
-
-uploadRouter.get('/upload/fooddiary', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLfooddiary.html');
-});
-
-uploadRouter.get('/upload/eetmeter', function (req, res) {
-    res.sendFile(__dirname + '/testHTMLeetmeter.html');
 });
 
 /**
@@ -122,9 +111,11 @@ async function uploadFile(req: any, res: any, dataParser: DataParser): Promise<v
                 );
                 break;
             default:
+                // Log message when uploading file fails
                 console.log(e.message);
                 res.status(503).send('Something went wrong :(');
         }
+        // Don't do anything on upload fail
         return;
     }
 

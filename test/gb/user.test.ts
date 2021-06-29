@@ -33,6 +33,9 @@ describe('with mocked user get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 46
+     */
     test('GET current user', async () => {
         const user = await client.user().getCurrentUser();
         const expectedResult: GameBusUser = {
@@ -60,5 +63,41 @@ describe('with mocked user get call', () => {
             })
         );
         expect(user).toStrictEqual(expectedResult);
+    });
+
+    /**
+     * UTP: GB - 47
+     */
+    test('Disconnect data provider', async () => {
+        const playerId = 1;
+        const dataProviderID = 1;
+        await client.user().disconnectDataProvider(playerId, dataProviderID);
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/players/1/data-providers/1`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
+    });
+
+    /**
+     * UTP: GB - 48
+     */
+    test('Connect data provider', async () => {
+        const playerId = 1;
+        const dataProviderID = 1;
+        await client.user().connectDataProvider(playerId, dataProviderID);
+        expect(request).toHaveBeenCalledTimes(1);
+        expect(request).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: `${endpoint}/players/1/data-providers/1`,
+                headers: expect.objectContaining({
+                    Authorization: `Bearer ${mockToken}`
+                })
+            })
+        );
     });
 });

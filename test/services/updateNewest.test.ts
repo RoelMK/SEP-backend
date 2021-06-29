@@ -2,16 +2,21 @@ import { DBClient } from '../../src/db/dbClient';
 import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
 import { InsulinModel, InsulinType } from '../../src/gb/models/insulinModel';
-import { AbbottData } from '../../src/services/dataParsers/abbottParser';
-import { OutputDataType } from '../../src/services/dataParsers/dataParser';
-import { FoodDiaryData } from '../../src/services/dataParsers/foodDiaryParser';
-import FoodParser, { FoodSource } from '../../src/services/food/foodParser';
-import GlucoseParser, { GlucoseSource } from '../../src/services/glucose/glucoseParser';
-import InsulinParser, { InsulinSource } from '../../src/services/insulin/insulinParser';
+import FoodParser from '../../src/services/food/foodParser';
+import GlucoseParser from '../../src/services/glucose/glucoseParser';
+import InsulinParser from '../../src/services/insulin/insulinParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
 import { parseAbbott, parseEetmeter, parseFoodDiary } from '../testUtils/parseUtils';
 import fs from 'fs';
 import { GameBusToken } from '../../src/gb/auth/tokenHandler';
+import {
+    AbbottData,
+    FoodDiaryData,
+    OutputDataType
+} from '../../src/services/dataParsers/dataParserTypes';
+import { FoodSource } from '../../src/services/food/foodTypes';
+import { InsulinSource } from '../../src/services/insulin/insulinTypes';
+import { GlucoseSource } from '../../src/services/glucose/glucoseTypes';
 
 // database init
 beforeAll(() => {
@@ -32,7 +37,11 @@ afterAll(() => {
 });
 
 // Before each test, clear the file parse events so old entries are not used
-beforeEach(() => new DBClient().cleanFileParseEvents());
+beforeEach(() => {
+    const dbClient: DBClient = new DBClient();
+    dbClient.cleanFileParseEvents();
+    dbClient.close();
+});
 
 /**
  * Checks whether updating only new data within files works as intended
@@ -40,6 +49,7 @@ beforeEach(() => new DBClient().cleanFileParseEvents());
 describe('Parsing files twice without updates returns nothing', () => {
     /**
      * Abbott Libreview
+     * UTP: EON - 1
      */
     test('only update new abbott export entries, parsing same file should return nothing', async () => {
         const expectedResultGlucose: GlucoseModel[] = [
@@ -84,6 +94,7 @@ describe('Parsing files twice without updates returns nothing', () => {
 
     /**
      * Food diary
+     * UTP: EON - 2
      */
     test('only update new fooddiary entries, parsing same file should return nothing', async () => {
         // expected results
@@ -124,6 +135,7 @@ describe('Parsing files twice without updates returns nothing', () => {
 
     /**
      * Eetmeter
+     * UTP: EON - 3
      */
     test('only update new Eetmeter entries, parsing same file should return nothing', async () => {
         const expectedResult = [
@@ -190,6 +202,7 @@ describe('Parsing files twice without updates returns nothing', () => {
 describe('Tests if ModelParsers only process to newest data', () => {
     /**
      * Tests the update newest function on the food and insulin parsers
+     * UTP: EON - 4
      */
     test('Update newest on the food and insulin parser', async () => {
         const rawDiaryData: FoodDiaryData[] = [
@@ -288,6 +301,7 @@ describe('Tests if ModelParsers only process to newest data', () => {
 
     /**
      * Tests the update newest function on the flucose parsers
+     * UTP: EON - 5
      */
     test('Update newest on the glucose parser', async () => {
         const abbott: AbbottData[] = [
@@ -384,6 +398,9 @@ describe('Tests if ModelParsers only process to newest data', () => {
         expect(glucoseParser.glucoseData).toStrictEqual(expectedGlucose);
     });
 
+    /**
+     * UTP: EON - 6
+     */
     test('Update newest on a ModelParser but no last update timestamp has been set', async () => {
         const rawDiaryData: FoodDiaryData[] = [
             {
@@ -432,6 +449,9 @@ describe('Tests if ModelParsers only process to newest data', () => {
         expect(foodParser.foodData).toStrictEqual(expectedFood);
     });
 
+    /**
+     * UTP: EON - 7
+     */
     test('Update newest on a ModelParser but last update timestamp has been set to 0', async () => {
         const rawDiaryData: FoodDiaryData[] = [
             {

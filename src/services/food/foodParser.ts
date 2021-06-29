@@ -1,20 +1,16 @@
 import { FoodModel } from '../../gb/models/foodModel';
-import { AbbottData } from '../dataParsers/abbottParser';
-import { FoodDiaryData } from '../dataParsers/foodDiaryParser';
 import { DateFormat } from '../utils/dates';
 import FoodMapper from './foodMapper';
-import { XOR } from 'ts-xor';
-import { Consumptie } from '../dataParsers/eetmeterParser';
-import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+
 import { ModelParser } from '../modelParser';
 import { GameBusToken } from '../../gb/auth/tokenHandler';
+
+import { FoodInput, FoodSource } from './foodTypes';
 
 /**
  * Food parser class that opens a .csv file and processes it to foodModels
  * Currently supported food sources:
  * - Abbott
- * TODO: automatically detect food source based on column names
- * TODO: use dynamic format where user is able to pick what column represents what
  */
 export default class FoodParser extends ModelParser {
     // Food data to be exported
@@ -60,7 +56,7 @@ export default class FoodParser extends ModelParser {
      */
     async post(): Promise<void> {
         if (this.userInfo.playerId == 'testing') {
-            return;
+            return; // For testing food posting
         }
         try {
             if (this.foodData && this.foodData.length > 0)
@@ -72,21 +68,3 @@ export default class FoodParser extends ModelParser {
         }
     }
 }
-
-/**
- * Current food sources available
- */
-export enum FoodSource {
-    ABBOTT = 0,
-    FOOD_DIARY_EXCEL = 1,
-    EETMETER = 2,
-    NIGHTSCOUT = 3
-}
-
-/**
- * All possible input types for food data,
- */
-export type FoodInput = XOR<
-    Consumptie[],
-    XOR<AbbottData[], XOR<FoodDiaryData[], NightScoutTreatmentModel[]>>
->;

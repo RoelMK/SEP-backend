@@ -1,90 +1,65 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { TokenHandler } from './auth/tokenHandler';
-import { Activity } from './objects/activity';
-import { Exercise } from './objects/exercise';
-import { Food } from './objects/food';
-import { Glucose } from './objects/glucose';
-import { Insulin } from './objects/insulin';
-import { Mood } from './objects/mood';
+import { Headers, Query } from './models';
 import FormData from 'form-data';
-import { Circle } from './objects/circle';
-import { Challenge } from './objects/challenge';
-import { BMI } from './objects/bmi';
-import { User } from './objects/user';
+import { GameBusObjects } from './objects/gbObjects';
 const endpoint = 'https://api3.gamebus.eu/v2/';
 
 export class GameBusClient {
     // Axios client
     readonly client: AxiosInstance;
 
-    private gamebusActivity: Activity;
-    private gamebusExercise: Exercise;
-    private gamebusFood: Food;
-    private gamebusGlucose: Glucose;
-    private gamebusInsulin: Insulin;
-    private gamebusMood: Mood;
-    private gamebusCircle: Circle;
-    private gamebusChallenge: Challenge;
-    private gamebusBMI: BMI;
-    private gamebusUser: User;
+    private gbObjects: GameBusObjects;
 
     // Create Axios instance, can add options if needed
     constructor(private readonly tokenHandler?: TokenHandler, private readonly verbose?: boolean) {
         this.client = axios.create();
-
-        // Create necessary classes
-        this.gamebusActivity = new Activity(this, true);
-        this.gamebusExercise = new Exercise(this.gamebusActivity, true);
-        this.gamebusFood = new Food(this.gamebusActivity, true);
-        this.gamebusGlucose = new Glucose(this.gamebusActivity, true);
-        this.gamebusInsulin = new Insulin(this.gamebusActivity, true);
-        this.gamebusMood = new Mood(this.gamebusActivity, true);
-        this.gamebusCircle = new Circle(this, true);
-        this.gamebusChallenge = new Challenge(this, true);
-        this.gamebusBMI = new BMI(this.gamebusActivity, true);
-        this.gamebusUser = new User(this, true);
+        this.gbObjects = new GameBusObjects(this);
     }
 
-    // TODO: should probably be removed at some point, since other objects are preferred (and use Activity anyway)
-    activity(): Activity {
-        return this.gamebusActivity;
+    /**
+     * Facade to retrieve GameBus objects and their functionalities
+     * @returns GameBus objects
+     */
+
+    activity() {
+        return this.gbObjects.gamebusActivity;
     }
 
-    exercise(): Exercise {
-        return this.gamebusExercise;
+    exercise() {
+        return this.gbObjects.gamebusExercise;
     }
 
-    food(): Food {
-        return this.gamebusFood;
+    food() {
+        return this.gbObjects.gamebusFood;
     }
 
-    glucose(): Glucose {
-        return this.gamebusGlucose;
+    glucose() {
+        return this.gbObjects.gamebusGlucose;
     }
 
-    insulin(): Insulin {
-        return this.gamebusInsulin;
+    insulin() {
+        return this.gbObjects.gamebusInsulin;
     }
 
-    mood(): Mood {
-        return this.gamebusMood;
+    mood() {
+        return this.gbObjects.gamebusMood;
     }
 
-    circle(): Circle {
-        return this.gamebusCircle;
+    circle() {
+        return this.gbObjects.gamebusCircle;
     }
 
-    challenge(): Challenge {
-        return this.gamebusChallenge;
+    challenge() {
+        return this.gbObjects.gamebusChallenge;
     }
 
-    bmi(): BMI {
-        return this.gamebusBMI;
+    bmi() {
+        return this.gbObjects.gamebusBMI;
     }
 
-    user(): User {
-        return this.gamebusUser;
+    user() {
+        return this.gbObjects.gamebusUser;
     }
 
     /**
@@ -105,14 +80,15 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // PUT request
         return this.request(
             path,
             RequestMethod.PUT,
             body,
-            headers,
+            headers, // Headers for PUT
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full PUT response
         );
     }
 
@@ -120,8 +96,8 @@ export class GameBusClient {
      * POST request
      * @param path Endpoint URL (without base in {endpoint})
      * @param body Body of POST
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for POST
+     * @param query Any query options for POST
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
@@ -134,33 +110,35 @@ export class GameBusClient {
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // POST request
         return this.request(
             path,
             RequestMethod.POST,
             body,
-            headers,
+            headers, // Headers for POST
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full POST response
         );
     }
 
     /**
      * GET request
      * @param path Endpoint URL (without base in {endpoint})
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for GET
+     * @param query Any query options for GET
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
      */
     async get(
         path: string,
-        headers?: Headers,
+        headers?: Headers, // Headers for GET request
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // GET request
         return this.request(
             path,
             RequestMethod.GET,
@@ -168,26 +146,27 @@ export class GameBusClient {
             headers,
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full GET response
         );
     }
 
     /**
      * DELETE request
      * @param path Endpoint URL (without base in {endpoint})
-     * @param headers Extra headers
-     * @param query Any query options
+     * @param headers Extra headers for DELETE
+     * @param query Any query options for DELETE
      * @param authRequired Whether authentication is required for the request
      * @param fullResponse Returns response + headers instead of just data
      * @returns Response
      */
     async delete(
         path: string,
-        headers?: Headers,
+        headers?: Headers, // Headers for DELETE request
         query?: Query,
         authRequired?: boolean,
         fullResponse?: boolean
     ): Promise<any> {
+        // DELETE request
         return this.request(
             path,
             RequestMethod.DELETE,
@@ -195,7 +174,7 @@ export class GameBusClient {
             headers,
             query,
             authRequired,
-            fullResponse
+            fullResponse // Whether you want the full DELETE response
         );
     }
 
@@ -287,7 +266,6 @@ export class GameBusClient {
         // Add authentication token to Authorization header if provided (and needed)
         if (authRequired && this.tokenHandler) {
             const token = this.tokenHandler.getToken();
-            // TODO: should we handle this differently?
             //this.playerId = token.playerId;
             // Only add the access token part of the token
             headers['Authorization'] = `Bearer ${token.accessToken}`;
@@ -328,20 +306,6 @@ export enum RequestMethod {
     POST = 'POST',
     PUT = 'PUT',
     DELETE = 'DELETE'
-}
-
-/**
- * Query interface that is converted to {@URLSearchParams}
- */
-export interface Query {
-    [key: string]: string;
-}
-
-/**
- * Headers interface
- */
-export interface Headers {
-    [key: string]: string;
 }
 
 // Date format that is to be used in GameBus queries

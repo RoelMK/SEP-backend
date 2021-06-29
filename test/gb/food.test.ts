@@ -2,9 +2,8 @@ import { TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { FoodModel, MEAL_TYPE } from '../../src/gb/models/foodModel';
 import { ActivityPOSTData, IDActivityPOSTData } from '../../src/gb/models/gamebusModel';
-import { FoodPropertyKeys } from '../../src/gb/objects/food';
+import { FoodPropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
 import { mockRequest } from '../testUtils/requestUtils';
-import { Keys } from '../../src/gb/objects/keys';
 
 jest.mock('axios');
 
@@ -164,6 +163,9 @@ describe('with mocked food get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '524'));
 
+    /**
+     * UTP: GB - 20
+     */
     test('GET all food activities', async () => {
         const food = await client.food().getAllFoodActivities(0);
         const result: FoodModel[] = [
@@ -214,6 +216,9 @@ describe('with mocked food get call', () => {
         expect(food).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 21
+     */
     test('GET food activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -266,6 +271,9 @@ describe('with mocked food get call', () => {
         expect(exercises).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 22
+     */
     test('GET food activities on date', async () => {
         const unixTimestamp = new Date('2021-04-19').getTime();
         const food = await client.food().getFoodActivitiesOnUnixDate(0, unixTimestamp);
@@ -315,6 +323,9 @@ describe('with mocked food get call', () => {
         expect(food).toEqual(result);
     });
 
+    /**
+     * UTP: GB - 39
+     */
     test('POST a single activity', async () => {
         const model: FoodModel = {
             timestamp: 12,
@@ -358,6 +369,9 @@ describe('with mocked food get call', () => {
         );
     });
 
+    /**
+     * UTP: GB - 40
+     */
     test('POST a multiple activities', async () => {
         const model1: FoodModel = {
             timestamp: 1,

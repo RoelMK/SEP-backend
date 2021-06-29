@@ -17,9 +17,7 @@ export default class CSVParser extends FileParser {
      * @returns Array of csv entries as objects
      */
     async parse(filePath: string, skipLine = false): Promise<Record<string, string>[]> {
-        // TODO: change path to uploaded .csv?
         // Open file from given filePath
-        // TODO: Papa.parse should be able to open URLs as well
         const csvFile = readFileSync(filePath);
         let csvData = csvFile.toString();
 

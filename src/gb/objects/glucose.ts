@@ -1,17 +1,17 @@
 import { convertMG_DLtoMMOL_L } from '../../services/utils/units';
-import { Query, Headers } from '../gbClient';
 import {
     ActivityGETData,
     ActivityPOSTData,
     IDActivityPOSTData,
     IDPropertyInstancePOST,
-    PropertyInstancePOST
-} from '../models/gamebusModel';
-import { GlucoseModel } from '../models/glucoseModel';
-import { ActivityModel } from '../models/activityModel';
-import { Activity, QueryOrder } from './activity';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
+    PropertyInstancePOST,
+    GlucoseModel,
+    ActivityModel,
+    Query,
+    Headers
+} from '../models';
+import { Activity, GameBusObject } from '.';
+import { GlucoseIDs, GlucosePropertyKeys, Keys, QueryOrder } from './GBObjectTypes';
 
 /**
  * Class for glucose-specific functions
@@ -33,12 +33,13 @@ export class Glucose extends GameBusObject {
             headers,
             query
         );
+        // Convert response to model
         return Glucose.convertResponseToGlucoseModels(response);
     }
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model single glucose model to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postSingleGlucoseActivity(
@@ -47,6 +48,7 @@ export class Glucose extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert glucose model to POST data and post it
         const data = this.toPOSTData(model, playerID);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -54,7 +56,7 @@ export class Glucose extends GameBusObject {
 
     /**
      * Function that post a single model for a given player
-     * @param model model to be POSTed
+     * @param model glucose models to be POSTed
      * @param playerID playerID of player for who this is posted
      */
     async postMultipleGlucoseActivities(
@@ -64,10 +66,13 @@ export class Glucose extends GameBusObject {
         query?: Query
     ): Promise<unknown> {
         const data: IDActivityPOSTData[] = [];
+        // For each glucose model, convert it to POST data
         models.forEach((item) => {
             data.push(this.toIDPOSTData(item, playerID));
         });
+        // Post the glucose model data
         const response = await this.activity.postActivities(data, headers, query);
+        // Return glucose response
         return response;
     }
 
@@ -78,8 +83,8 @@ export class Glucose extends GameBusObject {
         const obj = {
             gameDescriptorTK: Keys.glucoseTranslationKey,
             dataProviderName: this.activity.dataProviderName,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // glucose timestamp
             propertyInstances: [] as PropertyInstancePOST[],
             players: [playerID]
         };
@@ -91,6 +96,7 @@ export class Glucose extends GameBusObject {
                 });
             }
         }
+        // Return as glucose post data
         return obj;
     }
 
@@ -99,10 +105,10 @@ export class Glucose extends GameBusObject {
      */
     public toIDPOSTData(model: GlucoseModel, playerID: number): IDActivityPOSTData {
         const obj = {
-            gameDescriptor: Keys.glucoseGameDescriptorID,
+            gameDescriptor: Keys.glucoseGameDescriptorID, // Glucose game descriptor
             dataProvider: this.activity.dataProviderID,
-            image: '', //TODO add image?
-            date: model.timestamp,
+            image: '',
+            date: model.timestamp, // Glucose timestamp
             propertyInstances: [] as IDPropertyInstancePOST[],
             players: [playerID]
         };
@@ -130,7 +136,7 @@ export class Glucose extends GameBusObject {
         endDate: number,
         order?: QueryOrder,
         limit?: number,
-        page?: number,
+        page?: number, // Page number for glucose data in case of pagination
         headers?: Headers,
         query?: Query
     ): Promise<GlucoseModel[]> {
@@ -141,10 +147,11 @@ export class Glucose extends GameBusObject {
             [Keys.glucoseTranslationKey],
             order,
             limit,
-            page,
+            page, // Code duplication prevention 144
             headers,
             query
         );
+        // Convert response between unix dates to model
         return Glucose.convertResponseToGlucoseModels(response);
     }
 
@@ -187,8 +194,6 @@ export class Glucose extends GameBusObject {
                 }
             }
         });
-        // TODO: this might result in models that have a glucose value of 0,
-        // we should check that this does not cause issues
         return glucose;
     }
 
@@ -201,27 +206,15 @@ export class Glucose extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertGlucoseResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant glucose properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertGlucoseResponseToModel(response);
+                })
+        );
     }
 }
-
-/**
- * Relevant properties to map properties of activities to the glucoseModel
- * [key in glucoseModel] = [translationKey in GameBus]
- */
-export enum GlucosePropertyKeys {
-    glucoseLevel = 'eAG_MMOLL', // in mmol/L
-    glucoseLevelMgdl = 'eAG_MGDL' // in mg/dL (we won't use this one)
-}
-
-const GlucoseIDs = Object.freeze({
-    glucoseLevel: 88
-});
-
-export { GlucoseIDs };

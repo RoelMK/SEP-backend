@@ -26,11 +26,12 @@ export default {
     // An array of regexp pattern strings used to skip coverage collection
     coveragePathIgnorePatterns: [
         '\\\\node_modules\\\\',
-        'src/gb/models/',
-        'src/onedrive/models/',
-        'src/onedrive/auth.ts',
-        'src/onedrive/test.ts',
-        'src/services/testService.ts'
+        'src/gb/models/', // Jest does not offer proper interface testing support
+        'src/onedrive/models/', // Same as above
+        'src/onedrive/auth.ts', // Not mock-able
+        'src/utils/flush.ts', // Only for AT, no testing needed
+        'src/routes/flushDB.ts', // Only for AT, no testing needed
+        'dist/*'
     ],
 
     // Indicates which provider should be used to instrument code for coverage
@@ -97,7 +98,15 @@ export default {
     // projects: undefined,
 
     // Use this configuration option to add custom reporters to Jest
-    // reporters: undefined,
+    reporters: [
+        'default',
+        [
+            './node_modules/jest-html-reporter',
+            {
+                pageTitle: 'Test Report'
+            }
+        ]
+    ],
 
     // Automatically reset mock state between every test
     // resetMocks: false,
@@ -150,7 +159,7 @@ export default {
     // ],
 
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-    testPathIgnorePatterns: ['\\\\node_modules\\\\', 'src'],
+    testPathIgnorePatterns: ['\\\\node_modules\\\\', 'src', 'dist'],
 
     // The regexp pattern or array of patterns that Jest uses to detect test files
     // testRegex: [],

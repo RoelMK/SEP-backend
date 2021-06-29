@@ -1,5 +1,5 @@
-import { GameBusClient, Headers, Query } from '../gbClient';
-import { ChallengePOSTData } from '../models/gamebusModel';
+import { GameBusClient } from '../gbClient';
+import { ChallengePOSTData, Headers, Query } from '../models';
 import FormData from 'form-data';
 
 export class Challenge {
@@ -15,14 +15,14 @@ export class Challenge {
         query?: Query
     ): Promise<unknown> {
         // PUT uses form-data, so we convert data to string and send as form data
-        const body = new FormData();
-        body.append('challenge', JSON.stringify(data));
-        const formHeaders = body.getHeaders();
+        const challengeBody = new FormData();
+        challengeBody.append('challenge', JSON.stringify(data));
+        const formHeaders = challengeBody.getHeaders();
 
         // We have to create the headers here because FormData has some extra headers
-        let gamebusHeaders = this.gamebus.createHeader(true, headers);
-        gamebusHeaders = {
-            ...gamebusHeaders,
+        let challengeHeaders = this.gamebus.createHeader(true, headers);
+        challengeHeaders = {
+            ...challengeHeaders,
             ...formHeaders
         };
 
@@ -36,8 +36,8 @@ export class Challenge {
         const response = await this.gamebus.client.request({
             method: 'POST',
             url: gamebusUrl,
-            headers: gamebusHeaders,
-            data: body
+            headers: challengeHeaders,
+            data: challengeBody
         });
         return response.data;
     }

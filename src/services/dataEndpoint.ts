@@ -4,9 +4,9 @@ import { FoodModel } from '../gb/models/foodModel';
 import { GlucoseModel } from '../gb/models/glucoseModel';
 import { InsulinModel } from '../gb/models/insulinModel';
 import { MoodModel } from '../gb/models/moodModel';
-import { ExerciseGameDescriptorNames } from '../gb/objects/keys';
 import { DateSlice } from './utils/dates';
 import { nullUnion, UnionModel } from '../gb/models/unionModel';
+import { ExerciseGameDescriptorNames } from '../gb/objects/GBObjectTypes';
 
 export class DataEndpoint {
     private readonly dataTypes: DataType[]; // Data types to retrieve
@@ -178,15 +178,17 @@ export class DataEndpoint {
                 .getExerciseActivityFromGdBetweenUnix(
                     this.playerId,
                     exerciseTypes,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
+                    dateSlice.startDate.getTime(), // start of exercise query
+                    dateSlice.endDate.getTime(), // end of exercise query
+                    undefined, // no exercise order
                     this.PAGE_LIMIT,
                     page
                 );
+            // Concat exercise models
             models = models.concat(pageModels);
             if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        // Return exercise models
         return models;
     }
 
@@ -202,15 +204,17 @@ export class DataEndpoint {
                 .glucose()
                 .getGlucoseActivitiesBetweenUnix(
                     this.playerId,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
+                    dateSlice.startDate.getTime(), // start of glucose query
+                    dateSlice.endDate.getTime(), // end of glucose query
+                    undefined, // no glucose order
                     this.PAGE_LIMIT,
                     page
                 );
+            // Concat glucose models
             models = models.concat(pageModels);
             if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        // Return glucose models
         return models;
     }
 
@@ -226,15 +230,17 @@ export class DataEndpoint {
                 .insulin()
                 .getInsulinActivitiesBetweenUnix(
                     this.playerId,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
+                    dateSlice.startDate.getTime(), // start of insulin query
+                    dateSlice.endDate.getTime(), // end of insulin query
+                    undefined, // no insulin order
                     this.PAGE_LIMIT,
                     page
                 );
+            // Concat insulin models
             models = models.concat(pageModels);
             if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        // Return insulin models
         return models;
     }
 
@@ -246,19 +252,19 @@ export class DataEndpoint {
     private async retrieveMoodData(dateSlice: DateSlice): Promise<MoodModel[]> {
         let models: MoodModel[] = [];
         for (let page = 0; page < this.MAX_PAGES; page++) {
-            const pageModels: MoodModel[] = await this.gbClient
-                .mood()
-                .getMoodActivitiesBetweenUnix(
-                    this.playerId,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
-                    this.PAGE_LIMIT,
-                    page
-                );
+            const pageModels: MoodModel[] = await this.gbClient.mood().getMoodActivitiesBetweenUnix(
+                this.playerId,
+                dateSlice.startDate.getTime(), // start of mood query
+                dateSlice.endDate.getTime(), // end of mood query
+                undefined, // no mood order
+                this.PAGE_LIMIT,
+                page
+            );
+            // Concat mood models
             models = models.concat(pageModels);
             if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        // Return mood models
         return models;
     }
 
@@ -270,19 +276,19 @@ export class DataEndpoint {
     private async retrieveFoodData(dateSlice: DateSlice): Promise<FoodModel[]> {
         let models: FoodModel[] = [];
         for (let page = 0; page < this.MAX_PAGES; page++) {
-            const pageModels: FoodModel[] = await this.gbClient
-                .food()
-                .getFoodActivitiesBetweenUnix(
-                    this.playerId,
-                    dateSlice.startDate.getTime(),
-                    dateSlice.endDate.getTime(),
-                    undefined,
-                    this.PAGE_LIMIT,
-                    page
-                );
+            const pageModels: FoodModel[] = await this.gbClient.food().getFoodActivitiesBetweenUnix(
+                this.playerId,
+                dateSlice.startDate.getTime(), // start of food query
+                dateSlice.endDate.getTime(), // end of food query
+                undefined, // no food order
+                this.PAGE_LIMIT,
+                page
+            );
+            // Concat food models
             models = models.concat(pageModels);
             if (pageModels.length < this.PAGE_LIMIT) break;
         }
+        // Return food models
         return models;
     }
 }

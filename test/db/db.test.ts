@@ -17,12 +17,18 @@ afterAll(() => {
     }
 });
 
+/**
+ * UTP: DB - 1
+ */
 test('database initialization', () => {
     const dbClient = new DBClient();
     dbClient.initialize();
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 2
+ */
 test('database full login procedure', () => {
     const playerId = '1';
     const loginToken = 'a2';
@@ -49,6 +55,9 @@ test('database full login procedure', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 3
+ */
 test('database clean non-expired', () => {
     const playerId = '1266';
     const loginToken = 'a23454';
@@ -64,6 +73,9 @@ test('database clean non-expired', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 4
+ */
 test('database clean expired', () => {
     const playerId = '12';
     const loginToken = 'a23';
@@ -79,6 +91,9 @@ test('database clean expired', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 5
+ */
 test('database callback non-existing', () => {
     const playerId = '123';
     const accessToken = 'a12';
@@ -91,6 +106,9 @@ test('database callback non-existing', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 6
+ */
 test('database get undefined', () => {
     const playerId = '1234';
     const loginToken = 'adwd3r';
@@ -103,6 +121,9 @@ test('database get undefined', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 7
+ */
 test('database register double login attempt', () => {
     const playerId = '443';
 
@@ -115,6 +136,9 @@ test('database register double login attempt', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 11
+ */
 test('log child token', () => {
     const childEmail = 'child@gmail.com';
 
@@ -123,6 +147,9 @@ test('log child token', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 12
+ */
 test('request supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -132,6 +159,9 @@ test('request supervisor', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 13
+ */
 test('Get a list of requested supervisors for a normal user', () => {
     const childEmail = 'child@gmail.com';
 
@@ -144,6 +174,9 @@ test('Get a list of requested supervisors for a normal user', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 14
+ */
 test('Confirm supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -153,6 +186,9 @@ test('Confirm supervisor', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 15
+ */
 test('Get a list of supervisors which role is approved', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
@@ -167,21 +203,32 @@ test('Get a list of supervisors which role is approved', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 16
+ */
 test('Check if user is a supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
+    dbClient.reset();
+    expect(dbClient.requestSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.checkRole(supervisorEmail)).toBeTruthy();
+    expect(dbClient.checkRole(childEmail)).toBeFalsy();
     dbClient.close();
 });
 
+/**
+ * ATP: DB - 17
+ */
 test('Get a list of normal users requested supervisor role from a supervisor', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
+    dbClient.reset();
+    expect(dbClient.requestSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.confirmSupervisor(supervisorEmail, childEmail)).toBeTruthy();
     expect(dbClient.getChildren(supervisorEmail)).toEqual([
         {
@@ -191,15 +238,22 @@ test('Get a list of normal users requested supervisor role from a supervisor', (
     dbClient.close();
 });
 
+/**
+ * ATP: DB - 18
+ */
 test('Retract supervisor permission', () => {
     const childEmail = 'child@gmail.com';
     const supervisorEmail = 'supervisor@gmail.com';
 
     const dbClient = new DBClient();
     expect(dbClient.retractPermission(childEmail, supervisorEmail)).toBeTruthy();
+    expect(dbClient.checkRole(supervisorEmail)).toBeFalsy();
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 8
+ */
 test('Register a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';
@@ -213,6 +267,9 @@ test('Register a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 9
+ */
 test('Register and update a file parse event and retrieve it', () => {
     const playerId = '443';
     const fileName = 'foodDiary.xlsx';
@@ -231,6 +288,9 @@ test('Register and update a file parse event and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 10
+ */
 test('Register and update multiple file parse events and retrieve it', () => {
     const playerId1 = '443';
     const playerId2 = '444';
@@ -265,6 +325,9 @@ test('Register and update multiple file parse events and retrieve it', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 19
+ */
 test('Retrieve non existing parse event', () => {
     const playerId = '-1';
     const fileName = 'nonsense.xlsx';
@@ -273,6 +336,9 @@ test('Retrieve non existing parse event', () => {
     dbClient.close();
 });
 
+/**
+ * UTP: DB - 20
+ */
 test('Execute methods while database does not exist', () => {
     try {
         fs.unlinkSync(process.env.DATABASE!); // Remove db file
@@ -289,4 +355,5 @@ test('Execute methods while database does not exist', () => {
     expect(dbClient.registerCallback('id', 't1', 't2')).toBeFalsy();
     expect(dbClient.registerLoginAttempt('id', 't1', new Date())).toBeFalsy();
     expect(dbClient.removeFinishedLoginAttempt('id')).toBeFalsy();
+    dbClient.close();
 });

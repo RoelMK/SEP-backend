@@ -7,10 +7,10 @@ import {
     ActivityGETData
 } from '../../src/gb/models/gamebusModel';
 import { GlucoseModel } from '../../src/gb/models/glucoseModel';
-import { GlucosePropertyKeys, Glucose } from '../../src/gb/objects/glucose';
+import { Glucose } from '../../src/gb/objects/glucose';
 import { convertMG_DLtoMMOL_L } from '../../src/services/utils/units';
 import { mockRequest } from '../testUtils/requestUtils';
-import { Keys } from '../../src/gb/objects/keys';
+import { GlucosePropertyKeys, Keys } from '../../src/gb/objects/GBObjectTypes';
 
 jest.mock('axios');
 
@@ -31,6 +31,9 @@ describe('with mocked glucose POST call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 34
+     */
     test('POST a single activity', async () => {
         const model: GlucoseModel = {
             timestamp: 12,
@@ -64,7 +67,10 @@ describe('with mocked glucose POST call', () => {
         );
     });
 
-    test('POST a multiple activities', async () => {
+    /**
+     * UTP: GB - 35
+     */
+    test('POST multiple activities', async () => {
         const model1: GlucoseModel = {
             timestamp: 1,
             glucoseLevel: 2
@@ -130,6 +136,9 @@ describe('with mocked glucose get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 15
+     */
     test('GET glucose activities', async () => {
         const glucose = await client.glucose().getGlucoseActivities(0);
 
@@ -145,6 +154,9 @@ describe('with mocked glucose get call', () => {
         expect(glucose).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 16
+     */
     test('GET glucose activities between dates', async () => {
         const unixTimestampBefore = new Date('2021-04-19').getTime();
         const unixTimestampAfter = new Date('2021-04-21').getTime();
@@ -166,6 +178,9 @@ describe('with mocked glucose get call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 29
+     */
     test('convert single MMOL/L response to single model', () => {
         const response: ActivityGETData = {
             id: 0,
@@ -230,6 +245,9 @@ describe('convert response to models', () => {
         expect(Glucose.convertResponseToGlucoseModels([response])).toStrictEqual([expectedResult]);
     });
 
+    /**
+     * UTP: GB - 29
+     */
     test('convert single MG/DL response to single model', () => {
         const response: ActivityGETData = {
             id: 0,

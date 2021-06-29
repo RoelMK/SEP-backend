@@ -3,7 +3,7 @@ require('dotenv').config();
 import { GameBusToken, TokenHandler } from '../../src/gb/auth/tokenHandler';
 import { GameBusClient } from '../../src/gb/gbClient';
 import { FoodModel } from '../../src/gb/models/foodModel';
-import { Keys } from '../../src/gb/objects/keys';
+import { Keys } from '../../src/gb/objects/GBObjectTypes';
 import AbbottParser from '../../src/services/dataParsers/abbottParser';
 import FoodDiaryParser from '../../src/services/dataParsers/foodDiaryParser';
 import { DateFormat, parseDate } from '../../src/services/utils/dates';
@@ -49,7 +49,6 @@ class AccountPreparation {
 
         // add data
         try {
-            // TODO: check dates sent in backend-discussion to make sure the data is on the correct dates
             addMoods(this.gbAccessToken, this.playerId);
             console.log('mood added to the profile');
 

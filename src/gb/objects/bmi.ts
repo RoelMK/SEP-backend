@@ -1,10 +1,14 @@
-import { BMIModel } from '../models/bmiModels';
-import { Query, Headers } from '../gbClient';
-import { GameBusObject } from './base';
-import { Keys } from './keys';
-import { ActivityGETData, ActivityPOSTData, PropertyInstancePOST } from '../models/gamebusModel';
-import { Activity } from './activity';
-import { ActivityModel } from '../models/activityModel';
+import {
+    ActivityGETData,
+    ActivityPOSTData,
+    PropertyInstancePOST,
+    BMIModel,
+    ActivityModel,
+    Query,
+    Headers
+} from '../models';
+import { Activity, GameBusObject } from '.';
+import { BMIPropertyKeys, Keys } from './GBObjectTypes';
 
 export class BMI extends GameBusObject {
     /**
@@ -65,6 +69,7 @@ export class BMI extends GameBusObject {
         headers?: Headers,
         query?: Query
     ): Promise<unknown> {
+        // Convert BMI model to POST data and post it
         const data = this.toPOSTData(model, playerId);
         const response = await this.activity.postActivity(data, headers, query);
         return response;
@@ -91,6 +96,7 @@ export class BMI extends GameBusObject {
                 });
             }
         }
+        // Return as BMI post data
         return obj;
     }
 
@@ -133,21 +139,15 @@ export class BMI extends GameBusObject {
         if (!response) {
             return [];
         }
-        return response
-            .filter((response: ActivityGETData) => {
-                return response.propertyInstances.length > 0;
-            })
-            .map((response: ActivityGETData) => {
-                return this.convertBMIResponseToModel(response);
-            });
+        return (
+            response
+                // Get all relevant BMI properties
+                .filter((response: ActivityGETData) => {
+                    return response.propertyInstances.length > 0;
+                })
+                .map((response: ActivityGETData) => {
+                    return this.convertBMIResponseToModel(response);
+                })
+        );
     }
-}
-
-export enum BMIPropertyKeys {
-    weight = 'WEIGHT',
-    length = 'LENGTH',
-    age = 'AGE',
-    gender = 'GENDER',
-    waistCircumference = 'WAIST_CIRCUMFERENCE',
-    bmi = 'BODY_MASS_INDEX'
 }

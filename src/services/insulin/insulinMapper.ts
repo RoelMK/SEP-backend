@@ -1,7 +1,7 @@
 import { InsulinModel, InsulinType } from '../../gb/models/insulinModel';
-import { InsulinSource } from './insulinParser';
+import { NightScoutTreatmentModel } from '../dataParsers/dataParserTypes';
 import { DateFormat, parseDate } from '../utils/dates';
-import { NightScoutTreatmentModel } from '../dataParsers/nightscoutParser';
+import { InsulinSource } from './insulinTypes';
 
 /**
  * Helper class to map the different insulin sources to 1 insulinModel
@@ -29,8 +29,7 @@ export default class InsulinMapper {
             case InsulinSource.NIGHTSCOUT:
                 return this.mapNightScout;
             default:
-                // TODO this should not happen
-                return this.mapFoodDiaryInsulin;
+                throw Error('Insulin source not implemented!');
         }
     }
 
@@ -77,7 +76,7 @@ export default class InsulinMapper {
         return {
             timestamp: parseDate(
                 entry.date.replace(/-/g, '/') + ' ' + entry.time,
-                DateFormat.FOOD_DIARY,
+                DateFormat.FOOD_DIARY, // Use date format of food diary for the insulin entry
                 new Date(),
                 true
             ),

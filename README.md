@@ -22,12 +22,6 @@ There are a few other script available to run:
 -   `npm run build` will compile the the TypeScript files to Javascript and output them in the `dist` directory
 -   `npm run lint` will run the linter on all code
 
-### Code quality check
-
-For checking code quality, we've included our own tools in the `test/codeQuality` directory, the script for checking code quality can be executed using `yarn check-code` or `npm run check-code`. This script will then go over our source files and output (in the console) statistics about our code complexity and any other issues.
-
-For checking yourself, we recommend you only include the `src` folder. Our test files (located in the `test` folder) should be excluded as well as any third party modules (located in `node_modules`).
-
 ## Code quality check
 
 For checking code quality, we recommend you only include the `src` folder. Our test files (located in the `test` folder) should be excluded as well as any third party modules (located in `node_modules`). Furthermore, if there is a `dist` folder present, this folder should also be excluded since this folder contains the compiled JavaScript files.

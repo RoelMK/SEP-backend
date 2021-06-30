@@ -4,7 +4,7 @@
 
 This repo contains the back-end server for the Diabetter dashboard. It is written in TypeScript and can be run using Node.js.
 
-### Installation:
+## Installation:
 
 1. Install [Node.js](https://nodejs.org/en/)
 2. Install [Visual Studio Code](https://code.visualstudio.com/) (or any other IDE)
@@ -22,10 +22,17 @@ There are a few other script available to run:
 -   `npm run build` will compile the the TypeScript files to Javascript and output them in the `dist` directory
 -   `npm run lint` will run the linter on all code
 
-### Code quality check
+## Code quality check
 
-For checking code quality, we've included our own tools in the `test/codeQuality` directory, the script for checking code quality can be executed using `yarn check-code` or `npm run check-code`. This script will then go over our source files and output (in the console) statistics about our code complexity and any other issues.
+For checking code quality, we recommend you only include the `src` folder. Our test files (located in the `test` folder) should be excluded as well as any third party modules (located in `node_modules`). Furthermore, if there is a `dist` folder present, this folder should also be excluded since this folder contains the compiled JavaScript files.
 
+### Fan-out
+
+Since TypeScript is not strictly an Object-Oriented language, the "Fan-out" metric will be used to assess coupling. However, in our opinion, this metric is flawed, especially in the way Understand calculates the metric. While the metric is supposed to count the amount of external files used by a module, the Understand metric instead (roughly) counts the amount of entities imported. This, in and of itself, already increases the fan-out a lot since we are of course importing several entities from the same file.
+
+Furthermore, Understand does not distinguish between importing classes, types or functions. Since the code is evaulated on the "number of functions of other modules this module calls", classes and especially types (in the case of TypeScript) shouldn't be counted, yet they are in Understand.
+
+Lastly, the entire premise of npm (the Node package manager) is that you can just import a lot of modules so you don't have to reinvent the wheel for every little thing. The fan-out metric goes directly against that by limiting the amount of functions / files a module is allowed to import. This is why we think the fan-out metric is unfair, especially when using TypeScript.
 For checking yourself, we recommend you only include the `src` folder. Our test files (located in the `test` folder) should be excluded as well as any third party modules (located in `node_modules`).
 
 ## Changing GameBus configuration

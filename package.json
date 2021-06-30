@@ -2,15 +2,13 @@
     "name": "sep-backend",
     "version": "1.0.0",
     "description": "Backend for a diabetes platform.",
-    "main": "src\\app.ts",
+    "main": "src\\server.ts",
     "scripts": {
-        "start": "node dist/server.js",
-        "dev": "ts-node src/server.ts",
+        "start": "ts-node src/server.ts",
         "prep": "ts-node test/AT/prepareAccounts.ts",
         "test": "jest",
         "build": "tsc --build",
-        "lint": "eslint . --ext .ts",
-        "lint-fix": "eslint . --ext .ts --fix"
+        "lint": "eslint . --ext .ts"
     },
     "repository": {
         "type": "git",

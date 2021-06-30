@@ -10,7 +10,7 @@ export class NightScoutClient {
     private readonly client: AxiosInstance;
 
     // maximum amount of nightscout instances returned per request
-    private readonly MAX_NIGHTSCOUT = 10000;
+    private readonly MAX_NIGHTSCOUT = 1000000;
 
     constructor(private nightScoutHost: string, private token?: string) {
         this.client = axios.create();

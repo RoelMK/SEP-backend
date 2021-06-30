@@ -9,24 +9,24 @@ This repo contains the back-end server for the Diabetter dashboard. It is writte
 1. Install [Node.js](https://nodejs.org/en/)
 2. Install [Visual Studio Code](https://code.visualstudio.com/) (or any other IDE)
 3. Clone this git
-4. Run `yarn install` or `npm install` to install the relevant packages
-5. Execute `yarn dev` (needs install of yarn) or `npm run dev` to see if everything is working
+4. Run `yarn install` (needs install of yarn) or `npm install` to install the relevant packages
+5. Execute `yarn start` or `npm run start` to see if everything is working
 6. Navigate to http://localhost:8080/ to see your local server
+
+### Other scripts
+
+There are a few other script available to run:
+
+-   `npm run prep` will, when possible, prepare some GameBus accounts with some mock data to demonstrate the capabilities of the dashboard, while this command will probably stop working, the files can still be seen on how to do this
+-   `npm run test` will run the tests defined in the `test` directory
+-   `npm run build` will compile the the TypeScript files to Javascript and output them in the `dist` directory
+-   `npm run lint` will run the linter on all code
 
 ### Code quality check
 
 For checking code quality, we've included our own tools in the `test/codeQuality` directory, the script for checking code quality can be executed using `yarn check-code` or `npm run check-code`. This script will then go over our source files and output (in the console) statistics about our code complexity and any other issues.
 
 For checking yourself, we recommend you only include the `src` folder. Our test files (located in the `test` folder) should be excluded as well as any third party modules (located in `node_modules`).
-### Build:
-
-1. Install [Node.js](https://nodejs.org/en/)
-2. Install [Visual Studio Code](https://code.visualstudio.com/) (or any other IDE)
-3. Clone this git
-4. Run `yarn install` or `npm install` to install the relevant packages
-5. Execute `yarn build` or `npm run build` to build the TypeScript code so it gets compiled to JavaScript code
-6. Execute `yarn start` or `npm run start` to start the compiled server
-7. Navigate to http://localhost:8080/ to see your local server
 
 ## Changing GameBus configuration
 

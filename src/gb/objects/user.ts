@@ -32,6 +32,11 @@ export class User {
         );
     }
 
+    /**
+     * Connects given data provider (ID) from the given player (ID)
+     * @param playerId ID of player
+     * @param dataProviderId ID of data provider to connect
+     */
     async connectDataProvider(
         playerId: number,
         dataProviderId: number,

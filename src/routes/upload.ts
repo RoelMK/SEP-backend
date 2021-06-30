@@ -23,6 +23,11 @@ const uploadRouter = Router();
 uploadRouter.post('/upload', checkJwt, upload.single('file'), function (req: any, res) {
     if (!req.body.format) {
         res.status(400).send('Specify file format!');
+        try {
+            fs.unlinkSync(req.file.path);
+        } catch (e) {
+            console.log(e.message);
+        }
         return;
     }
     // retrieve user information from upload endpoint

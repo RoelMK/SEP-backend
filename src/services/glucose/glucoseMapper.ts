@@ -32,6 +32,8 @@ export default class GlucoseMapper {
                 return function (entry: any): GlucoseModel {
                     return GlucoseMapper.mapNightScout(entry, glucoseUnit);
                 };
+            default:
+                throw Error('Glucose source not implemented!');
         }
     }
 

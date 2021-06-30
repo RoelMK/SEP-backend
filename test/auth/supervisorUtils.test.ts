@@ -29,6 +29,7 @@ afterAll(() => {
 
 /**
  * Purpose: Check full supervisor functionality.
+ * UTP: AUTH - 6
  */
 test('check full supervisor functionality', async () => {
     const childEmail = 'child@gmail.com';
@@ -61,4 +62,5 @@ test('check full supervisor functionality', async () => {
     ]);
     expect(await checkSupervisor(supervisorEmail)).toBeTruthy();
     expect(await retractPermission(childEmail, supervisorEmail)).toBeTruthy();
+    expect(await checkSupervisor(supervisorEmail)).toBeFalsy();
 });

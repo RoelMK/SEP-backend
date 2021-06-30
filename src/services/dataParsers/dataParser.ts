@@ -182,7 +182,7 @@ export abstract class DataParser {
             case OutputDataType.FOOD:
                 return this.foodParser?.foodData;
             case OutputDataType.MOOD:
-                return [this.moodParser?.mood as MoodModel];
+                return this.moodParser?.mood;
             case OutputDataType.ALL:
                 // Should return all of the types (if they are present)
                 return {

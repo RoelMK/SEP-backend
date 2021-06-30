@@ -25,6 +25,9 @@ describe('with mocked BMI POST call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 45
+     */
     test('POST single activity', async () => {
         const model: BMIModel = {
             timestamp: 1,
@@ -84,6 +87,9 @@ describe('with mocked BMI get call', () => {
     const mockToken = 'testToken';
     const client = new GameBusClient(new TokenHandler(mockToken, 'refreshToken', '0'));
 
+    /**
+     * UTP: GB - 26
+     */
     test('GET BMI activities', async () => {
         const bmi = await client.bmi().getBMIActivities(0);
 
@@ -99,6 +105,9 @@ describe('with mocked BMI get call', () => {
         expect(bmi).toEqual([]);
     });
 
+    /**
+     * UTP: GB - 27
+     */
     test('GET latest BMI activity', async () => {
         const bmi = await client.bmi().getLatestBMIActivity(0);
 
@@ -124,6 +133,9 @@ describe('with mocked BMI get call', () => {
 });
 
 describe('convert response to models', () => {
+    /**
+     * UTP: GB - 33
+     */
     test('convert single response to single model', () => {
         const response: ActivityGETData = {
             id: 0,

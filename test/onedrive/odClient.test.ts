@@ -1,12 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable quotes */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import {
+    generateRedirectUrl,
+    OneDriveTokenModel
+} from '../../src/onedrive/models/onedriveTokenModel';
 import { OneDriveClient } from '../../src/onedrive/odClient';
 import { mockOnedriveRequest } from './odUtils';
 
 jest.mock('axios');
-
-// TODO: improve coverage
 
 describe('with mocked activities get call', () => {
     // Request handler that returns simulated onedrive responses
@@ -673,6 +675,9 @@ describe('with mocked activities get call', () => {
     // Before each request, clear the count so we start at 0 again
     beforeEach(() => request.mockClear());
 
+    /**
+     * UTP: ONED - 2
+     */
     test('Get tableValues with non-existing table', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -688,20 +693,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 1
+     */
     test('Get tableValues', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -726,20 +724,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 3
+     */
     test('Get rangeValues', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -764,20 +755,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-        expect(request).toHaveBeenCalledWith(
-            expect.objectContaining({
-                url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-                headers: expect.objectContaining({
-                    authorization: 'Bearer token'
-                })
-            })
-        );
-        */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 4
+     */
     test('Get rangeText', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -802,20 +786,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 5
+     */
     test('Get tableList', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -847,20 +824,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(3);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 6
+     */
     test('Get file at root', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient('token', 'Book1.xlsx', undefined, 'fooddiary', 'Sheet1');
@@ -903,20 +873,13 @@ describe('with mocked activities get call', () => {
 
         // Check that URL matches expected URL and mockToken is used in authorization
         expect(request).toHaveBeenCalledTimes(1);
-        //TODO: find a way to add these as they don't hold everytime
-        /* 
-      expect(request).toHaveBeenCalledWith(
-          expect.objectContaining({
-              url: "https://graph.microsoft.com/v1.0/me/drive/root/children",
-              headers: expect.objectContaining({
-                  authorization: 'Bearer token'
-              })
-          })
-      );
-      */
+
         expect(results).toEqual(expectation);
     });
 
+    /**
+     * UTP: ONED - 7
+     */
     test('Debug booleans TF', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -943,6 +906,10 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(false);
     });
+
+    /**
+     * UTP: ONED - 8
+     */
     test('Debug booleans FT', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -969,6 +936,10 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(true);
     });
+
+    /**
+     * UTP: ONED - 9
+     */
     test('Debug booleans TT', async () => {
         // GameBusClient using mockToken
         const client = new OneDriveClient(
@@ -995,7 +966,45 @@ describe('with mocked activities get call', () => {
         // @ts-ignore
         expect(client.printDeep).toEqual(true);
     });
+
+    /**
+     * UTP: ONED - 14
+     */
+    test('Default constructor', () => {
+        const client = new OneDriveClient(
+            'token',
+            'diary.xlsx',
+            '',
+            undefined,
+            undefined,
+            undefined,
+            undefined
+        );
+        // @ts-ignore
+        expect(client.folderPath).toEqual(undefined);
+        // @ts-ignore
+        expect(client.tableName).toEqual('fooddiary');
+        // @ts-ignore
+        expect(client.sheetName).toEqual('Sheet1');
+        // @ts-ignore
+        expect(client.doPrint).toEqual(false);
+        // @ts-ignore
+        expect(client.printDeep).toEqual(false);
+    });
 });
 
-//TODO: getTableList
-//TODO: getfile from root
+/**
+ * UTP: ONED - 15
+ */
+test('Generate OneDrive redirect URL', () => {
+    const account: OneDriveTokenModel = {
+        homeAccountId: '1',
+        accessToken: '2',
+        expiresOn: 1000000000000
+    };
+    expect(
+        generateRedirectUrl(account).endsWith(
+            '?homeAccountId=1&accessToken=2&expiresOn=1000000000000'
+        )
+    ).toBeTruthy();
+});

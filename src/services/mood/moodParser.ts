@@ -6,7 +6,7 @@ import { ModelParser } from '../modelParser';
 //TODO only implement if mood data from other sources needs to be parsed
 export default class MoodParser extends ModelParser {
     // Mood data to be exported
-    mood?: MoodModel;
+    mood?: MoodModel[];
 
     /**
      * Create mood parser that makes sure mood data to reach Gamebus
@@ -15,6 +15,7 @@ export default class MoodParser extends ModelParser {
     constructor(private readonly moodInput: MoodModel[], userInfo: GameBusToken) {
         // only processing newest is not necessary for moods, since it is only given via the dashboard
         super(userInfo, false);
+        this.mood = moodInput;
         // Maybe process if needed in the future
         this.process();
     }

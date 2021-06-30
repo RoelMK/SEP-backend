@@ -86,9 +86,12 @@ export default class OneDriveExcelParser extends FileParser {
      * @param keys The keys that belong to the objects, i.e. key[0] belongs to array2D[i][0] etc.
      * @returns An array of objects with key-value pairs
      */
-    assignKeys(array2D: string[][], keys: string[]): Record<string, string>[] {
+    assignKeys(array2D: any[][], keys?: string[]): Record<string, string>[] {
+        if (!keys) {
+            throw Error('Keys are undefined, no data source was provided!');
+        }
         // amount of values in an object-array must be equal to the amount of passed keys
-        if (array2D[0].length != keys.length) {
+        if (array2D[0].length !== keys.length) {
             throw Error(
                 'Length mismatch: 2D array cannot be converted to an object with given keys!'
             );

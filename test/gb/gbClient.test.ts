@@ -21,6 +21,9 @@ describe('GameBusClient requests', () => {
     const unauthorizedClient = new GameBusClient();
     const unauthorizedClientWithToken = new GameBusClient(new TokenHandler('', '', ''));
 
+    /**
+     * UTP: GBC - 1
+     */
     test('full response', async () => {
         const response = await client.request(
             '',
@@ -37,6 +40,9 @@ describe('GameBusClient requests', () => {
         });
     });
 
+    /**
+     * UTP: GBC - 2
+     */
     test('PUT request', async () => {
         const response = await client.put(
             'players/0/activities',
@@ -56,6 +62,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GBC - 3
+     */
     test('POST request', async () => {
         const response = await client.post(
             'players/0/activities',
@@ -75,6 +84,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GBC - 4
+     */
     test('GET request', async () => {
         const response = await client.get(
             'players/0/activities',
@@ -93,6 +105,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GBC - 5
+     */
     test('Unauthorized request without TokenHandler', async () => {
         expect(async () => {
             await unauthorizedClient.request(
@@ -108,6 +123,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: GBC - 6
+     */
     test('Unauthorized request with empty TokenHandler', async () => {
         expect(async () => {
             await unauthorizedClientWithToken.request(
@@ -127,16 +145,25 @@ describe('GameBusClient requests', () => {
 describe('GameBusClient helper functions', () => {
     const client = new GameBusClient();
 
+    /**
+     * UTP: GBC - 7
+     */
     test('unauthorized header creation', () => {
         expect(() => {
             client.createHeader(true);
         }).toThrow('You must be authenticated to use this function');
     });
 
+    /**
+     * UTP: GBC - 8
+     */
     test('URL without query', () => {
         expect(client.createURL('players')).toBe(`${endpoint}/players`);
     });
 
+    /**
+     * UTP: GBC - 9
+     */
     test('URL with query', () => {
         expect(
             client.createURL('players', {

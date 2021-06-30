@@ -41,6 +41,9 @@ describe('GameBusClient requests', () => {
         enteredBy: 'Frans'
     };
 
+    /**
+     * UTP: NS - 1
+     */
     test('Posting an entry', async () => {
         await client.postEntry(testEntry);
         // Full response means data is given separately
@@ -52,6 +55,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: NS - 2
+     */
     test('Posting a treatment', async () => {
         await client.postTreatment(testTreatment);
         // Full response means data is given separately
@@ -63,6 +69,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: NS - 3
+     */
     test('Getting entries', async () => {
         const response = await client.getEntries();
         // Full response means data is given separately
@@ -78,6 +87,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: NS - 4
+     */
     test('Getting treatments', async () => {
         const response = await client.getTreatments();
         // Full response means data is given separately
@@ -93,6 +105,9 @@ describe('GameBusClient requests', () => {
         );
     });
 
+    /**
+     * UTP: NS - 5
+     */
     test('Getting glucose unit', async () => {
         // Full response means data is given separately
         expect(async () => {

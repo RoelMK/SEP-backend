@@ -15,7 +15,7 @@ __pycache__
 npm-debug.log
 **/.mypy_cache/**
 !yarn.lock
-coverage/
+/coverage
 cucumber-report.json
 **/.vscode-test/**
 **/.vscode test/**
@@ -52,7 +52,6 @@ db.test.db
 test.bat
 dist/
 data/
-sql/
 auth.test.db-journal
 auth.test.db
 db.test.db
